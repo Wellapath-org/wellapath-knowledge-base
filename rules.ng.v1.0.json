@@ -1,0 +1,291 @@
+{
+  "_metadata": {
+    "artifact_id": "rules",
+    "version": "1.0",
+    "country": "ng",
+    "schema_version": "1.0",
+    "release_date": "2026-04-06",
+    "description": "WellaPath Nigeria CDSS — Red Flag Rule Layer. Global and condition-specific red flag rules. All rules evaluate before scoring. A matched red flag always overrides scoring output. Non-negotiable.",
+    "evaluation_order": [
+      "Step 1: Evaluate ALL global rules (applies_to: all) — highest priority first",
+      "Step 2: If ANY global rule fires — set urgency to emergency. Return immediately. Do not run scoring.",
+      "Step 3: Evaluate condition-specific rules for conditions in the scoring top 3 candidates",
+      "Step 4: If a condition-specific rule fires — escalate urgency for that condition",
+      "Step 5: Only after ALL red flag evaluation completes — run weighted symptom scoring",
+      "Step 6: Red flag result ALWAYS overrides scoring output. Scoring NEVER overrides a red flag."
+    ],
+    "rule_id_convention": {
+      "global_rules": "rf_001 to rf_099",
+      "condition_specific_rules": "rf_100 onwards"
+    },
+    "total_global_rules": 14,
+    "total_condition_specific_rules": 12,
+    "total_rules": 26,
+    "token_dictionary_ref": "token_dictionary.ng.v1.0.json",
+    "pilot_conditions_covered": ["malaria", "pneumonia_children", "acute_diarrhoea"]
+  },
+
+  "rules": [
+
+    {
+      "rule_id": "rf_001",
+      "rule_name": "Inability to Drink or Feed",
+      "token": "inability_to_drink",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Inability to drink or feed is a WHO universal danger sign. Present in any condition it indicates critical deterioration requiring immediate emergency care. In children it is an IMCI very severe disease criterion.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_002",
+      "rule_name": "Active Seizures",
+      "token": "seizures",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Active seizures indicate severe neurological compromise regardless of underlying condition. Requires emergency assessment immediately. Cannot be managed at home or clinic level.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_003",
+      "rule_name": "Altered Consciousness or Confusion",
+      "token": "altered_consciousness",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Altered consciousness or confusion is a universal danger sign indicating severe systemic illness, neurological compromise, or metabolic emergency. Always escalate regardless of condition.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_004",
+      "rule_name": "Impaired Consciousness",
+      "token": "impaired_consciousness",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Impaired consciousness represents a deeper level of neurological compromise than confusion. Present in severe malaria, meningitis, severe dehydration, and other life-threatening conditions. Always emergency.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_005",
+      "rule_name": "Circulatory Collapse or Shock",
+      "token": "circulatory_collapse",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Circulatory collapse or clinical shock indicates cardiovascular failure. Present in severe cholera, severe malaria, sepsis, anaphylaxis, and haemorrhage. Requires immediate emergency resuscitation.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_006",
+      "rule_name": "Shock",
+      "token": "shock",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Clinical shock — hypotension, cold clammy skin, rapid weak pulse — is a life-threatening emergency in any condition. Mapped separately from circulatory_collapse to capture all presentations of shock.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_007",
+      "rule_name": "Respiratory Distress",
+      "token": "respiratory_distress",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Severe respiratory distress — difficulty breathing at rest, use of accessory muscles, inability to complete sentences — is a universal emergency. Seen in severe malaria, SARI, pneumonia, asthma attack, and anaphylaxis.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_008",
+      "rule_name": "Breathlessness at Rest",
+      "token": "breathlessness_at_rest",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Breathlessness occurring at rest (not only on exertion) indicates severe respiratory or cardiac compromise. Requires emergency assessment regardless of suspected condition.",
+      "priority": 2
+    },
+
+    {
+      "rule_id": "rf_009",
+      "rule_name": "Central Cyanosis — Blue Lips or Face",
+      "token": "blue_lips_face",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Central cyanosis indicates critical hypoxia — oxygen saturation is dangerously low. Requires emergency oxygen and immediate escalation. An IMCI very severe disease criterion in children.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_010",
+      "rule_name": "Cyanosis",
+      "token": "cyanosis",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Cyanosis is a clinical sign of severe hypoxia. Maps to both central (blue_lips_face) and peripheral presentations. Retained as a separate token to capture all documented presentations across conditions.",
+      "priority": 1
+    },
+
+    {
+      "rule_id": "rf_011",
+      "rule_name": "Prostration — Inability to Stand or Sit Without Support",
+      "token": "prostration",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Prostration is a WHO severe malaria criterion and general danger sign indicating extreme systemic weakness. A patient who cannot stand or sit without support requires emergency care. Not limited to malaria.",
+      "priority": 2
+    },
+
+    {
+      "rule_id": "rf_012",
+      "rule_name": "Signs of Severe Dehydration",
+      "token": "severe_dehydration",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Severe dehydration — sunken fontanelle, very sunken eyes, skin pinch test returns slowly, no urine output — is life-threatening in any condition especially in children. Requires emergency fluid resuscitation.",
+      "priority": 2
+    },
+
+    {
+      "rule_id": "rf_013",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Haematemesis — vomiting blood — indicates upper gastrointestinal bleeding or severe systemic haemorrhage. Present in severe hepatitis, VHF, Lassa fever, and peptic ulcer complications. Always emergency.",
+      "priority": 2
+    },
+
+    {
+      "rule_id": "rf_014",
+      "rule_name": "Stroke Signs — Sudden One-Sided Weakness",
+      "token": "stroke_signs",
+      "override_urgency": "emergency",
+      "applies_to": ["all"],
+      "explanation": "Sudden onset one-sided weakness, facial drooping, speech difficulty, or sudden severe headache are stroke warning signs. Time-critical — delayed treatment causes irreversible brain damage. Always emergency.",
+      "priority": 2
+    },
+
+    {
+      "rule_id": "rf_100",
+      "rule_name": "Malaria — Haemoglobinuria (Dark Urine)",
+      "token": "haemoglobinuria",
+      "override_urgency": "emergency",
+      "applies_to": ["malaria"],
+      "explanation": "Haemoglobinuria — passage of dark red or black urine — is a WHO criterion for severe malaria indicating massive intravascular haemolysis. Immediate emergency referral required. Associated with quinine use and G6PD deficiency.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_101",
+      "rule_name": "Malaria — Severe Anaemia",
+      "token": "severe_anaemia",
+      "override_urgency": "emergency",
+      "applies_to": ["malaria"],
+      "explanation": "Severe anaemia in the context of malaria — pallor, rapid breathing, cardiac decompensation — is a WHO severe malaria criterion. Particularly dangerous in children under 5 and pregnant women. Requires emergency blood transfusion assessment.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_102",
+      "rule_name": "Malaria — Hypoglycaemia",
+      "token": "hypoglycaemia",
+      "override_urgency": "emergency",
+      "applies_to": ["malaria"],
+      "explanation": "Hypoglycaemia — blood glucose below safe threshold — is a WHO severe malaria criterion and a complication of quinine treatment. Causes altered consciousness and seizures. Requires immediate glucose administration and emergency care.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_103",
+      "rule_name": "Malaria — Abnormal Bleeding",
+      "token": "abnormal_bleeding",
+      "override_urgency": "emergency",
+      "applies_to": ["malaria"],
+      "explanation": "Abnormal or spontaneous bleeding in malaria — from gums, nose, or skin — indicates coagulopathy or severe thrombocytopaenia associated with severe malaria. A WHO severe malaria criterion requiring emergency care.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_104",
+      "rule_name": "Malaria — Severe Jaundice",
+      "token": "severe_jaundice",
+      "override_urgency": "emergency",
+      "applies_to": ["malaria"],
+      "explanation": "Severe jaundice — deep yellow discolouration of skin and sclera — indicates hepatic involvement in severe malaria. A WHO severe malaria criterion. Associated with increased mortality especially in adults.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_105",
+      "rule_name": "Pneumonia (Children) — Severe Chest Indrawing",
+      "token": "chest_indrawing_severe",
+      "override_urgency": "emergency",
+      "applies_to": ["pneumonia_children"],
+      "explanation": "Severe chest indrawing — the lower chest wall drawing in on inspiration — is an IMCI criterion for severe pneumonia requiring urgent hospital referral. Indicates significant respiratory compromise in a child. Must not be under-triaged.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_106",
+      "rule_name": "Pneumonia (Children) — Child Not Eating or Drinking",
+      "token": "not_eating_drinking_child",
+      "override_urgency": "emergency",
+      "applies_to": ["pneumonia_children"],
+      "explanation": "A child who is not eating or drinking has entered a critical state of systemic compromise. This is an IMCI very severe disease criterion. Combined with respiratory symptoms it indicates imminent deterioration.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_107",
+      "rule_name": "Pneumonia (Children) — IMCI Danger Signs Present",
+      "token": "danger_signs_imci",
+      "override_urgency": "emergency",
+      "applies_to": ["pneumonia_children"],
+      "explanation": "The IMCI general danger signs — unable to drink, vomiting everything, convulsions, lethargy or unconsciousness — classify a child as very severe disease requiring immediate emergency referral regardless of other findings.",
+      "priority": 11
+    },
+
+    {
+      "rule_id": "rf_108",
+      "rule_name": "Acute Diarrhoea — Sunken Eyes",
+      "token": "sunken_eyes",
+      "override_urgency": "emergency",
+      "applies_to": ["acute_diarrhoea"],
+      "explanation": "Sunken eyes are a clinical sign of significant dehydration in acute diarrhoea. In children under 5 this sign indicates a child is at risk of rapidly fatal dehydration. Requires emergency oral or IV rehydration.",
+      "priority": 12
+    },
+
+    {
+      "rule_id": "rf_109",
+      "rule_name": "Acute Diarrhoea — Severe Dehydration",
+      "token": "severe_dehydration",
+      "override_urgency": "emergency",
+      "applies_to": ["acute_diarrhoea"],
+      "explanation": "Severe dehydration in acute diarrhoea — loss of more than 10% body weight, inability to drink, sunken eyes, reduced skin turgor — is life-threatening especially in children and the elderly. Requires emergency IV fluid resuscitation.",
+      "priority": 12
+    },
+
+    {
+      "rule_id": "rf_110",
+      "rule_name": "Acute Diarrhoea — Shock",
+      "token": "shock",
+      "override_urgency": "emergency",
+      "applies_to": ["acute_diarrhoea"],
+      "explanation": "Hypovolaemic shock from acute diarrhoea — rapid pulse, cold extremities, reduced consciousness — is immediately life-threatening. Requires emergency IV resuscitation. Most common in cholera-like illness and young children.",
+      "priority": 12
+    },
+
+    {
+      "rule_id": "rf_111",
+      "rule_name": "Acute Diarrhoea — Altered Consciousness from Dehydration",
+      "token": "altered_consciousness",
+      "override_urgency": "emergency",
+      "applies_to": ["acute_diarrhoea"],
+      "explanation": "Altered consciousness in the context of acute diarrhoea indicates severe dehydration with electrolyte disturbance or metabolic emergency. Any child or adult with diarrhoea who is confused or unresponsive requires immediate emergency care.",
+      "priority": 12
+    }
+
+  ]
+}
