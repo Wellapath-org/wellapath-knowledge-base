@@ -1,0 +1,305 @@
+{
+  "_metadata": {
+    "artifact_id": "knowledge_base",
+    "version": "1.0",
+    "schema_version": "1.0",
+    "country": "ng",
+    "release_date": "2026-04-06",
+    "status": "pilot \u2014 3 conditions",
+    "description": "WellaPath Nigeria CDSS Knowledge Base \u2014 pilot artifact containing 3 conditions for E3 engine testing. Full 50-condition expansion in E7.",
+    "conditions_count": 3,
+    "conditions": [
+      "malaria",
+      "pneumonia_children",
+      "acute_diarrhoea"
+    ],
+    "token_dictionary_version": "1.0",
+    "notes": "Individual condition source files are in /pilot/ for medical review. This root file is the packaged artifact consumed by the mobile scoring engine."
+  },
+  "conditions": [
+    {
+      "condition_id": "malaria",
+      "condition_name": "Malaria",
+      "version": "1.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 10,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 9
+        },
+        {
+          "token": "chills",
+          "weight": 7
+        },
+        {
+          "token": "headache",
+          "weight": 6
+        },
+        {
+          "token": "sweating",
+          "weight": 6
+        },
+        {
+          "token": "body_pain",
+          "weight": 5
+        },
+        {
+          "token": "weakness",
+          "weight": 5
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "prostration",
+        "impaired_consciousness",
+        "respiratory_distress",
+        "seizures",
+        "circulatory_collapse",
+        "abnormal_bleeding",
+        "severe_jaundice",
+        "haemoglobinuria",
+        "severe_anaemia",
+        "hypoglycaemia"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever",
+          "headache"
+        ],
+        "moderate": [
+          "weakness",
+          "vomiting"
+        ],
+        "severe": [
+          "confusion",
+          "convulsions",
+          "dark_urine",
+          "jaundice"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Highest mortality risk \u2014 fast-track evaluation required"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "increase_urgency",
+          "note": "Risk of severe malaria and maternal anaemia \u2014 escalate"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Greater risk of rapid decompensation"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Peak transmission May\u2013October in Nigeria \u2014 higher match probability"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. Malaria is a common and serious illness in Nigeria \u2014 prompt testing and care is strongly advised.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "body hot",
+        "fever dey",
+        "cold and hot",
+        "shivering"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "pneumonia_children",
+      "condition_name": "Pneumonia (Children)",
+      "version": "1.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "fast_breathing_child",
+          "weight": 9
+        },
+        {
+          "token": "chest_indrawing",
+          "weight": 10
+        },
+        {
+          "token": "lethargy",
+          "weight": 9
+        },
+        {
+          "token": "convulsions",
+          "weight": 10
+        },
+        {
+          "token": "poor_feeding",
+          "weight": 8
+        },
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "cough",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "chest_indrawing_severe",
+        "inability_to_drink",
+        "not_eating_drinking_child",
+        "danger_signs_imci",
+        "cyanosis",
+        "seizures"
+      ],
+      "severity_levels": {
+        "no_pneumonia": [
+          "cough",
+          "mild_cough",
+          "runny_nose"
+        ],
+        "pneumonia": [
+          "fast_breathing_child",
+          "fever",
+          "cough"
+        ],
+        "severe_pneumonia": [
+          "chest_indrawing",
+          "fast_breathing_child"
+        ],
+        "very_severe_disease": [
+          "poor_feeding",
+          "lethargy",
+          "convulsions",
+          "stridor",
+          "chest_indrawing"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "monitor_and_escalate",
+          "note": "Core target population \u2014 use IMCI breathing rate thresholds (\u226550/min <1yr; \u226540/min 1\u20135yr)"
+        },
+        {
+          "modifier": "severe_malnutrition_sam_mam",
+          "effect": "escalate_emergency",
+          "note": "Escalate to very severe disease category immediately \u2014 malnourished children deteriorate rapidly"
+        },
+        {
+          "modifier": "hiv_positive",
+          "effect": "increase_urgency",
+          "note": "Higher risk of PCP pneumonia \u2014 escalate urgency"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence November\u2013February due to dry dusty air irritating airways"
+        }
+      ],
+      "explanation_template": "Your child's symptoms may be consistent with a respiratory infection or pneumonia. Fast breathing or chest indrawing in a child requires urgent clinic or hospital assessment \u2014 please do not wait.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "chest infection",
+        "catarrh with fast breathing"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "acute_diarrhoea",
+      "condition_name": "Acute Diarrhoea (Non-Bloody)",
+      "version": "1.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 8,
+      "symptoms": [
+        {
+          "token": "watery_stool",
+          "weight": 8
+        },
+        {
+          "token": "vomiting",
+          "weight": 5
+        },
+        {
+          "token": "abdominal_cramps",
+          "weight": 5
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "low_grade_fever",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_dehydration",
+        "sunken_eyes",
+        "inability_to_drink",
+        "altered_consciousness",
+        "shock"
+      ],
+      "severity_levels": {
+        "mild": [
+          "watery_stool",
+          "nausea"
+        ],
+        "moderate": [
+          "watery_stool",
+          "vomiting",
+          "dehydration"
+        ],
+        "severe": [
+          "dehydration",
+          "lethargy",
+          "weakness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Dehydration can be fatal rapidly in young children \u2014 escalate urgency"
+        },
+        {
+          "modifier": "severe_malnutrition_sam_mam",
+          "effect": "escalate_emergency",
+          "note": "A severely malnourished child with diarrhoea requires immediate emergency referral regardless of dehydration signs"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "monitor_and_escalate",
+          "note": "Monitor for dehydration closely \u2014 escalate faster than normal"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence May\u2013October through contaminated water and food"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with acute diarrhoea. Staying hydrated with oral rehydration solution (ORS) is important. Seek care promptly if you cannot drink fluids, feel very weak, or symptoms worsen.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe dehydration)",
+      "local_expressions": [
+        "running stomach",
+        "loose stool",
+        "stomach ache with stool"
+      ],
+      "duration_note": "Sudden onset of frequent watery stools indicates acute diarrhoea. If stools have been watery for more than 3 days, or if dehydration signs appear, urgency increases significantly."
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "condition_id": "pneumonia_children",
+  "condition_name": "Pneumonia (Children)",
+  "version": "1.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 7,
+  "symptoms": [
+    {
+      "token": "fast_breathing_child",
+      "weight": 9
+    },
+    {
+      "token": "chest_indrawing",
+      "weight": 10
+    },
+    {
+      "token": "lethargy",
+      "weight": 9
+    },
+    {
+      "token": "convulsions",
+      "weight": 10
+    },
+    {
+      "token": "poor_feeding",
+      "weight": 8
+    },
+    {
+      "token": "fever",
+      "weight": 6
+    },
+    {
+      "token": "cough",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "chest_indrawing_severe",
+    "inability_to_drink",
+    "not_eating_drinking_child",
+    "danger_signs_imci",
+    "cyanosis",
+    "seizures"
+  ],
+  "severity_levels": {
+    "no_pneumonia": [
+      "cough",
+      "mild_cough",
+      "runny_nose"
+    ],
+    "pneumonia": [
+      "fast_breathing_child",
+      "fever",
+      "cough"
+    ],
+    "severe_pneumonia": [
+      "chest_indrawing",
+      "fast_breathing_child"
+    ],
+    "very_severe_disease": [
+      "poor_feeding",
+      "lethargy",
+      "convulsions",
+      "stridor",
+      "chest_indrawing"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "monitor_and_escalate",
+      "note": "Core target population \u2014 use IMCI breathing rate thresholds (\u226550/min <1yr; \u226540/min 1\u20135yr)"
+    },
+    {
+      "modifier": "severe_malnutrition_sam_mam",
+      "effect": "escalate_emergency",
+      "note": "Escalate to very severe disease category immediately \u2014 malnourished children deteriorate rapidly"
+    },
+    {
+      "modifier": "hiv_positive",
+      "effect": "increase_urgency",
+      "note": "Higher risk of PCP pneumonia \u2014 escalate urgency"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence November\u2013February due to dry dusty air irritating airways"
+    }
+  ],
+  "explanation_template": "Your child's symptoms may be consistent with a respiratory infection or pneumonia. Fast breathing or chest indrawing in a child requires urgent clinic or hospital assessment \u2014 please do not wait.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "chest infection",
+    "catarrh with fast breathing"
+  ],
+  "duration_note": null
+}

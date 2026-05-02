@@ -1,0 +1,400 @@
+{
+  "_schema_meta": {
+    "schema_id": "kb_schema",
+    "schema_version": "1.0",
+    "artifact_type": "knowledge_base",
+    "country": "ng",
+    "created": "2026-04-06",
+    "status": "LOCKED \u2014 E2.2 complete",
+    "description": "JSON schema definition for kb.ng.v1.0.json \u2014 the WellaPath Nigeria knowledge base artifact. Every condition object in the knowledge base must conform to this schema exactly. Field additions or renames require a schema version bump.",
+    "locked_principles": [
+      "No PHI fields \u2014 no name, dob, phone, email, address",
+      "All token values must exist in token_dictionary.ng.v1.0.json",
+      "urgency_default must be one of the 4 locked enum values",
+      "explanation_template must never use diagnostic language \u2014 use 'may be consistent with' phrasing",
+      "Red flags always override scoring \u2014 not a suggestion",
+      "Artifact is immutable after publish \u2014 never overwrite a versioned file"
+    ]
+  },
+  "_field_definitions": {
+    "condition_id": {
+      "type": "string",
+      "format": "lowercase_snake_case",
+      "required": true,
+      "unique": true,
+      "description": "Machine-readable unique identifier for the condition. Matches illness_id from the Knowledge Base source sheet.",
+      "example": "malaria",
+      "constraints": [
+        "lowercase only",
+        "underscores only \u2014 no hyphens or spaces",
+        "must match KB source illness_id exactly"
+      ]
+    },
+    "condition_name": {
+      "type": "string",
+      "required": true,
+      "description": "Human-readable display name for the condition.",
+      "example": "Malaria"
+    },
+    "version": {
+      "type": "string",
+      "format": "MAJOR.MINOR",
+      "required": true,
+      "description": "Condition object version. Matches the artifact version this condition was first released in.",
+      "example": "1.0",
+      "constraints": [
+        "Must increment when condition content changes",
+        "Major bump for schema changes, minor for content changes"
+      ]
+    },
+    "country": {
+      "type": "string",
+      "required": true,
+      "description": "ISO 3166-1 alpha-2 country code. Scopes condition to a specific national context.",
+      "example": "ng",
+      "constraints": [
+        "lowercase",
+        "ISO 3166-1 alpha-2 format"
+      ]
+    },
+    "urgency_default": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "emergency",
+        "urgent",
+        "non_urgent",
+        "self_care"
+      ],
+      "description": "Default urgency level for this condition absent any red flag or demographic modifier. One of exactly 4 locked values.",
+      "example": "urgent",
+      "constraints": [
+        "Must be one of exactly 4 enum values \u2014 no others permitted"
+      ]
+    },
+    "base_weight": {
+      "type": "integer",
+      "required": true,
+      "minimum": 1,
+      "maximum": 10,
+      "description": "Base scoring weight for this condition in the Nigeria context (1=lowest burden, 10=highest). Applied before symptom matching.",
+      "example": 10
+    },
+    "symptoms": {
+      "type": "array",
+      "required": true,
+      "min_items": 1,
+      "description": "Ordered list of symptom token/weight pairs for this condition. Each token must exist in symptom_tokens in the token dictionary.",
+      "item_schema": {
+        "token": {
+          "type": "string",
+          "description": "Symptom token \u2014 must exist in symptom_tokens in token_dictionary.ng.v1.0.json",
+          "example": "fever"
+        },
+        "weight": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Contribution weight of this symptom to the condition score when matched",
+          "example": 9
+        }
+      },
+      "example": [
+        {
+          "token": "fever",
+          "weight": 9
+        },
+        {
+          "token": "chills",
+          "weight": 7
+        }
+      ]
+    },
+    "red_flags": {
+      "type": "array",
+      "required": true,
+      "description": "List of red flag tokens that, when matched, immediately override urgency to emergency. All tokens must exist in red_flag_tokens in the token dictionary. Empty array [] if condition has no specific red flags beyond globals.",
+      "item_type": "string \u2014 must exist in red_flag_tokens in token_dictionary.ng.v1.0.json",
+      "example": [
+        "seizures",
+        "inability_to_drink",
+        "prostration"
+      ]
+    },
+    "severity_levels": {
+      "type": "object",
+      "required": true,
+      "description": "Severity tier classification using symptom token arrays. Standard conditions use mild/moderate/severe. IMCI conditions (pneumonia_children) use no_pneumonia/pneumonia/severe_pneumonia/very_severe_disease. Keys must be values from severity_tokens in the token dictionary.",
+      "standard_keys": [
+        "mild",
+        "moderate",
+        "severe"
+      ],
+      "imci_keys": [
+        "no_pneumonia",
+        "pneumonia",
+        "severe_pneumonia",
+        "very_severe_disease"
+      ],
+      "value_type": "array of symptom token strings \u2014 each must exist in symptom_tokens",
+      "example": {
+        "mild": [
+          "fever",
+          "headache"
+        ],
+        "moderate": [
+          "weakness",
+          "vomiting"
+        ],
+        "severe": [
+          "confusion",
+          "seizures"
+        ]
+      }
+    },
+    "demographic_modifiers": {
+      "type": "array",
+      "required": true,
+      "description": "List of demographic modifier objects defining how patient characteristics affect urgency or scoring. Empty array [] if no modifiers apply.",
+      "item_schema": {
+        "modifier": {
+          "type": "string",
+          "description": "Demographic token \u2014 must exist in demographic_tokens in token_dictionary.ng.v1.0.json",
+          "example": "children_under_5"
+        },
+        "effect": {
+          "type": "string",
+          "enum": [
+            "increase_urgency",
+            "increase_base_weight",
+            "escalate_emergency",
+            "escalate_urgent",
+            "monitor_and_escalate",
+            "routine_caution"
+          ],
+          "description": "Locked effect enum value \u2014 what action the engine takes when this modifier applies",
+          "example": "increase_urgency"
+        },
+        "note": {
+          "type": "string",
+          "description": "Clinical rationale for this modifier \u2014 human-readable, not used by engine",
+          "example": "Highest mortality risk \u2014 fast-track evaluation"
+        }
+      }
+    },
+    "seasonal_modifiers": {
+      "type": "array",
+      "required": true,
+      "description": "List of seasonal modifier objects defining transmission or incidence patterns by season. Empty array [] if no seasonal variation applies.",
+      "item_schema": {
+        "season": {
+          "type": "string",
+          "enum": [
+            "rainy_season",
+            "harmattan_season",
+            "dry_season",
+            "lean_season",
+            "farming_season"
+          ],
+          "description": "Locked season enum value",
+          "example": "rainy_season"
+        },
+        "effect": {
+          "type": "string",
+          "enum": [
+            "increase_base_weight",
+            "increase_urgency",
+            "epidemic_alert"
+          ],
+          "description": "Locked seasonal effect enum value",
+          "example": "increase_base_weight"
+        },
+        "note": {
+          "type": "string",
+          "description": "Clinical or epidemiological rationale",
+          "example": "Peak malaria transmission May\u2013October in Nigeria"
+        }
+      }
+    },
+    "explanation_template": {
+      "type": "string",
+      "required": true,
+      "description": "Patient-facing result text shown after triage. Must never say 'you have X' or 'you are diagnosed with X'. Must use 'may be consistent with' or similar non-diagnostic phrasing. Reviewed by medical reviewer before publish.",
+      "constraints": [
+        "No definitive diagnostic language",
+        "No first-person claims of diagnosis",
+        "Must include a recommended action (seek care, visit clinic, etc.)",
+        "Must be written in plain English \u2014 no clinical jargon"
+      ],
+      "example": "Your symptoms may be consistent with malaria or another fever-causing condition. Prompt testing and care is strongly advised."
+    },
+    "care_level": {
+      "type": "string",
+      "required": true,
+      "description": "Human-readable care-seeking recommendation. Paired with urgency_default. Not used by scoring engine \u2014 display only.",
+      "example": "Clinic / Emergency (if severe)"
+    },
+    "local_expressions": {
+      "type": "array",
+      "required": true,
+      "description": "How patients in Nigeria commonly describe this condition in local language or colloquial terms. Used for UI display and future NLP features. Plain strings \u2014 not tokens.",
+      "item_type": "string",
+      "example": [
+        "body hot",
+        "fever dey",
+        "cold and hot"
+      ]
+    },
+    "duration_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "required": true,
+      "description": "Duration context note where clinically significant. null if not applicable. Only used for conditions where onset speed critically changes urgency (e.g. cholera).",
+      "example": "Symptoms typically begin suddenly within hours; profuse watery stools may cause life-threatening dehydration within 24 hours if untreated.",
+      "example_null": null
+    }
+  },
+  "_urgency_enum": {
+    "emergency": {
+      "meaning": "Immediate life-threatening danger sign present",
+      "care_instruction": "Go to emergency now \u2014 do not wait",
+      "engine_behaviour": "Red flag override always produces emergency. Base urgency_default of emergency produces emergency regardless of score."
+    },
+    "urgent": {
+      "meaning": "Needs professional evaluation today",
+      "care_instruction": "Visit a clinic or health facility today",
+      "engine_behaviour": "Demographic modifier with effect=escalate_emergency or increase_urgency can elevate to emergency."
+    },
+    "non_urgent": {
+      "meaning": "Needs care but not immediately life-threatening",
+      "care_instruction": "Visit a clinic within 1\u20132 days",
+      "engine_behaviour": "Demographic modifier can escalate. Red flag always overrides to emergency."
+    },
+    "self_care": {
+      "meaning": "Can be managed at home with monitoring",
+      "care_instruction": "Rest, fluids, OTC care \u2014 seek help if worsens",
+      "engine_behaviour": "Red flag always overrides to emergency. Demographic modifier can escalate."
+    }
+  },
+  "_demographic_effect_enum": {
+    "increase_urgency": "Increase urgency level by one tier (self_care\u2192non_urgent, non_urgent\u2192urgent, urgent\u2192emergency)",
+    "increase_base_weight": "Increase condition base weight for scoring \u2014 higher match likelihood, no urgency change",
+    "escalate_emergency": "Override urgency directly to emergency regardless of score or base urgency_default",
+    "escalate_urgent": "Override urgency to urgent regardless of base urgency_default",
+    "monitor_and_escalate": "No immediate urgency change \u2014 flag for close monitoring; escalate if secondary signs appear",
+    "routine_caution": "Clinical awareness note only \u2014 no engine effect on urgency or scoring"
+  },
+  "_seasonal_effect_enum": {
+    "increase_base_weight": "Increase condition base weight during this season \u2014 higher match probability",
+    "increase_urgency": "Increase urgency one tier during this season",
+    "epidemic_alert": "Epidemic season active \u2014 lower escalation threshold; treat with heightened concern"
+  },
+  "_season_enum": [
+    "rainy_season",
+    "harmattan_season",
+    "dry_season",
+    "lean_season",
+    "farming_season"
+  ],
+  "_annotated_example": {
+    "condition_id": "malaria",
+    "condition_name": "Malaria",
+    "version": "1.0",
+    "country": "ng",
+    "urgency_default": "urgent",
+    "base_weight": 10,
+    "symptoms": [
+      {
+        "token": "fever",
+        "weight": 9
+      },
+      {
+        "token": "chills",
+        "weight": 7
+      },
+      {
+        "token": "headache",
+        "weight": 6
+      },
+      {
+        "token": "body_pain",
+        "weight": 5
+      },
+      {
+        "token": "sweating",
+        "weight": 6
+      },
+      {
+        "token": "weakness",
+        "weight": 5
+      },
+      {
+        "token": "nausea",
+        "weight": 4
+      }
+    ],
+    "red_flags": [
+      "prostration",
+      "impaired_consciousness",
+      "respiratory_distress",
+      "seizures",
+      "circulatory_collapse",
+      "abnormal_bleeding",
+      "severe_jaundice",
+      "haemoglobinuria",
+      "severe_anaemia",
+      "hypoglycaemia"
+    ],
+    "severity_levels": {
+      "mild": [
+        "fever",
+        "headache"
+      ],
+      "moderate": [
+        "weakness",
+        "vomiting"
+      ],
+      "severe": [
+        "confusion",
+        "seizures",
+        "dark_urine",
+        "jaundice"
+      ]
+    },
+    "demographic_modifiers": [
+      {
+        "modifier": "children_under_5",
+        "effect": "increase_urgency",
+        "note": "Highest mortality risk \u2014 fast-track evaluation"
+      },
+      {
+        "modifier": "pregnancy",
+        "effect": "increase_urgency",
+        "note": "Risk of severe malaria and maternal anaemia"
+      },
+      {
+        "modifier": "elderly",
+        "effect": "increase_urgency",
+        "note": "Greater risk of rapid decompensation"
+      }
+    ],
+    "seasonal_modifiers": [
+      {
+        "season": "rainy_season",
+        "effect": "increase_base_weight",
+        "note": "Peak transmission May\u2013October in Nigeria"
+      }
+    ],
+    "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. Malaria is a common and serious illness in Nigeria \u2014 prompt testing and care is strongly advised.",
+    "care_level": "Clinic / Emergency (if severe)",
+    "local_expressions": [
+      "body hot",
+      "fever dey",
+      "cold and hot",
+      "shivering"
+    ],
+    "duration_note": null
+  }
+}

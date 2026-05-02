@@ -1,0 +1,121 @@
+{
+  "_schema_meta": {
+    "schema_id": "rules_schema",
+    "schema_version": "1.0",
+    "artifact_type": "rules",
+    "country": "ng",
+    "created": "2026-04-06",
+    "status": "LOCKED \u2014 E2.2 complete",
+    "description": "JSON schema definition for rules.ng.v1.0.json \u2014 the WellaPath Nigeria red flag rules artifact. Every rule object must conform to this schema exactly. Red flag rules evaluate BEFORE scoring and ALWAYS override urgency when matched.",
+    "locked_principles": [
+      "Red flag override always takes priority \u2014 this is non-negotiable",
+      "Rules evaluate before scoring \u2014 not after",
+      "Global rules (applies_to: all) fire for every condition evaluation",
+      "Condition-specific rules only fire when that condition is in top candidates",
+      "All tokens must exist in red_flag_tokens in token_dictionary.ng.v1.0.json",
+      "override_urgency must always be 'emergency' for global rules",
+      "priority 1 = highest \u2014 evaluated first"
+    ]
+  },
+  "_field_definitions": {
+    "rule_id": {
+      "type": "string",
+      "format": "rf_{zero_padded_number}",
+      "required": true,
+      "unique": true,
+      "description": "Unique rule identifier. Format: rf_NNN (zero-padded to 3 digits). Global rules: rf_001\u2013rf_099. Condition-specific rules: rf_100+.",
+      "example": "rf_001",
+      "constraints": [
+        "Must be unique across entire rules file",
+        "Sequential \u2014 no gaps"
+      ]
+    },
+    "rule_name": {
+      "type": "string",
+      "required": true,
+      "description": "Human-readable rule name for audit and display purposes.",
+      "example": "Inability to Drink or Feed"
+    },
+    "token": {
+      "type": "string",
+      "required": true,
+      "description": "Red flag token this rule evaluates. Must exist in red_flag_tokens in token_dictionary.ng.v1.0.json.",
+      "example": "inability_to_drink"
+    },
+    "override_urgency": {
+      "type": "string",
+      "required": true,
+      "enum": [
+        "emergency",
+        "urgent"
+      ],
+      "description": "Urgency level to force when this rule fires. Global rules must always be 'emergency'. Condition-specific rules may be 'urgent' if not immediately life-threatening.",
+      "example": "emergency"
+    },
+    "applies_to": {
+      "type": "array",
+      "required": true,
+      "description": "Scope of this rule. Use [\"all\"] for global rules that apply to every condition evaluation. Use a list of specific condition_ids for condition-scoped rules.",
+      "valid_values": "['all'] OR array of condition_id strings matching condition_id fields in kb.ng.v1.0.json",
+      "example_global": [
+        "all"
+      ],
+      "example_specific": [
+        "pneumonia_children",
+        "sari",
+        "lower_respiratory_infection"
+      ]
+    },
+    "explanation": {
+      "type": "string",
+      "required": true,
+      "description": "Clinical explanation of why this is a danger sign. Used for audit, medical review, and future UI display. Not shown to patients directly.",
+      "example": "Inability to drink or feed is a universal danger sign requiring immediate emergency care."
+    },
+    "priority": {
+      "type": "integer",
+      "required": true,
+      "minimum": 1,
+      "description": "Evaluation priority. 1 = highest, evaluated first. Global rules should have priority 1\u201310. Condition-specific rules 11+. Within same priority level, rules evaluate in array order.",
+      "example": 1
+    }
+  },
+  "_override_urgency_enum": {
+    "emergency": "Immediate life-threatening danger \u2014 always use for global rules",
+    "urgent": "Needs same-day professional care \u2014 only valid for condition-specific rules"
+  },
+  "_applies_to_rules": {
+    "global": "applies_to: [\"all\"] \u2014 evaluates for every condition assessment regardless of top candidates",
+    "condition_specific": "applies_to: [\"condition_id_1\", \"condition_id_2\"] \u2014 only evaluates when that condition is in the scoring top candidates"
+  },
+  "_evaluation_order": [
+    "1. Evaluate ALL global red flag rules (applies_to: all) first \u2014 highest priority",
+    "2. If any global rule fires \u2192 set urgency to emergency, stop evaluation, return result",
+    "3. Evaluate condition-specific rules for conditions in top 3 scoring candidates",
+    "4. If condition-specific rule fires \u2192 escalate urgency for that condition",
+    "5. Only after all red flag evaluation completes \u2192 run weighted scoring",
+    "6. Red flag result always overrides scoring output \u2014 never the reverse"
+  ],
+  "_annotated_example_global": {
+    "rule_id": "rf_001",
+    "rule_name": "Inability to Drink or Feed",
+    "token": "inability_to_drink",
+    "override_urgency": "emergency",
+    "applies_to": [
+      "all"
+    ],
+    "explanation": "Inability to drink or feed is a universal danger sign in both adults and children. It indicates severe dehydration, altered consciousness, or systemic collapse \u2014 any of which require immediate emergency care.",
+    "priority": 1
+  },
+  "_annotated_example_condition_specific": {
+    "rule_id": "rf_101",
+    "rule_name": "Chest Indrawing \u2014 Severe Pneumonia",
+    "token": "chest_indrawing_severe",
+    "override_urgency": "emergency",
+    "applies_to": [
+      "pneumonia_children"
+    ],
+    "explanation": "Severe chest indrawing in a child indicates severe pneumonia by IMCI classification. Requires emergency referral \u2014 do not manage at community level.",
+    "priority": 11
+  }
+}
