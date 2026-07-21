@@ -59,9 +59,14 @@
       "note": "Highest risk of complications"
     },
     {
-      "modifier": "severe_malnutrition_sam_mam",
-      "effect": "routine_caution",
-      "note": "High mortality risk \u2014 immediate escalation"
+      "modifier": "severe_malnutrition_sam",
+      "effect": "escalate_emergency",
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
     }
   ],
   "seasonal_modifiers": [

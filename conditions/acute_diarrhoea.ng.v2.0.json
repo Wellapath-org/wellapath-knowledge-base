@@ -57,9 +57,14 @@
       "note": "Dehydration can be fatal rapidly in young children \u2014 escalate urgency"
     },
     {
-      "modifier": "severe_malnutrition_sam_mam",
+      "modifier": "severe_malnutrition_sam",
       "effect": "escalate_emergency",
-      "note": "A severely malnourished child with diarrhoea requires immediate emergency referral regardless of dehydration signs"
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
     },
     {
       "modifier": "pregnancy",

@@ -64,7 +64,13 @@
       "pneumonia_children",
       "acute_diarrhoea"
     ],
-    "token_dictionary_version": "1.0"
+    "token_dictionary_version": "1.0",
+    "patch_notes": [
+      "Medical reviewer fix: split severe_malnutrition_sam_mam into sam/mam across 8 conditions",
+      "Medical reviewer fix: hypertension severity_levels.severe populated",
+      "Medical reviewer fix: diabetes DKA symptoms added",
+      "Medical reviewer fix: rf_147 RTI bug corrected"
+    ]
   },
   "conditions": [
     {
@@ -308,9 +314,14 @@
           "note": "Dehydration can be fatal rapidly in young children \u2014 escalate urgency"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
           "effect": "escalate_emergency",
-          "note": "A severely malnourished child with diarrhoea requires immediate emergency referral regardless of dehydration signs"
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         },
         {
           "modifier": "pregnancy",
@@ -389,9 +400,14 @@
           "note": "Increase urgency \u2014 rapid dehydration risk"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
-          "effect": "routine_caution",
-          "note": "ESCALATE \u2014 immediate referral required"
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [
@@ -910,9 +926,14 @@
           "note": "Higher prevalence; escalate if weight loss or anaemia signs"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
           "effect": "increase_urgency",
-          "note": "Increase urgency \u2014 co-infection worsens nutritional status"
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [],
@@ -1326,9 +1347,14 @@
           "note": "Highest risk of complications"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
-          "effect": "routine_caution",
-          "note": "High mortality risk \u2014 immediate escalation"
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [
@@ -1828,9 +1854,14 @@
           "note": "Highest burden; escalate if growth delay or severe anaemia"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
           "effect": "increase_urgency",
-          "note": "Increase urgency \u2014 compounding effect"
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [],
@@ -2305,7 +2336,11 @@
           "dizziness",
           "headache"
         ],
-        "severe": []
+        "severe": [
+          "severe_headache",
+          "blurred_vision",
+          "nosebleed"
+        ]
       },
       "demographic_modifiers": [
         {
@@ -2358,6 +2393,18 @@
         },
         {
           "token": "recurrent_infections",
+          "weight": 5
+        },
+        {
+          "token": "fast_breathing",
+          "weight": 6
+        },
+        {
+          "token": "abdominal_pain",
+          "weight": 5
+        },
+        {
+          "token": "vomiting",
           "weight": 5
         }
       ],
@@ -2594,9 +2641,14 @@
           "note": "High burden; co-existing malaria/malnutrition common"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
           "effect": "increase_urgency",
-          "note": "Increase urgency"
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [],
@@ -3168,9 +3220,14 @@
           "note": "Core target population \u2014 use IMCI breathing rate thresholds (\u226550/min <1yr; \u226540/min 1\u20135yr)"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
           "effect": "escalate_emergency",
-          "note": "Escalate to very severe disease category immediately \u2014 malnourished children deteriorate rapidly"
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         },
         {
           "modifier": "hiv_positive",
@@ -3251,9 +3308,14 @@
           "note": "Core at-risk group \u2014 highest burden"
         },
         {
-          "modifier": "severe_malnutrition_sam_mam",
+          "modifier": "severe_malnutrition_sam",
           "effect": "escalate_emergency",
-          "note": "EMERGENCY if any danger sign \u2014 therapeutic feeding needed"
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
         }
       ],
       "seasonal_modifiers": [
