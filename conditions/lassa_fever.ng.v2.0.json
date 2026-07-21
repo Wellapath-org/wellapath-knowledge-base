@@ -1,0 +1,79 @@
+{
+  "condition_id": "lassa_fever",
+  "condition_name": "Lassa Fever",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 7
+    },
+    {
+      "token": "sore_throat",
+      "weight": 6
+    },
+    {
+      "token": "severe_weakness",
+      "weight": 8
+    },
+    {
+      "token": "headache",
+      "weight": 5
+    },
+    {
+      "token": "chest_pain",
+      "weight": 6
+    },
+    {
+      "token": "bleeding",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "weakness",
+      "fever"
+    ],
+    "moderate": [
+      "bleeding"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Very high mortality in third trimester \u2014 immediate escalation"
+    },
+    {
+      "modifier": "known_rat_exposure",
+      "effect": "escalate_emergency",
+      "note": "EMERGENCY \u2014 increase urgency to maximum"
+    },
+    {
+      "modifier": "healthcare_worker",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 nosocomial risk"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "dry_season",
+      "effect": "increase_base_weight",
+      "note": "Peak transmission November\u2013April; Lassa fever season in Nigeria"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a serious febrile illness. In Nigeria, fever with weakness and sore throat requires urgent medical evaluation \u2014 please seek care immediately.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Serious fever",
+    "rat sickness"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,60 @@
+{
+  "condition_id": "schistosomiasis",
+  "condition_name": "Schistosomiasis",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "blood_in_urine",
+      "weight": 9
+    },
+    {
+      "token": "abdominal_pain",
+      "weight": 5
+    },
+    {
+      "token": "diarrhoea",
+      "weight": 4
+    },
+    {
+      "token": "tiredness",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "abdominal_rigidity_board"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [
+      "blood_in_urine"
+    ],
+    "severe": [
+      "weakness",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_school_age",
+      "effect": "routine_caution",
+      "note": "Higher exposure risk \u2014 endemic in rural/agricultural areas"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "increase_base_weight",
+      "note": "Higher transmission in rainy season through freshwater contact"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with schistosomiasis or another parasitic condition. Blood in urine should always be investigated \u2014 please visit a clinic for testing and treatment.",
+  "care_level": "Clinic",
+  "local_expressions": [
+    "Blood for urine",
+    "blood in urine"
+  ],
+  "duration_note": null
+}

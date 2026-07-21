@@ -1,0 +1,80 @@
+{
+  "condition_id": "yellow_fever",
+  "condition_name": "Yellow Fever",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 7
+    },
+    {
+      "token": "jaundice",
+      "weight": 9
+    },
+    {
+      "token": "headache",
+      "weight": 5
+    },
+    {
+      "token": "muscle_pain",
+      "weight": 5
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    },
+    {
+      "token": "vomiting",
+      "weight": 5
+    },
+    {
+      "token": "backache",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "severe_jaundice",
+    "altered_consciousness",
+    "abdominal_rigidity_board"
+  ],
+  "severity_levels": {
+    "mild": [
+      "headache",
+      "fever"
+    ],
+    "moderate": [
+      "bleeding",
+      "jaundice"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "unvaccinated",
+      "effect": "increase_urgency",
+      "note": "Significantly increase urgency \u2014 vaccination status critical"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of severe disease"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "increase_base_weight",
+      "note": "Higher mosquito activity; peak transmission risk"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a serious fever-causing illness. Jaundice (yellowing of eyes or skin) with fever requires immediate medical evaluation \u2014 please seek emergency care.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Yellow fever",
+    "yellow eye disease"
+  ],
+  "duration_note": null
+}

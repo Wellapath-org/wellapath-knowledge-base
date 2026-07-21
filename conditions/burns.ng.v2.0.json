@@ -1,0 +1,66 @@
+{
+  "condition_id": "burns",
+  "condition_name": "Burns",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "skin_redness",
+      "weight": 5
+    },
+    {
+      "token": "pain_at_burn",
+      "weight": 7
+    },
+    {
+      "token": "blistering",
+      "weight": 8
+    },
+    {
+      "token": "charred_skin",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "shock",
+    "stridor_airway",
+    "respiratory_distress"
+  ],
+  "severity_levels": {
+    "mild": [
+      "skin_redness",
+      "pain_at_burn"
+    ],
+    "moderate": [
+      "blistering",
+      "skin_pain"
+    ],
+    "severe": [
+      "charred_skin",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Scalds common; higher body surface area relative to size \u2014 escalate sooner"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Escalate for any significant burn"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a burn injury. Small superficial burns can be treated carefully at home or at a pharmacy. Seek emergency care for large, deep, or facial burns.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Fire burn",
+    "scald",
+    "hot water burn"
+  ],
+  "duration_note": null
+}

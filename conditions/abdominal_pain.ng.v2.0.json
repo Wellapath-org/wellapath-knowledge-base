@@ -1,0 +1,67 @@
+{
+  "condition_id": "abdominal_pain",
+  "condition_name": "Abdominal Pain (Non-Specific)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "abdominal_pain",
+      "weight": 6
+    },
+    {
+      "token": "bloating",
+      "weight": 4
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    },
+    {
+      "token": "bowel_changes",
+      "weight": 4
+    },
+    {
+      "token": "abdominal_rigidity",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "vomiting_blood",
+    "inability_pass_stool_gas"
+  ],
+  "severity_levels": {
+    "mild": [
+      "bloating"
+    ],
+    "moderate": [
+      "nausea",
+      "pain"
+    ],
+    "severe": [
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Escalate for any significant abdominal pain \u2014 multiple obstetric causes possible"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Escalate with vomiting or fever \u2014 appendicitis and intussusception possible"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms include abdominal pain, which has many possible causes. Mild pain may resolve with rest, but persistent or severe pain \u2014 especially with fever or vomiting \u2014 should be assessed by a healthcare provider.",
+  "care_level": "Pharmacy / Clinic (Emergency if severe or red flags)",
+  "local_expressions": [
+    "Stomach pain",
+    "belle pain",
+    "stomach ache"
+  ],
+  "duration_note": null
+}

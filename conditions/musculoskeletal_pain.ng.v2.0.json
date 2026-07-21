@@ -1,0 +1,71 @@
+{
+  "condition_id": "musculoskeletal_pain",
+  "condition_name": "Back Pain / Musculoskeletal Pain",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "back_pain",
+      "weight": 6
+    },
+    {
+      "token": "joint_pain",
+      "weight": 5
+    },
+    {
+      "token": "muscle_stiffness",
+      "weight": 4
+    },
+    {
+      "token": "limited_movement",
+      "weight": 5
+    },
+    {
+      "token": "limb_weakness",
+      "weight": 8
+    }
+  ],
+  "red_flags": [
+    "paralysis",
+    "neurological_signs",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "back_pain",
+      "muscle_aches"
+    ],
+    "moderate": [
+      "limited_movement",
+      "joint_pain"
+    ],
+    "severe": [
+      "limb_weakness",
+      "muscle_stiffness"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of fracture; escalate with post-fall pain"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Lower back pain common; escalate if flank pain \u2014 rule out UTI"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with musculoskeletal pain or back pain. Most cases are not serious and improve with rest. Seek care if pain is severe, follows an injury, or is accompanied by numbness or weakness.",
+  "care_level": "Pharmacy / Clinic (Emergency if neurological signs or post-trauma)",
+  "local_expressions": [
+    "Back pain",
+    "body pain",
+    "joint pain",
+    "waist pain"
+  ],
+  "duration_note": null
+}

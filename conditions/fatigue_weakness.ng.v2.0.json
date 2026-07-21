@@ -1,0 +1,60 @@
+{
+  "condition_id": "fatigue_weakness",
+  "condition_name": "Fatigue / Weakness",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "persistent_fatigue",
+      "weight": 5
+    },
+    {
+      "token": "low_energy",
+      "weight": 4
+    },
+    {
+      "token": "general_weakness",
+      "weight": 5
+    },
+    {
+      "token": "reduced_daily_function",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "prostration"
+  ],
+  "severity_levels": {
+    "mild": [
+      "tiredness"
+    ],
+    "moderate": [],
+    "severe": [
+      "weakness",
+      "fever"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Fatigue in pregnancy is common but anaemia must be excluded"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Investigate underlying cause \u2014 frailty risk"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms include fatigue or weakness, which can have many causes. In Nigeria, malaria and anaemia are common causes. Please see a healthcare provider if fatigue is severe or accompanied by fever or other symptoms.",
+  "care_level": "Pharmacy / Clinic (Emergency if sudden or one-sided weakness)",
+  "local_expressions": [
+    "Body weakness",
+    "no power",
+    "tired every time"
+  ],
+  "duration_note": null
+}

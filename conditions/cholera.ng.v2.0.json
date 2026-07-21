@@ -1,0 +1,75 @@
+{
+  "condition_id": "cholera",
+  "condition_name": "Cholera",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "profuse_watery_stool",
+      "weight": 10
+    },
+    {
+      "token": "vomiting",
+      "weight": 7
+    },
+    {
+      "token": "dehydration",
+      "weight": 8
+    },
+    {
+      "token": "rapid_onset_diarrhoea",
+      "weight": 9
+    }
+  ],
+  "red_flags": [
+    "sunken_eyes",
+    "inability_to_drink",
+    "altered_consciousness",
+    "shock",
+    "irregular_pulse",
+    "cold_clammy_skin"
+  ],
+  "severity_levels": {
+    "mild": [
+      "diarrhoea"
+    ],
+    "moderate": [
+      "dehydration",
+      "weakness"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "escalate_emergency",
+      "note": "Highest mortality risk \u2014 immediate emergency referral"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "escalate_emergency",
+      "note": "High mortality \u2014 immediate emergency referral"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 maternal and fetal risk"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "epidemic_alert",
+      "note": "Epidemic risk highest during rainy season and flooding events"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a severe dehydrating illness such as cholera. This is a medical emergency \u2014 seek care immediately and begin oral rehydration if available.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Running stomach",
+    "water stool"
+  ],
+  "duration_note": "Symptoms typically begin suddenly within hours of exposure; profuse watery stools may lead to life-threatening dehydration within 24 hours if untreated"
+}

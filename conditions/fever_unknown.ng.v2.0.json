@@ -1,0 +1,68 @@
+{
+  "condition_id": "fever_unknown",
+  "condition_name": "Fever of Unknown Origin",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "prolonged_fever",
+      "weight": 8
+    },
+    {
+      "token": "night_sweats",
+      "weight": 5
+    },
+    {
+      "token": "weight_loss",
+      "weight": 5
+    },
+    {
+      "token": "fatigue",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "neck_stiffness_fever",
+    "respiratory_distress"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever"
+    ],
+    "moderate": [
+      "persistent_fever",
+      "weakness",
+      "fever"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Always escalate \u2014 multiple causes possible"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of missed serious cause"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Escalate \u2014 fever in pregnancy has significant risk"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms include a fever that may need further investigation to identify the cause. Please see a healthcare provider \u2014 several conditions cause prolonged fever and testing can help identify the right treatment.",
+  "care_level": "Clinic (urgent investigation needed)",
+  "local_expressions": [
+    "Body hot",
+    "high temperature",
+    "fever wey no gree go"
+  ],
+  "duration_note": null
+}

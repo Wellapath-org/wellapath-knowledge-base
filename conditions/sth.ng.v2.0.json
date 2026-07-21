@@ -1,0 +1,74 @@
+{
+  "condition_id": "sth",
+  "condition_name": "Soil-Transmitted Helminthiasis",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "abdominal_pain",
+      "weight": 5
+    },
+    {
+      "token": "poor_appetite",
+      "weight": 5
+    },
+    {
+      "token": "pallor",
+      "weight": 6
+    },
+    {
+      "token": "fatigue",
+      "weight": 5
+    },
+    {
+      "token": "diarrhoea",
+      "weight": 4
+    },
+    {
+      "token": "growth_delay",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "severe_anaemia",
+    "bilateral_oedema_lethargy",
+    "inability_pass_stool_gas"
+  ],
+  "severity_levels": {
+    "mild": [
+      "abdominal_pain",
+      "fatigue"
+    ],
+    "moderate": [
+      "pallor",
+      "poor_appetite",
+      "growth_delay"
+    ],
+    "severe": [
+      "general_weakness",
+      "pallor"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_school_age",
+      "effect": "routine_caution",
+      "note": "Highest burden; escalate if growth delay or severe anaemia"
+    },
+    {
+      "modifier": "severe_malnutrition_sam_mam",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 compounding effect"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a parasitic worm infection. This is common and treatable \u2014 a pharmacist or clinic can advise on appropriate treatment.",
+  "care_level": "Pharmacy / Clinic",
+  "local_expressions": [
+    "Worm disease",
+    "stomach worms"
+  ],
+  "duration_note": null
+}

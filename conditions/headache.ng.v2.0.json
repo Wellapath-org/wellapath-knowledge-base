@@ -1,0 +1,62 @@
+{
+  "condition_id": "headache",
+  "condition_name": "Headache",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "head_pain",
+      "weight": 6
+    },
+    {
+      "token": "throbbing_headache",
+      "weight": 5
+    },
+    {
+      "token": "pressure_headache",
+      "weight": 4
+    },
+    {
+      "token": "one_sided_headache",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "neck_stiffness_fever",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "headache"
+    ],
+    "moderate": [
+      "headache"
+    ],
+    "severe": [
+      "severe_headache",
+      "headache"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Severe headache in pregnancy \u2014 ESCALATE, rule out pre-eclampsia"
+    },
+    {
+      "modifier": "hypertension_known",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 may indicate BP crisis"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms include headache, which is very common and usually not serious. However, a sudden severe headache or headache with fever, stiff neck, or confusion requires urgent medical attention \u2014 please seek care promptly.",
+  "care_level": "Self-care / Pharmacy (Clinic if persistent or red flags)",
+  "local_expressions": [
+    "Head pain",
+    "head dey pain me"
+  ],
+  "duration_note": null
+}

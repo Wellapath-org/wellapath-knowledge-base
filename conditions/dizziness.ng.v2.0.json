@@ -1,0 +1,67 @@
+{
+  "condition_id": "dizziness",
+  "condition_name": "Dizziness",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "spinning_sensation",
+      "weight": 6
+    },
+    {
+      "token": "light_headedness",
+      "weight": 5
+    },
+    {
+      "token": "unsteadiness",
+      "weight": 5
+    },
+    {
+      "token": "near_fainting",
+      "weight": 7
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "stroke_signs",
+    "neurological_signs",
+    "cardiac_chest_pain"
+  ],
+  "severity_levels": {
+    "mild": [
+      "light_headedness",
+      "spinning_sensation"
+    ],
+    "moderate": [
+      "unsteadiness",
+      "near_fainting"
+    ],
+    "severe": [
+      "general_weakness",
+      "headache"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Dizziness in pregnancy \u2014 rule out anaemia and pre-eclampsia; escalate with headache"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Risk of falls; escalate"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms include dizziness, which can have several causes including dehydration, low blood pressure, or anaemia. Most cases are not serious, but seek care if dizziness is severe, causes fainting, or comes with headache or chest pain.",
+  "care_level": "Pharmacy / Clinic (Emergency if fainting or neurological signs)",
+  "local_expressions": [
+    "Head spinning",
+    "vertigo",
+    "feel like falling"
+  ],
+  "duration_note": null
+}
