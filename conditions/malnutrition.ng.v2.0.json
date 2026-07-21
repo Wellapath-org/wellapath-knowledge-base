@@ -56,9 +56,14 @@
       "note": "Core at-risk group \u2014 highest burden"
     },
     {
-      "modifier": "severe_malnutrition_sam_mam",
+      "modifier": "severe_malnutrition_sam",
       "effect": "escalate_emergency",
-      "note": "EMERGENCY if any danger sign \u2014 therapeutic feeding needed"
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
     }
   ],
   "seasonal_modifiers": [

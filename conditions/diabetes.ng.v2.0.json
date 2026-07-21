@@ -29,6 +29,18 @@
     {
       "token": "recurrent_infections",
       "weight": 5
+    },
+    {
+      "token": "fast_breathing",
+      "weight": 6
+    },
+    {
+      "token": "abdominal_pain",
+      "weight": 5
+    },
+    {
+      "token": "vomiting",
+      "weight": 5
     }
   ],
   "red_flags": [

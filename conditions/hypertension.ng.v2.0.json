@@ -32,7 +32,11 @@
       "dizziness",
       "headache"
     ],
-    "severe": []
+    "severe": [
+      "severe_headache",
+      "blurred_vision",
+      "nosebleed"
+    ]
   },
   "demographic_modifiers": [
     {

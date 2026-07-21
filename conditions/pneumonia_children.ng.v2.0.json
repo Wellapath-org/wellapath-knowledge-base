@@ -73,9 +73,14 @@
       "note": "Core target population \u2014 use IMCI breathing rate thresholds (\u226550/min <1yr; \u226540/min 1\u20135yr)"
     },
     {
-      "modifier": "severe_malnutrition_sam_mam",
+      "modifier": "severe_malnutrition_sam",
       "effect": "escalate_emergency",
-      "note": "Escalate to very severe disease category immediately \u2014 malnourished children deteriorate rapidly"
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
     },
     {
       "modifier": "hiv_positive",

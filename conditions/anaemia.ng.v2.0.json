@@ -60,9 +60,14 @@
       "note": "High burden; co-existing malaria/malnutrition common"
     },
     {
-      "modifier": "severe_malnutrition_sam_mam",
+      "modifier": "severe_malnutrition_sam",
+      "effect": "escalate_emergency",
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
       "effect": "increase_urgency",
-      "note": "Increase urgency"
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
     }
   ],
   "seasonal_modifiers": [],
