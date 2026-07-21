@@ -1,0 +1,69 @@
+{
+  "condition_id": "neonatal_infection",
+  "condition_name": "Neonatal Infection",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "neonatal_fever",
+      "weight": 9
+    },
+    {
+      "token": "poor_feeding",
+      "weight": 8
+    },
+    {
+      "token": "lethargy",
+      "weight": 9
+    },
+    {
+      "token": "fast_breathing_neonate",
+      "weight": 9
+    },
+    {
+      "token": "irritability",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "neonatal_not_feeding",
+    "respiratory_distress",
+    "blue_lips_face"
+  ],
+  "severity_levels": {
+    "mild": [
+      "irritability",
+      "fever"
+    ],
+    "moderate": [
+      "poor_feeding",
+      "fever"
+    ],
+    "severe": [
+      "convulsions"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "neonates",
+      "effect": "escalate_emergency",
+      "note": "All cases are emergency or urgent \u2014 neonatal illness deteriorates rapidly"
+    },
+    {
+      "modifier": "preterm_birth",
+      "effect": "increase_urgency",
+      "note": "ESCALATE \u2014 higher risk of severe infection"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "A newborn with fever, poor feeding, or unusual behaviour needs urgent medical attention. Newborn infections can become life-threatening very quickly \u2014 please seek emergency care immediately.",
+  "care_level": "Emergency / Clinic (Urgent)",
+  "local_expressions": [
+    "Newborn sickness",
+    "baby weak",
+    "baby no dey feed"
+  ],
+  "duration_note": null
+}

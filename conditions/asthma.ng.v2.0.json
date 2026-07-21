@@ -1,0 +1,64 @@
+{
+  "condition_id": "asthma",
+  "condition_name": "Asthma",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "wheeze",
+      "weight": 9
+    },
+    {
+      "token": "shortness_of_breath",
+      "weight": 8
+    },
+    {
+      "token": "chest_tightness",
+      "weight": 7
+    },
+    {
+      "token": "nocturnal_cough",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "blue_lips_face",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "wheeze"
+    ],
+    "moderate": [],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "increase_urgency",
+      "note": "Higher risk of severe attack; escalate with any breathing difficulty"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Poorly controlled asthma increases fetal risk; escalate"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Dust and dry air triggers exacerbations November\u2013February"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with asthma or a breathing condition. If you use an inhaler, use it now. Seek emergency care immediately if you cannot speak in full sentences or if your lips look blue.",
+  "care_level": "Clinic / Emergency (if severe attack)",
+  "local_expressions": [
+    "Asthma",
+    "chest tightness",
+    "wheeze"
+  ],
+  "duration_note": null
+}

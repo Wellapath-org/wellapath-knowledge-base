@@ -1,0 +1,75 @@
+{
+  "condition_id": "allergic_reactions",
+  "condition_name": "Allergic Reactions (Non-Anaphylactic)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "itchy_rash",
+      "weight": 7
+    },
+    {
+      "token": "hives",
+      "weight": 8
+    },
+    {
+      "token": "sneezing",
+      "weight": 4
+    },
+    {
+      "token": "runny_nose",
+      "weight": 4
+    },
+    {
+      "token": "itchy_eyes",
+      "weight": 5
+    },
+    {
+      "token": "mild_swelling",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress"
+  ],
+  "severity_levels": {
+    "mild": [
+      "hives"
+    ],
+    "moderate": [
+      "runny_nose"
+    ],
+    "severe": [
+      "swelling"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "known_allergy",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 previous reactions may predict severity"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Escalate faster \u2014 respiratory reserve is lower"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence of allergic rhinitis"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with an allergic reaction. Most mild allergic reactions respond to antihistamines available at a pharmacy. Seek emergency care immediately if your symptoms may be consistent with difficulty breathing, throat swelling, or feel faint.",
+  "care_level": "Pharmacy (mild) / Clinic / Emergency (if airway involvement)",
+  "local_expressions": [
+    "Allergy",
+    "reaction",
+    "rash from food or drugs"
+  ],
+  "duration_note": null
+}

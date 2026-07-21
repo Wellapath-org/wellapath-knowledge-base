@@ -1,0 +1,78 @@
+{
+  "condition_id": "skin_infections",
+  "condition_name": "Skin Infections / Skin Diseases",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "itchy_rash",
+      "weight": 6
+    },
+    {
+      "token": "boils",
+      "weight": 6
+    },
+    {
+      "token": "skin_redness",
+      "weight": 5
+    },
+    {
+      "token": "skin_swelling",
+      "weight": 5
+    },
+    {
+      "token": "pus_discharge",
+      "weight": 7
+    },
+    {
+      "token": "skin_pain",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "widespread_spreading_infection",
+    "altered_consciousness",
+    "shock",
+    "black_wound"
+  ],
+  "severity_levels": {
+    "mild": [
+      "itchy_rash",
+      "skin_redness"
+    ],
+    "moderate": [
+      "boils",
+      "pus_discharge",
+      "skin_swelling"
+    ],
+    "severe": [
+      "spreading_rash",
+      "fever",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "immunocompromised",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 risk of rapid spread"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Escalate if fever accompanies rash \u2014 exclude measles/mpox"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a skin infection or skin condition. Many skin conditions are treatable \u2014 a pharmacy or clinic visit is recommended for assessment.",
+  "care_level": "Pharmacy / Clinic (Emergency if severe allergy or rapidly spreading infection)",
+  "local_expressions": [
+    "Skin infection",
+    "skin rash",
+    "ringworm",
+    "boils"
+  ],
+  "duration_note": null
+}

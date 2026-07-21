@@ -1,0 +1,73 @@
+{
+  "condition_id": "uti",
+  "condition_name": "Urinary Tract Infection (UTI)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "dysuria",
+      "weight": 8
+    },
+    {
+      "token": "urinary_frequency",
+      "weight": 7
+    },
+    {
+      "token": "cloudy_urine",
+      "weight": 6
+    },
+    {
+      "token": "lower_abdominal_pain",
+      "weight": 5
+    },
+    {
+      "token": "fever",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "impaired_consciousness",
+    "flank_pain_kidney",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "dysuria"
+    ],
+    "moderate": [
+      "fever"
+    ],
+    "severe": [
+      "fever",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 UTI in pregnancy has high complication risk; treat promptly"
+    },
+    {
+      "modifier": "female",
+      "effect": "routine_caution",
+      "note": "Higher baseline prevalence"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Risk of silent UTI progressing to sepsis; escalate with fever"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a urinary tract infection. This is usually treated with antibiotics \u2014 see a healthcare provider for assessment and treatment.",
+  "care_level": "Clinic",
+  "local_expressions": [
+    "Urine infection",
+    "painful urine",
+    "toilet infection"
+  ],
+  "duration_note": null
+}

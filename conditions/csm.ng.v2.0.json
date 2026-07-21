@@ -1,0 +1,75 @@
+{
+  "condition_id": "csm",
+  "condition_name": "Cerebrospinal Meningitis (CSM)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "severe_headache",
+      "weight": 8
+    },
+    {
+      "token": "neck_stiffness",
+      "weight": 10
+    },
+    {
+      "token": "fever",
+      "weight": 7
+    },
+    {
+      "token": "light_sensitivity",
+      "weight": 7
+    },
+    {
+      "token": "vomiting",
+      "weight": 5
+    },
+    {
+      "token": "confusion",
+      "weight": 9
+    },
+    {
+      "token": "petechial_rash",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "neck_stiffness_fever",
+    "altered_consciousness",
+    "seizures"
+  ],
+  "severity_levels": {
+    "mild": [
+      "headache",
+      "fever"
+    ],
+    "moderate": [
+      "neck_stiffness",
+      "confusion"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "unvaccinated",
+      "effect": "increase_urgency",
+      "note": "Higher risk \u2014 MenAfriVac gap"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "dry_season",
+      "effect": "epidemic_alert",
+      "note": "Epidemic season December\u2013June in the Nigerian meningitis belt"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a serious infection affecting the brain or spine. This requires immediate emergency care \u2014 please go to hospital now or call for help.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Stiff neck fever",
+    "brain fever"
+  ],
+  "duration_note": null
+}

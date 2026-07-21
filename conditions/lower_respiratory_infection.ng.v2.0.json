@@ -1,0 +1,70 @@
+{
+  "condition_id": "lower_respiratory_infection",
+  "condition_name": "Lower Respiratory Tract Infection (Non-Severe)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "productive_cough",
+      "weight": 7
+    },
+    {
+      "token": "breathlessness",
+      "weight": 7
+    },
+    {
+      "token": "chest_discomfort",
+      "weight": 5
+    },
+    {
+      "token": "fever",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "breathlessness_at_rest",
+    "fast_breathing_danger",
+    "altered_consciousness",
+    "blue_lips_face"
+  ],
+  "severity_levels": {
+    "mild": [
+      "productive_cough",
+      "fever",
+      "cough"
+    ],
+    "moderate": [
+      "breathlessness"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of severe disease; escalate sooner"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Check breathing rate; escalate if fast breathing"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence; dry air worsens symptoms"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a lower respiratory infection. Please see a healthcare provider \u2014 some respiratory infections require treatment and monitoring.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Chest infection",
+    "chest cold",
+    "cough with chest pain"
+  ],
+  "duration_note": null
+}

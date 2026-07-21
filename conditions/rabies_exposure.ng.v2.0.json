@@ -1,0 +1,65 @@
+{
+  "condition_id": "rabies_exposure",
+  "condition_name": "Rabies Exposure (Animal Bites)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "animal_bite",
+      "weight": 10
+    },
+    {
+      "token": "wound_at_bite",
+      "weight": 8
+    },
+    {
+      "token": "local_swelling",
+      "weight": 5
+    },
+    {
+      "token": "fear_of_water",
+      "weight": 10
+    },
+    {
+      "token": "confusion",
+      "weight": 9
+    }
+  ],
+  "red_flags": [
+    "hydrophobia",
+    "bat_exposure",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "wound_at_bite",
+      "local_swelling"
+    ],
+    "moderate": [
+      "animal_bite",
+      "wound_at_bite"
+    ],
+    "severe": [
+      "fear_of_water",
+      "confusion"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Higher exposure risk; escalate immediately \u2014 bites often on face/neck"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "You may have been exposed to a serious infection through an animal bite. Rabies post-exposure prophylaxis is needed urgently \u2014 please go to an emergency facility immediately. Do not wait for symptoms.",
+  "care_level": "Emergency (post-exposure prophylaxis urgently needed)",
+  "local_expressions": [
+    "Dog bite",
+    "animal bite",
+    "mad dog bite"
+  ],
+  "duration_note": null
+}

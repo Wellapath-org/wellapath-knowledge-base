@@ -1,0 +1,62 @@
+{
+  "condition_id": "minor_injury",
+  "condition_name": "Minor Injuries / Trauma",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "pain",
+      "weight": 6
+    },
+    {
+      "token": "bruising",
+      "weight": 5
+    },
+    {
+      "token": "swelling",
+      "weight": 5
+    },
+    {
+      "token": "laceration",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "bruising"
+    ],
+    "moderate": [
+      "swelling"
+    ],
+    "severe": [
+      "bleeding"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Head injury requires immediate assessment"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Higher fracture risk from falls"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a minor injury. Most minor injuries can be treated at a pharmacy or clinic. Seek emergency care if there was a head injury, heavy bleeding, or you cannot move the affected area.",
+  "care_level": "Pharmacy / Clinic (Emergency if severe)",
+  "local_expressions": [
+    "Injury",
+    "wound",
+    "cut",
+    "knocks"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,83 @@
+{
+  "condition_id": "cough_common_cold",
+  "condition_name": "Cough / Common Cold (Non-Pneumonia)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 8,
+  "symptoms": [
+    {
+      "token": "runny_nose",
+      "weight": 7
+    },
+    {
+      "token": "sneezing",
+      "weight": 5
+    },
+    {
+      "token": "mild_sore_throat",
+      "weight": 5
+    },
+    {
+      "token": "mild_cough",
+      "weight": 6
+    },
+    {
+      "token": "mild_headache",
+      "weight": 4
+    },
+    {
+      "token": "low_grade_fever",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "impaired_consciousness",
+    "respiratory_distress",
+    "fast_breathing_danger",
+    "inability_to_drink",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "runny_nose",
+      "sneezing"
+    ],
+    "moderate": [
+      "sore_throat",
+      "mild_cough",
+      "cough"
+    ],
+    "severe": [
+      "fever"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "increase_urgency",
+      "note": "Increase urgency if fever or feeding difficulty; watch for fast breathing"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Consider secondary infection risk; escalate if symptoms worsen"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence during Harmattan (Nov\u2013Feb) due to dry dusty air"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a common cold or mild upper respiratory illness. Most cases resolve with rest and fluids, but seek care if your symptoms worsen or breathing becomes difficult.",
+  "care_level": "Self-care / Pharmacy (Clinic if red flags or children with fever)",
+  "local_expressions": [
+    "Catarrh",
+    "cough",
+    "runny nose",
+    "cold"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,68 @@
+{
+  "condition_id": "intestinal_worms",
+  "condition_name": "Intestinal Worm Infestation",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "abdominal_discomfort",
+      "weight": 5
+    },
+    {
+      "token": "poor_appetite",
+      "weight": 5
+    },
+    {
+      "token": "anal_itching",
+      "weight": 6
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    },
+    {
+      "token": "diarrhoea",
+      "weight": 4
+    },
+    {
+      "token": "tiredness",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "abdominal_rigidity_board",
+    "vomiting_blood"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [],
+    "severe": [
+      "blood_in_stool",
+      "dehydration",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Higher prevalence; escalate if weight loss or anaemia signs"
+    },
+    {
+      "modifier": "severe_malnutrition_sam_mam",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 co-infection worsens nutritional status"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with an intestinal worm infestation. This is common and treatable \u2014 a pharmacist or clinic can recommend appropriate deworming treatment.",
+  "care_level": "Pharmacy / Clinic (Clinic for children, persistent symptoms, or red flags)",
+  "local_expressions": [
+    "Worms",
+    "stomach worms",
+    "toilet worms"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,71 @@
+{
+  "condition_id": "urti",
+  "condition_name": "Upper Respiratory Tract Infection (URTI)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "self_care",
+  "base_weight": 8,
+  "symptoms": [
+    {
+      "token": "cough",
+      "weight": 7
+    },
+    {
+      "token": "runny_nose",
+      "weight": 7
+    },
+    {
+      "token": "sneezing",
+      "weight": 5
+    },
+    {
+      "token": "sore_throat",
+      "weight": 6
+    },
+    {
+      "token": "fever",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "impaired_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "cough"
+    ],
+    "moderate": [
+      "sore_throat",
+      "fever"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Escalate if breathing changes or high fever \u2014 risk of lower respiratory involvement"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Escalate if fever or weakness; risk of secondary pneumonia"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence during Harmattan (Nov\u2013Feb)"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with an upper respiratory tract infection such as a cold or flu. Most cases resolve on their own, but seek care if symptoms worsen or breathing becomes difficult.",
+  "care_level": "Self-care / Pharmacy",
+  "local_expressions": [
+    "Catarrh",
+    "cold",
+    "flu"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,73 @@
+{
+  "condition_id": "gastroenteritis",
+  "condition_name": "Gastroenteritis",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 7,
+  "symptoms": [
+    {
+      "token": "nausea",
+      "weight": 6
+    },
+    {
+      "token": "vomiting",
+      "weight": 7
+    },
+    {
+      "token": "diarrhoea",
+      "weight": 7
+    },
+    {
+      "token": "abdominal_cramps",
+      "weight": 5
+    },
+    {
+      "token": "low_grade_fever",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "severe_dehydration",
+    "altered_consciousness",
+    "impaired_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "nausea"
+    ],
+    "moderate": [
+      "diarrhoea",
+      "vomiting"
+    ],
+    "severe": [
+      "dehydration"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "High dehydration risk; escalate faster"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of rapid dehydration"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence through contaminated food/water"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with gastroenteritis. Staying hydrated is very important. If you cannot keep fluids down or feel very weak, seek medical attention promptly.",
+  "care_level": "Pharmacy / Clinic (Emergency if severe dehydration)",
+  "local_expressions": [
+    "Stomach upset",
+    "running stomach and vomiting"
+  ],
+  "duration_note": null
+}

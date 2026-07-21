@@ -1,0 +1,71 @@
+{
+  "condition_id": "hepatitis_b",
+  "condition_name": "Hepatitis B",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "jaundice",
+      "weight": 9
+    },
+    {
+      "token": "fatigue",
+      "weight": 5
+    },
+    {
+      "token": "dark_urine",
+      "weight": 7
+    },
+    {
+      "token": "right_abdominal_pain",
+      "weight": 6
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    },
+    {
+      "token": "loss_of_appetite",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "severe_jaundice",
+    "altered_consciousness",
+    "vomiting_blood"
+  ],
+  "severity_levels": {
+    "mild": [
+      "jaundice",
+      "fatigue"
+    ],
+    "moderate": [
+      "jaundice",
+      "nausea"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Vertical transmission risk; escalate and refer for specialist care"
+    },
+    {
+      "modifier": "immunocompromised",
+      "effect": "increase_urgency",
+      "note": "Higher risk of chronic disease"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a liver condition such as hepatitis. Yellowing of the eyes or skin with fatigue warrants prompt medical evaluation \u2014 please visit a clinic for assessment.",
+  "care_level": "Clinic / Emergency (if liver failure signs)",
+  "local_expressions": [
+    "Yellow fever",
+    "yellow eye",
+    "liver disease"
+  ],
+  "duration_note": null
+}

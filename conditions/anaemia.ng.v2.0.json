@@ -1,0 +1,77 @@
+{
+  "condition_id": "anaemia",
+  "condition_name": "Anaemia",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "fatigue",
+      "weight": 6
+    },
+    {
+      "token": "pallor",
+      "weight": 8
+    },
+    {
+      "token": "dizziness",
+      "weight": 5
+    },
+    {
+      "token": "exertional_breathlessness",
+      "weight": 6
+    },
+    {
+      "token": "rapid_heartbeat",
+      "weight": 6
+    },
+    {
+      "token": "weakness",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fatigue"
+    ],
+    "moderate": [
+      "exertional_breathlessness",
+      "breathlessness"
+    ],
+    "severe": [
+      "breathlessness",
+      "chest_pain",
+      "pain"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 anaemia in pregnancy is a major contributor to maternal mortality"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "High burden; co-existing malaria/malnutrition common"
+    },
+    {
+      "modifier": "severe_malnutrition_sam_mam",
+      "effect": "increase_urgency",
+      "note": "Increase urgency"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with anaemia or low blood levels. This is common in Nigeria and has several treatable causes \u2014 please visit a clinic for a blood test.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Blood shortage",
+    "weak blood",
+    "thin blood"
+  ],
+  "duration_note": null
+}

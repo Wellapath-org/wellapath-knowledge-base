@@ -1,0 +1,73 @@
+{
+  "condition_id": "pregnancy_complications",
+  "condition_name": "Pregnancy-Related Complications (Warning Symptoms)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "vaginal_bleeding",
+      "weight": 9
+    },
+    {
+      "token": "severe_abdominal_pain",
+      "weight": 9
+    },
+    {
+      "token": "severe_headache",
+      "weight": 8
+    },
+    {
+      "token": "facial_swelling",
+      "weight": 7
+    },
+    {
+      "token": "reduced_fetal_movement",
+      "weight": 8
+    },
+    {
+      "token": "dizziness",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "heavy_vaginal_bleeding",
+    "abdominal_rigidity_board",
+    "seizures",
+    "vision_changes_pregnancy"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [],
+    "severe": [
+      "bleeding"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "first_pregnancy",
+      "effect": "routine_caution",
+      "note": "Increased risk of pre-eclampsia"
+    },
+    {
+      "modifier": "hypertension_known",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 pre-eclampsia risk very high"
+    },
+    {
+      "modifier": "diabetes_known",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 gestational diabetes complications"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may indicate a pregnancy-related warning sign. These symptoms require prompt medical attention \u2014 please go to a clinic or hospital immediately, especially if there is bleeding or severe headache.",
+  "care_level": "Clinic (Urgent) / Emergency (if red flags)",
+  "local_expressions": [
+    "Pregnancy bleeding",
+    "pregnancy pain",
+    "eclampsia signs"
+  ],
+  "duration_note": null
+}

@@ -1,0 +1,68 @@
+{
+  "condition_id": "chronic_respiratory",
+  "condition_name": "Chronic Respiratory Disease",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "chronic_cough",
+      "weight": 7
+    },
+    {
+      "token": "exertional_breathlessness",
+      "weight": 7
+    },
+    {
+      "token": "wheeze",
+      "weight": 6
+    },
+    {
+      "token": "chest_tightness",
+      "weight": 6
+    }
+  ],
+  "red_flags": [
+    "blue_lips_face"
+  ],
+  "severity_levels": {
+    "mild": [
+      "exertional_breathlessness",
+      "breathlessness",
+      "chronic_cough",
+      "cough"
+    ],
+    "moderate": [],
+    "severe": [
+      "breathlessness"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "smoker",
+      "effect": "increase_base_weight",
+      "note": "Increase base weight"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Higher severity risk"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Dust triggers exacerbations"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with a long-term respiratory condition. A clinic visit is recommended to investigate the cause \u2014 chronic cough lasting over two weeks should always be evaluated.",
+  "care_level": "Clinic (Urgent) / Emergency (if severe)",
+  "local_expressions": [
+    "Chest problem",
+    "breathing wahala",
+    "chronic cough"
+  ],
+  "duration_note": null
+}

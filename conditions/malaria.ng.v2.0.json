@@ -1,0 +1,99 @@
+{
+  "condition_id": "malaria",
+  "condition_name": "Malaria",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 10,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 9
+    },
+    {
+      "token": "chills",
+      "weight": 7
+    },
+    {
+      "token": "headache",
+      "weight": 6
+    },
+    {
+      "token": "sweating",
+      "weight": 6
+    },
+    {
+      "token": "body_pain",
+      "weight": 5
+    },
+    {
+      "token": "weakness",
+      "weight": 5
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "prostration",
+    "impaired_consciousness",
+    "respiratory_distress",
+    "seizures",
+    "circulatory_collapse",
+    "abnormal_bleeding",
+    "severe_jaundice",
+    "haemoglobinuria",
+    "severe_anaemia",
+    "hypoglycaemia"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever",
+      "headache"
+    ],
+    "moderate": [
+      "weakness",
+      "vomiting"
+    ],
+    "severe": [
+      "confusion",
+      "convulsions",
+      "dark_urine",
+      "jaundice"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "increase_urgency",
+      "note": "Highest mortality risk \u2014 fast-track evaluation required"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "increase_urgency",
+      "note": "Risk of severe malaria and maternal anaemia \u2014 escalate"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Greater risk of rapid decompensation"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "increase_base_weight",
+      "note": "Peak transmission May\u2013October in Nigeria \u2014 higher match probability"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. Malaria is a common and serious illness in Nigeria \u2014 prompt testing and care is strongly advised.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "body hot",
+    "fever dey",
+    "cold and hot",
+    "shivering"
+  ],
+  "duration_note": null
+}

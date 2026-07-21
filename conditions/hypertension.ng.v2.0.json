@@ -1,0 +1,57 @@
+{
+  "condition_id": "hypertension",
+  "condition_name": "Hypertension (Suspected / Known)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 7,
+  "symptoms": [
+    {
+      "token": "headache",
+      "weight": 5
+    },
+    {
+      "token": "dizziness",
+      "weight": 5
+    },
+    {
+      "token": "blurred_vision",
+      "weight": 6
+    },
+    {
+      "token": "nosebleed",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [
+      "dizziness",
+      "headache"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "over_40",
+      "effect": "increase_base_weight",
+      "note": "Increase base weight \u2014 rising hypertension prevalence in Nigeria"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 risk of pre-eclampsia/eclampsia"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with high blood pressure or a related condition. Blood pressure can be measured at a clinic \u2014 it is important to have this checked, especially if your symptoms may be consistent with headaches or dizziness.",
+  "care_level": "Clinic / Emergency (if stroke or heart attack symptoms)",
+  "local_expressions": [
+    "High blood",
+    "BP"
+  ],
+  "duration_note": null
+}
