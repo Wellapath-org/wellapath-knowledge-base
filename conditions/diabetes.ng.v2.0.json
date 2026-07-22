@@ -44,7 +44,8 @@
     }
   ],
   "red_flags": [
-    "altered_consciousness"
+    "altered_consciousness",
+    "hypoglycaemia"
   ],
   "severity_levels": {
     "mild": [],
