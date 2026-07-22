@@ -69,7 +69,8 @@
       "Medical reviewer fix: split severe_malnutrition_sam_mam into sam/mam across 8 conditions",
       "Medical reviewer fix: hypertension severity_levels.severe populated",
       "Medical reviewer fix: diabetes DKA symptoms added",
-      "Medical reviewer fix: rf_147 RTI bug corrected"
+      "Medical reviewer fix: rf_147 RTI bug corrected",
+      "Consistency fix: mirror new red flag tokens into hypertension, diabetes, and dental_oral condition files"
     ]
   },
   "conditions": [
@@ -1113,7 +1114,8 @@
       ],
       "red_flags": [
         "respiratory_distress",
-        "impaired_consciousness"
+        "impaired_consciousness",
+        "facial_space_swelling"
       ],
       "severity_levels": {
         "mild": [
@@ -2328,7 +2330,8 @@
         }
       ],
       "red_flags": [
-        "altered_consciousness"
+        "altered_consciousness",
+        "severe_headache_vomiting"
       ],
       "severity_levels": {
         "mild": [],
@@ -2409,7 +2412,8 @@
         }
       ],
       "red_flags": [
-        "altered_consciousness"
+        "altered_consciousness",
+        "hypoglycaemia"
       ],
       "severity_levels": {
         "mild": [],

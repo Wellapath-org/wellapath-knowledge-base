@@ -29,7 +29,8 @@
   ],
   "red_flags": [
     "respiratory_distress",
-    "impaired_consciousness"
+    "impaired_consciousness",
+    "facial_space_swelling"
   ],
   "severity_levels": {
     "mild": [

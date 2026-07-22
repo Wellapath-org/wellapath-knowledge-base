@@ -24,7 +24,8 @@
     }
   ],
   "red_flags": [
-    "altered_consciousness"
+    "altered_consciousness",
+    "severe_headache_vomiting"
   ],
   "severity_levels": {
     "mild": [],
