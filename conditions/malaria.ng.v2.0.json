@@ -87,7 +87,7 @@
       "note": "Peak transmission May\u2013October in Nigeria \u2014 higher match probability"
     }
   ],
-  "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. Malaria is a common and serious illness in Nigeria \u2014 prompt testing and care is strongly advised.",
+  "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. In young children during rainy season this is especially serious \u2014 please see a clinic today, do not wait. If your child stops drinking, becomes drowsy, or has a fit, go to emergency immediately.",
   "care_level": "Clinic / Emergency (if severe)",
   "local_expressions": [
     "body hot",
