@@ -1,0 +1,1150 @@
+[
+  {
+    "token": "abdominal_cramps",
+    "display_name": "Stomach cramps",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "abdominal_discomfort",
+    "display_name": "Stomach discomfort",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "abdominal_pain",
+    "display_name": "Stomach pain",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "abdominal_rigidity",
+    "display_name": "Belly feels hard and stiff",
+    "body_area": "Abdomen",
+    "ambiguous": true,
+    "note": "Clinical sign (guarding); lay users may not recognise 'rigidity' \u2014 display name simplifies but reachability depends on user noticing it"
+  },
+  {
+    "token": "anal_itching",
+    "display_name": "Itching around the bottom",
+    "body_area": "Pelvis",
+    "ambiguous": true,
+    "note": "Sensitive/embarrassing symptom, users may under-report"
+  },
+  {
+    "token": "animal_bite",
+    "display_name": "Bitten by an animal",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "back_pain",
+    "display_name": "Back pain",
+    "body_area": "Back",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "backache",
+    "display_name": "Back ache",
+    "body_area": "Back",
+    "ambiguous": true,
+    "note": "Duplicate of back_pain in effect \u2014 near-identical token, may confuse token selection"
+  },
+  {
+    "token": "bad_breath",
+    "display_name": "Bad breath",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "bilateral_oedema",
+    "display_name": "Swelling in both feet/legs",
+    "body_area": "Legs",
+    "ambiguous": true,
+    "note": "Token doesn't state location; clinical term for symmetric swelling (malnutrition sign) \u2014 lay users say 'my legs are swollen'"
+  },
+  {
+    "token": "bite_mark",
+    "display_name": "Mark left by a bite",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "bleeding",
+    "display_name": "Bleeding",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No location specified \u2014 could be anywhere; very generic token"
+  },
+  {
+    "token": "bleeding_gums",
+    "display_name": "Bleeding gums",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "blistering",
+    "display_name": "Blisters on the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "bloating",
+    "display_name": "Bloated stomach",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "blood_in_stool",
+    "display_name": "Blood in stool",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "blood_in_urine",
+    "display_name": "Blood in urine",
+    "body_area": "Pelvis",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "blurred_vision",
+    "display_name": "Blurry vision",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "body_pain",
+    "display_name": "Pain all over the body",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "boils",
+    "display_name": "Boils on the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "bowel_changes",
+    "display_name": "Change in toilet habits (bowel movements)",
+    "body_area": "Abdomen",
+    "ambiguous": true,
+    "note": "Vague clinical umbrella term \u2014 unclear what change means to a lay user"
+  },
+  {
+    "token": "breathlessness",
+    "display_name": "Shortness of breath",
+    "body_area": "Chest",
+    "ambiguous": true,
+    "note": "Near-duplicate of shortness_of_breath/difficulty_breathing \u2014 three tokens mean almost the same thing"
+  },
+  {
+    "token": "bruising",
+    "display_name": "Bruising",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "charred_skin",
+    "display_name": "Burnt / charred skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chest_discomfort",
+    "display_name": "Discomfort in the chest",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chest_indrawing",
+    "display_name": "Skin pulling in between the ribs when breathing",
+    "body_area": "Chest",
+    "ambiguous": true,
+    "note": "Key paediatric danger sign but the term itself is clinical \u2014 needs an illustration/description, not just text, to be reachable"
+  },
+  {
+    "token": "chest_pain",
+    "display_name": "Chest pain",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chest_tightness",
+    "display_name": "Tightness in the chest",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chills",
+    "display_name": "Chills / feeling cold with fever",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chronic_cough",
+    "display_name": "Cough lasting more than 2-3 weeks",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "chronic_diarrhoea",
+    "display_name": "Diarrhoea lasting more than 2 weeks",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "cloudy_urine",
+    "display_name": "Cloudy urine",
+    "body_area": "Pelvis",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "confusion",
+    "display_name": "Confusion / not thinking clearly",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "constipation",
+    "display_name": "Constipation",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "convulsions",
+    "display_name": "Fits / convulsions",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Whole-body event but brain-driven; some users may look under General instead of Head"
+  },
+  {
+    "token": "cough",
+    "display_name": "Cough",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "dark_urine",
+    "display_name": "Dark-coloured urine",
+    "body_area": "Pelvis",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "dehydration",
+    "display_name": "Signs of dehydration (very thirsty, dry mouth, sunken eyes)",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Umbrella clinical term \u2014 needs the expanded description to be meaningful to a lay user"
+  },
+  {
+    "token": "diarrhoea",
+    "display_name": "Diarrhoea / watery stool",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "difficulty_breathing",
+    "display_name": "Difficulty breathing",
+    "body_area": "Chest",
+    "ambiguous": true,
+    "note": "Near-duplicate of breathlessness/shortness_of_breath"
+  },
+  {
+    "token": "difficulty_swallowing",
+    "display_name": "Difficulty swallowing",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "dizziness",
+    "display_name": "Dizziness",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "dysuria",
+    "display_name": "Pain when urinating",
+    "body_area": "Pelvis",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "ear_discharge",
+    "display_name": "Fluid coming from the ear",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "ear_pain",
+    "display_name": "Ear pain",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "excessive_thirst",
+    "display_name": "Unusually thirsty",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "exertional_breathlessness",
+    "display_name": "Breathless with activity or exercise",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "eye_discharge",
+    "display_name": "Discharge from the eye",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "eye_itchiness",
+    "display_name": "Itchy eyes",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of itchy_eyes token"
+  },
+  {
+    "token": "eye_pain",
+    "display_name": "Eye pain",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "eye_redness",
+    "display_name": "Red eyes",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of red_eyes token"
+  },
+  {
+    "token": "facial_swelling",
+    "display_name": "Swelling of the face",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "fast_breathing",
+    "display_name": "Fast breathing",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "fast_breathing_child",
+    "display_name": "Fast breathing (in a child)",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "fast_breathing_neonate",
+    "display_name": "Fast breathing (in a newborn baby)",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "fatigue",
+    "display_name": "Tiredness / fatigue",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "fear_of_water",
+    "display_name": "Fear of water",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Very specific rabies sign (hydrophobia) \u2014 unfamiliar phrasing for most lay users, may need extra context text"
+  },
+  {
+    "token": "fever",
+    "display_name": "Fever / high temperature",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "frequent_urination",
+    "display_name": "Urinating more often than usual",
+    "body_area": "Pelvis",
+    "ambiguous": true,
+    "note": "Near-duplicate of urinary_frequency token"
+  },
+  {
+    "token": "general_weakness",
+    "display_name": "General weakness",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of weakness token"
+  },
+  {
+    "token": "growth_delay",
+    "display_name": "Child not growing as expected",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Requires caregiver to know growth history/milestones \u2014 hard for a lay user to self-report in the moment"
+  },
+  {
+    "token": "head_injury_signs",
+    "display_name": "Signs of a head injury",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Vague umbrella term covering multiple distinct signs (e.g. vomiting, confusion, loss of consciousness after a knock to the head)"
+  },
+  {
+    "token": "head_pain",
+    "display_name": "Head pain",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Near-duplicate of headache token"
+  },
+  {
+    "token": "headache",
+    "display_name": "Headache",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "hearing_loss",
+    "display_name": "Loss of hearing",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of reduced_hearing token"
+  },
+  {
+    "token": "hives",
+    "display_name": "Itchy raised bumps on the skin (hives)",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "hoarse_voice",
+    "display_name": "Hoarse or rough voice",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "irritability",
+    "display_name": "Unusually irritable or fussy",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Most meaningful for infants/children observed by a caregiver \u2014 an adult self-reporting this is less common"
+  },
+  {
+    "token": "itchy_eyes",
+    "display_name": "Itchy eyes",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of eye_itchiness token"
+  },
+  {
+    "token": "itchy_rash",
+    "display_name": "Itchy rash",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "jaundice",
+    "display_name": "Yellowing of the skin or eyes",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "joint_pain",
+    "display_name": "Joint pain",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No specific joint/limb identified \u2014 could be arms, legs, or both"
+  },
+  {
+    "token": "koplik_spots",
+    "display_name": "White spots inside the mouth",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Koplik spots is a clinical term unfamiliar to lay users \u2014 display name must carry all the meaning"
+  },
+  {
+    "token": "laceration",
+    "display_name": "Cut / laceration",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "leg_swelling",
+    "display_name": "Swelling in the leg",
+    "body_area": "Legs",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "lethargy",
+    "display_name": "Unusually sleepy or low energy",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Clinical term for a danger sign, especially in infants \u2014 meaning depends heavily on display text"
+  },
+  {
+    "token": "light_headedness",
+    "display_name": "Feeling light-headed",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Near-duplicate of dizziness/near_fainting"
+  },
+  {
+    "token": "light_sensitivity",
+    "display_name": "Eyes hurt in bright light",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Photophobia \u2014 important meningitis sign, but clinical term needs translating"
+  },
+  {
+    "token": "limb_weakness",
+    "display_name": "Weakness in an arm or leg",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Doesn't specify which limb \u2014 arm vs leg matters for body-diagram routing"
+  },
+  {
+    "token": "limited_movement",
+    "display_name": "Difficulty moving normally",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No body part specified \u2014 could apply to back, arms, or legs"
+  },
+  {
+    "token": "local_swelling",
+    "display_name": "Swelling in one spot",
+    "body_area": "Skin",
+    "ambiguous": true,
+    "note": "No location specified \u2014 generic swelling token used across multiple conditions"
+  },
+  {
+    "token": "loss_of_appetite",
+    "display_name": "Not feeling like eating",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "low_energy",
+    "display_name": "Low energy",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of fatigue/tiredness tokens"
+  },
+  {
+    "token": "low_grade_fever",
+    "display_name": "Mild fever",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "lower_abdominal_pain",
+    "display_name": "Pain in the lower belly",
+    "body_area": "Pelvis",
+    "ambiguous": true,
+    "note": "Could reasonably sit under Abdomen or Pelvis depending on how the body diagram splits the torso"
+  },
+  {
+    "token": "mild_cough",
+    "display_name": "Mild cough",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "mild_headache",
+    "display_name": "Mild headache",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "mild_sore_throat",
+    "display_name": "Mild sore throat",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "mild_swelling",
+    "display_name": "Mild swelling",
+    "body_area": "Skin",
+    "ambiguous": true,
+    "note": "No location specified"
+  },
+  {
+    "token": "mouth_sores",
+    "display_name": "Sores in the mouth",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "mucus_in_stool",
+    "display_name": "Mucus in stool",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "muscle_aches",
+    "display_name": "Muscle aches all over",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of muscle_pain"
+  },
+  {
+    "token": "muscle_pain",
+    "display_name": "Muscle pain",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of muscle_aches"
+  },
+  {
+    "token": "muscle_stiffness",
+    "display_name": "Stiff muscles",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No location specified \u2014 could be back, neck, or limbs"
+  },
+  {
+    "token": "nausea",
+    "display_name": "Feeling sick / nausea",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "near_fainting",
+    "display_name": "Feeling like you might faint",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "neck_stiffness",
+    "display_name": "Stiff neck",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "neonatal_fever",
+    "display_name": "Fever in a newborn baby",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "night_sweats",
+    "display_name": "Sweating heavily at night",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "nocturnal_cough",
+    "display_name": "Cough that's worse at night",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "nosebleed",
+    "display_name": "Nosebleed",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "one_sided_headache",
+    "display_name": "Headache on one side of the head",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "oral_thrush",
+    "display_name": "White patches in the mouth (thrush)",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "pain",
+    "display_name": "Pain",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Extremely generic \u2014 no body location or character at all; effectively unreachable as a meaningful filter"
+  },
+  {
+    "token": "pain_at_burn",
+    "display_name": "Pain at the burn site",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "pain_on_chewing",
+    "display_name": "Pain when chewing",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "pain_post_accident",
+    "display_name": "Pain after an accident",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No body location specified"
+  },
+  {
+    "token": "pallor",
+    "display_name": "Unusually pale skin",
+    "body_area": "Skin",
+    "ambiguous": true,
+    "note": "Clinical sign users may not notice in themselves \u2014 often observed by someone else"
+  },
+  {
+    "token": "palpitations",
+    "display_name": "Fast or pounding heartbeat",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "persistent_fatigue",
+    "display_name": "Ongoing tiredness that doesn't go away",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of fatigue/tiredness"
+  },
+  {
+    "token": "persistent_fever",
+    "display_name": "Fever that doesn't go away",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "petechial_rash",
+    "display_name": "Small red or purple spots that don't fade when pressed",
+    "body_area": "Skin",
+    "ambiguous": true,
+    "note": "Important meningitis/VHF sign but the non-fading/blanching test is a clinical concept lay users won't know to check"
+  },
+  {
+    "token": "poor_appetite",
+    "display_name": "Poor appetite",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of loss_of_appetite"
+  },
+  {
+    "token": "poor_feeding",
+    "display_name": "Feeding poorly (baby or young child)",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "poor_growth",
+    "display_name": "Poor growth (not gaining weight/height)",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Requires tracking over time \u2014 hard to self-report in a single symptom check"
+  },
+  {
+    "token": "pressure_headache",
+    "display_name": "Headache that feels like pressure",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "productive_cough",
+    "display_name": "Cough with phlegm or mucus",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "profuse_watery_stool",
+    "display_name": "Very watery, frequent stool",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "prolonged_fever",
+    "display_name": "Fever lasting several days",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "ptosis",
+    "display_name": "Drooping eyelid",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Clinical term unfamiliar to most lay users \u2014 needs a plain description or illustration"
+  },
+  {
+    "token": "pus_discharge",
+    "display_name": "Pus coming from the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "rapid_heartbeat",
+    "display_name": "Fast heartbeat",
+    "body_area": "Chest",
+    "ambiguous": true,
+    "note": "Near-duplicate of palpitations"
+  },
+  {
+    "token": "rapid_onset_diarrhoea",
+    "display_name": "Diarrhoea that started suddenly",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "recurrent_infections",
+    "display_name": "Getting infections again and again",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of repeated_infections; also requires recall over time"
+  },
+  {
+    "token": "red_eyes",
+    "display_name": "Red eyes",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of eye_redness"
+  },
+  {
+    "token": "reduced_daily_function",
+    "display_name": "Struggling with everyday activities",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Vague functional-status term \u2014 hard for a lay user to map to a concrete symptom"
+  },
+  {
+    "token": "reduced_fetal_movement",
+    "display_name": "Baby moving less than usual (in pregnancy)",
+    "body_area": "Pelvis",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "reduced_hearing",
+    "display_name": "Reduced hearing",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Duplicate of hearing_loss"
+  },
+  {
+    "token": "repeated_infections",
+    "display_name": "Repeated infections",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Duplicate of recurrent_infections"
+  },
+  {
+    "token": "right_abdominal_pain",
+    "display_name": "Pain on the right side of the belly",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "runny_nose",
+    "display_name": "Runny nose",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "severe_abdominal_pain",
+    "display_name": "Severe stomach pain",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "severe_headache",
+    "display_name": "Severe headache",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "severe_weakness",
+    "display_name": "Severe weakness",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "shortness_of_breath",
+    "display_name": "Shortness of breath",
+    "body_area": "Chest",
+    "ambiguous": true,
+    "note": "Near-duplicate of breathlessness/difficulty_breathing"
+  },
+  {
+    "token": "skin_lesions",
+    "display_name": "Sores or spots on the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "skin_pain",
+    "display_name": "Pain on the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "skin_redness",
+    "display_name": "Redness of the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "skin_swelling",
+    "display_name": "Swelling of the skin",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "sneezing",
+    "display_name": "Sneezing",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "sore_throat",
+    "display_name": "Sore throat",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "spinning_sensation",
+    "display_name": "Feeling like the room is spinning",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "spreading_rash",
+    "display_name": "Rash that is spreading",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "spreading_swelling",
+    "display_name": "Swelling that is spreading",
+    "body_area": "Skin",
+    "ambiguous": true,
+    "note": "Key snake-bite danger sign \u2014 'spreading' over time is hard to capture in a one-off symptom pick"
+  },
+  {
+    "token": "stridor",
+    "display_name": "Noisy, harsh sound when breathing in",
+    "body_area": "Neck",
+    "ambiguous": true,
+    "note": "Clinical term unfamiliar to lay users \u2014 needs a plain-language description, possibly audio/illustration"
+  },
+  {
+    "token": "sweating",
+    "display_name": "Sweating",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "swelling",
+    "display_name": "Swelling",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "No location specified \u2014 extremely generic token"
+  },
+  {
+    "token": "swollen_eyelids",
+    "display_name": "Swollen eyelids",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "swollen_gums",
+    "display_name": "Swollen gums",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "swollen_lymph_nodes",
+    "display_name": "Swollen glands (in the neck, armpit, or groin)",
+    "body_area": "Neck",
+    "ambiguous": true,
+    "note": "Lymph nodes can swell in several places, not just the neck \u2014 routing to a single body area is imprecise"
+  },
+  {
+    "token": "swollen_neck",
+    "display_name": "Swollen neck",
+    "body_area": "Neck",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "throat_membrane",
+    "display_name": "A grey-white coating in the throat",
+    "body_area": "Neck",
+    "ambiguous": true,
+    "note": "Diphtheria pseudomembrane \u2014 very specific clinical sign, unlikely to be recognised or reported by a lay user without a photo/description"
+  },
+  {
+    "token": "throbbing_headache",
+    "display_name": "Throbbing headache",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "tiredness",
+    "display_name": "Tiredness",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of fatigue"
+  },
+  {
+    "token": "toothache",
+    "display_name": "Toothache",
+    "body_area": "Head",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "unsteadiness",
+    "display_name": "Feeling unsteady on your feet",
+    "body_area": "Head",
+    "ambiguous": true,
+    "note": "Balance-related; could plausibly be filed under Legs by some users"
+  },
+  {
+    "token": "urinary_frequency",
+    "display_name": "Needing to urinate often",
+    "body_area": "Pelvis",
+    "ambiguous": true,
+    "note": "Near-duplicate of frequent_urination"
+  },
+  {
+    "token": "vaginal_bleeding",
+    "display_name": "Vaginal bleeding",
+    "body_area": "Pelvis",
+    "ambiguous": true,
+    "note": "Sensitive symptom \u2014 some users may be reluctant to report via a generic body-area picker"
+  },
+  {
+    "token": "vomiting",
+    "display_name": "Vomiting",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "watery_stool",
+    "display_name": "Watery stool",
+    "body_area": "Abdomen",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "weakness",
+    "display_name": "Weakness",
+    "body_area": "General",
+    "ambiguous": true,
+    "note": "Near-duplicate of general_weakness"
+  },
+  {
+    "token": "weight_loss",
+    "display_name": "Losing weight without trying",
+    "body_area": "General",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "wheeze",
+    "display_name": "Wheezing / whistling sound when breathing",
+    "body_area": "Chest",
+    "ambiguous": false,
+    "note": ""
+  },
+  {
+    "token": "wound_at_bite",
+    "display_name": "Wound where the bite happened",
+    "body_area": "Skin",
+    "ambiguous": false,
+    "note": ""
+  }
+]
