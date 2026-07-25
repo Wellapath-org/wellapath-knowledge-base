@@ -1,0 +1,165 @@
+token,display_name,body_area,ambiguous,note
+abdominal_cramps,Stomach cramps,Abdomen,False,
+abdominal_discomfort,Stomach discomfort,Abdomen,False,
+abdominal_pain,Stomach pain,Abdomen,False,
+abdominal_rigidity,Belly feels hard and stiff,Abdomen,True,Clinical sign (guarding); lay users may not recognise 'rigidity' — display name simplifies but reachability depends on user noticing it
+anal_itching,Itching around the bottom,Pelvis,True,"Sensitive/embarrassing symptom, users may under-report"
+animal_bite,Bitten by an animal,Skin,False,
+back_pain,Back pain,Back,False,
+backache,Back ache,Back,True,"Duplicate of back_pain in effect — near-identical token, may confuse token selection"
+bad_breath,Bad breath,Head,False,
+bilateral_oedema,Swelling in both feet/legs,Legs,True,Token doesn't state location; clinical term for symmetric swelling (malnutrition sign) — lay users say 'my legs are swollen'
+bite_mark,Mark left by a bite,Skin,False,
+bleeding,Bleeding,General,True,No location specified — could be anywhere; very generic token
+bleeding_gums,Bleeding gums,Head,False,
+blistering,Blisters on the skin,Skin,False,
+bloating,Bloated stomach,Abdomen,False,
+blood_in_stool,Blood in stool,Abdomen,False,
+blood_in_urine,Blood in urine,Pelvis,False,
+blurred_vision,Blurry vision,Head,False,
+body_pain,Pain all over the body,General,False,
+boils,Boils on the skin,Skin,False,
+bowel_changes,Change in toilet habits (bowel movements),Abdomen,True,Vague clinical umbrella term — unclear what change means to a lay user
+breathlessness,Shortness of breath,Chest,True,Near-duplicate of shortness_of_breath/difficulty_breathing — three tokens mean almost the same thing
+bruising,Bruising,Skin,False,
+charred_skin,Burnt / charred skin,Skin,False,
+chest_discomfort,Discomfort in the chest,Chest,False,
+chest_indrawing,Skin pulling in between the ribs when breathing,Chest,True,"Key paediatric danger sign but the term itself is clinical — needs an illustration/description, not just text, to be reachable"
+chest_pain,Chest pain,Chest,False,
+chest_tightness,Tightness in the chest,Chest,False,
+chills,Chills / feeling cold with fever,General,False,
+chronic_cough,Cough lasting more than 2-3 weeks,Chest,False,
+chronic_diarrhoea,Diarrhoea lasting more than 2 weeks,Abdomen,False,
+cloudy_urine,Cloudy urine,Pelvis,False,
+confusion,Confusion / not thinking clearly,Head,False,
+constipation,Constipation,Abdomen,False,
+convulsions,Fits / convulsions,Head,True,Whole-body event but brain-driven; some users may look under General instead of Head
+cough,Cough,Chest,False,
+dark_urine,Dark-coloured urine,Pelvis,False,
+dehydration,"Signs of dehydration (very thirsty, dry mouth, sunken eyes)",General,True,Umbrella clinical term — needs the expanded description to be meaningful to a lay user
+diarrhoea,Diarrhoea / watery stool,Abdomen,False,
+difficulty_breathing,Difficulty breathing,Chest,True,Near-duplicate of breathlessness/shortness_of_breath
+difficulty_swallowing,Difficulty swallowing,Neck,False,
+dizziness,Dizziness,Head,False,
+dysuria,Pain when urinating,Pelvis,False,
+ear_discharge,Fluid coming from the ear,Head,False,
+ear_pain,Ear pain,Head,False,
+excessive_thirst,Unusually thirsty,General,False,
+exertional_breathlessness,Breathless with activity or exercise,Chest,False,
+eye_discharge,Discharge from the eye,Head,False,
+eye_itchiness,Itchy eyes,Head,True,Duplicate of itchy_eyes token
+eye_pain,Eye pain,Head,False,
+eye_redness,Red eyes,Head,True,Duplicate of red_eyes token
+facial_swelling,Swelling of the face,Head,False,
+fast_breathing,Fast breathing,Chest,False,
+fast_breathing_child,Fast breathing (in a child),Chest,False,
+fast_breathing_neonate,Fast breathing (in a newborn baby),Chest,False,
+fatigue,Tiredness / fatigue,General,False,
+fear_of_water,Fear of water,Head,True,"Very specific rabies sign (hydrophobia) — unfamiliar phrasing for most lay users, may need extra context text"
+fever,Fever / high temperature,General,False,
+frequent_urination,Urinating more often than usual,Pelvis,True,Near-duplicate of urinary_frequency token
+general_weakness,General weakness,General,True,Near-duplicate of weakness token
+growth_delay,Child not growing as expected,General,True,Requires caregiver to know growth history/milestones — hard for a lay user to self-report in the moment
+head_injury_signs,Signs of a head injury,Head,True,"Vague umbrella term covering multiple distinct signs (e.g. vomiting, confusion, loss of consciousness after a knock to the head)"
+head_pain,Head pain,Head,True,Near-duplicate of headache token
+headache,Headache,Head,False,
+hearing_loss,Loss of hearing,Head,True,Duplicate of reduced_hearing token
+hives,Itchy raised bumps on the skin (hives),Skin,False,
+hoarse_voice,Hoarse or rough voice,Neck,False,
+irritability,Unusually irritable or fussy,General,True,Most meaningful for infants/children observed by a caregiver — an adult self-reporting this is less common
+itchy_eyes,Itchy eyes,Head,True,Duplicate of eye_itchiness token
+itchy_rash,Itchy rash,Skin,False,
+jaundice,Yellowing of the skin or eyes,Skin,False,
+joint_pain,Joint pain,General,True,"No specific joint/limb identified — could be arms, legs, or both"
+koplik_spots,White spots inside the mouth,Head,True,Koplik spots is a clinical term unfamiliar to lay users — display name must carry all the meaning
+laceration,Cut / laceration,Skin,False,
+leg_swelling,Swelling in the leg,Legs,False,
+lethargy,Unusually sleepy or low energy,General,True,"Clinical term for a danger sign, especially in infants — meaning depends heavily on display text"
+light_headedness,Feeling light-headed,Head,True,Near-duplicate of dizziness/near_fainting
+light_sensitivity,Eyes hurt in bright light,Head,True,"Photophobia — important meningitis sign, but clinical term needs translating"
+limb_weakness,Weakness in an arm or leg,General,True,Doesn't specify which limb — arm vs leg matters for body-diagram routing
+limited_movement,Difficulty moving normally,General,True,"No body part specified — could apply to back, arms, or legs"
+local_swelling,Swelling in one spot,Skin,True,No location specified — generic swelling token used across multiple conditions
+loss_of_appetite,Not feeling like eating,General,False,
+low_energy,Low energy,General,True,Near-duplicate of fatigue/tiredness tokens
+low_grade_fever,Mild fever,General,False,
+lower_abdominal_pain,Pain in the lower belly,Pelvis,True,Could reasonably sit under Abdomen or Pelvis depending on how the body diagram splits the torso
+mild_cough,Mild cough,Chest,False,
+mild_headache,Mild headache,Head,False,
+mild_sore_throat,Mild sore throat,Neck,False,
+mild_swelling,Mild swelling,Skin,True,No location specified
+mouth_sores,Sores in the mouth,Head,False,
+mucus_in_stool,Mucus in stool,Abdomen,False,
+muscle_aches,Muscle aches all over,General,True,Near-duplicate of muscle_pain
+muscle_pain,Muscle pain,General,True,Near-duplicate of muscle_aches
+muscle_stiffness,Stiff muscles,General,True,"No location specified — could be back, neck, or limbs"
+nausea,Feeling sick / nausea,Abdomen,False,
+near_fainting,Feeling like you might faint,Head,False,
+neck_stiffness,Stiff neck,Neck,False,
+neonatal_fever,Fever in a newborn baby,General,False,
+night_sweats,Sweating heavily at night,General,False,
+nocturnal_cough,Cough that's worse at night,Chest,False,
+nosebleed,Nosebleed,Head,False,
+one_sided_headache,Headache on one side of the head,Head,False,
+oral_thrush,White patches in the mouth (thrush),Head,False,
+pain,Pain,General,True,Extremely generic — no body location or character at all; effectively unreachable as a meaningful filter
+pain_at_burn,Pain at the burn site,Skin,False,
+pain_on_chewing,Pain when chewing,Head,False,
+pain_post_accident,Pain after an accident,General,True,No body location specified
+pallor,Unusually pale skin,Skin,True,Clinical sign users may not notice in themselves — often observed by someone else
+palpitations,Fast or pounding heartbeat,Chest,False,
+persistent_fatigue,Ongoing tiredness that doesn't go away,General,True,Near-duplicate of fatigue/tiredness
+persistent_fever,Fever that doesn't go away,General,False,
+petechial_rash,Small red or purple spots that don't fade when pressed,Skin,True,Important meningitis/VHF sign but the non-fading/blanching test is a clinical concept lay users won't know to check
+poor_appetite,Poor appetite,General,True,Near-duplicate of loss_of_appetite
+poor_feeding,Feeding poorly (baby or young child),General,False,
+poor_growth,Poor growth (not gaining weight/height),General,True,Requires tracking over time — hard to self-report in a single symptom check
+pressure_headache,Headache that feels like pressure,Head,False,
+productive_cough,Cough with phlegm or mucus,Chest,False,
+profuse_watery_stool,"Very watery, frequent stool",Abdomen,False,
+prolonged_fever,Fever lasting several days,General,False,
+ptosis,Drooping eyelid,Head,True,Clinical term unfamiliar to most lay users — needs a plain description or illustration
+pus_discharge,Pus coming from the skin,Skin,False,
+rapid_heartbeat,Fast heartbeat,Chest,True,Near-duplicate of palpitations
+rapid_onset_diarrhoea,Diarrhoea that started suddenly,Abdomen,False,
+recurrent_infections,Getting infections again and again,General,True,Near-duplicate of repeated_infections; also requires recall over time
+red_eyes,Red eyes,Head,True,Duplicate of eye_redness
+reduced_daily_function,Struggling with everyday activities,General,True,Vague functional-status term — hard for a lay user to map to a concrete symptom
+reduced_fetal_movement,Baby moving less than usual (in pregnancy),Pelvis,False,
+reduced_hearing,Reduced hearing,Head,True,Duplicate of hearing_loss
+repeated_infections,Repeated infections,General,True,Duplicate of recurrent_infections
+right_abdominal_pain,Pain on the right side of the belly,Abdomen,False,
+runny_nose,Runny nose,Head,False,
+severe_abdominal_pain,Severe stomach pain,Abdomen,False,
+severe_headache,Severe headache,Head,False,
+severe_weakness,Severe weakness,General,False,
+shortness_of_breath,Shortness of breath,Chest,True,Near-duplicate of breathlessness/difficulty_breathing
+skin_lesions,Sores or spots on the skin,Skin,False,
+skin_pain,Pain on the skin,Skin,False,
+skin_redness,Redness of the skin,Skin,False,
+skin_swelling,Swelling of the skin,Skin,False,
+sneezing,Sneezing,Head,False,
+sore_throat,Sore throat,Neck,False,
+spinning_sensation,Feeling like the room is spinning,Head,False,
+spreading_rash,Rash that is spreading,Skin,False,
+spreading_swelling,Swelling that is spreading,Skin,True,Key snake-bite danger sign — 'spreading' over time is hard to capture in a one-off symptom pick
+stridor,"Noisy, harsh sound when breathing in",Neck,True,"Clinical term unfamiliar to lay users — needs a plain-language description, possibly audio/illustration"
+sweating,Sweating,General,False,
+swelling,Swelling,General,True,No location specified — extremely generic token
+swollen_eyelids,Swollen eyelids,Head,False,
+swollen_gums,Swollen gums,Head,False,
+swollen_lymph_nodes,"Swollen glands (in the neck, armpit, or groin)",Neck,True,"Lymph nodes can swell in several places, not just the neck — routing to a single body area is imprecise"
+swollen_neck,Swollen neck,Neck,False,
+throat_membrane,A grey-white coating in the throat,Neck,True,"Diphtheria pseudomembrane — very specific clinical sign, unlikely to be recognised or reported by a lay user without a photo/description"
+throbbing_headache,Throbbing headache,Head,False,
+tiredness,Tiredness,General,True,Near-duplicate of fatigue
+toothache,Toothache,Head,False,
+unsteadiness,Feeling unsteady on your feet,Head,True,Balance-related; could plausibly be filed under Legs by some users
+urinary_frequency,Needing to urinate often,Pelvis,True,Near-duplicate of frequent_urination
+vaginal_bleeding,Vaginal bleeding,Pelvis,True,Sensitive symptom — some users may be reluctant to report via a generic body-area picker
+vomiting,Vomiting,Abdomen,False,
+watery_stool,Watery stool,Abdomen,False,
+weakness,Weakness,General,True,Near-duplicate of general_weakness
+weight_loss,Losing weight without trying,General,False,
+wheeze,Wheezing / whistling sound when breathing,Chest,False,
+wound_at_bite,Wound where the bite happened,Skin,False,
