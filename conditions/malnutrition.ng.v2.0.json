@@ -1,0 +1,84 @@
+{
+  "condition_id": "malnutrition",
+  "condition_name": "Malnutrition (Moderate / Severe)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "weight_loss",
+      "weight": 7
+    },
+    {
+      "token": "poor_appetite",
+      "weight": 6
+    },
+    {
+      "token": "bilateral_oedema",
+      "weight": 9
+    },
+    {
+      "token": "repeated_infections",
+      "weight": 6
+    },
+    {
+      "token": "poor_growth",
+      "weight": 8
+    },
+    {
+      "token": "tiredness",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "not_eating_drinking_child",
+    "altered_consciousness",
+    "vomiting_blood",
+    "severe_dehydration"
+  ],
+  "severity_levels": {
+    "mild": [
+      "weight_loss"
+    ],
+    "moderate": [
+      "poor_growth"
+    ],
+    "severe": [
+      "swelling",
+      "lethargy"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Core at-risk group \u2014 highest burden"
+    },
+    {
+      "modifier": "severe_malnutrition_sam",
+      "effect": "escalate_emergency",
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "lean_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence in lean season before harvest (June\u2013September)"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with malnutrition or inadequate nutritional intake. This condition is treatable \u2014 please visit a clinic or health centre for assessment and nutritional support.",
+  "care_level": "Clinic (Urgent) / Emergency (if severe)",
+  "local_expressions": [
+    "Underweight",
+    "child no dey grow well",
+    "swollen legs"
+  ],
+  "duration_note": null
+}

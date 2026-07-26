@@ -1,0 +1,85 @@
+{
+  "condition_id": "diabetes",
+  "condition_name": "Diabetes Mellitus (Suspected / Known)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 6,
+  "symptoms": [
+    {
+      "token": "frequent_urination",
+      "weight": 7
+    },
+    {
+      "token": "excessive_thirst",
+      "weight": 7
+    },
+    {
+      "token": "fatigue",
+      "weight": 5
+    },
+    {
+      "token": "weight_loss",
+      "weight": 5
+    },
+    {
+      "token": "blurred_vision",
+      "weight": 6
+    },
+    {
+      "token": "recurrent_infections",
+      "weight": 5
+    },
+    {
+      "token": "fast_breathing",
+      "weight": 6
+    },
+    {
+      "token": "abdominal_pain",
+      "weight": 5
+    },
+    {
+      "token": "vomiting",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "hypoglycaemia"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [
+      "weight_loss",
+      "fatigue"
+    ],
+    "severe": [
+      "dehydration"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "over_40",
+      "effect": "increase_base_weight",
+      "note": "Increase base weight"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "ESCALATE \u2014 gestational diabetes risk"
+    },
+    {
+      "modifier": "obesity",
+      "effect": "increase_base_weight",
+      "note": "Increase base weight"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with diabetes or a related metabolic condition. These symptoms warrant a blood sugar test \u2014 please visit a clinic for assessment and advice.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Sugar disease",
+    "high sugar"
+  ],
+  "duration_note": null
+}

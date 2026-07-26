@@ -1,0 +1,63 @@
+{
+  "condition_id": "mpox",
+  "condition_name": "Mpox",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 6
+    },
+    {
+      "token": "swollen_lymph_nodes",
+      "weight": 7
+    },
+    {
+      "token": "skin_lesions",
+      "weight": 9
+    },
+    {
+      "token": "muscle_aches",
+      "weight": 5
+    },
+    {
+      "token": "fatigue",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever"
+    ],
+    "moderate": [
+      "fever"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "immunocompromised",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 higher risk of severe disease"
+    },
+    {
+      "modifier": "hiv_positive",
+      "effect": "increase_urgency",
+      "note": "Increase urgency"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with mpox or another rash-causing illness. Please seek medical care and avoid close contact with others \u2014 isolation advice will be provided by a healthcare worker.",
+  "care_level": "Clinic (Urgent) / Emergency (if severe)",
+  "local_expressions": [
+    "Monkeypox",
+    "pox rash"
+  ],
+  "duration_note": null
+}

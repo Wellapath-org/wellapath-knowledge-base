@@ -1,0 +1,880 @@
+{
+  "_metadata": {
+    "artifact_id": "rules",
+    "version": "2.0",
+    "schema_version": "1.0",
+    "country": "ng",
+    "release_date": "2026-04-06",
+    "description": "WellaPath Nigeria CDSS \u2014 Red Flag Rules \u2014 Full 50-condition expansion",
+    "total_global_rules": 13,
+    "total_condition_specific_rules": 63,
+    "total_rules": 76,
+    "global_rule_range": "rf_001 to rf_014",
+    "pilot_specific_rule_range": "rf_100 to rf_111",
+    "expanded_rule_range": "rf_112 to rf_160",
+    "notes": [
+      "14 global rules unchanged from v1.0",
+      "12 pilot condition-specific rules unchanged from v1.0",
+      "49 new condition-specific rules added in v2.0 for remaining 47 conditions",
+      "All tokens validated against token_dictionary.ng.v1.0.json",
+      "rf_004 removed: token 'unconsciousness' not in token_dictionary.ng.v1.0.json. Unconsciousness is covered by rf_011 (impaired_consciousness) and rf_003 (altered_consciousness)."
+    ],
+    "patch_notes": [
+      "rf_101 applies_to extended to include diabetes (hypoglycaemia)",
+      "rf_147 corrected: RTI rule replaced vaginal bleeding bug",
+      "rf_161 added: hypertensive emergency (severe_headache_vomiting)",
+      "rf_162 added: Ludwig's angina for dental_oral (facial_space_swelling)"
+    ]
+  },
+  "rules": [
+    {
+      "rule_id": "rf_001",
+      "rule_name": "Inability to Drink or Feed",
+      "token": "inability_to_drink",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Inability to drink or feed is a universal danger sign in adults and children. Indicates severe dehydration, altered consciousness, or systemic collapse. Requires immediate emergency care.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_002",
+      "rule_name": "Active Seizures",
+      "token": "seizures",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Active or recently reported seizures are a universal danger sign requiring emergency evaluation regardless of underlying cause.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_003",
+      "rule_name": "Altered Consciousness or Confusion",
+      "token": "altered_consciousness",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Confusion, disorientation, or altered level of consciousness is a universal danger sign indicating possible CNS involvement, severe metabolic disturbance, or systemic collapse.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_005",
+      "rule_name": "Severe Breathing Difficulty at Rest",
+      "token": "breathlessness_at_rest",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Inability to breathe comfortably at rest indicates severe respiratory compromise. Requires immediate emergency assessment.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_006",
+      "rule_name": "Circulatory Collapse or Shock",
+      "token": "circulatory_collapse",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Circulatory collapse or shock with cold clammy skin, rapid pulse, and altered consciousness requires immediate emergency resuscitation.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_007",
+      "rule_name": "Prostration or Inability to Stand",
+      "token": "prostration",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Prostration \u2014 inability to stand or sit without support \u2014 is a WHO severe malaria criterion and a universal danger sign indicating systemic collapse.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_008",
+      "rule_name": "Heavy Uncontrolled Bleeding",
+      "token": "abnormal_bleeding",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Heavy or uncontrolled bleeding from any site requires immediate emergency intervention.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_009",
+      "rule_name": "Central Cyanosis (Blue Lips or Face)",
+      "token": "blue_lips_face",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Central cyanosis indicates severe hypoxia. Requires immediate emergency oxygen and assessment.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_010",
+      "rule_name": "Signs of Severe Dehydration",
+      "token": "severe_dehydration",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Severe dehydration with sunken eyes, inability to drink, and lethargy or shock requires immediate emergency IV fluid resuscitation.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_011",
+      "rule_name": "Impaired Consciousness",
+      "token": "impaired_consciousness",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Any degree of impaired consciousness is a danger sign requiring emergency evaluation.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_012",
+      "rule_name": "Respiratory Distress",
+      "token": "respiratory_distress",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Respiratory distress with use of accessory muscles, nasal flaring, or inability to complete sentences requires emergency care.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_013",
+      "rule_name": "Circulatory Shock",
+      "token": "shock",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Circulatory shock \u2014 cold peripheries, rapid feeble pulse, low blood pressure \u2014 requires immediate emergency resuscitation.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_014",
+      "rule_name": "Anaphylaxis Signs",
+      "token": "anaphylaxis_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "all"
+      ],
+      "explanation": "Signs of anaphylaxis \u2014 urticaria with throat swelling, wheezing, or circulatory collapse \u2014 require immediate emergency epinephrine and care.",
+      "priority": 1
+    },
+    {
+      "rule_id": "rf_100",
+      "rule_name": "Haemoglobinuria \u2014 Severe Malaria",
+      "token": "haemoglobinuria",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria"
+      ],
+      "explanation": "Haemoglobinuria (black water fever) is WHO severe malaria criterion 8. Indicates massive haemolysis requiring emergency care.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_101",
+      "rule_name": "Hypoglycaemia \u2014 Severe Malaria",
+      "token": "hypoglycaemia",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria",
+        "diabetes"
+      ],
+      "explanation": "Hypoglycaemia is WHO severe malaria criterion 10. Life-threatening complication especially in children and pregnancy.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_102",
+      "rule_name": "Severe Anaemia \u2014 Malaria",
+      "token": "severe_anaemia",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria"
+      ],
+      "explanation": "Severe anaemia is WHO severe malaria criterion 9. Requires emergency transfusion assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_103",
+      "rule_name": "Severe Jaundice \u2014 Malaria",
+      "token": "severe_jaundice",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria"
+      ],
+      "explanation": "Severe jaundice is WHO severe malaria criterion 7, indicating hepatic involvement.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_104",
+      "rule_name": "Neck Stiffness with Fever \u2014 Meningism",
+      "token": "neck_stiffness_fever",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria",
+        "csm",
+        "typhoid_fever"
+      ],
+      "explanation": "Neck stiffness with fever may indicate cerebral malaria or bacterial meningitis. Both are emergencies.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_105",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria",
+        "hepatitis_b",
+        "typhoid_fever",
+        "lassa_fever"
+      ],
+      "explanation": "Haematemesis indicates severe GI bleeding or haemorrhagic complication requiring emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_106",
+      "rule_name": "Petechial Rash with Fever",
+      "token": "petechial_rash_fever",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malaria",
+        "csm",
+        "vhf_suspected",
+        "lassa_fever"
+      ],
+      "explanation": "Petechial or purpuric rash with fever suggests meningococcaemia, VHF, or severe malaria. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_107",
+      "rule_name": "Severe Chest Indrawing \u2014 Pneumonia",
+      "token": "chest_indrawing_severe",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pneumonia_children"
+      ],
+      "explanation": "Severe lower chest indrawing in a child indicates severe pneumonia by IMCI classification. Requires emergency referral.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_108",
+      "rule_name": "IMCI Danger Signs \u2014 Child",
+      "token": "danger_signs_imci",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pneumonia_children"
+      ],
+      "explanation": "IMCI composite danger signs in a child under 5 require immediate emergency referral.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_109",
+      "rule_name": "Not Eating or Drinking \u2014 Child",
+      "token": "not_eating_drinking_child",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pneumonia_children",
+        "malnutrition"
+      ],
+      "explanation": "A child unable to eat or drink requires emergency assessment for dehydration and systemic illness.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_110",
+      "rule_name": "Sunken Eyes \u2014 Severe Dehydration",
+      "token": "sunken_eyes",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "acute_diarrhoea",
+        "cholera",
+        "gastroenteritis"
+      ],
+      "explanation": "Sunken eyes indicate severe dehydration requiring emergency IV fluid resuscitation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_111",
+      "rule_name": "Liver Failure Signs",
+      "token": "liver_failure_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "hepatitis_b",
+        "lassa_fever"
+      ],
+      "explanation": "Signs of liver failure (jaundice, coagulopathy, encephalopathy) require emergency hospital admission.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_112",
+      "rule_name": "Dangerously Fast Breathing",
+      "token": "fast_breathing_danger",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cough_common_cold"
+      ],
+      "explanation": "Respiratory rate indicating respiratory failure requires emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_113",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dysentery"
+      ],
+      "explanation": "Vomiting Blood is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_114",
+      "rule_name": "Bilateral Oedema with Lethargy",
+      "token": "bilateral_oedema_lethargy",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dysentery"
+      ],
+      "explanation": "Bilateral pitting oedema with lethargy in a child indicates severe malnutrition with complications. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_115",
+      "rule_name": "Board-Like Abdominal Rigidity",
+      "token": "abdominal_rigidity_board",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "typhoid_fever"
+      ],
+      "explanation": "Rigidity with guarding and rebound tenderness indicates peritonitis or perforated viscus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_116",
+      "rule_name": "Irregular Pulse",
+      "token": "irregular_pulse",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cholera"
+      ],
+      "explanation": "Severe irregular pulse (AF with rapid ventricular rate, heart block) requires emergency evaluation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_117",
+      "rule_name": "Cold Clammy Skin",
+      "token": "cold_clammy_skin",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cholera"
+      ],
+      "explanation": "Cold Clammy Skin is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_118",
+      "rule_name": "Dangerously Fast Breathing",
+      "token": "fast_breathing_danger",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "lower_respiratory_infection"
+      ],
+      "explanation": "Respiratory rate indicating respiratory failure requires emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_119",
+      "rule_name": "Spreading Skin Infection",
+      "token": "widespread_spreading_infection",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "skin_infections"
+      ],
+      "explanation": "Rapidly spreading redness with fever suggests cellulitis or necrotising fasciitis. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_120",
+      "rule_name": "Black Wound \u2014 Necrosis",
+      "token": "black_wound",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "skin_infections"
+      ],
+      "explanation": "Wound necrosis with blackening indicates severe infection or cytotoxic venom. Emergency debridement.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_121",
+      "rule_name": "Flank Pain \u2014 Kidney Involvement",
+      "token": "flank_pain_kidney",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "uti"
+      ],
+      "explanation": "Severe flank pain suggests pyelonephritis or renal calculus. Urgent assessment required.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_122",
+      "rule_name": "Board-Like Abdominal Rigidity",
+      "token": "abdominal_rigidity_board",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "intestinal_worms"
+      ],
+      "explanation": "Rigidity with guarding and rebound tenderness indicates peritonitis or perforated viscus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_123",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "intestinal_worms"
+      ],
+      "explanation": "Vomiting Blood is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_124",
+      "rule_name": "Neurological Danger Signs",
+      "token": "neurological_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "eye_infections"
+      ],
+      "explanation": "Focal neurological signs require emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_125",
+      "rule_name": "Neck Stiffness with Fever",
+      "token": "neck_stiffness_fever",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "ear_infections"
+      ],
+      "explanation": "Meningism \u2014 neck stiffness with fever requires emergency lumbar puncture and IV antibiotics.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_126",
+      "rule_name": "Facial Weakness",
+      "token": "facial_weakness",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "ear_infections"
+      ],
+      "explanation": "Facial Weakness is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_127",
+      "rule_name": "Neck Stiffness with Fever",
+      "token": "neck_stiffness_fever",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "fever_unknown"
+      ],
+      "explanation": "Meningism \u2014 neck stiffness with fever requires emergency lumbar puncture and IV antibiotics.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_128",
+      "rule_name": "Visual Disturbance in Pregnancy",
+      "token": "vision_changes_pregnancy",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "measles"
+      ],
+      "explanation": "Blurred vision or visual symptoms in pregnancy suggest pre-eclampsia or eclampsia. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_129",
+      "rule_name": "Severe Jaundice",
+      "token": "severe_jaundice",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "hepatitis_b"
+      ],
+      "explanation": "Severe Jaundice is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_130",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "hiv_symptomatic"
+      ],
+      "explanation": "Vomiting Blood is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_131",
+      "rule_name": "Board-Like Abdominal Rigidity",
+      "token": "abdominal_rigidity_board",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "schistosomiasis"
+      ],
+      "explanation": "Rigidity with guarding and rebound tenderness indicates peritonitis or perforated viscus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_132",
+      "rule_name": "Severe Anaemia",
+      "token": "severe_anaemia",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "sth"
+      ],
+      "explanation": "Severe Anaemia is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_133",
+      "rule_name": "Bilateral Oedema with Lethargy",
+      "token": "bilateral_oedema_lethargy",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "sth"
+      ],
+      "explanation": "Bilateral pitting oedema with lethargy in a child indicates severe malnutrition with complications. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_134",
+      "rule_name": "Unable to Pass Stool or Gas",
+      "token": "inability_pass_stool_gas",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "sth"
+      ],
+      "explanation": "Complete obstruction \u2014 cannot pass stool or flatus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_135",
+      "rule_name": "Hydrophobia \u2014 Rabies Sign",
+      "token": "hydrophobia",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "rabies_exposure"
+      ],
+      "explanation": "Fear of water is pathognomonic of rabies encephalitis. Fatal without immediate supportive care.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_136",
+      "rule_name": "Bat Exposure \u2014 Rabies Risk",
+      "token": "bat_exposure",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "rabies_exposure"
+      ],
+      "explanation": "Any exposure to bats requires immediate post-exposure prophylaxis assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_137",
+      "rule_name": "Stridor \u2014 Airway Compromise",
+      "token": "stridor_airway",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "diphtheria"
+      ],
+      "explanation": "Stridor indicates partial upper airway obstruction. Risk of complete obstruction. Emergency assessment required.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_138",
+      "rule_name": "Irregular Pulse",
+      "token": "irregular_pulse",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "diphtheria"
+      ],
+      "explanation": "Severe irregular pulse (AF with rapid ventricular rate, heart block) requires emergency evaluation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_139",
+      "rule_name": "Paralysis",
+      "token": "paralysis",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "diphtheria"
+      ],
+      "explanation": "Acute paralysis requires emergency neurological evaluation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_140",
+      "rule_name": "Severe Jaundice",
+      "token": "severe_jaundice",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "yellow_fever"
+      ],
+      "explanation": "Severe Jaundice is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_141",
+      "rule_name": "Board-Like Abdominal Rigidity",
+      "token": "abdominal_rigidity_board",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "yellow_fever"
+      ],
+      "explanation": "Rigidity with guarding and rebound tenderness indicates peritonitis or perforated viscus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_142",
+      "rule_name": "Cardiac Chest Pain",
+      "token": "cardiac_chest_pain",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cardio_symptoms"
+      ],
+      "explanation": "Chest pain with radiation, sweating, or irregular pulse suggests acute cardiac event. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_143",
+      "rule_name": "Pain Radiating to Arm or Jaw",
+      "token": "radiating_arm_jaw_pain",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cardio_symptoms"
+      ],
+      "explanation": "Chest pain radiating to the arm or jaw is a cardinal sign of myocardial infarction. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_144",
+      "rule_name": "Irregular Pulse",
+      "token": "irregular_pulse",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "cardio_symptoms"
+      ],
+      "explanation": "Severe irregular pulse (AF with rapid ventricular rate, heart block) requires emergency evaluation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_145",
+      "rule_name": "Stridor \u2014 Airway Compromise",
+      "token": "stridor_airway",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "burns"
+      ],
+      "explanation": "Stridor indicates partial upper airway obstruction. Risk of complete obstruction. Emergency assessment required.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_146",
+      "rule_name": "Ptosis \u2014 Neurotoxic Snake Bite",
+      "token": "ptosis_snakebite",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "snake_bite"
+      ],
+      "explanation": "Ptosis after snake bite indicates neurotoxic envenomation. Emergency antivenom required.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_147",
+      "rule_name": "Road Traffic Injury \u2014 Signs of Internal Bleeding",
+      "token": "circulatory_collapse",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "road_traffic_injury_minor"
+      ],
+      "explanation": "Signs of circulatory collapse following a road traffic injury may indicate internal bleeding requiring immediate emergency care.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_148",
+      "rule_name": "Heavy Vaginal Bleeding",
+      "token": "heavy_vaginal_bleeding",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pregnancy_complications"
+      ],
+      "explanation": "Heavy uncontrolled vaginal bleeding in pregnancy is an obstetric emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_149",
+      "rule_name": "Board-Like Abdominal Rigidity",
+      "token": "abdominal_rigidity_board",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pregnancy_complications"
+      ],
+      "explanation": "Rigidity with guarding and rebound tenderness indicates peritonitis or perforated viscus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_150",
+      "rule_name": "Visual Disturbance in Pregnancy",
+      "token": "vision_changes_pregnancy",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "pregnancy_complications"
+      ],
+      "explanation": "Blurred vision or visual symptoms in pregnancy suggest pre-eclampsia or eclampsia. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_151",
+      "rule_name": "Neonate Not Feeding",
+      "token": "neonatal_not_feeding",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "neonatal_infection"
+      ],
+      "explanation": "A neonate unable to feed is a danger sign for neonatal sepsis or metabolic disease.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_152",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "malnutrition"
+      ],
+      "explanation": "Vomiting Blood is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_153",
+      "rule_name": "Neck Stiffness with Fever",
+      "token": "neck_stiffness_fever",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "headache"
+      ],
+      "explanation": "Meningism \u2014 neck stiffness with fever requires emergency lumbar puncture and IV antibiotics.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_154",
+      "rule_name": "Vomiting Blood",
+      "token": "vomiting_blood",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "abdominal_pain"
+      ],
+      "explanation": "Vomiting Blood is a danger sign requiring emergency or urgent assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_155",
+      "rule_name": "Unable to Pass Stool or Gas",
+      "token": "inability_pass_stool_gas",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "abdominal_pain"
+      ],
+      "explanation": "Complete obstruction \u2014 cannot pass stool or flatus. Surgical emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_156",
+      "rule_name": "Paralysis",
+      "token": "paralysis",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "musculoskeletal_pain"
+      ],
+      "explanation": "Acute paralysis requires emergency neurological evaluation.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_157",
+      "rule_name": "Neurological Danger Signs",
+      "token": "neurological_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "musculoskeletal_pain"
+      ],
+      "explanation": "Focal neurological signs require emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_158",
+      "rule_name": "Signs of Stroke",
+      "token": "stroke_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dizziness"
+      ],
+      "explanation": "Facial drooping, arm weakness, speech difficulty \u2014 acute stroke. Emergency within minutes.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_159",
+      "rule_name": "Neurological Danger Signs",
+      "token": "neurological_signs",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dizziness"
+      ],
+      "explanation": "Focal neurological signs require emergency assessment.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_160",
+      "rule_name": "Cardiac Chest Pain",
+      "token": "cardiac_chest_pain",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dizziness"
+      ],
+      "explanation": "Chest pain with radiation, sweating, or irregular pulse suggests acute cardiac event. Emergency.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_161",
+      "rule_name": "Hypertensive Emergency Signs",
+      "token": "severe_headache_vomiting",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "hypertension"
+      ],
+      "explanation": "Severe headache with vomiting in a hypertensive patient may indicate hypertensive emergency requiring immediate care.",
+      "priority": 11
+    },
+    {
+      "rule_id": "rf_162",
+      "rule_name": "Ludwig's Angina Risk \u2014 Facial Swelling with Airway Compromise",
+      "token": "facial_space_swelling",
+      "override_urgency": "emergency",
+      "applies_to": [
+        "dental_oral"
+      ],
+      "explanation": "Facial swelling with difficulty swallowing in a dental condition may indicate Ludwig's angina \u2014 a life-threatening airway emergency requiring immediate care.",
+      "priority": 11
+    }
+  ]
+}

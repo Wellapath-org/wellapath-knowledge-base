@@ -1,0 +1,72 @@
+{
+  "condition_id": "sari",
+  "condition_name": "Severe Acute Respiratory Infection (SARI)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 6
+    },
+    {
+      "token": "cough",
+      "weight": 7
+    },
+    {
+      "token": "shortness_of_breath",
+      "weight": 9
+    },
+    {
+      "token": "chest_pain",
+      "weight": 7
+    },
+    {
+      "token": "fast_breathing",
+      "weight": 9
+    }
+  ],
+  "red_flags": [
+    "breathlessness_at_rest",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever",
+      "cough"
+    ],
+    "moderate": [
+      "fast_breathing",
+      "cough"
+    ],
+    "severe": [
+      "difficulty_breathing"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Highest mortality risk; escalate immediately"
+    },
+    {
+      "modifier": "immunocompromised",
+      "effect": "routine_caution",
+      "note": "Escalate urgency"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Use IMCI criteria for breathing rate; fast-track referral"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a severe respiratory infection. Breathing difficulties can worsen quickly \u2014 please seek emergency care immediately if your symptoms may be consistent with difficulty breathing at rest.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Severe chest infection",
+    "can't breathe well"
+  ],
+  "duration_note": null
+}

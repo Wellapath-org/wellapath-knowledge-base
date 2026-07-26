@@ -1,0 +1,65 @@
+{
+  "condition_id": "ear_infections",
+  "condition_name": "Ear Infections",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "ear_pain",
+      "weight": 7
+    },
+    {
+      "token": "reduced_hearing",
+      "weight": 5
+    },
+    {
+      "token": "fever",
+      "weight": 5
+    },
+    {
+      "token": "ear_discharge",
+      "weight": 7
+    },
+    {
+      "token": "irritability",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "neck_stiffness_fever",
+    "impaired_consciousness",
+    "facial_weakness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "ear_pain",
+      "fever",
+      "pain"
+    ],
+    "moderate": [
+      "fever",
+      "pain"
+    ],
+    "severe": [
+      "swelling"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "increase_urgency",
+      "note": "Higher risk and can progress faster; escalate with high fever or feeding refusal"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with an ear infection. Most ear infections are treatable \u2014 please see a clinic, especially if fever is present or a child is affected. Seek emergency care if there is swelling behind the ear or severe headache.",
+  "care_level": "Clinic (Emergency if mastoiditis signs or neurological symptoms)",
+  "local_expressions": [
+    "Ear pain",
+    "ear discharge",
+    "running ear"
+  ],
+  "duration_note": null
+}

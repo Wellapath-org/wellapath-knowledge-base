@@ -1,0 +1,64 @@
+{
+  "condition_id": "dental_oral",
+  "condition_name": "Dental / Oral Conditions",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "toothache",
+      "weight": 7
+    },
+    {
+      "token": "swollen_gums",
+      "weight": 6
+    },
+    {
+      "token": "mouth_sores",
+      "weight": 5
+    },
+    {
+      "token": "pain_on_chewing",
+      "weight": 6
+    },
+    {
+      "token": "bad_breath",
+      "weight": 3
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "impaired_consciousness",
+    "facial_space_swelling"
+  ],
+  "severity_levels": {
+    "mild": [
+      "toothache"
+    ],
+    "moderate": [
+      "swelling"
+    ],
+    "severe": [
+      "facial_swelling",
+      "swelling",
+      "fever"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Increased risk of gum disease; routine dental care advised"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a dental or oral condition. Pain relief may help temporarily, but dental assessment is recommended. Seek emergency care if swelling spreads to the face or neck.",
+  "care_level": "Pharmacy / Dental Clinic (Emergency if spreading swelling or airway risk)",
+  "local_expressions": [
+    "Toothache",
+    "mouth pain",
+    "gum pain"
+  ],
+  "duration_note": null
+}

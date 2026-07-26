@@ -1,0 +1,3744 @@
+{
+  "_metadata": {
+    "artifact_id": "knowledge_base",
+    "version": "2.3",
+    "schema_version": "1.0",
+    "country": "ng",
+    "release_date": "2026-04-06",
+    "total_conditions": 50,
+    "description": "WellaPath Nigeria CDSS \u2014 Full Top-50 Knowledge Base",
+    "conditions_list": [
+      "malaria",
+      "cough_common_cold",
+      "acute_diarrhoea",
+      "dysentery",
+      "typhoid_fever",
+      "cholera",
+      "urti",
+      "lower_respiratory_infection",
+      "skin_infections",
+      "uti",
+      "intestinal_worms",
+      "eye_infections",
+      "ear_infections",
+      "dental_oral",
+      "gastroenteritis",
+      "fever_unknown",
+      "measles",
+      "hepatitis_b",
+      "tuberculosis_suspected",
+      "hiv_symptomatic",
+      "sari",
+      "vhf_suspected",
+      "schistosomiasis",
+      "sth",
+      "rabies_exposure",
+      "lassa_fever",
+      "csm",
+      "diphtheria",
+      "yellow_fever",
+      "mpox",
+      "hypertension",
+      "diabetes",
+      "asthma",
+      "chronic_respiratory",
+      "anaemia",
+      "cardio_symptoms",
+      "minor_injury",
+      "burns",
+      "snake_bite",
+      "road_traffic_injury_minor",
+      "pregnancy_complications",
+      "neonatal_infection",
+      "pneumonia_children",
+      "malnutrition",
+      "headache",
+      "abdominal_pain",
+      "musculoskeletal_pain",
+      "fatigue_weakness",
+      "dizziness",
+      "allergic_reactions"
+    ],
+    "pilot_conditions": [
+      "malaria",
+      "pneumonia_children",
+      "acute_diarrhoea"
+    ],
+    "token_dictionary_version": "1.0",
+    "patch_notes": [
+      "Medical reviewer fix: split severe_malnutrition_sam_mam into sam/mam across 8 conditions",
+      "Medical reviewer fix: hypertension severity_levels.severe populated",
+      "Medical reviewer fix: diabetes DKA symptoms added",
+      "Medical reviewer fix: rf_147 RTI bug corrected",
+      "Consistency fix: mirror new red flag tokens into hypertension, diabetes, and dental_oral condition files"
+    ]
+  },
+  "conditions": [
+    {
+      "condition_id": "malaria",
+      "condition_name": "Malaria",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 10,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 9
+        },
+        {
+          "token": "chills",
+          "weight": 7
+        },
+        {
+          "token": "headache",
+          "weight": 6
+        },
+        {
+          "token": "sweating",
+          "weight": 6
+        },
+        {
+          "token": "body_pain",
+          "weight": 5
+        },
+        {
+          "token": "weakness",
+          "weight": 5
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "prostration",
+        "impaired_consciousness",
+        "respiratory_distress",
+        "seizures",
+        "circulatory_collapse",
+        "abnormal_bleeding",
+        "severe_jaundice",
+        "haemoglobinuria",
+        "severe_anaemia",
+        "hypoglycaemia"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever",
+          "headache"
+        ],
+        "moderate": [
+          "weakness",
+          "vomiting"
+        ],
+        "severe": [
+          "confusion",
+          "convulsions",
+          "dark_urine",
+          "jaundice"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Highest mortality risk \u2014 fast-track evaluation required"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "increase_urgency",
+          "note": "Risk of severe malaria and maternal anaemia \u2014 escalate"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Greater risk of rapid decompensation"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Peak transmission May\u2013October in Nigeria \u2014 higher match probability"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with malaria or another fever-causing condition. In young children during rainy season this is especially serious \u2014 please see a clinic today, do not wait. If your child stops drinking, becomes drowsy, or has a fit, go to emergency immediately.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "body hot",
+        "fever dey",
+        "cold and hot",
+        "shivering"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "cough_common_cold",
+      "condition_name": "Cough / Common Cold (Non-Pneumonia)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 8,
+      "symptoms": [
+        {
+          "token": "runny_nose",
+          "weight": 7
+        },
+        {
+          "token": "sneezing",
+          "weight": 5
+        },
+        {
+          "token": "mild_sore_throat",
+          "weight": 5
+        },
+        {
+          "token": "mild_cough",
+          "weight": 6
+        },
+        {
+          "token": "mild_headache",
+          "weight": 4
+        },
+        {
+          "token": "low_grade_fever",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "impaired_consciousness",
+        "respiratory_distress",
+        "fast_breathing_danger",
+        "inability_to_drink",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "runny_nose",
+          "sneezing"
+        ],
+        "moderate": [
+          "sore_throat",
+          "mild_cough",
+          "cough"
+        ],
+        "severe": [
+          "fever"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Increase urgency if fever or feeding difficulty; watch for fast breathing"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Consider secondary infection risk; escalate if symptoms worsen"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence during Harmattan (Nov\u2013Feb) due to dry dusty air"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a common cold or mild upper respiratory illness. Most cases resolve with rest and fluids, but seek care if your symptoms worsen or breathing becomes difficult.",
+      "care_level": "Self-care / Pharmacy (Clinic if red flags or children with fever)",
+      "local_expressions": [
+        "Catarrh",
+        "cough",
+        "runny nose",
+        "cold"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "acute_diarrhoea",
+      "condition_name": "Acute Diarrhoea (Non-Bloody)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 8,
+      "symptoms": [
+        {
+          "token": "watery_stool",
+          "weight": 8
+        },
+        {
+          "token": "vomiting",
+          "weight": 5
+        },
+        {
+          "token": "abdominal_cramps",
+          "weight": 5
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "low_grade_fever",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_dehydration",
+        "sunken_eyes",
+        "inability_to_drink",
+        "altered_consciousness",
+        "shock"
+      ],
+      "severity_levels": {
+        "mild": [
+          "watery_stool",
+          "nausea"
+        ],
+        "moderate": [
+          "watery_stool",
+          "vomiting",
+          "dehydration"
+        ],
+        "severe": [
+          "dehydration",
+          "lethargy",
+          "weakness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Dehydration can be fatal rapidly in young children \u2014 escalate urgency"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "monitor_and_escalate",
+          "note": "Monitor for dehydration closely \u2014 escalate faster than normal"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence May\u2013October through contaminated water and food"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with acute diarrhoea. Staying hydrated with oral rehydration solution (ORS) is important. Seek care promptly if you cannot drink fluids, feel very weak, or symptoms worsen.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe dehydration)",
+      "local_expressions": [
+        "running stomach",
+        "loose stool",
+        "stomach ache with stool"
+      ],
+      "duration_note": "Sudden onset of frequent watery stools indicates acute diarrhoea. If stools have been watery for more than 3 days, or if dehydration signs appear, urgency increases significantly."
+    },
+    {
+      "condition_id": "dysentery",
+      "condition_name": "Dysentery",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "blood_in_stool",
+          "weight": 9
+        },
+        {
+          "token": "abdominal_cramps",
+          "weight": 6
+        },
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "weakness",
+          "weight": 5
+        },
+        {
+          "token": "mucus_in_stool",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "severe_dehydration",
+        "vomiting_blood",
+        "impaired_consciousness",
+        "bilateral_oedema_lethargy",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [
+          "fever"
+        ],
+        "severe": [
+          "severe_weakness",
+          "dehydration",
+          "confusion",
+          "weakness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 rapid dehydration risk"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence; increase base weight"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with dysentery, a form of diarrhoea that can cause dehydration. Please seek medical care promptly \u2014 treatment and rehydration are important.",
+      "care_level": "Clinic / Emergency (if severe dehydration or altered consciousness)",
+      "local_expressions": [
+        "Bloody stool",
+        "stool with blood",
+        "running stomach with blood"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "typhoid_fever",
+      "condition_name": "Typhoid Fever",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "prolonged_fever",
+          "weight": 8
+        },
+        {
+          "token": "abdominal_pain",
+          "weight": 6
+        },
+        {
+          "token": "headache",
+          "weight": 5
+        },
+        {
+          "token": "weakness",
+          "weight": 5
+        },
+        {
+          "token": "diarrhoea",
+          "weight": 4
+        },
+        {
+          "token": "constipation",
+          "weight": 3
+        }
+      ],
+      "red_flags": [
+        "abdominal_rigidity_board",
+        "vomiting_blood",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "headache",
+          "fever"
+        ],
+        "moderate": [
+          "abdominal_pain",
+          "weakness",
+          "pain"
+        ],
+        "severe": [
+          "confusion",
+          "bleeding"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 higher complication risk"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "increase_urgency",
+          "note": "Increase urgency"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher transmission via contaminated water"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with typhoid fever or another infection. Typhoid is treated with antibiotics \u2014 a clinic visit is recommended for testing and treatment.",
+      "care_level": "Clinic",
+      "local_expressions": [
+        "Stomach infection",
+        "dirty water sickness"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "cholera",
+      "condition_name": "Cholera",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "profuse_watery_stool",
+          "weight": 10
+        },
+        {
+          "token": "vomiting",
+          "weight": 7
+        },
+        {
+          "token": "dehydration",
+          "weight": 8
+        },
+        {
+          "token": "rapid_onset_diarrhoea",
+          "weight": 9
+        }
+      ],
+      "red_flags": [
+        "sunken_eyes",
+        "inability_to_drink",
+        "altered_consciousness",
+        "shock",
+        "irregular_pulse",
+        "cold_clammy_skin"
+      ],
+      "severity_levels": {
+        "mild": [
+          "diarrhoea"
+        ],
+        "moderate": [
+          "dehydration",
+          "weakness"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "escalate_emergency",
+          "note": "Highest mortality risk \u2014 immediate emergency referral"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "escalate_emergency",
+          "note": "High mortality \u2014 immediate emergency referral"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 maternal and fetal risk"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "epidemic_alert",
+          "note": "Epidemic risk highest during rainy season and flooding events"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a severe dehydrating illness such as cholera. This is a medical emergency \u2014 seek care immediately and begin oral rehydration if available.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Running stomach",
+        "water stool"
+      ],
+      "duration_note": "Symptoms typically begin suddenly within hours of exposure; profuse watery stools may lead to life-threatening dehydration within 24 hours if untreated"
+    },
+    {
+      "condition_id": "urti",
+      "condition_name": "Upper Respiratory Tract Infection (URTI)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 8,
+      "symptoms": [
+        {
+          "token": "cough",
+          "weight": 7
+        },
+        {
+          "token": "runny_nose",
+          "weight": 7
+        },
+        {
+          "token": "sneezing",
+          "weight": 5
+        },
+        {
+          "token": "sore_throat",
+          "weight": 6
+        },
+        {
+          "token": "fever",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "impaired_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "cough"
+        ],
+        "moderate": [
+          "sore_throat",
+          "fever"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Escalate if breathing changes or high fever \u2014 risk of lower respiratory involvement"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Escalate if fever or weakness; risk of secondary pneumonia"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence during Harmattan (Nov\u2013Feb)"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with an upper respiratory tract infection such as a cold or flu. Most cases resolve on their own, but seek care if symptoms worsen or breathing becomes difficult.",
+      "care_level": "Self-care / Pharmacy",
+      "local_expressions": [
+        "Catarrh",
+        "cold",
+        "flu"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "lower_respiratory_infection",
+      "condition_name": "Lower Respiratory Tract Infection (Non-Severe)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "productive_cough",
+          "weight": 7
+        },
+        {
+          "token": "breathlessness",
+          "weight": 7
+        },
+        {
+          "token": "chest_discomfort",
+          "weight": 5
+        },
+        {
+          "token": "fever",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "breathlessness_at_rest",
+        "fast_breathing_danger",
+        "altered_consciousness",
+        "blue_lips_face"
+      ],
+      "severity_levels": {
+        "mild": [
+          "productive_cough",
+          "fever",
+          "cough"
+        ],
+        "moderate": [
+          "breathlessness"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of severe disease; escalate sooner"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Check breathing rate; escalate if fast breathing"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence; dry air worsens symptoms"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a lower respiratory infection. Please see a healthcare provider \u2014 some respiratory infections require treatment and monitoring.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Chest infection",
+        "chest cold",
+        "cough with chest pain"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "skin_infections",
+      "condition_name": "Skin Infections / Skin Diseases",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "itchy_rash",
+          "weight": 6
+        },
+        {
+          "token": "boils",
+          "weight": 6
+        },
+        {
+          "token": "skin_redness",
+          "weight": 5
+        },
+        {
+          "token": "skin_swelling",
+          "weight": 5
+        },
+        {
+          "token": "pus_discharge",
+          "weight": 7
+        },
+        {
+          "token": "skin_pain",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "widespread_spreading_infection",
+        "altered_consciousness",
+        "shock",
+        "black_wound"
+      ],
+      "severity_levels": {
+        "mild": [
+          "itchy_rash",
+          "skin_redness"
+        ],
+        "moderate": [
+          "boils",
+          "pus_discharge",
+          "skin_swelling"
+        ],
+        "severe": [
+          "spreading_rash",
+          "fever",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "immunocompromised",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 risk of rapid spread"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Escalate if fever accompanies rash \u2014 exclude measles/mpox"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a skin infection or skin condition. Many skin conditions are treatable \u2014 a pharmacy or clinic visit is recommended for assessment.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe allergy or rapidly spreading infection)",
+      "local_expressions": [
+        "Skin infection",
+        "skin rash",
+        "ringworm",
+        "boils"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "uti",
+      "condition_name": "Urinary Tract Infection (UTI)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "dysuria",
+          "weight": 8
+        },
+        {
+          "token": "urinary_frequency",
+          "weight": 7
+        },
+        {
+          "token": "cloudy_urine",
+          "weight": 6
+        },
+        {
+          "token": "lower_abdominal_pain",
+          "weight": 5
+        },
+        {
+          "token": "fever",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "impaired_consciousness",
+        "flank_pain_kidney",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "dysuria"
+        ],
+        "moderate": [
+          "fever"
+        ],
+        "severe": [
+          "fever",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 UTI in pregnancy has high complication risk; treat promptly"
+        },
+        {
+          "modifier": "female",
+          "effect": "routine_caution",
+          "note": "Higher baseline prevalence"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Risk of silent UTI progressing to sepsis; escalate with fever"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a urinary tract infection. This is usually treated with antibiotics \u2014 see a healthcare provider for assessment and treatment.",
+      "care_level": "Clinic",
+      "local_expressions": [
+        "Urine infection",
+        "painful urine",
+        "toilet infection"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "intestinal_worms",
+      "condition_name": "Intestinal Worm Infestation",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "abdominal_discomfort",
+          "weight": 5
+        },
+        {
+          "token": "poor_appetite",
+          "weight": 5
+        },
+        {
+          "token": "anal_itching",
+          "weight": 6
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "diarrhoea",
+          "weight": 4
+        },
+        {
+          "token": "tiredness",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "abdominal_rigidity_board",
+        "vomiting_blood"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [],
+        "severe": [
+          "blood_in_stool",
+          "dehydration",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Higher prevalence; escalate if weight loss or anaemia signs"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with an intestinal worm infestation. This is common and treatable \u2014 a pharmacist or clinic can recommend appropriate deworming treatment.",
+      "care_level": "Pharmacy / Clinic (Clinic for children, persistent symptoms, or red flags)",
+      "local_expressions": [
+        "Worms",
+        "stomach worms",
+        "toilet worms"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "eye_infections",
+      "condition_name": "Eye Infections",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "eye_redness",
+          "weight": 7
+        },
+        {
+          "token": "eye_itchiness",
+          "weight": 6
+        },
+        {
+          "token": "eye_discharge",
+          "weight": 7
+        },
+        {
+          "token": "eye_pain",
+          "weight": 5
+        },
+        {
+          "token": "swollen_eyelids",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "neurological_signs"
+      ],
+      "severity_levels": {
+        "mild": [
+          "eye_redness",
+          "eye_itchiness"
+        ],
+        "moderate": [
+          "eye_discharge",
+          "swollen_eyelids"
+        ],
+        "severe": [
+          "eye_pain",
+          "blurred_vision",
+          "light_sensitivity"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "neonates",
+          "effect": "routine_caution",
+          "note": "Neonatal eye discharge requires urgent assessment \u2014 risk of ophthalmia neonatorum"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Dry dusty air increases conjunctivitis incidence"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with an eye infection. Most mild eye infections respond to treatment \u2014 see a pharmacist or clinic. Seek urgent care if your vision is affected or there is significant pain.",
+      "care_level": "Pharmacy / Clinic (Emergency if injury, chemical exposure, or vision loss)",
+      "local_expressions": [
+        "Red eye",
+        "eye infection",
+        "sore eye"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "ear_infections",
+      "condition_name": "Ear Infections",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "ear_pain",
+          "weight": 7
+        },
+        {
+          "token": "reduced_hearing",
+          "weight": 5
+        },
+        {
+          "token": "fever",
+          "weight": 5
+        },
+        {
+          "token": "ear_discharge",
+          "weight": 7
+        },
+        {
+          "token": "irritability",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "neck_stiffness_fever",
+        "impaired_consciousness",
+        "facial_weakness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "ear_pain",
+          "fever",
+          "pain"
+        ],
+        "moderate": [
+          "fever",
+          "pain"
+        ],
+        "severe": [
+          "swelling"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Higher risk and can progress faster; escalate with high fever or feeding refusal"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with an ear infection. Most ear infections are treatable \u2014 please see a clinic, especially if fever is present or a child is affected. Seek emergency care if there is swelling behind the ear or severe headache.",
+      "care_level": "Clinic (Emergency if mastoiditis signs or neurological symptoms)",
+      "local_expressions": [
+        "Ear pain",
+        "ear discharge",
+        "running ear"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "dental_oral",
+      "condition_name": "Dental / Oral Conditions",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "toothache",
+          "weight": 7
+        },
+        {
+          "token": "swollen_gums",
+          "weight": 6
+        },
+        {
+          "token": "mouth_sores",
+          "weight": 5
+        },
+        {
+          "token": "pain_on_chewing",
+          "weight": 6
+        },
+        {
+          "token": "bad_breath",
+          "weight": 3
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "impaired_consciousness",
+        "facial_space_swelling"
+      ],
+      "severity_levels": {
+        "mild": [
+          "toothache"
+        ],
+        "moderate": [
+          "swelling"
+        ],
+        "severe": [
+          "facial_swelling",
+          "swelling",
+          "fever"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Increased risk of gum disease; routine dental care advised"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a dental or oral condition. Pain relief may help temporarily, but dental assessment is recommended. Seek emergency care if swelling spreads to the face or neck.",
+      "care_level": "Pharmacy / Dental Clinic (Emergency if spreading swelling or airway risk)",
+      "local_expressions": [
+        "Toothache",
+        "mouth pain",
+        "gum pain"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "gastroenteritis",
+      "condition_name": "Gastroenteritis",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "nausea",
+          "weight": 6
+        },
+        {
+          "token": "vomiting",
+          "weight": 7
+        },
+        {
+          "token": "diarrhoea",
+          "weight": 7
+        },
+        {
+          "token": "abdominal_cramps",
+          "weight": 5
+        },
+        {
+          "token": "low_grade_fever",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_dehydration",
+        "altered_consciousness",
+        "impaired_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "nausea"
+        ],
+        "moderate": [
+          "diarrhoea",
+          "vomiting"
+        ],
+        "severe": [
+          "dehydration"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "High dehydration risk; escalate faster"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of rapid dehydration"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence through contaminated food/water"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with gastroenteritis. Staying hydrated is very important. If you cannot keep fluids down or feel very weak, seek medical attention promptly.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe dehydration)",
+      "local_expressions": [
+        "Stomach upset",
+        "running stomach and vomiting"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "fever_unknown",
+      "condition_name": "Fever of Unknown Origin",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "prolonged_fever",
+          "weight": 8
+        },
+        {
+          "token": "night_sweats",
+          "weight": 5
+        },
+        {
+          "token": "weight_loss",
+          "weight": 5
+        },
+        {
+          "token": "fatigue",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "neck_stiffness_fever",
+        "respiratory_distress"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever"
+        ],
+        "moderate": [
+          "persistent_fever",
+          "weakness",
+          "fever"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Always escalate \u2014 multiple causes possible"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of missed serious cause"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Escalate \u2014 fever in pregnancy has significant risk"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms include a fever that may need further investigation to identify the cause. Please see a healthcare provider \u2014 several conditions cause prolonged fever and testing can help identify the right treatment.",
+      "care_level": "Clinic (urgent investigation needed)",
+      "local_expressions": [
+        "Body hot",
+        "high temperature",
+        "fever wey no gree go"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "measles",
+      "condition_name": "Measles",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 7
+        },
+        {
+          "token": "runny_nose",
+          "weight": 5
+        },
+        {
+          "token": "cough",
+          "weight": 5
+        },
+        {
+          "token": "red_eyes",
+          "weight": 7
+        },
+        {
+          "token": "koplik_spots",
+          "weight": 9
+        },
+        {
+          "token": "spreading_rash",
+          "weight": 9
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "severe_dehydration",
+        "vision_changes_pregnancy",
+        "impaired_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever"
+        ],
+        "moderate": [
+          "red_eyes",
+          "fever"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "unvaccinated",
+          "effect": "increase_urgency",
+          "note": "Significantly increase urgency"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Highest risk of complications"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "dry_season",
+          "effect": "epidemic_alert",
+          "note": "Epidemic peaks common January\u2013April in Nigeria"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with measles or another rash-causing illness. Measles can be serious \u2014 please seek care promptly and avoid close contact with others to reduce spread.",
+      "care_level": "Clinic / Emergency (if severe complications)",
+      "local_expressions": [
+        "Shaworo",
+        "measles rash",
+        "skin rash with fever"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "hepatitis_b",
+      "condition_name": "Hepatitis B",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "jaundice",
+          "weight": 9
+        },
+        {
+          "token": "fatigue",
+          "weight": 5
+        },
+        {
+          "token": "dark_urine",
+          "weight": 7
+        },
+        {
+          "token": "right_abdominal_pain",
+          "weight": 6
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "loss_of_appetite",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_jaundice",
+        "altered_consciousness",
+        "vomiting_blood"
+      ],
+      "severity_levels": {
+        "mild": [
+          "jaundice",
+          "fatigue"
+        ],
+        "moderate": [
+          "jaundice",
+          "nausea"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Vertical transmission risk; escalate and refer for specialist care"
+        },
+        {
+          "modifier": "immunocompromised",
+          "effect": "increase_urgency",
+          "note": "Higher risk of chronic disease"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a liver condition such as hepatitis. Yellowing of the eyes or skin with fatigue warrants prompt medical evaluation \u2014 please visit a clinic for assessment.",
+      "care_level": "Clinic / Emergency (if liver failure signs)",
+      "local_expressions": [
+        "Yellow fever",
+        "yellow eye",
+        "liver disease"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "tuberculosis_suspected",
+      "condition_name": "Tuberculosis (Suspected)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "chronic_cough",
+          "weight": 9
+        },
+        {
+          "token": "weight_loss",
+          "weight": 7
+        },
+        {
+          "token": "night_sweats",
+          "weight": 7
+        },
+        {
+          "token": "fever",
+          "weight": 5
+        },
+        {
+          "token": "chest_pain",
+          "weight": 5
+        },
+        {
+          "token": "tiredness",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "cough"
+        ],
+        "moderate": [
+          "night_sweats",
+          "weight_loss",
+          "cough"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "hiv_positive",
+          "effect": "increase_urgency",
+          "note": "Significantly increase urgency \u2014 TB/HIV co-infection very common in Nigeria"
+        },
+        {
+          "modifier": "immunocompromised",
+          "effect": "increase_urgency",
+          "note": "Increase urgency"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of atypical presentation"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with tuberculosis or another chronic respiratory condition. Coughs lasting more than two weeks should be investigated \u2014 please visit a clinic for evaluation and testing.",
+      "care_level": "Clinic (Urgent) / Emergency (if severe breathing difficulty or haemoptysis)",
+      "local_expressions": [
+        "TB",
+        "chronic cough",
+        "cough wey no gree"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "hiv_symptomatic",
+      "condition_name": "HIV-Related Symptomatic Illness",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "persistent_fever",
+          "weight": 7
+        },
+        {
+          "token": "weight_loss",
+          "weight": 7
+        },
+        {
+          "token": "recurrent_infections",
+          "weight": 7
+        },
+        {
+          "token": "chronic_diarrhoea",
+          "weight": 6
+        },
+        {
+          "token": "oral_thrush",
+          "weight": 7
+        },
+        {
+          "token": "night_sweats",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "respiratory_distress",
+        "vomiting_blood"
+      ],
+      "severity_levels": {
+        "mild": [
+          "recurrent_infections"
+        ],
+        "moderate": [
+          "weight_loss"
+        ],
+        "severe": [
+          "dehydration"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Escalate urgency \u2014 PMTCT services needed"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Escalate \u2014 vertically acquired HIV must be identified"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with an immune-related condition or infection. These symptoms warrant a medical evaluation \u2014 a clinic can provide confidential testing and support.",
+      "care_level": "Clinic (Urgent) / Emergency (if danger signs)",
+      "local_expressions": [
+        "Slim disease",
+        "chronic sickness",
+        "falling sick often"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "sari",
+      "condition_name": "Severe Acute Respiratory Infection (SARI)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "cough",
+          "weight": 7
+        },
+        {
+          "token": "shortness_of_breath",
+          "weight": 9
+        },
+        {
+          "token": "chest_pain",
+          "weight": 7
+        },
+        {
+          "token": "fast_breathing",
+          "weight": 9
+        }
+      ],
+      "red_flags": [
+        "breathlessness_at_rest",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever",
+          "cough"
+        ],
+        "moderate": [
+          "fast_breathing",
+          "cough"
+        ],
+        "severe": [
+          "difficulty_breathing"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Highest mortality risk; escalate immediately"
+        },
+        {
+          "modifier": "immunocompromised",
+          "effect": "routine_caution",
+          "note": "Escalate urgency"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Use IMCI criteria for breathing rate; fast-track referral"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a severe respiratory infection. Breathing difficulties can worsen quickly \u2014 please seek emergency care immediately if your symptoms may be consistent with difficulty breathing at rest.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Severe chest infection",
+        "can't breathe well"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "vhf_suspected",
+      "condition_name": "Viral Haemorrhagic Fever (Suspected)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "severe_weakness",
+          "weight": 8
+        },
+        {
+          "token": "bleeding_gums",
+          "weight": 10
+        },
+        {
+          "token": "nosebleed",
+          "weight": 8
+        },
+        {
+          "token": "blood_in_stool",
+          "weight": 8
+        },
+        {
+          "token": "muscle_pain",
+          "weight": 5
+        },
+        {
+          "token": "sore_throat",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_dehydration",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever"
+        ],
+        "moderate": [
+          "confusion",
+          "bleeding"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "known_exposure",
+          "effect": "escalate_emergency",
+          "note": "EMERGENCY \u2014 immediate isolation and referral regardless of severity"
+        },
+        {
+          "modifier": "healthcare_worker",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 nosocomial risk"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a serious infectious illness requiring immediate medical evaluation. Please seek emergency care now and inform healthcare staff of your symptoms on arrival.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Serious fever",
+        "bleeding fever"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "schistosomiasis",
+      "condition_name": "Schistosomiasis",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "blood_in_urine",
+          "weight": 9
+        },
+        {
+          "token": "abdominal_pain",
+          "weight": 5
+        },
+        {
+          "token": "diarrhoea",
+          "weight": 4
+        },
+        {
+          "token": "tiredness",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "abdominal_rigidity_board"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [
+          "blood_in_urine"
+        ],
+        "severe": [
+          "weakness",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_school_age",
+          "effect": "routine_caution",
+          "note": "Higher exposure risk \u2014 endemic in rural/agricultural areas"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher transmission in rainy season through freshwater contact"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with schistosomiasis or another parasitic condition. Blood in urine should always be investigated \u2014 please visit a clinic for testing and treatment.",
+      "care_level": "Clinic",
+      "local_expressions": [
+        "Blood for urine",
+        "blood in urine"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "sth",
+      "condition_name": "Soil-Transmitted Helminthiasis",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "abdominal_pain",
+          "weight": 5
+        },
+        {
+          "token": "poor_appetite",
+          "weight": 5
+        },
+        {
+          "token": "pallor",
+          "weight": 6
+        },
+        {
+          "token": "fatigue",
+          "weight": 5
+        },
+        {
+          "token": "diarrhoea",
+          "weight": 4
+        },
+        {
+          "token": "growth_delay",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "severe_anaemia",
+        "bilateral_oedema_lethargy",
+        "inability_pass_stool_gas"
+      ],
+      "severity_levels": {
+        "mild": [
+          "abdominal_pain",
+          "fatigue"
+        ],
+        "moderate": [
+          "pallor",
+          "poor_appetite",
+          "growth_delay"
+        ],
+        "severe": [
+          "general_weakness",
+          "pallor"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_school_age",
+          "effect": "routine_caution",
+          "note": "Highest burden; escalate if growth delay or severe anaemia"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a parasitic worm infection. This is common and treatable \u2014 a pharmacist or clinic can advise on appropriate treatment.",
+      "care_level": "Pharmacy / Clinic",
+      "local_expressions": [
+        "Worm disease",
+        "stomach worms"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "rabies_exposure",
+      "condition_name": "Rabies Exposure (Animal Bites)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "animal_bite",
+          "weight": 10
+        },
+        {
+          "token": "wound_at_bite",
+          "weight": 8
+        },
+        {
+          "token": "local_swelling",
+          "weight": 5
+        },
+        {
+          "token": "fear_of_water",
+          "weight": 10
+        },
+        {
+          "token": "confusion",
+          "weight": 9
+        }
+      ],
+      "red_flags": [
+        "hydrophobia",
+        "bat_exposure",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "wound_at_bite",
+          "local_swelling"
+        ],
+        "moderate": [
+          "animal_bite",
+          "wound_at_bite"
+        ],
+        "severe": [
+          "fear_of_water",
+          "confusion"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Higher exposure risk; escalate immediately \u2014 bites often on face/neck"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "You may have been exposed to a serious infection through an animal bite. Rabies post-exposure prophylaxis is needed urgently \u2014 please go to an emergency facility immediately. Do not wait for symptoms.",
+      "care_level": "Emergency (post-exposure prophylaxis urgently needed)",
+      "local_expressions": [
+        "Dog bite",
+        "animal bite",
+        "mad dog bite"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "lassa_fever",
+      "condition_name": "Lassa Fever",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 7
+        },
+        {
+          "token": "sore_throat",
+          "weight": 6
+        },
+        {
+          "token": "severe_weakness",
+          "weight": 8
+        },
+        {
+          "token": "headache",
+          "weight": 5
+        },
+        {
+          "token": "chest_pain",
+          "weight": 6
+        },
+        {
+          "token": "bleeding",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "weakness",
+          "fever"
+        ],
+        "moderate": [
+          "bleeding"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Very high mortality in third trimester \u2014 immediate escalation"
+        },
+        {
+          "modifier": "known_rat_exposure",
+          "effect": "escalate_emergency",
+          "note": "EMERGENCY \u2014 increase urgency to maximum"
+        },
+        {
+          "modifier": "healthcare_worker",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 nosocomial risk"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "dry_season",
+          "effect": "increase_base_weight",
+          "note": "Peak transmission November\u2013April; Lassa fever season in Nigeria"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a serious febrile illness. In Nigeria, fever with weakness and sore throat requires urgent medical evaluation \u2014 please seek care immediately.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Serious fever",
+        "rat sickness"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "csm",
+      "condition_name": "Cerebrospinal Meningitis (CSM)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "severe_headache",
+          "weight": 8
+        },
+        {
+          "token": "neck_stiffness",
+          "weight": 10
+        },
+        {
+          "token": "fever",
+          "weight": 7
+        },
+        {
+          "token": "light_sensitivity",
+          "weight": 7
+        },
+        {
+          "token": "vomiting",
+          "weight": 5
+        },
+        {
+          "token": "confusion",
+          "weight": 9
+        },
+        {
+          "token": "petechial_rash",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "neck_stiffness_fever",
+        "altered_consciousness",
+        "seizures"
+      ],
+      "severity_levels": {
+        "mild": [
+          "headache",
+          "fever"
+        ],
+        "moderate": [
+          "neck_stiffness",
+          "confusion"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "unvaccinated",
+          "effect": "increase_urgency",
+          "note": "Higher risk \u2014 MenAfriVac gap"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "dry_season",
+          "effect": "epidemic_alert",
+          "note": "Epidemic season December\u2013June in the Nigerian meningitis belt"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a serious infection affecting the brain or spine. This requires immediate emergency care \u2014 please go to hospital now or call for help.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Stiff neck fever",
+        "brain fever"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "diphtheria",
+      "condition_name": "Diphtheria",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "sore_throat",
+          "weight": 6
+        },
+        {
+          "token": "throat_membrane",
+          "weight": 10
+        },
+        {
+          "token": "swollen_neck",
+          "weight": 8
+        },
+        {
+          "token": "difficulty_swallowing",
+          "weight": 7
+        },
+        {
+          "token": "hoarse_voice",
+          "weight": 7
+        },
+        {
+          "token": "stridor",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "stridor_airway",
+        "respiratory_distress",
+        "irregular_pulse",
+        "paralysis"
+      ],
+      "severity_levels": {
+        "mild": [
+          "sore_throat"
+        ],
+        "moderate": [],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "unvaccinated",
+          "effect": "routine_caution",
+          "note": "Highest risk \u2014 DTP vaccination gap"
+        },
+        {
+          "modifier": "children_under_15",
+          "effect": "routine_caution",
+          "note": "Highest burden age group"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a serious throat infection requiring immediate medical attention. Please seek emergency care now \u2014 throat swelling can affect breathing.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Throat disease",
+        "throat swelling"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "yellow_fever",
+      "condition_name": "Yellow Fever",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 7
+        },
+        {
+          "token": "jaundice",
+          "weight": 9
+        },
+        {
+          "token": "headache",
+          "weight": 5
+        },
+        {
+          "token": "muscle_pain",
+          "weight": 5
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "vomiting",
+          "weight": 5
+        },
+        {
+          "token": "backache",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "severe_jaundice",
+        "altered_consciousness",
+        "abdominal_rigidity_board"
+      ],
+      "severity_levels": {
+        "mild": [
+          "headache",
+          "fever"
+        ],
+        "moderate": [
+          "bleeding",
+          "jaundice"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "unvaccinated",
+          "effect": "increase_urgency",
+          "note": "Significantly increase urgency \u2014 vaccination status critical"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of severe disease"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "rainy_season",
+          "effect": "increase_base_weight",
+          "note": "Higher mosquito activity; peak transmission risk"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a serious fever-causing illness. Jaundice (yellowing of eyes or skin) with fever requires immediate medical evaluation \u2014 please seek emergency care.",
+      "care_level": "Emergency",
+      "local_expressions": [
+        "Yellow fever",
+        "yellow eye disease"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "mpox",
+      "condition_name": "Mpox",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "swollen_lymph_nodes",
+          "weight": 7
+        },
+        {
+          "token": "skin_lesions",
+          "weight": 9
+        },
+        {
+          "token": "muscle_aches",
+          "weight": 5
+        },
+        {
+          "token": "fatigue",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fever"
+        ],
+        "moderate": [
+          "fever"
+        ],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "immunocompromised",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 higher risk of severe disease"
+        },
+        {
+          "modifier": "hiv_positive",
+          "effect": "increase_urgency",
+          "note": "Increase urgency"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with mpox or another rash-causing illness. Please seek medical care and avoid close contact with others \u2014 isolation advice will be provided by a healthcare worker.",
+      "care_level": "Clinic (Urgent) / Emergency (if severe)",
+      "local_expressions": [
+        "Monkeypox",
+        "pox rash"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "hypertension",
+      "condition_name": "Hypertension (Suspected / Known)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "headache",
+          "weight": 5
+        },
+        {
+          "token": "dizziness",
+          "weight": 5
+        },
+        {
+          "token": "blurred_vision",
+          "weight": 6
+        },
+        {
+          "token": "nosebleed",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "severe_headache_vomiting"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [
+          "dizziness",
+          "headache"
+        ],
+        "severe": [
+          "severe_headache",
+          "blurred_vision",
+          "nosebleed"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "over_40",
+          "effect": "increase_base_weight",
+          "note": "Increase base weight \u2014 rising hypertension prevalence in Nigeria"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 risk of pre-eclampsia/eclampsia"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with high blood pressure or a related condition. Blood pressure can be measured at a clinic \u2014 it is important to have this checked, especially if your symptoms may be consistent with headaches or dizziness.",
+      "care_level": "Clinic / Emergency (if stroke or heart attack symptoms)",
+      "local_expressions": [
+        "High blood",
+        "BP"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "diabetes",
+      "condition_name": "Diabetes Mellitus (Suspected / Known)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "frequent_urination",
+          "weight": 7
+        },
+        {
+          "token": "excessive_thirst",
+          "weight": 7
+        },
+        {
+          "token": "fatigue",
+          "weight": 5
+        },
+        {
+          "token": "weight_loss",
+          "weight": 5
+        },
+        {
+          "token": "blurred_vision",
+          "weight": 6
+        },
+        {
+          "token": "recurrent_infections",
+          "weight": 5
+        },
+        {
+          "token": "fast_breathing",
+          "weight": 6
+        },
+        {
+          "token": "abdominal_pain",
+          "weight": 5
+        },
+        {
+          "token": "vomiting",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "hypoglycaemia"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [
+          "weight_loss",
+          "fatigue"
+        ],
+        "severe": [
+          "dehydration"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "over_40",
+          "effect": "increase_base_weight",
+          "note": "Increase base weight"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 gestational diabetes risk"
+        },
+        {
+          "modifier": "obesity",
+          "effect": "increase_base_weight",
+          "note": "Increase base weight"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with diabetes or a related metabolic condition. These symptoms warrant a blood sugar test \u2014 please visit a clinic for assessment and advice.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Sugar disease",
+        "high sugar"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "asthma",
+      "condition_name": "Asthma",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "wheeze",
+          "weight": 9
+        },
+        {
+          "token": "shortness_of_breath",
+          "weight": 8
+        },
+        {
+          "token": "chest_tightness",
+          "weight": 7
+        },
+        {
+          "token": "nocturnal_cough",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "blue_lips_face",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "wheeze"
+        ],
+        "moderate": [],
+        "severe": []
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "increase_urgency",
+          "note": "Higher risk of severe attack; escalate with any breathing difficulty"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Poorly controlled asthma increases fetal risk; escalate"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Dust and dry air triggers exacerbations November\u2013February"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with asthma or a breathing condition. If you use an inhaler, use it now. Seek emergency care immediately if you cannot speak in full sentences or if your lips look blue.",
+      "care_level": "Clinic / Emergency (if severe attack)",
+      "local_expressions": [
+        "Asthma",
+        "chest tightness",
+        "wheeze"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "chronic_respiratory",
+      "condition_name": "Chronic Respiratory Disease",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "chronic_cough",
+          "weight": 7
+        },
+        {
+          "token": "exertional_breathlessness",
+          "weight": 7
+        },
+        {
+          "token": "wheeze",
+          "weight": 6
+        },
+        {
+          "token": "chest_tightness",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "blue_lips_face"
+      ],
+      "severity_levels": {
+        "mild": [
+          "exertional_breathlessness",
+          "breathlessness",
+          "chronic_cough",
+          "cough"
+        ],
+        "moderate": [],
+        "severe": [
+          "breathlessness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "smoker",
+          "effect": "increase_base_weight",
+          "note": "Increase base weight"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Higher severity risk"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Dust triggers exacerbations"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with a long-term respiratory condition. A clinic visit is recommended to investigate the cause \u2014 chronic cough lasting over two weeks should always be evaluated.",
+      "care_level": "Clinic (Urgent) / Emergency (if severe)",
+      "local_expressions": [
+        "Chest problem",
+        "breathing wahala",
+        "chronic cough"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "anaemia",
+      "condition_name": "Anaemia",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "fatigue",
+          "weight": 6
+        },
+        {
+          "token": "pallor",
+          "weight": 8
+        },
+        {
+          "token": "dizziness",
+          "weight": 5
+        },
+        {
+          "token": "exertional_breathlessness",
+          "weight": 6
+        },
+        {
+          "token": "rapid_heartbeat",
+          "weight": 6
+        },
+        {
+          "token": "weakness",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "fatigue"
+        ],
+        "moderate": [
+          "exertional_breathlessness",
+          "breathlessness"
+        ],
+        "severe": [
+          "breathlessness",
+          "chest_pain",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 anaemia in pregnancy is a major contributor to maternal mortality"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "High burden; co-existing malaria/malnutrition common"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with anaemia or low blood levels. This is common in Nigeria and has several treatable causes \u2014 please visit a clinic for a blood test.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Blood shortage",
+        "weak blood",
+        "thin blood"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "cardio_symptoms",
+      "condition_name": "Cardiovascular Symptoms (Chest Pain, Palpitations)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "chest_pain",
+          "weight": 8
+        },
+        {
+          "token": "palpitations",
+          "weight": 6
+        },
+        {
+          "token": "shortness_of_breath",
+          "weight": 7
+        },
+        {
+          "token": "dizziness",
+          "weight": 5
+        },
+        {
+          "token": "leg_swelling",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "cardiac_chest_pain",
+        "radiating_arm_jaw_pain",
+        "irregular_pulse",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "palpitations"
+        ],
+        "moderate": [
+          "shortness_of_breath",
+          "palpitations",
+          "chest_discomfort"
+        ],
+        "severe": [
+          "chest_pain",
+          "rapid_heartbeat",
+          "dizziness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "over_40",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 higher cardiovascular risk"
+        },
+        {
+          "modifier": "hypertension_known",
+          "effect": "increase_urgency",
+          "note": "Increase urgency"
+        },
+        {
+          "modifier": "diabetes_known",
+          "effect": "increase_urgency",
+          "note": "Increase urgency"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a heart or cardiovascular condition. Chest pain \u2014 especially with sweating, arm pain, or difficulty breathing \u2014 requires emergency evaluation. Please seek immediate care.",
+      "care_level": "Clinic / Emergency (if severe chest pain or fainting)",
+      "local_expressions": [
+        "Heart pain",
+        "chest pain",
+        "racing heart"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "minor_injury",
+      "condition_name": "Minor Injuries / Trauma",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "pain",
+          "weight": 6
+        },
+        {
+          "token": "bruising",
+          "weight": 5
+        },
+        {
+          "token": "swelling",
+          "weight": 5
+        },
+        {
+          "token": "laceration",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "bruising"
+        ],
+        "moderate": [
+          "swelling"
+        ],
+        "severe": [
+          "bleeding"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Head injury requires immediate assessment"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Higher fracture risk from falls"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a minor injury. Most minor injuries can be treated at a pharmacy or clinic. Seek emergency care if there was a head injury, heavy bleeding, or you cannot move the affected area.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe)",
+      "local_expressions": [
+        "Injury",
+        "wound",
+        "cut",
+        "knocks"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "burns",
+      "condition_name": "Burns",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "skin_redness",
+          "weight": 5
+        },
+        {
+          "token": "pain_at_burn",
+          "weight": 7
+        },
+        {
+          "token": "blistering",
+          "weight": 8
+        },
+        {
+          "token": "charred_skin",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "shock",
+        "stridor_airway",
+        "respiratory_distress"
+      ],
+      "severity_levels": {
+        "mild": [
+          "skin_redness",
+          "pain_at_burn"
+        ],
+        "moderate": [
+          "blistering",
+          "skin_pain"
+        ],
+        "severe": [
+          "charred_skin",
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Scalds common; higher body surface area relative to size \u2014 escalate sooner"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Escalate for any significant burn"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with a burn injury. Small superficial burns can be treated carefully at home or at a pharmacy. Seek emergency care for large, deep, or facial burns.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Fire burn",
+        "scald",
+        "hot water burn"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "snake_bite",
+      "condition_name": "Snake Bite",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 3,
+      "symptoms": [
+        {
+          "token": "bite_mark",
+          "weight": 10
+        },
+        {
+          "token": "local_swelling",
+          "weight": 8
+        },
+        {
+          "token": "spreading_swelling",
+          "weight": 10
+        },
+        {
+          "token": "bleeding",
+          "weight": 10
+        },
+        {
+          "token": "ptosis",
+          "weight": 10
+        },
+        {
+          "token": "difficulty_breathing",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "respiratory_distress",
+        "ptosis_snakebite"
+      ],
+      "severity_levels": {
+        "mild": [
+          "pain"
+        ],
+        "moderate": [
+          "spreading_swelling",
+          "swelling"
+        ],
+        "severe": [
+          "bleeding"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Higher lethality \u2014 smaller body mass; escalate immediately"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "farming_season",
+          "effect": "increase_base_weight",
+          "note": "Higher risk during agricultural season and rainy season (Apr\u2013Oct)"
+        }
+      ],
+      "explanation_template": "A snake bite is a potential emergency. Please go to an emergency facility immediately \u2014 even if the bite seems minor, dangerous venom can act quickly. Do not wait for symptoms to worsen.",
+      "care_level": "Emergency (all snake bites should be assessed urgently)",
+      "local_expressions": [
+        "Snake bite",
+        "snake wound"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "road_traffic_injury_minor",
+      "condition_name": "Road Traffic Injury (Minor)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "pain_post_accident",
+          "weight": 6
+        },
+        {
+          "token": "bruising",
+          "weight": 5
+        },
+        {
+          "token": "swelling",
+          "weight": 5
+        },
+        {
+          "token": "laceration",
+          "weight": 7
+        },
+        {
+          "token": "head_injury_signs",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "heavy_vaginal_bleeding"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [
+          "swelling",
+          "pain"
+        ],
+        "severe": [
+          "head_injury_signs",
+          "bleeding"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Higher fracture and intracranial bleed risk"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "All road injuries require prompt assessment"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with minor injuries from an accident. Please visit a clinic for assessment \u2014 some injuries that seem minor can be more serious. Seek emergency care immediately if there was a head injury or heavy bleeding.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "Accident injury",
+        "okada accident"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "pregnancy_complications",
+      "condition_name": "Pregnancy-Related Complications (Warning Symptoms)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "vaginal_bleeding",
+          "weight": 9
+        },
+        {
+          "token": "severe_abdominal_pain",
+          "weight": 9
+        },
+        {
+          "token": "severe_headache",
+          "weight": 8
+        },
+        {
+          "token": "facial_swelling",
+          "weight": 7
+        },
+        {
+          "token": "reduced_fetal_movement",
+          "weight": 8
+        },
+        {
+          "token": "dizziness",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "heavy_vaginal_bleeding",
+        "abdominal_rigidity_board",
+        "seizures",
+        "vision_changes_pregnancy"
+      ],
+      "severity_levels": {
+        "mild": [],
+        "moderate": [],
+        "severe": [
+          "bleeding"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "first_pregnancy",
+          "effect": "routine_caution",
+          "note": "Increased risk of pre-eclampsia"
+        },
+        {
+          "modifier": "hypertension_known",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 pre-eclampsia risk very high"
+        },
+        {
+          "modifier": "diabetes_known",
+          "effect": "routine_caution",
+          "note": "ESCALATE \u2014 gestational diabetes complications"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may indicate a pregnancy-related warning sign. These symptoms require prompt medical attention \u2014 please go to a clinic or hospital immediately, especially if there is bleeding or severe headache.",
+      "care_level": "Clinic (Urgent) / Emergency (if red flags)",
+      "local_expressions": [
+        "Pregnancy bleeding",
+        "pregnancy pain",
+        "eclampsia signs"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "neonatal_infection",
+      "condition_name": "Neonatal Infection",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "emergency",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "neonatal_fever",
+          "weight": 9
+        },
+        {
+          "token": "poor_feeding",
+          "weight": 8
+        },
+        {
+          "token": "lethargy",
+          "weight": 9
+        },
+        {
+          "token": "fast_breathing_neonate",
+          "weight": 9
+        },
+        {
+          "token": "irritability",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "neonatal_not_feeding",
+        "respiratory_distress",
+        "blue_lips_face"
+      ],
+      "severity_levels": {
+        "mild": [
+          "irritability",
+          "fever"
+        ],
+        "moderate": [
+          "poor_feeding",
+          "fever"
+        ],
+        "severe": [
+          "convulsions"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "neonates",
+          "effect": "escalate_emergency",
+          "note": "All cases are emergency or urgent \u2014 neonatal illness deteriorates rapidly"
+        },
+        {
+          "modifier": "preterm_birth",
+          "effect": "increase_urgency",
+          "note": "ESCALATE \u2014 higher risk of severe infection"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "A newborn with fever, poor feeding, or unusual behaviour needs urgent medical attention. Newborn infections can become life-threatening very quickly \u2014 please seek emergency care immediately.",
+      "care_level": "Emergency / Clinic (Urgent)",
+      "local_expressions": [
+        "Newborn sickness",
+        "baby weak",
+        "baby no dey feed"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "pneumonia_children",
+      "condition_name": "Pneumonia (Children)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 7,
+      "symptoms": [
+        {
+          "token": "fast_breathing_child",
+          "weight": 9
+        },
+        {
+          "token": "chest_indrawing",
+          "weight": 10
+        },
+        {
+          "token": "lethargy",
+          "weight": 9
+        },
+        {
+          "token": "convulsions",
+          "weight": 10
+        },
+        {
+          "token": "poor_feeding",
+          "weight": 8
+        },
+        {
+          "token": "fever",
+          "weight": 6
+        },
+        {
+          "token": "cough",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "chest_indrawing_severe",
+        "inability_to_drink",
+        "not_eating_drinking_child",
+        "danger_signs_imci",
+        "cyanosis",
+        "seizures"
+      ],
+      "severity_levels": {
+        "no_pneumonia": [
+          "cough",
+          "mild_cough",
+          "runny_nose"
+        ],
+        "pneumonia": [
+          "fast_breathing_child",
+          "fever",
+          "cough"
+        ],
+        "severe_pneumonia": [
+          "chest_indrawing",
+          "fast_breathing_child"
+        ],
+        "very_severe_disease": [
+          "poor_feeding",
+          "lethargy",
+          "convulsions",
+          "stridor",
+          "chest_indrawing"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "monitor_and_escalate",
+          "note": "Core target population \u2014 use IMCI breathing rate thresholds (\u226550/min <1yr; \u226540/min 1\u20135yr)"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        },
+        {
+          "modifier": "hiv_positive",
+          "effect": "increase_urgency",
+          "note": "Higher risk of PCP pneumonia \u2014 escalate urgency"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence November\u2013February due to dry dusty air irritating airways"
+        }
+      ],
+      "explanation_template": "Your child's symptoms may be consistent with a respiratory infection or pneumonia. Fast breathing or chest indrawing in a child requires urgent clinic or hospital assessment \u2014 please do not wait.",
+      "care_level": "Clinic / Emergency (if severe)",
+      "local_expressions": [
+        "chest infection",
+        "catarrh with fast breathing"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "malnutrition",
+      "condition_name": "Malnutrition (Moderate / Severe)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "weight_loss",
+          "weight": 7
+        },
+        {
+          "token": "poor_appetite",
+          "weight": 6
+        },
+        {
+          "token": "bilateral_oedema",
+          "weight": 9
+        },
+        {
+          "token": "repeated_infections",
+          "weight": 6
+        },
+        {
+          "token": "poor_growth",
+          "weight": 8
+        },
+        {
+          "token": "tiredness",
+          "weight": 4
+        }
+      ],
+      "red_flags": [
+        "not_eating_drinking_child",
+        "altered_consciousness",
+        "vomiting_blood",
+        "severe_dehydration"
+      ],
+      "severity_levels": {
+        "mild": [
+          "weight_loss"
+        ],
+        "moderate": [
+          "poor_growth"
+        ],
+        "severe": [
+          "swelling",
+          "lethargy"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Core at-risk group \u2014 highest burden"
+        },
+        {
+          "modifier": "severe_malnutrition_sam",
+          "effect": "escalate_emergency",
+          "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+        },
+        {
+          "modifier": "moderate_malnutrition_mam",
+          "effect": "increase_urgency",
+          "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "lean_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence in lean season before harvest (June\u2013September)"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with malnutrition or inadequate nutritional intake. This condition is treatable \u2014 please visit a clinic or health centre for assessment and nutritional support.",
+      "care_level": "Clinic (Urgent) / Emergency (if severe)",
+      "local_expressions": [
+        "Underweight",
+        "child no dey grow well",
+        "swollen legs"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "headache",
+      "condition_name": "Headache",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "head_pain",
+          "weight": 6
+        },
+        {
+          "token": "throbbing_headache",
+          "weight": 5
+        },
+        {
+          "token": "pressure_headache",
+          "weight": 4
+        },
+        {
+          "token": "one_sided_headache",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "neck_stiffness_fever",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "headache"
+        ],
+        "moderate": [
+          "headache"
+        ],
+        "severe": [
+          "severe_headache",
+          "headache"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Severe headache in pregnancy \u2014 ESCALATE, rule out pre-eclampsia"
+        },
+        {
+          "modifier": "hypertension_known",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 may indicate BP crisis"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms include headache, which is very common and usually not serious. However, a sudden severe headache or headache with fever, stiff neck, or confusion requires urgent medical attention \u2014 please seek care promptly.",
+      "care_level": "Self-care / Pharmacy (Clinic if persistent or red flags)",
+      "local_expressions": [
+        "Head pain",
+        "head dey pain me"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "abdominal_pain",
+      "condition_name": "Abdominal Pain (Non-Specific)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 6,
+      "symptoms": [
+        {
+          "token": "abdominal_pain",
+          "weight": 6
+        },
+        {
+          "token": "bloating",
+          "weight": 4
+        },
+        {
+          "token": "nausea",
+          "weight": 4
+        },
+        {
+          "token": "bowel_changes",
+          "weight": 4
+        },
+        {
+          "token": "abdominal_rigidity",
+          "weight": 10
+        }
+      ],
+      "red_flags": [
+        "vomiting_blood",
+        "inability_pass_stool_gas"
+      ],
+      "severity_levels": {
+        "mild": [
+          "bloating"
+        ],
+        "moderate": [
+          "nausea",
+          "pain"
+        ],
+        "severe": [
+          "pain"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Escalate for any significant abdominal pain \u2014 multiple obstetric causes possible"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Escalate with vomiting or fever \u2014 appendicitis and intussusception possible"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms include abdominal pain, which has many possible causes. Mild pain may resolve with rest, but persistent or severe pain \u2014 especially with fever or vomiting \u2014 should be assessed by a healthcare provider.",
+      "care_level": "Pharmacy / Clinic (Emergency if severe or red flags)",
+      "local_expressions": [
+        "Stomach pain",
+        "belle pain",
+        "stomach ache"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "musculoskeletal_pain",
+      "condition_name": "Back Pain / Musculoskeletal Pain",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "back_pain",
+          "weight": 6
+        },
+        {
+          "token": "joint_pain",
+          "weight": 5
+        },
+        {
+          "token": "muscle_stiffness",
+          "weight": 4
+        },
+        {
+          "token": "limited_movement",
+          "weight": 5
+        },
+        {
+          "token": "limb_weakness",
+          "weight": 8
+        }
+      ],
+      "red_flags": [
+        "paralysis",
+        "neurological_signs",
+        "altered_consciousness"
+      ],
+      "severity_levels": {
+        "mild": [
+          "back_pain",
+          "muscle_aches"
+        ],
+        "moderate": [
+          "limited_movement",
+          "joint_pain"
+        ],
+        "severe": [
+          "limb_weakness",
+          "muscle_stiffness"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "elderly",
+          "effect": "increase_urgency",
+          "note": "Higher risk of fracture; escalate with post-fall pain"
+        },
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Lower back pain common; escalate if flank pain \u2014 rule out UTI"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms may be consistent with musculoskeletal pain or back pain. Most cases are not serious and improve with rest. Seek care if pain is severe, follows an injury, or is accompanied by numbness or weakness.",
+      "care_level": "Pharmacy / Clinic (Emergency if neurological signs or post-trauma)",
+      "local_expressions": [
+        "Back pain",
+        "body pain",
+        "joint pain",
+        "waist pain"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "fatigue_weakness",
+      "condition_name": "Fatigue / Weakness",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 5,
+      "symptoms": [
+        {
+          "token": "persistent_fatigue",
+          "weight": 5
+        },
+        {
+          "token": "low_energy",
+          "weight": 4
+        },
+        {
+          "token": "general_weakness",
+          "weight": 5
+        },
+        {
+          "token": "reduced_daily_function",
+          "weight": 5
+        }
+      ],
+      "red_flags": [
+        "prostration"
+      ],
+      "severity_levels": {
+        "mild": [
+          "tiredness"
+        ],
+        "moderate": [],
+        "severe": [
+          "weakness",
+          "fever"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Fatigue in pregnancy is common but anaemia must be excluded"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Investigate underlying cause \u2014 frailty risk"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms include fatigue or weakness, which can have many causes. In Nigeria, malaria and anaemia are common causes. Please see a healthcare provider if fatigue is severe or accompanied by fever or other symptoms.",
+      "care_level": "Pharmacy / Clinic (Emergency if sudden or one-sided weakness)",
+      "local_expressions": [
+        "Body weakness",
+        "no power",
+        "tired every time"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "dizziness",
+      "condition_name": "Dizziness",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "self_care",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "spinning_sensation",
+          "weight": 6
+        },
+        {
+          "token": "light_headedness",
+          "weight": 5
+        },
+        {
+          "token": "unsteadiness",
+          "weight": 5
+        },
+        {
+          "token": "near_fainting",
+          "weight": 7
+        }
+      ],
+      "red_flags": [
+        "altered_consciousness",
+        "stroke_signs",
+        "neurological_signs",
+        "cardiac_chest_pain"
+      ],
+      "severity_levels": {
+        "mild": [
+          "light_headedness",
+          "spinning_sensation"
+        ],
+        "moderate": [
+          "unsteadiness",
+          "near_fainting"
+        ],
+        "severe": [
+          "general_weakness",
+          "headache"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "pregnancy",
+          "effect": "routine_caution",
+          "note": "Dizziness in pregnancy \u2014 rule out anaemia and pre-eclampsia; escalate with headache"
+        },
+        {
+          "modifier": "elderly",
+          "effect": "routine_caution",
+          "note": "Risk of falls; escalate"
+        }
+      ],
+      "seasonal_modifiers": [],
+      "explanation_template": "Your symptoms include dizziness, which can have several causes including dehydration, low blood pressure, or anaemia. Most cases are not serious, but seek care if dizziness is severe, causes fainting, or comes with headache or chest pain.",
+      "care_level": "Pharmacy / Clinic (Emergency if fainting or neurological signs)",
+      "local_expressions": [
+        "Head spinning",
+        "vertigo",
+        "feel like falling"
+      ],
+      "duration_note": null
+    },
+    {
+      "condition_id": "allergic_reactions",
+      "condition_name": "Allergic Reactions (Non-Anaphylactic)",
+      "version": "2.0",
+      "country": "ng",
+      "urgency_default": "non_urgent",
+      "base_weight": 4,
+      "symptoms": [
+        {
+          "token": "itchy_rash",
+          "weight": 7
+        },
+        {
+          "token": "hives",
+          "weight": 8
+        },
+        {
+          "token": "sneezing",
+          "weight": 4
+        },
+        {
+          "token": "runny_nose",
+          "weight": 4
+        },
+        {
+          "token": "itchy_eyes",
+          "weight": 5
+        },
+        {
+          "token": "mild_swelling",
+          "weight": 6
+        }
+      ],
+      "red_flags": [
+        "respiratory_distress"
+      ],
+      "severity_levels": {
+        "mild": [
+          "hives"
+        ],
+        "moderate": [
+          "runny_nose"
+        ],
+        "severe": [
+          "swelling"
+        ]
+      },
+      "demographic_modifiers": [
+        {
+          "modifier": "known_allergy",
+          "effect": "increase_urgency",
+          "note": "Increase urgency \u2014 previous reactions may predict severity"
+        },
+        {
+          "modifier": "children_under_5",
+          "effect": "routine_caution",
+          "note": "Escalate faster \u2014 respiratory reserve is lower"
+        }
+      ],
+      "seasonal_modifiers": [
+        {
+          "season": "harmattan_season",
+          "effect": "increase_base_weight",
+          "note": "Higher incidence of allergic rhinitis"
+        }
+      ],
+      "explanation_template": "Your symptoms may be consistent with an allergic reaction. Most mild allergic reactions respond to antihistamines available at a pharmacy. Seek emergency care immediately if your symptoms may be consistent with difficulty breathing, throat swelling, or feel faint.",
+      "care_level": "Pharmacy (mild) / Clinic / Emergency (if airway involvement)",
+      "local_expressions": [
+        "Allergy",
+        "reaction",
+        "rash from food or drugs"
+      ],
+      "duration_note": null
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "condition_id": "measles",
+  "condition_name": "Measles",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 7
+    },
+    {
+      "token": "runny_nose",
+      "weight": 5
+    },
+    {
+      "token": "cough",
+      "weight": 5
+    },
+    {
+      "token": "red_eyes",
+      "weight": 7
+    },
+    {
+      "token": "koplik_spots",
+      "weight": 9
+    },
+    {
+      "token": "spreading_rash",
+      "weight": 9
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "severe_dehydration",
+    "vision_changes_pregnancy",
+    "impaired_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever"
+    ],
+    "moderate": [
+      "red_eyes",
+      "fever"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "unvaccinated",
+      "effect": "increase_urgency",
+      "note": "Significantly increase urgency"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Highest risk of complications"
+    },
+    {
+      "modifier": "severe_malnutrition_sam",
+      "effect": "escalate_emergency",
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "dry_season",
+      "effect": "epidemic_alert",
+      "note": "Epidemic peaks common January\u2013April in Nigeria"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with measles or another rash-causing illness. Measles can be serious \u2014 please seek care promptly and avoid close contact with others to reduce spread.",
+  "care_level": "Clinic / Emergency (if severe complications)",
+  "local_expressions": [
+    "Shaworo",
+    "measles rash",
+    "skin rash with fever"
+  ],
+  "duration_note": null
+}

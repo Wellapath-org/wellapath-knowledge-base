@@ -1,0 +1,67 @@
+{
+  "condition_id": "diphtheria",
+  "condition_name": "Diphtheria",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "sore_throat",
+      "weight": 6
+    },
+    {
+      "token": "throat_membrane",
+      "weight": 10
+    },
+    {
+      "token": "swollen_neck",
+      "weight": 8
+    },
+    {
+      "token": "difficulty_swallowing",
+      "weight": 7
+    },
+    {
+      "token": "hoarse_voice",
+      "weight": 7
+    },
+    {
+      "token": "stridor",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "stridor_airway",
+    "respiratory_distress",
+    "irregular_pulse",
+    "paralysis"
+  ],
+  "severity_levels": {
+    "mild": [
+      "sore_throat"
+    ],
+    "moderate": [],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "unvaccinated",
+      "effect": "routine_caution",
+      "note": "Highest risk \u2014 DTP vaccination gap"
+    },
+    {
+      "modifier": "children_under_15",
+      "effect": "routine_caution",
+      "note": "Highest burden age group"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a serious throat infection requiring immediate medical attention. Please seek emergency care now \u2014 throat swelling can affect breathing.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Throat disease",
+    "throat swelling"
+  ],
+  "duration_note": null
+}

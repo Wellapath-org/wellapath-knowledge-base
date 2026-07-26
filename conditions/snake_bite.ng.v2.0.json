@@ -1,0 +1,72 @@
+{
+  "condition_id": "snake_bite",
+  "condition_name": "Snake Bite",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "bite_mark",
+      "weight": 10
+    },
+    {
+      "token": "local_swelling",
+      "weight": 8
+    },
+    {
+      "token": "spreading_swelling",
+      "weight": 10
+    },
+    {
+      "token": "bleeding",
+      "weight": 10
+    },
+    {
+      "token": "ptosis",
+      "weight": 10
+    },
+    {
+      "token": "difficulty_breathing",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "respiratory_distress",
+    "ptosis_snakebite"
+  ],
+  "severity_levels": {
+    "mild": [
+      "pain"
+    ],
+    "moderate": [
+      "spreading_swelling",
+      "swelling"
+    ],
+    "severe": [
+      "bleeding"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Higher lethality \u2014 smaller body mass; escalate immediately"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "farming_season",
+      "effect": "increase_base_weight",
+      "note": "Higher risk during agricultural season and rainy season (Apr\u2013Oct)"
+    }
+  ],
+  "explanation_template": "A snake bite is a potential emergency. Please go to an emergency facility immediately \u2014 even if the bite seems minor, dangerous venom can act quickly. Do not wait for symptoms to worsen.",
+  "care_level": "Emergency (all snake bites should be assessed urgently)",
+  "local_expressions": [
+    "Snake bite",
+    "snake wound"
+  ],
+  "duration_note": null
+}

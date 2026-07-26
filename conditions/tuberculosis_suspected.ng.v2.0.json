@@ -1,0 +1,75 @@
+{
+  "condition_id": "tuberculosis_suspected",
+  "condition_name": "Tuberculosis (Suspected)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "chronic_cough",
+      "weight": 9
+    },
+    {
+      "token": "weight_loss",
+      "weight": 7
+    },
+    {
+      "token": "night_sweats",
+      "weight": 7
+    },
+    {
+      "token": "fever",
+      "weight": 5
+    },
+    {
+      "token": "chest_pain",
+      "weight": 5
+    },
+    {
+      "token": "tiredness",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "respiratory_distress",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "cough"
+    ],
+    "moderate": [
+      "night_sweats",
+      "weight_loss",
+      "cough"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "hiv_positive",
+      "effect": "increase_urgency",
+      "note": "Significantly increase urgency \u2014 TB/HIV co-infection very common in Nigeria"
+    },
+    {
+      "modifier": "immunocompromised",
+      "effect": "increase_urgency",
+      "note": "Increase urgency"
+    },
+    {
+      "modifier": "elderly",
+      "effect": "increase_urgency",
+      "note": "Higher risk of atypical presentation"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with tuberculosis or another chronic respiratory condition. Coughs lasting more than two weeks should be investigated \u2014 please visit a clinic for evaluation and testing.",
+  "care_level": "Clinic (Urgent) / Emergency (if severe breathing difficulty or haemoptysis)",
+  "local_expressions": [
+    "TB",
+    "chronic cough",
+    "cough wey no gree"
+  ],
+  "duration_note": null
+}

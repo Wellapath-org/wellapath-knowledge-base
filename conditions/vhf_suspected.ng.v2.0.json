@@ -1,0 +1,72 @@
+{
+  "condition_id": "vhf_suspected",
+  "condition_name": "Viral Haemorrhagic Fever (Suspected)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "emergency",
+  "base_weight": 3,
+  "symptoms": [
+    {
+      "token": "fever",
+      "weight": 6
+    },
+    {
+      "token": "severe_weakness",
+      "weight": 8
+    },
+    {
+      "token": "bleeding_gums",
+      "weight": 10
+    },
+    {
+      "token": "nosebleed",
+      "weight": 8
+    },
+    {
+      "token": "blood_in_stool",
+      "weight": 8
+    },
+    {
+      "token": "muscle_pain",
+      "weight": 5
+    },
+    {
+      "token": "sore_throat",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "severe_dehydration",
+    "altered_consciousness"
+  ],
+  "severity_levels": {
+    "mild": [
+      "fever"
+    ],
+    "moderate": [
+      "confusion",
+      "bleeding"
+    ],
+    "severe": []
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "known_exposure",
+      "effect": "escalate_emergency",
+      "note": "EMERGENCY \u2014 immediate isolation and referral regardless of severity"
+    },
+    {
+      "modifier": "healthcare_worker",
+      "effect": "increase_urgency",
+      "note": "Increase urgency \u2014 nosocomial risk"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with a serious infectious illness requiring immediate medical evaluation. Please seek emergency care now and inform healthcare staff of your symptoms on arrival.",
+  "care_level": "Emergency",
+  "local_expressions": [
+    "Serious fever",
+    "bleeding fever"
+  ],
+  "duration_note": null
+}

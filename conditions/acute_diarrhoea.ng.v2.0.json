@@ -1,0 +1,90 @@
+{
+  "condition_id": "acute_diarrhoea",
+  "condition_name": "Acute Diarrhoea (Non-Bloody)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 8,
+  "symptoms": [
+    {
+      "token": "watery_stool",
+      "weight": 8
+    },
+    {
+      "token": "vomiting",
+      "weight": 5
+    },
+    {
+      "token": "abdominal_cramps",
+      "weight": 5
+    },
+    {
+      "token": "nausea",
+      "weight": 4
+    },
+    {
+      "token": "low_grade_fever",
+      "weight": 4
+    }
+  ],
+  "red_flags": [
+    "severe_dehydration",
+    "sunken_eyes",
+    "inability_to_drink",
+    "altered_consciousness",
+    "shock"
+  ],
+  "severity_levels": {
+    "mild": [
+      "watery_stool",
+      "nausea"
+    ],
+    "moderate": [
+      "watery_stool",
+      "vomiting",
+      "dehydration"
+    ],
+    "severe": [
+      "dehydration",
+      "lethargy",
+      "weakness"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "children_under_5",
+      "effect": "increase_urgency",
+      "note": "Dehydration can be fatal rapidly in young children \u2014 escalate urgency"
+    },
+    {
+      "modifier": "severe_malnutrition_sam",
+      "effect": "escalate_emergency",
+      "note": "Severe acute malnutrition \u2014 emergency escalation regardless of primary condition severity"
+    },
+    {
+      "modifier": "moderate_malnutrition_mam",
+      "effect": "increase_urgency",
+      "note": "Moderate acute malnutrition \u2014 increase urgency by one tier"
+    },
+    {
+      "modifier": "pregnancy",
+      "effect": "monitor_and_escalate",
+      "note": "Monitor for dehydration closely \u2014 escalate faster than normal"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "rainy_season",
+      "effect": "increase_base_weight",
+      "note": "Higher incidence May\u2013October through contaminated water and food"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with acute diarrhoea. Staying hydrated with oral rehydration solution (ORS) is important. Seek care promptly if you cannot drink fluids, feel very weak, or symptoms worsen.",
+  "care_level": "Pharmacy / Clinic (Emergency if severe dehydration)",
+  "local_expressions": [
+    "running stomach",
+    "loose stool",
+    "stomach ache with stool"
+  ],
+  "duration_note": "Sudden onset of frequent watery stools indicates acute diarrhoea. If stools have been watery for more than 3 days, or if dehydration signs appear, urgency increases significantly."
+}

@@ -1,0 +1,71 @@
+{
+  "condition_id": "hiv_symptomatic",
+  "condition_name": "HIV-Related Symptomatic Illness",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "persistent_fever",
+      "weight": 7
+    },
+    {
+      "token": "weight_loss",
+      "weight": 7
+    },
+    {
+      "token": "recurrent_infections",
+      "weight": 7
+    },
+    {
+      "token": "chronic_diarrhoea",
+      "weight": 6
+    },
+    {
+      "token": "oral_thrush",
+      "weight": 7
+    },
+    {
+      "token": "night_sweats",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "respiratory_distress",
+    "vomiting_blood"
+  ],
+  "severity_levels": {
+    "mild": [
+      "recurrent_infections"
+    ],
+    "moderate": [
+      "weight_loss"
+    ],
+    "severe": [
+      "dehydration"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "pregnancy",
+      "effect": "routine_caution",
+      "note": "Escalate urgency \u2014 PMTCT services needed"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "Escalate \u2014 vertically acquired HIV must be identified"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with an immune-related condition or infection. These symptoms warrant a medical evaluation \u2014 a clinic can provide confidential testing and support.",
+  "care_level": "Clinic (Urgent) / Emergency (if danger signs)",
+  "local_expressions": [
+    "Slim disease",
+    "chronic sickness",
+    "falling sick often"
+  ],
+  "duration_note": null
+}

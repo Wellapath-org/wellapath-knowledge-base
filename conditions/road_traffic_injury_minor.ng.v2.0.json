@@ -1,0 +1,65 @@
+{
+  "condition_id": "road_traffic_injury_minor",
+  "condition_name": "Road Traffic Injury (Minor)",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 4,
+  "symptoms": [
+    {
+      "token": "pain_post_accident",
+      "weight": 6
+    },
+    {
+      "token": "bruising",
+      "weight": 5
+    },
+    {
+      "token": "swelling",
+      "weight": 5
+    },
+    {
+      "token": "laceration",
+      "weight": 7
+    },
+    {
+      "token": "head_injury_signs",
+      "weight": 10
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "heavy_vaginal_bleeding"
+  ],
+  "severity_levels": {
+    "mild": [],
+    "moderate": [
+      "swelling",
+      "pain"
+    ],
+    "severe": [
+      "head_injury_signs",
+      "bleeding"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "elderly",
+      "effect": "routine_caution",
+      "note": "Higher fracture and intracranial bleed risk"
+    },
+    {
+      "modifier": "children_under_5",
+      "effect": "routine_caution",
+      "note": "All road injuries require prompt assessment"
+    }
+  ],
+  "seasonal_modifiers": [],
+  "explanation_template": "Your symptoms may be consistent with minor injuries from an accident. Please visit a clinic for assessment \u2014 some injuries that seem minor can be more serious. Seek emergency care immediately if there was a head injury or heavy bleeding.",
+  "care_level": "Clinic / Emergency (if severe)",
+  "local_expressions": [
+    "Accident injury",
+    "okada accident"
+  ],
+  "duration_note": null
+}

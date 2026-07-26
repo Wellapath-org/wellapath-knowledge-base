@@ -1,0 +1,71 @@
+{
+  "condition_id": "eye_infections",
+  "condition_name": "Eye Infections",
+  "version": "2.0",
+  "country": "ng",
+  "urgency_default": "non_urgent",
+  "base_weight": 5,
+  "symptoms": [
+    {
+      "token": "eye_redness",
+      "weight": 7
+    },
+    {
+      "token": "eye_itchiness",
+      "weight": 6
+    },
+    {
+      "token": "eye_discharge",
+      "weight": 7
+    },
+    {
+      "token": "eye_pain",
+      "weight": 5
+    },
+    {
+      "token": "swollen_eyelids",
+      "weight": 5
+    }
+  ],
+  "red_flags": [
+    "altered_consciousness",
+    "neurological_signs"
+  ],
+  "severity_levels": {
+    "mild": [
+      "eye_redness",
+      "eye_itchiness"
+    ],
+    "moderate": [
+      "eye_discharge",
+      "swollen_eyelids"
+    ],
+    "severe": [
+      "eye_pain",
+      "blurred_vision",
+      "light_sensitivity"
+    ]
+  },
+  "demographic_modifiers": [
+    {
+      "modifier": "neonates",
+      "effect": "routine_caution",
+      "note": "Neonatal eye discharge requires urgent assessment \u2014 risk of ophthalmia neonatorum"
+    }
+  ],
+  "seasonal_modifiers": [
+    {
+      "season": "harmattan_season",
+      "effect": "increase_base_weight",
+      "note": "Dry dusty air increases conjunctivitis incidence"
+    }
+  ],
+  "explanation_template": "Your symptoms may be consistent with an eye infection. Most mild eye infections respond to treatment \u2014 see a pharmacist or clinic. Seek urgent care if your vision is affected or there is significant pain.",
+  "care_level": "Pharmacy / Clinic (Emergency if injury, chemical exposure, or vision loss)",
+  "local_expressions": [
+    "Red eye",
+    "eye infection",
+    "sore eye"
+  ],
+  "duration_note": null
+}
