@@ -120,41 +120,54 @@ for cid, cond in conditions.items():
             safety=(default == "emergency"), exp_source="urgency_default",
             note="condition has no demographic modifiers")
     else:
+        # Source rule: any effect the engine's urgency determiner acts on (Priority 3
+        # escalate_emergency, Priority 4a increase_urgency) reports source
+        # 'demographic_escalation' -- EVEN WHEN the escalated value equals the default
+        # (e.g. capped at 'urgent', or an emergency-default condition). Effects the
+        # determiner ignores (routine_caution / monitor_and_escalate / increase_base_weight)
+        # fall through to Priority 5 and keep source 'urgency_default'.
         if effect == "escalate_emergency":
-            exp = "emergency"; note = "escalate_emergency modifier"
+            exp = "emergency"; src = "demographic_escalation"; note = "escalate_emergency (Priority 3)"
         elif effect == "increase_urgency":
-            exp = escalate_one(default); note = "increase_urgency: one tier up from default"
+            exp = escalate_one(default); src = "demographic_escalation"
+            note = "increase_urgency (Priority 4a), one tier up from default (may be capped)"
         else:
-            exp = default; note = f"'{effect}' does not change urgency tier"
+            exp = default; src = "urgency_default"; note = f"'{effect}' does not change urgency tier"
         add(cid, f"{name}: with demographic modifier '{demo_tok}'",
             t5[:4], [demo_tok], None, exp, cid,
-            safety=(exp == "emergency"), exp_source="demographic_escalation" if exp != default else "urgency_default",
-            note=note)
+            safety=(exp == "emergency"), exp_source=src, note=note)
 
-    # 3. With a condition-specific red flag (or global if none) -> emergency
+    # 3. With a condition-specific red flag (or global if none) -> emergency.
+    # expected_top_condition is null on all red-flag cases: urgency is red-flag-driven
+    # and independent of which condition scores top. If the red-flag token is ALSO a
+    # global danger sign, the global pass (Priority 1) fires first, so source is
+    # global_red_flag (this is the case for road_traffic_injury_minor's circulatory_collapse).
     crf = COND_RED_FLAGS.get(cid, [])
     if crf:
         rf = crf[0]
-        add(cid, f"{name}: with condition-specific red flag '{rf}'",
-            t5[:3] + [rf], [], None, "emergency", cid,
-            safety=True, exp_source="condition_specific_red_flag")
+        rf_global = rf in GLOBAL_RED_FLAGS
+        add(cid, f"{name}: with {'global' if rf_global else 'condition-specific'} red flag '{rf}'",
+            t5[:3] + [rf], [], None, "emergency", None,
+            safety=True,
+            exp_source="global_red_flag" if rf_global else "condition_specific_red_flag",
+            note="red-flag token is also a global danger sign — global pass fires first" if rf_global else None)
     else:
         rf = "seizures"
         add(cid, f"{name}: with global danger sign '{rf}' (no condition-specific rule exists)",
-            t5[:3] + [rf], [], None, "emergency", cid,
+            t5[:3] + [rf], [], None, "emergency", None,
             safety=True, exp_source="global_red_flag",
             note="condition relies on global danger signs only")
 
     # 4. With a global danger sign layered on a real presentation -> emergency
     add(cid, f"{name}: real presentation + global danger sign 'inability_to_drink'",
-        t5[:3] + ["inability_to_drink"], [], None, "emergency", cid,
+        t5[:3] + ["inability_to_drink"], [], None, "emergency", None,
         safety=True, exp_source="global_red_flag")
 
 # ---- emergency conditions: +1 extra each (>=5 total) --------------------------
 for cid in EMERGENCY_CONDITIONS:
     cond = conditions[cid]; t5 = top5[cid]; name = cond["condition_name"]
     add(cid, f"{name}: real presentation + global danger sign 'circulatory_collapse'",
-        t5[:3] + ["circulatory_collapse"], [], None, "emergency", cid,
+        t5[:3] + ["circulatory_collapse"], [], None, "emergency", None,
         safety=True, exp_source="global_red_flag")
 
 # ---- edge cases ---------------------------------------------------------------
@@ -199,7 +212,8 @@ add("malaria", "Edge: malaria + under-5 + rainy season, NO danger sign -> urgent
     note="Case-04 policy: URGENT not EMERGENCY when no danger sign present")
 add("malaria", "Edge: malaria + under-5 alone, NO season -> urgent (default already urgent, capped)",
     ["fever", "chills", "headache", "weakness"], ["children_under_5"], None, "urgent", "malaria",
-    safety=False, exp_source="urgency_default", note="escalate_one(urgent)=urgent")
+    safety=False, exp_source="demographic_escalation",
+    note="increase_urgency (Priority 4a) fires; escalate_one(urgent)=urgent (capped, value unchanged) — source is still demographic_escalation")
 
 # Conflicting symptoms across two conditions -> top condition observed, urgency indeterminate
 add(None, "Edge: conflicting tokens from malaria + acute_diarrhoea -> observe top condition",
@@ -211,7 +225,7 @@ add(None, "Edge: conflicting tokens from cardio + dizziness -> observe top condi
 
 # Global red flag overrides a mild presentation
 add("cough_common_cold", "Edge: mild cold + global danger sign 'seizures' -> emergency (override)",
-    ["runny_nose", "mild_cough", "seizures"], [], None, "emergency", "cough_common_cold",
+    ["runny_nose", "mild_cough", "seizures"], [], None, "emergency", None,
     safety=True, exp_source="global_red_flag", note="danger sign overrides low-acuity condition")
 
 # ---- assemble + coverage metadata ---------------------------------------------
@@ -230,6 +244,9 @@ bank = {
             "rules": "rules.ng.v2.1.json",
             "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)",
         },
+        "valid_against_rules": "v2.1 and v2.2 — v2.2 removes rf_147 (RTI circulatory_collapse), which is "
+            "behaviourally inert: circulatory_collapse still returns emergency via global rf_006. CB_159 "
+            "already reflects this (source global_red_flag).",
         "total_cases": len(cases),
         "safety_critical_cases": len(safety_cases),
         "conditions_covered": len(covered),
@@ -238,6 +255,12 @@ bank = {
             "(KB urgency_default + red flag rules + Case-04 Option B escalation policy), independent of "
             "the engine implementation, so the run can catch engine bugs.",
         "known_caveats": [
+            "expected_top_condition is null on all red-flag cases (source global_red_flag or "
+            "condition_specific_red_flag): urgency is red-flag-driven and independent of which condition "
+            "scores top. It is asserted only on non-red-flag cases.",
+            "expected_urgency_source uses the engine's actual emitted value 'demographic_escalation' for "
+            "Priority 3 (escalate_emergency) and Priority 4a (increase_urgency) cases, including when the "
+            "escalated value equals the default (capped, or emergency-default conditions).",
             "expected_top_condition for 'standard' cases assumes the condition's own top-5 tokens make it "
             "the top scorer. If the engine returns a different top condition, that is a real finding "
             "(cf. the headache token-reachability gap, Issue #8), not a case-bank error.",
