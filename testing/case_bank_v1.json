@@ -1,0 +1,4261 @@
+{
+  "_metadata": {
+    "artifact_id": "case_bank",
+    "version": "1.0",
+    "phase": "E8.1",
+    "country": "ng",
+    "built_from": {
+      "knowledge_base": "kb.ng.v2.3.json",
+      "rules": "rules.ng.v2.1.json",
+      "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)"
+    },
+    "total_cases": 234,
+    "safety_critical_cases": 150,
+    "conditions_covered": 50,
+    "global_red_flag_tokens_tested": 13,
+    "expected_value_derivation": "See build_case_bank.py header. Expected values are spec-derived (KB urgency_default + red flag rules + Case-04 Option B escalation policy), independent of the engine implementation, so the run can catch engine bugs.",
+    "known_caveats": [
+      "expected_top_condition for 'standard' cases assumes the condition's own top-5 tokens make it the top scorer. If the engine returns a different top condition, that is a real finding (cf. the headache token-reachability gap, Issue #8), not a case-bank error.",
+      "Cases with expected_urgency_source='observe' have no asserted expected value; the runner should record actual output for human review rather than pass/fail.",
+      "Priority-4c cases (increase_urgency + seasonal -> urgent) encode the Case-04 Option B policy. The updated engine source for 4c was reported by engineering but not independently verified at build time; if the engine still returns emergency here, that is the discrepancy to resolve."
+    ]
+  },
+  "coverage": {
+    "cases_per_condition": {
+      "abdominal_pain": 4,
+      "acute_diarrhoea": 6,
+      "allergic_reactions": 4,
+      "anaemia": 4,
+      "asthma": 4,
+      "burns": 4,
+      "cardio_symptoms": 4,
+      "cholera": 5,
+      "chronic_respiratory": 4,
+      "cough_common_cold": 7,
+      "csm": 5,
+      "dental_oral": 4,
+      "diabetes": 4,
+      "diphtheria": 5,
+      "dizziness": 4,
+      "dysentery": 4,
+      "ear_infections": 4,
+      "eye_infections": 4,
+      "fatigue_weakness": 4,
+      "fever_unknown": 4,
+      "gastroenteritis": 4,
+      "headache": 4,
+      "hepatitis_b": 4,
+      "hiv_symptomatic": 4,
+      "hypertension": 4,
+      "intestinal_worms": 4,
+      "lassa_fever": 5,
+      "lower_respiratory_infection": 4,
+      "malaria": 7,
+      "malnutrition": 4,
+      "measles": 4,
+      "minor_injury": 4,
+      "mpox": 4,
+      "musculoskeletal_pain": 4,
+      "neonatal_infection": 5,
+      "pneumonia_children": 4,
+      "pregnancy_complications": 4,
+      "rabies_exposure": 5,
+      "road_traffic_injury_minor": 4,
+      "sari": 5,
+      "schistosomiasis": 4,
+      "skin_infections": 4,
+      "snake_bite": 5,
+      "sth": 4,
+      "tuberculosis_suspected": 4,
+      "typhoid_fever": 4,
+      "urti": 4,
+      "uti": 4,
+      "vhf_suspected": 5,
+      "yellow_fever": 5
+    },
+    "emergency_conditions": [
+      "cholera",
+      "sari",
+      "vhf_suspected",
+      "rabies_exposure",
+      "lassa_fever",
+      "csm",
+      "diphtheria",
+      "yellow_fever",
+      "snake_bite",
+      "neonatal_infection"
+    ],
+    "global_red_flag_tokens": [
+      "abnormal_bleeding",
+      "altered_consciousness",
+      "anaphylaxis_signs",
+      "blue_lips_face",
+      "breathlessness_at_rest",
+      "circulatory_collapse",
+      "impaired_consciousness",
+      "inability_to_drink",
+      "prostration",
+      "respiratory_distress",
+      "seizures",
+      "severe_dehydration",
+      "shock"
+    ]
+  },
+  "cases": [
+    {
+      "case_id": "CB_001",
+      "condition_target": "malaria",
+      "description": "Malaria: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "sweating",
+        "body_pain"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_002",
+      "condition_target": "malaria",
+      "description": "Malaria: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "sweating"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_003",
+      "condition_target": "malaria",
+      "description": "Malaria: with condition-specific red flag 'haemoglobinuria'",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "haemoglobinuria"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "malaria",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_004",
+      "condition_target": "malaria",
+      "description": "Malaria: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "malaria",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_005",
+      "condition_target": "cough_common_cold",
+      "description": "Cough / Common Cold (Non-Pneumonia): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough",
+        "sneezing",
+        "mild_sore_throat",
+        "mild_headache"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_006",
+      "condition_target": "cough_common_cold",
+      "description": "Cough / Common Cold (Non-Pneumonia): with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough",
+        "sneezing",
+        "mild_sore_throat"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_007",
+      "condition_target": "cough_common_cold",
+      "description": "Cough / Common Cold (Non-Pneumonia): with condition-specific red flag 'fast_breathing_danger'",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough",
+        "sneezing",
+        "fast_breathing_danger"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_008",
+      "condition_target": "cough_common_cold",
+      "description": "Cough / Common Cold (Non-Pneumonia): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough",
+        "sneezing",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_009",
+      "condition_target": "acute_diarrhoea",
+      "description": "Acute Diarrhoea (Non-Bloody): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting",
+        "abdominal_cramps",
+        "nausea",
+        "low_grade_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_010",
+      "condition_target": "acute_diarrhoea",
+      "description": "Acute Diarrhoea (Non-Bloody): with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting",
+        "abdominal_cramps",
+        "nausea"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_011",
+      "condition_target": "acute_diarrhoea",
+      "description": "Acute Diarrhoea (Non-Bloody): with condition-specific red flag 'sunken_eyes'",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting",
+        "abdominal_cramps",
+        "sunken_eyes"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_012",
+      "condition_target": "acute_diarrhoea",
+      "description": "Acute Diarrhoea (Non-Bloody): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting",
+        "abdominal_cramps",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_013",
+      "condition_target": "dysentery",
+      "description": "Dysentery: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "blood_in_stool",
+        "abdominal_cramps",
+        "fever",
+        "mucus_in_stool",
+        "weakness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "dysentery",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_014",
+      "condition_target": "dysentery",
+      "description": "Dysentery: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "blood_in_stool",
+        "abdominal_cramps",
+        "fever",
+        "mucus_in_stool"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "dysentery",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_015",
+      "condition_target": "dysentery",
+      "description": "Dysentery: with condition-specific red flag 'vomiting_blood'",
+      "input_tokens": [
+        "blood_in_stool",
+        "abdominal_cramps",
+        "fever",
+        "vomiting_blood"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dysentery",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_016",
+      "condition_target": "dysentery",
+      "description": "Dysentery: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "blood_in_stool",
+        "abdominal_cramps",
+        "fever",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dysentery",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_017",
+      "condition_target": "typhoid_fever",
+      "description": "Typhoid Fever: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "prolonged_fever",
+        "abdominal_pain",
+        "headache",
+        "weakness",
+        "diarrhoea"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "typhoid_fever",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_018",
+      "condition_target": "typhoid_fever",
+      "description": "Typhoid Fever: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "prolonged_fever",
+        "abdominal_pain",
+        "headache",
+        "weakness"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "typhoid_fever",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_019",
+      "condition_target": "typhoid_fever",
+      "description": "Typhoid Fever: with condition-specific red flag 'neck_stiffness_fever'",
+      "input_tokens": [
+        "prolonged_fever",
+        "abdominal_pain",
+        "headache",
+        "neck_stiffness_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "typhoid_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_020",
+      "condition_target": "typhoid_fever",
+      "description": "Typhoid Fever: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "prolonged_fever",
+        "abdominal_pain",
+        "headache",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "typhoid_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_021",
+      "condition_target": "cholera",
+      "description": "Cholera: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "profuse_watery_stool",
+        "rapid_onset_diarrhoea",
+        "dehydration",
+        "vomiting"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cholera",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_022",
+      "condition_target": "cholera",
+      "description": "Cholera: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "profuse_watery_stool",
+        "rapid_onset_diarrhoea",
+        "dehydration",
+        "vomiting"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cholera",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_023",
+      "condition_target": "cholera",
+      "description": "Cholera: with condition-specific red flag 'sunken_eyes'",
+      "input_tokens": [
+        "profuse_watery_stool",
+        "rapid_onset_diarrhoea",
+        "dehydration",
+        "sunken_eyes"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cholera",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_024",
+      "condition_target": "cholera",
+      "description": "Cholera: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "profuse_watery_stool",
+        "rapid_onset_diarrhoea",
+        "dehydration",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cholera",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_025",
+      "condition_target": "urti",
+      "description": "Upper Respiratory Tract Infection (URTI): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "cough",
+        "runny_nose",
+        "sore_throat",
+        "sneezing",
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "urti",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_026",
+      "condition_target": "urti",
+      "description": "Upper Respiratory Tract Infection (URTI): with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "cough",
+        "runny_nose",
+        "sore_throat",
+        "sneezing"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "urti",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_027",
+      "condition_target": "urti",
+      "description": "Upper Respiratory Tract Infection (URTI): with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "cough",
+        "runny_nose",
+        "sore_throat",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "urti",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_028",
+      "condition_target": "urti",
+      "description": "Upper Respiratory Tract Infection (URTI): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "cough",
+        "runny_nose",
+        "sore_throat",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "urti",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_029",
+      "condition_target": "lower_respiratory_infection",
+      "description": "Lower Respiratory Tract Infection (Non-Severe): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "productive_cough",
+        "breathlessness",
+        "fever",
+        "chest_discomfort"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "lower_respiratory_infection",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_030",
+      "condition_target": "lower_respiratory_infection",
+      "description": "Lower Respiratory Tract Infection (Non-Severe): with demographic modifier 'elderly'",
+      "input_tokens": [
+        "productive_cough",
+        "breathlessness",
+        "fever",
+        "chest_discomfort"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "lower_respiratory_infection",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_031",
+      "condition_target": "lower_respiratory_infection",
+      "description": "Lower Respiratory Tract Infection (Non-Severe): with condition-specific red flag 'fast_breathing_danger'",
+      "input_tokens": [
+        "productive_cough",
+        "breathlessness",
+        "fever",
+        "fast_breathing_danger"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lower_respiratory_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_032",
+      "condition_target": "lower_respiratory_infection",
+      "description": "Lower Respiratory Tract Infection (Non-Severe): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "productive_cough",
+        "breathlessness",
+        "fever",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lower_respiratory_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_033",
+      "condition_target": "skin_infections",
+      "description": "Skin Infections / Skin Diseases: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "pus_discharge",
+        "itchy_rash",
+        "boils",
+        "skin_redness",
+        "skin_swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "skin_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_034",
+      "condition_target": "skin_infections",
+      "description": "Skin Infections / Skin Diseases: with demographic modifier 'immunocompromised'",
+      "input_tokens": [
+        "pus_discharge",
+        "itchy_rash",
+        "boils",
+        "skin_redness"
+      ],
+      "demographic_tokens": [
+        "immunocompromised"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "skin_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_035",
+      "condition_target": "skin_infections",
+      "description": "Skin Infections / Skin Diseases: with condition-specific red flag 'widespread_spreading_infection'",
+      "input_tokens": [
+        "pus_discharge",
+        "itchy_rash",
+        "boils",
+        "widespread_spreading_infection"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "skin_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_036",
+      "condition_target": "skin_infections",
+      "description": "Skin Infections / Skin Diseases: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "pus_discharge",
+        "itchy_rash",
+        "boils",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "skin_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_037",
+      "condition_target": "uti",
+      "description": "Urinary Tract Infection (UTI): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "dysuria",
+        "urinary_frequency",
+        "cloudy_urine",
+        "lower_abdominal_pain",
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "uti",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_038",
+      "condition_target": "uti",
+      "description": "Urinary Tract Infection (UTI): with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "dysuria",
+        "urinary_frequency",
+        "cloudy_urine",
+        "lower_abdominal_pain"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "uti",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_039",
+      "condition_target": "uti",
+      "description": "Urinary Tract Infection (UTI): with condition-specific red flag 'flank_pain_kidney'",
+      "input_tokens": [
+        "dysuria",
+        "urinary_frequency",
+        "cloudy_urine",
+        "flank_pain_kidney"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "uti",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_040",
+      "condition_target": "uti",
+      "description": "Urinary Tract Infection (UTI): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "dysuria",
+        "urinary_frequency",
+        "cloudy_urine",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "uti",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_041",
+      "condition_target": "intestinal_worms",
+      "description": "Intestinal Worm Infestation: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "anal_itching",
+        "abdominal_discomfort",
+        "poor_appetite",
+        "nausea",
+        "diarrhoea"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "intestinal_worms",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_042",
+      "condition_target": "intestinal_worms",
+      "description": "Intestinal Worm Infestation: with demographic modifier 'severe_malnutrition_sam'",
+      "input_tokens": [
+        "anal_itching",
+        "abdominal_discomfort",
+        "poor_appetite",
+        "nausea"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "intestinal_worms",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_043",
+      "condition_target": "intestinal_worms",
+      "description": "Intestinal Worm Infestation: with condition-specific red flag 'abdominal_rigidity_board'",
+      "input_tokens": [
+        "anal_itching",
+        "abdominal_discomfort",
+        "poor_appetite",
+        "abdominal_rigidity_board"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "intestinal_worms",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_044",
+      "condition_target": "intestinal_worms",
+      "description": "Intestinal Worm Infestation: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "anal_itching",
+        "abdominal_discomfort",
+        "poor_appetite",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "intestinal_worms",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_045",
+      "condition_target": "eye_infections",
+      "description": "Eye Infections: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "eye_redness",
+        "eye_discharge",
+        "eye_itchiness",
+        "eye_pain",
+        "swollen_eyelids"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "eye_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_046",
+      "condition_target": "eye_infections",
+      "description": "Eye Infections: with demographic modifier 'neonates'",
+      "input_tokens": [
+        "eye_redness",
+        "eye_discharge",
+        "eye_itchiness",
+        "eye_pain"
+      ],
+      "demographic_tokens": [
+        "neonates"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "eye_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_047",
+      "condition_target": "eye_infections",
+      "description": "Eye Infections: with condition-specific red flag 'neurological_signs'",
+      "input_tokens": [
+        "eye_redness",
+        "eye_discharge",
+        "eye_itchiness",
+        "neurological_signs"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "eye_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_048",
+      "condition_target": "eye_infections",
+      "description": "Eye Infections: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "eye_redness",
+        "eye_discharge",
+        "eye_itchiness",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "eye_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_049",
+      "condition_target": "ear_infections",
+      "description": "Ear Infections: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "ear_pain",
+        "ear_discharge",
+        "reduced_hearing",
+        "fever",
+        "irritability"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "ear_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_050",
+      "condition_target": "ear_infections",
+      "description": "Ear Infections: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "ear_pain",
+        "ear_discharge",
+        "reduced_hearing",
+        "fever"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "ear_infections",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_051",
+      "condition_target": "ear_infections",
+      "description": "Ear Infections: with condition-specific red flag 'neck_stiffness_fever'",
+      "input_tokens": [
+        "ear_pain",
+        "ear_discharge",
+        "reduced_hearing",
+        "neck_stiffness_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "ear_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_052",
+      "condition_target": "ear_infections",
+      "description": "Ear Infections: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "ear_pain",
+        "ear_discharge",
+        "reduced_hearing",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "ear_infections",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_053",
+      "condition_target": "dental_oral",
+      "description": "Dental / Oral Conditions: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "toothache",
+        "swollen_gums",
+        "pain_on_chewing",
+        "mouth_sores",
+        "bad_breath"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "dental_oral",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_054",
+      "condition_target": "dental_oral",
+      "description": "Dental / Oral Conditions: with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "toothache",
+        "swollen_gums",
+        "pain_on_chewing",
+        "mouth_sores"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "dental_oral",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_055",
+      "condition_target": "dental_oral",
+      "description": "Dental / Oral Conditions: with condition-specific red flag 'facial_space_swelling'",
+      "input_tokens": [
+        "toothache",
+        "swollen_gums",
+        "pain_on_chewing",
+        "facial_space_swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dental_oral",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_056",
+      "condition_target": "dental_oral",
+      "description": "Dental / Oral Conditions: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "toothache",
+        "swollen_gums",
+        "pain_on_chewing",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dental_oral",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_057",
+      "condition_target": "gastroenteritis",
+      "description": "Gastroenteritis: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "vomiting",
+        "diarrhoea",
+        "nausea",
+        "abdominal_cramps",
+        "low_grade_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "gastroenteritis",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_058",
+      "condition_target": "gastroenteritis",
+      "description": "Gastroenteritis: with demographic modifier 'elderly'",
+      "input_tokens": [
+        "vomiting",
+        "diarrhoea",
+        "nausea",
+        "abdominal_cramps"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "gastroenteritis",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_059",
+      "condition_target": "gastroenteritis",
+      "description": "Gastroenteritis: with condition-specific red flag 'sunken_eyes'",
+      "input_tokens": [
+        "vomiting",
+        "diarrhoea",
+        "nausea",
+        "sunken_eyes"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "gastroenteritis",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_060",
+      "condition_target": "gastroenteritis",
+      "description": "Gastroenteritis: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "vomiting",
+        "diarrhoea",
+        "nausea",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "gastroenteritis",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_061",
+      "condition_target": "fever_unknown",
+      "description": "Fever of Unknown Origin: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "prolonged_fever",
+        "night_sweats",
+        "weight_loss",
+        "fatigue"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "fever_unknown",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_062",
+      "condition_target": "fever_unknown",
+      "description": "Fever of Unknown Origin: with demographic modifier 'elderly'",
+      "input_tokens": [
+        "prolonged_fever",
+        "night_sweats",
+        "weight_loss",
+        "fatigue"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "fever_unknown",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_063",
+      "condition_target": "fever_unknown",
+      "description": "Fever of Unknown Origin: with condition-specific red flag 'neck_stiffness_fever'",
+      "input_tokens": [
+        "prolonged_fever",
+        "night_sweats",
+        "weight_loss",
+        "neck_stiffness_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "fever_unknown",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_064",
+      "condition_target": "fever_unknown",
+      "description": "Fever of Unknown Origin: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "prolonged_fever",
+        "night_sweats",
+        "weight_loss",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "fever_unknown",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_065",
+      "condition_target": "measles",
+      "description": "Measles: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "koplik_spots",
+        "spreading_rash",
+        "fever",
+        "red_eyes",
+        "runny_nose"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "measles",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_066",
+      "condition_target": "measles",
+      "description": "Measles: with demographic modifier 'unvaccinated'",
+      "input_tokens": [
+        "koplik_spots",
+        "spreading_rash",
+        "fever",
+        "red_eyes"
+      ],
+      "demographic_tokens": [
+        "unvaccinated"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "measles",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_067",
+      "condition_target": "measles",
+      "description": "Measles: with condition-specific red flag 'vision_changes_pregnancy'",
+      "input_tokens": [
+        "koplik_spots",
+        "spreading_rash",
+        "fever",
+        "vision_changes_pregnancy"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "measles",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_068",
+      "condition_target": "measles",
+      "description": "Measles: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "koplik_spots",
+        "spreading_rash",
+        "fever",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "measles",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_069",
+      "condition_target": "hepatitis_b",
+      "description": "Hepatitis B: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "jaundice",
+        "dark_urine",
+        "right_abdominal_pain",
+        "fatigue",
+        "nausea"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "hepatitis_b",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_070",
+      "condition_target": "hepatitis_b",
+      "description": "Hepatitis B: with demographic modifier 'immunocompromised'",
+      "input_tokens": [
+        "jaundice",
+        "dark_urine",
+        "right_abdominal_pain",
+        "fatigue"
+      ],
+      "demographic_tokens": [
+        "immunocompromised"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "hepatitis_b",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_071",
+      "condition_target": "hepatitis_b",
+      "description": "Hepatitis B: with condition-specific red flag 'vomiting_blood'",
+      "input_tokens": [
+        "jaundice",
+        "dark_urine",
+        "right_abdominal_pain",
+        "vomiting_blood"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hepatitis_b",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_072",
+      "condition_target": "hepatitis_b",
+      "description": "Hepatitis B: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "jaundice",
+        "dark_urine",
+        "right_abdominal_pain",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hepatitis_b",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_073",
+      "condition_target": "tuberculosis_suspected",
+      "description": "Tuberculosis (Suspected): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "chronic_cough",
+        "weight_loss",
+        "night_sweats",
+        "fever",
+        "chest_pain"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "tuberculosis_suspected",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_074",
+      "condition_target": "tuberculosis_suspected",
+      "description": "Tuberculosis (Suspected): with demographic modifier 'hiv_positive'",
+      "input_tokens": [
+        "chronic_cough",
+        "weight_loss",
+        "night_sweats",
+        "fever"
+      ],
+      "demographic_tokens": [
+        "hiv_positive"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "tuberculosis_suspected",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_075",
+      "condition_target": "tuberculosis_suspected",
+      "description": "Tuberculosis (Suspected): with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "chronic_cough",
+        "weight_loss",
+        "night_sweats",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "tuberculosis_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_076",
+      "condition_target": "tuberculosis_suspected",
+      "description": "Tuberculosis (Suspected): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "chronic_cough",
+        "weight_loss",
+        "night_sweats",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "tuberculosis_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_077",
+      "condition_target": "hiv_symptomatic",
+      "description": "HIV-Related Symptomatic Illness: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "persistent_fever",
+        "weight_loss",
+        "recurrent_infections",
+        "oral_thrush",
+        "chronic_diarrhoea"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "hiv_symptomatic",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_078",
+      "condition_target": "hiv_symptomatic",
+      "description": "HIV-Related Symptomatic Illness: with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "persistent_fever",
+        "weight_loss",
+        "recurrent_infections",
+        "oral_thrush"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "hiv_symptomatic",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_079",
+      "condition_target": "hiv_symptomatic",
+      "description": "HIV-Related Symptomatic Illness: with condition-specific red flag 'vomiting_blood'",
+      "input_tokens": [
+        "persistent_fever",
+        "weight_loss",
+        "recurrent_infections",
+        "vomiting_blood"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hiv_symptomatic",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_080",
+      "condition_target": "hiv_symptomatic",
+      "description": "HIV-Related Symptomatic Illness: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "persistent_fever",
+        "weight_loss",
+        "recurrent_infections",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hiv_symptomatic",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_081",
+      "condition_target": "sari",
+      "description": "Severe Acute Respiratory Infection (SARI): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "shortness_of_breath",
+        "fast_breathing",
+        "cough",
+        "chest_pain",
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sari",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_082",
+      "condition_target": "sari",
+      "description": "Severe Acute Respiratory Infection (SARI): with demographic modifier 'elderly'",
+      "input_tokens": [
+        "shortness_of_breath",
+        "fast_breathing",
+        "cough",
+        "chest_pain"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sari",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_083",
+      "condition_target": "sari",
+      "description": "Severe Acute Respiratory Infection (SARI): with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "shortness_of_breath",
+        "fast_breathing",
+        "cough",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sari",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_084",
+      "condition_target": "sari",
+      "description": "Severe Acute Respiratory Infection (SARI): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "shortness_of_breath",
+        "fast_breathing",
+        "cough",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sari",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_085",
+      "condition_target": "vhf_suspected",
+      "description": "Viral Haemorrhagic Fever (Suspected): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "bleeding_gums",
+        "severe_weakness",
+        "nosebleed",
+        "blood_in_stool",
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "vhf_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_086",
+      "condition_target": "vhf_suspected",
+      "description": "Viral Haemorrhagic Fever (Suspected): with demographic modifier 'known_exposure'",
+      "input_tokens": [
+        "bleeding_gums",
+        "severe_weakness",
+        "nosebleed",
+        "blood_in_stool"
+      ],
+      "demographic_tokens": [
+        "known_exposure"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "vhf_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_087",
+      "condition_target": "vhf_suspected",
+      "description": "Viral Haemorrhagic Fever (Suspected): with condition-specific red flag 'petechial_rash_fever'",
+      "input_tokens": [
+        "bleeding_gums",
+        "severe_weakness",
+        "nosebleed",
+        "petechial_rash_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "vhf_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_088",
+      "condition_target": "vhf_suspected",
+      "description": "Viral Haemorrhagic Fever (Suspected): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "bleeding_gums",
+        "severe_weakness",
+        "nosebleed",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "vhf_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_089",
+      "condition_target": "schistosomiasis",
+      "description": "Schistosomiasis: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "blood_in_urine",
+        "abdominal_pain",
+        "diarrhoea",
+        "tiredness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "schistosomiasis",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_090",
+      "condition_target": "schistosomiasis",
+      "description": "Schistosomiasis: with demographic modifier 'children_school_age'",
+      "input_tokens": [
+        "blood_in_urine",
+        "abdominal_pain",
+        "diarrhoea",
+        "tiredness"
+      ],
+      "demographic_tokens": [
+        "children_school_age"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "schistosomiasis",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_091",
+      "condition_target": "schistosomiasis",
+      "description": "Schistosomiasis: with condition-specific red flag 'abdominal_rigidity_board'",
+      "input_tokens": [
+        "blood_in_urine",
+        "abdominal_pain",
+        "diarrhoea",
+        "abdominal_rigidity_board"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "schistosomiasis",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_092",
+      "condition_target": "schistosomiasis",
+      "description": "Schistosomiasis: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "blood_in_urine",
+        "abdominal_pain",
+        "diarrhoea",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "schistosomiasis",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_093",
+      "condition_target": "sth",
+      "description": "Soil-Transmitted Helminthiasis: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "pallor",
+        "abdominal_pain",
+        "poor_appetite",
+        "fatigue",
+        "growth_delay"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "sth",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_094",
+      "condition_target": "sth",
+      "description": "Soil-Transmitted Helminthiasis: with demographic modifier 'severe_malnutrition_sam'",
+      "input_tokens": [
+        "pallor",
+        "abdominal_pain",
+        "poor_appetite",
+        "fatigue"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sth",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_095",
+      "condition_target": "sth",
+      "description": "Soil-Transmitted Helminthiasis: with condition-specific red flag 'severe_anaemia'",
+      "input_tokens": [
+        "pallor",
+        "abdominal_pain",
+        "poor_appetite",
+        "severe_anaemia"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sth",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_096",
+      "condition_target": "sth",
+      "description": "Soil-Transmitted Helminthiasis: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "pallor",
+        "abdominal_pain",
+        "poor_appetite",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sth",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_097",
+      "condition_target": "rabies_exposure",
+      "description": "Rabies Exposure (Animal Bites): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "animal_bite",
+        "fear_of_water",
+        "confusion",
+        "wound_at_bite",
+        "local_swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "rabies_exposure",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_098",
+      "condition_target": "rabies_exposure",
+      "description": "Rabies Exposure (Animal Bites): with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "animal_bite",
+        "fear_of_water",
+        "confusion",
+        "wound_at_bite"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "rabies_exposure",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_099",
+      "condition_target": "rabies_exposure",
+      "description": "Rabies Exposure (Animal Bites): with condition-specific red flag 'hydrophobia'",
+      "input_tokens": [
+        "animal_bite",
+        "fear_of_water",
+        "confusion",
+        "hydrophobia"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "rabies_exposure",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_100",
+      "condition_target": "rabies_exposure",
+      "description": "Rabies Exposure (Animal Bites): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "animal_bite",
+        "fear_of_water",
+        "confusion",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "rabies_exposure",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_101",
+      "condition_target": "lassa_fever",
+      "description": "Lassa Fever: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "bleeding",
+        "severe_weakness",
+        "fever",
+        "sore_throat",
+        "chest_pain"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lassa_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_102",
+      "condition_target": "lassa_fever",
+      "description": "Lassa Fever: with demographic modifier 'known_rat_exposure'",
+      "input_tokens": [
+        "bleeding",
+        "severe_weakness",
+        "fever",
+        "sore_throat"
+      ],
+      "demographic_tokens": [
+        "known_rat_exposure"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lassa_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_103",
+      "condition_target": "lassa_fever",
+      "description": "Lassa Fever: with condition-specific red flag 'vomiting_blood'",
+      "input_tokens": [
+        "bleeding",
+        "severe_weakness",
+        "fever",
+        "vomiting_blood"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lassa_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_104",
+      "condition_target": "lassa_fever",
+      "description": "Lassa Fever: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "bleeding",
+        "severe_weakness",
+        "fever",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lassa_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_105",
+      "condition_target": "csm",
+      "description": "Cerebrospinal Meningitis (CSM): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "neck_stiffness",
+        "petechial_rash",
+        "confusion",
+        "severe_headache",
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "csm",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_106",
+      "condition_target": "csm",
+      "description": "Cerebrospinal Meningitis (CSM): with demographic modifier 'unvaccinated'",
+      "input_tokens": [
+        "neck_stiffness",
+        "petechial_rash",
+        "confusion",
+        "severe_headache"
+      ],
+      "demographic_tokens": [
+        "unvaccinated"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "csm",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_107",
+      "condition_target": "csm",
+      "description": "Cerebrospinal Meningitis (CSM): with condition-specific red flag 'neck_stiffness_fever'",
+      "input_tokens": [
+        "neck_stiffness",
+        "petechial_rash",
+        "confusion",
+        "neck_stiffness_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "csm",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_108",
+      "condition_target": "csm",
+      "description": "Cerebrospinal Meningitis (CSM): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "neck_stiffness",
+        "petechial_rash",
+        "confusion",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "csm",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_109",
+      "condition_target": "diphtheria",
+      "description": "Diphtheria: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "throat_membrane",
+        "stridor",
+        "swollen_neck",
+        "difficulty_swallowing",
+        "hoarse_voice"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diphtheria",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_110",
+      "condition_target": "diphtheria",
+      "description": "Diphtheria: with demographic modifier 'unvaccinated'",
+      "input_tokens": [
+        "throat_membrane",
+        "stridor",
+        "swollen_neck",
+        "difficulty_swallowing"
+      ],
+      "demographic_tokens": [
+        "unvaccinated"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diphtheria",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_111",
+      "condition_target": "diphtheria",
+      "description": "Diphtheria: with condition-specific red flag 'stridor_airway'",
+      "input_tokens": [
+        "throat_membrane",
+        "stridor",
+        "swollen_neck",
+        "stridor_airway"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diphtheria",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_112",
+      "condition_target": "diphtheria",
+      "description": "Diphtheria: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "throat_membrane",
+        "stridor",
+        "swollen_neck",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diphtheria",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_113",
+      "condition_target": "yellow_fever",
+      "description": "Yellow Fever: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "jaundice",
+        "fever",
+        "headache",
+        "muscle_pain",
+        "vomiting"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "yellow_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_114",
+      "condition_target": "yellow_fever",
+      "description": "Yellow Fever: with demographic modifier 'unvaccinated'",
+      "input_tokens": [
+        "jaundice",
+        "fever",
+        "headache",
+        "muscle_pain"
+      ],
+      "demographic_tokens": [
+        "unvaccinated"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "yellow_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_115",
+      "condition_target": "yellow_fever",
+      "description": "Yellow Fever: with condition-specific red flag 'severe_jaundice'",
+      "input_tokens": [
+        "jaundice",
+        "fever",
+        "headache",
+        "severe_jaundice"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "yellow_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_116",
+      "condition_target": "yellow_fever",
+      "description": "Yellow Fever: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "jaundice",
+        "fever",
+        "headache",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "yellow_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_117",
+      "condition_target": "mpox",
+      "description": "Mpox: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "skin_lesions",
+        "swollen_lymph_nodes",
+        "fever",
+        "muscle_aches",
+        "fatigue"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "mpox",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_118",
+      "condition_target": "mpox",
+      "description": "Mpox: with demographic modifier 'immunocompromised'",
+      "input_tokens": [
+        "skin_lesions",
+        "swollen_lymph_nodes",
+        "fever",
+        "muscle_aches"
+      ],
+      "demographic_tokens": [
+        "immunocompromised"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "mpox",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_119",
+      "condition_target": "mpox",
+      "description": "Mpox: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "skin_lesions",
+        "swollen_lymph_nodes",
+        "fever",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "mpox",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_120",
+      "condition_target": "mpox",
+      "description": "Mpox: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "skin_lesions",
+        "swollen_lymph_nodes",
+        "fever",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "mpox",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_121",
+      "condition_target": "hypertension",
+      "description": "Hypertension (Suspected / Known): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "blurred_vision",
+        "headache",
+        "dizziness",
+        "nosebleed"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "hypertension",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_122",
+      "condition_target": "hypertension",
+      "description": "Hypertension (Suspected / Known): with demographic modifier 'over_40'",
+      "input_tokens": [
+        "blurred_vision",
+        "headache",
+        "dizziness",
+        "nosebleed"
+      ],
+      "demographic_tokens": [
+        "over_40"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "hypertension",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'increase_base_weight' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_123",
+      "condition_target": "hypertension",
+      "description": "Hypertension (Suspected / Known): with condition-specific red flag 'severe_headache_vomiting'",
+      "input_tokens": [
+        "blurred_vision",
+        "headache",
+        "dizziness",
+        "severe_headache_vomiting"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hypertension",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_124",
+      "condition_target": "hypertension",
+      "description": "Hypertension (Suspected / Known): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "blurred_vision",
+        "headache",
+        "dizziness",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "hypertension",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_125",
+      "condition_target": "diabetes",
+      "description": "Diabetes Mellitus (Suspected / Known): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "frequent_urination",
+        "excessive_thirst",
+        "blurred_vision",
+        "fast_breathing",
+        "fatigue"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "diabetes",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_126",
+      "condition_target": "diabetes",
+      "description": "Diabetes Mellitus (Suspected / Known): with demographic modifier 'over_40'",
+      "input_tokens": [
+        "frequent_urination",
+        "excessive_thirst",
+        "blurred_vision",
+        "fast_breathing"
+      ],
+      "demographic_tokens": [
+        "over_40"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "diabetes",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'increase_base_weight' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_127",
+      "condition_target": "diabetes",
+      "description": "Diabetes Mellitus (Suspected / Known): with condition-specific red flag 'hypoglycaemia'",
+      "input_tokens": [
+        "frequent_urination",
+        "excessive_thirst",
+        "blurred_vision",
+        "hypoglycaemia"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diabetes",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_128",
+      "condition_target": "diabetes",
+      "description": "Diabetes Mellitus (Suspected / Known): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "frequent_urination",
+        "excessive_thirst",
+        "blurred_vision",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diabetes",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_129",
+      "condition_target": "asthma",
+      "description": "Asthma: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "wheeze",
+        "shortness_of_breath",
+        "chest_tightness",
+        "nocturnal_cough"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "asthma",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_130",
+      "condition_target": "asthma",
+      "description": "Asthma: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "wheeze",
+        "shortness_of_breath",
+        "chest_tightness",
+        "nocturnal_cough"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "asthma",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_131",
+      "condition_target": "asthma",
+      "description": "Asthma: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "wheeze",
+        "shortness_of_breath",
+        "chest_tightness",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "asthma",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_132",
+      "condition_target": "asthma",
+      "description": "Asthma: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "wheeze",
+        "shortness_of_breath",
+        "chest_tightness",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "asthma",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_133",
+      "condition_target": "chronic_respiratory",
+      "description": "Chronic Respiratory Disease: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "chronic_cough",
+        "exertional_breathlessness",
+        "wheeze",
+        "chest_tightness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "chronic_respiratory",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_134",
+      "condition_target": "chronic_respiratory",
+      "description": "Chronic Respiratory Disease: with demographic modifier 'smoker'",
+      "input_tokens": [
+        "chronic_cough",
+        "exertional_breathlessness",
+        "wheeze",
+        "chest_tightness"
+      ],
+      "demographic_tokens": [
+        "smoker"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "chronic_respiratory",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'increase_base_weight' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_135",
+      "condition_target": "chronic_respiratory",
+      "description": "Chronic Respiratory Disease: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "chronic_cough",
+        "exertional_breathlessness",
+        "wheeze",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "chronic_respiratory",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_136",
+      "condition_target": "chronic_respiratory",
+      "description": "Chronic Respiratory Disease: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "chronic_cough",
+        "exertional_breathlessness",
+        "wheeze",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "chronic_respiratory",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_137",
+      "condition_target": "anaemia",
+      "description": "Anaemia: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "pallor",
+        "fatigue",
+        "exertional_breathlessness",
+        "rapid_heartbeat",
+        "dizziness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "anaemia",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_138",
+      "condition_target": "anaemia",
+      "description": "Anaemia: with demographic modifier 'severe_malnutrition_sam'",
+      "input_tokens": [
+        "pallor",
+        "fatigue",
+        "exertional_breathlessness",
+        "rapid_heartbeat"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "anaemia",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_139",
+      "condition_target": "anaemia",
+      "description": "Anaemia: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "pallor",
+        "fatigue",
+        "exertional_breathlessness",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "anaemia",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_140",
+      "condition_target": "anaemia",
+      "description": "Anaemia: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "pallor",
+        "fatigue",
+        "exertional_breathlessness",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "anaemia",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_141",
+      "condition_target": "cardio_symptoms",
+      "description": "Cardiovascular Symptoms (Chest Pain, Palpitations): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "chest_pain",
+        "shortness_of_breath",
+        "palpitations",
+        "dizziness",
+        "leg_swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "cardio_symptoms",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_142",
+      "condition_target": "cardio_symptoms",
+      "description": "Cardiovascular Symptoms (Chest Pain, Palpitations): with demographic modifier 'over_40'",
+      "input_tokens": [
+        "chest_pain",
+        "shortness_of_breath",
+        "palpitations",
+        "dizziness"
+      ],
+      "demographic_tokens": [
+        "over_40"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "cardio_symptoms",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_143",
+      "condition_target": "cardio_symptoms",
+      "description": "Cardiovascular Symptoms (Chest Pain, Palpitations): with condition-specific red flag 'cardiac_chest_pain'",
+      "input_tokens": [
+        "chest_pain",
+        "shortness_of_breath",
+        "palpitations",
+        "cardiac_chest_pain"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cardio_symptoms",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_144",
+      "condition_target": "cardio_symptoms",
+      "description": "Cardiovascular Symptoms (Chest Pain, Palpitations): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "chest_pain",
+        "shortness_of_breath",
+        "palpitations",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cardio_symptoms",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_145",
+      "condition_target": "minor_injury",
+      "description": "Minor Injuries / Trauma: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "pain",
+        "laceration",
+        "bruising",
+        "swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "minor_injury",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_146",
+      "condition_target": "minor_injury",
+      "description": "Minor Injuries / Trauma: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "pain",
+        "laceration",
+        "bruising",
+        "swelling"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "minor_injury",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_147",
+      "condition_target": "minor_injury",
+      "description": "Minor Injuries / Trauma: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "pain",
+        "laceration",
+        "bruising",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "minor_injury",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_148",
+      "condition_target": "minor_injury",
+      "description": "Minor Injuries / Trauma: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "pain",
+        "laceration",
+        "bruising",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "minor_injury",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_149",
+      "condition_target": "burns",
+      "description": "Burns: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "charred_skin",
+        "blistering",
+        "pain_at_burn",
+        "skin_redness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "burns",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_150",
+      "condition_target": "burns",
+      "description": "Burns: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "charred_skin",
+        "blistering",
+        "pain_at_burn",
+        "skin_redness"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "burns",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_151",
+      "condition_target": "burns",
+      "description": "Burns: with condition-specific red flag 'stridor_airway'",
+      "input_tokens": [
+        "charred_skin",
+        "blistering",
+        "pain_at_burn",
+        "stridor_airway"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "burns",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_152",
+      "condition_target": "burns",
+      "description": "Burns: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "charred_skin",
+        "blistering",
+        "pain_at_burn",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "burns",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_153",
+      "condition_target": "snake_bite",
+      "description": "Snake Bite: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "bite_mark",
+        "spreading_swelling",
+        "bleeding",
+        "ptosis",
+        "difficulty_breathing"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "snake_bite",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_154",
+      "condition_target": "snake_bite",
+      "description": "Snake Bite: with demographic modifier 'children_under_5'",
+      "input_tokens": [
+        "bite_mark",
+        "spreading_swelling",
+        "bleeding",
+        "ptosis"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "snake_bite",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_155",
+      "condition_target": "snake_bite",
+      "description": "Snake Bite: with condition-specific red flag 'ptosis_snakebite'",
+      "input_tokens": [
+        "bite_mark",
+        "spreading_swelling",
+        "bleeding",
+        "ptosis_snakebite"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "snake_bite",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_156",
+      "condition_target": "snake_bite",
+      "description": "Snake Bite: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "bite_mark",
+        "spreading_swelling",
+        "bleeding",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "snake_bite",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_157",
+      "condition_target": "road_traffic_injury_minor",
+      "description": "Road Traffic Injury (Minor): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "head_injury_signs",
+        "laceration",
+        "pain_post_accident",
+        "bruising",
+        "swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "road_traffic_injury_minor",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_158",
+      "condition_target": "road_traffic_injury_minor",
+      "description": "Road Traffic Injury (Minor): with demographic modifier 'elderly'",
+      "input_tokens": [
+        "head_injury_signs",
+        "laceration",
+        "pain_post_accident",
+        "bruising"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "road_traffic_injury_minor",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_159",
+      "condition_target": "road_traffic_injury_minor",
+      "description": "Road Traffic Injury (Minor): with condition-specific red flag 'circulatory_collapse'",
+      "input_tokens": [
+        "head_injury_signs",
+        "laceration",
+        "pain_post_accident",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "road_traffic_injury_minor",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_160",
+      "condition_target": "road_traffic_injury_minor",
+      "description": "Road Traffic Injury (Minor): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "head_injury_signs",
+        "laceration",
+        "pain_post_accident",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "road_traffic_injury_minor",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_161",
+      "condition_target": "pregnancy_complications",
+      "description": "Pregnancy-Related Complications (Warning Symptoms): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "vaginal_bleeding",
+        "severe_abdominal_pain",
+        "severe_headache",
+        "reduced_fetal_movement",
+        "facial_swelling"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "pregnancy_complications",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_162",
+      "condition_target": "pregnancy_complications",
+      "description": "Pregnancy-Related Complications (Warning Symptoms): with demographic modifier 'first_pregnancy'",
+      "input_tokens": [
+        "vaginal_bleeding",
+        "severe_abdominal_pain",
+        "severe_headache",
+        "reduced_fetal_movement"
+      ],
+      "demographic_tokens": [
+        "first_pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "pregnancy_complications",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_163",
+      "condition_target": "pregnancy_complications",
+      "description": "Pregnancy-Related Complications (Warning Symptoms): with condition-specific red flag 'heavy_vaginal_bleeding'",
+      "input_tokens": [
+        "vaginal_bleeding",
+        "severe_abdominal_pain",
+        "severe_headache",
+        "heavy_vaginal_bleeding"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "pregnancy_complications",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_164",
+      "condition_target": "pregnancy_complications",
+      "description": "Pregnancy-Related Complications (Warning Symptoms): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "vaginal_bleeding",
+        "severe_abdominal_pain",
+        "severe_headache",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "pregnancy_complications",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_165",
+      "condition_target": "neonatal_infection",
+      "description": "Neonatal Infection: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "neonatal_fever",
+        "lethargy",
+        "fast_breathing_neonate",
+        "poor_feeding",
+        "irritability"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "neonatal_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_166",
+      "condition_target": "neonatal_infection",
+      "description": "Neonatal Infection: with demographic modifier 'neonates'",
+      "input_tokens": [
+        "neonatal_fever",
+        "lethargy",
+        "fast_breathing_neonate",
+        "poor_feeding"
+      ],
+      "demographic_tokens": [
+        "neonates"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "neonatal_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "urgency_default",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_167",
+      "condition_target": "neonatal_infection",
+      "description": "Neonatal Infection: with condition-specific red flag 'neonatal_not_feeding'",
+      "input_tokens": [
+        "neonatal_fever",
+        "lethargy",
+        "fast_breathing_neonate",
+        "neonatal_not_feeding"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "neonatal_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_168",
+      "condition_target": "neonatal_infection",
+      "description": "Neonatal Infection: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "neonatal_fever",
+        "lethargy",
+        "fast_breathing_neonate",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "neonatal_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_169",
+      "condition_target": "pneumonia_children",
+      "description": "Pneumonia (Children): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "chest_indrawing",
+        "convulsions",
+        "fast_breathing_child",
+        "lethargy",
+        "poor_feeding"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "pneumonia_children",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_170",
+      "condition_target": "pneumonia_children",
+      "description": "Pneumonia (Children): with demographic modifier 'severe_malnutrition_sam'",
+      "input_tokens": [
+        "chest_indrawing",
+        "convulsions",
+        "fast_breathing_child",
+        "lethargy"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "pneumonia_children",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_171",
+      "condition_target": "pneumonia_children",
+      "description": "Pneumonia (Children): with condition-specific red flag 'chest_indrawing_severe'",
+      "input_tokens": [
+        "chest_indrawing",
+        "convulsions",
+        "fast_breathing_child",
+        "chest_indrawing_severe"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "pneumonia_children",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_172",
+      "condition_target": "pneumonia_children",
+      "description": "Pneumonia (Children): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "chest_indrawing",
+        "convulsions",
+        "fast_breathing_child",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "pneumonia_children",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_173",
+      "condition_target": "malnutrition",
+      "description": "Malnutrition (Moderate / Severe): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "bilateral_oedema",
+        "poor_growth",
+        "weight_loss",
+        "poor_appetite",
+        "repeated_infections"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malnutrition",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_174",
+      "condition_target": "malnutrition",
+      "description": "Malnutrition (Moderate / Severe): with demographic modifier 'severe_malnutrition_sam'",
+      "input_tokens": [
+        "bilateral_oedema",
+        "poor_growth",
+        "weight_loss",
+        "poor_appetite"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "malnutrition",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "escalate_emergency modifier"
+    },
+    {
+      "case_id": "CB_175",
+      "condition_target": "malnutrition",
+      "description": "Malnutrition (Moderate / Severe): with condition-specific red flag 'not_eating_drinking_child'",
+      "input_tokens": [
+        "bilateral_oedema",
+        "poor_growth",
+        "weight_loss",
+        "not_eating_drinking_child"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "malnutrition",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_176",
+      "condition_target": "malnutrition",
+      "description": "Malnutrition (Moderate / Severe): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "bilateral_oedema",
+        "poor_growth",
+        "weight_loss",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "malnutrition",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_177",
+      "condition_target": "headache",
+      "description": "Headache: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "head_pain",
+        "throbbing_headache",
+        "one_sided_headache",
+        "pressure_headache"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "headache",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_178",
+      "condition_target": "headache",
+      "description": "Headache: with demographic modifier 'hypertension_known'",
+      "input_tokens": [
+        "head_pain",
+        "throbbing_headache",
+        "one_sided_headache",
+        "pressure_headache"
+      ],
+      "demographic_tokens": [
+        "hypertension_known"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "headache",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_179",
+      "condition_target": "headache",
+      "description": "Headache: with condition-specific red flag 'neck_stiffness_fever'",
+      "input_tokens": [
+        "head_pain",
+        "throbbing_headache",
+        "one_sided_headache",
+        "neck_stiffness_fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "headache",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_180",
+      "condition_target": "headache",
+      "description": "Headache: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "head_pain",
+        "throbbing_headache",
+        "one_sided_headache",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "headache",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_181",
+      "condition_target": "abdominal_pain",
+      "description": "Abdominal Pain (Non-Specific): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "abdominal_rigidity",
+        "abdominal_pain",
+        "bloating",
+        "nausea",
+        "bowel_changes"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "abdominal_pain",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_182",
+      "condition_target": "abdominal_pain",
+      "description": "Abdominal Pain (Non-Specific): with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "abdominal_rigidity",
+        "abdominal_pain",
+        "bloating",
+        "nausea"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "abdominal_pain",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_183",
+      "condition_target": "abdominal_pain",
+      "description": "Abdominal Pain (Non-Specific): with condition-specific red flag 'vomiting_blood'",
+      "input_tokens": [
+        "abdominal_rigidity",
+        "abdominal_pain",
+        "bloating",
+        "vomiting_blood"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "abdominal_pain",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_184",
+      "condition_target": "abdominal_pain",
+      "description": "Abdominal Pain (Non-Specific): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "abdominal_rigidity",
+        "abdominal_pain",
+        "bloating",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "abdominal_pain",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_185",
+      "condition_target": "musculoskeletal_pain",
+      "description": "Back Pain / Musculoskeletal Pain: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "limb_weakness",
+        "back_pain",
+        "joint_pain",
+        "limited_movement",
+        "muscle_stiffness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "musculoskeletal_pain",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_186",
+      "condition_target": "musculoskeletal_pain",
+      "description": "Back Pain / Musculoskeletal Pain: with demographic modifier 'elderly'",
+      "input_tokens": [
+        "limb_weakness",
+        "back_pain",
+        "joint_pain",
+        "limited_movement"
+      ],
+      "demographic_tokens": [
+        "elderly"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "musculoskeletal_pain",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_187",
+      "condition_target": "musculoskeletal_pain",
+      "description": "Back Pain / Musculoskeletal Pain: with condition-specific red flag 'paralysis'",
+      "input_tokens": [
+        "limb_weakness",
+        "back_pain",
+        "joint_pain",
+        "paralysis"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "musculoskeletal_pain",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_188",
+      "condition_target": "musculoskeletal_pain",
+      "description": "Back Pain / Musculoskeletal Pain: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "limb_weakness",
+        "back_pain",
+        "joint_pain",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "musculoskeletal_pain",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_189",
+      "condition_target": "fatigue_weakness",
+      "description": "Fatigue / Weakness: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "persistent_fatigue",
+        "general_weakness",
+        "reduced_daily_function",
+        "low_energy"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "fatigue_weakness",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_190",
+      "condition_target": "fatigue_weakness",
+      "description": "Fatigue / Weakness: with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "persistent_fatigue",
+        "general_weakness",
+        "reduced_daily_function",
+        "low_energy"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "fatigue_weakness",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_191",
+      "condition_target": "fatigue_weakness",
+      "description": "Fatigue / Weakness: with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "persistent_fatigue",
+        "general_weakness",
+        "reduced_daily_function",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "fatigue_weakness",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_192",
+      "condition_target": "fatigue_weakness",
+      "description": "Fatigue / Weakness: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "persistent_fatigue",
+        "general_weakness",
+        "reduced_daily_function",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "fatigue_weakness",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_193",
+      "condition_target": "dizziness",
+      "description": "Dizziness: standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "near_fainting",
+        "spinning_sensation",
+        "light_headedness",
+        "unsteadiness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "dizziness",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_194",
+      "condition_target": "dizziness",
+      "description": "Dizziness: with demographic modifier 'pregnancy'",
+      "input_tokens": [
+        "near_fainting",
+        "spinning_sensation",
+        "light_headedness",
+        "unsteadiness"
+      ],
+      "demographic_tokens": [
+        "pregnancy"
+      ],
+      "season": null,
+      "expected_urgency": "self_care",
+      "expected_top_condition": "dizziness",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "'routine_caution' does not change urgency tier"
+    },
+    {
+      "case_id": "CB_195",
+      "condition_target": "dizziness",
+      "description": "Dizziness: with condition-specific red flag 'stroke_signs'",
+      "input_tokens": [
+        "near_fainting",
+        "spinning_sensation",
+        "light_headedness",
+        "stroke_signs"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dizziness",
+      "safety_critical": true,
+      "expected_urgency_source": "condition_specific_red_flag"
+    },
+    {
+      "case_id": "CB_196",
+      "condition_target": "dizziness",
+      "description": "Dizziness: real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "near_fainting",
+        "spinning_sensation",
+        "light_headedness",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "dizziness",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_197",
+      "condition_target": "allergic_reactions",
+      "description": "Allergic Reactions (Non-Anaphylactic): standard presentation, adult, no modifiers",
+      "input_tokens": [
+        "hives",
+        "itchy_rash",
+        "mild_swelling",
+        "itchy_eyes",
+        "sneezing"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "allergic_reactions",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_198",
+      "condition_target": "allergic_reactions",
+      "description": "Allergic Reactions (Non-Anaphylactic): with demographic modifier 'known_allergy'",
+      "input_tokens": [
+        "hives",
+        "itchy_rash",
+        "mild_swelling",
+        "itchy_eyes"
+      ],
+      "demographic_tokens": [
+        "known_allergy"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "allergic_reactions",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency: one tier up from default"
+    },
+    {
+      "case_id": "CB_199",
+      "condition_target": "allergic_reactions",
+      "description": "Allergic Reactions (Non-Anaphylactic): with global danger sign 'seizures' (no condition-specific rule exists)",
+      "input_tokens": [
+        "hives",
+        "itchy_rash",
+        "mild_swelling",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "allergic_reactions",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "condition relies on global danger signs only"
+    },
+    {
+      "case_id": "CB_200",
+      "condition_target": "allergic_reactions",
+      "description": "Allergic Reactions (Non-Anaphylactic): real presentation + global danger sign 'inability_to_drink'",
+      "input_tokens": [
+        "hives",
+        "itchy_rash",
+        "mild_swelling",
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "allergic_reactions",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_201",
+      "condition_target": "cholera",
+      "description": "Cholera: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "profuse_watery_stool",
+        "rapid_onset_diarrhoea",
+        "dehydration",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cholera",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_202",
+      "condition_target": "sari",
+      "description": "Severe Acute Respiratory Infection (SARI): real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "shortness_of_breath",
+        "fast_breathing",
+        "cough",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "sari",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_203",
+      "condition_target": "vhf_suspected",
+      "description": "Viral Haemorrhagic Fever (Suspected): real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "bleeding_gums",
+        "severe_weakness",
+        "nosebleed",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "vhf_suspected",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_204",
+      "condition_target": "rabies_exposure",
+      "description": "Rabies Exposure (Animal Bites): real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "animal_bite",
+        "fear_of_water",
+        "confusion",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "rabies_exposure",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_205",
+      "condition_target": "lassa_fever",
+      "description": "Lassa Fever: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "bleeding",
+        "severe_weakness",
+        "fever",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "lassa_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_206",
+      "condition_target": "csm",
+      "description": "Cerebrospinal Meningitis (CSM): real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "neck_stiffness",
+        "petechial_rash",
+        "confusion",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "csm",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_207",
+      "condition_target": "diphtheria",
+      "description": "Diphtheria: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "throat_membrane",
+        "stridor",
+        "swollen_neck",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "diphtheria",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_208",
+      "condition_target": "yellow_fever",
+      "description": "Yellow Fever: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "jaundice",
+        "fever",
+        "headache",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "yellow_fever",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_209",
+      "condition_target": "snake_bite",
+      "description": "Snake Bite: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "bite_mark",
+        "spreading_swelling",
+        "bleeding",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "snake_bite",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_210",
+      "condition_target": "neonatal_infection",
+      "description": "Neonatal Infection: real presentation + global danger sign 'circulatory_collapse'",
+      "input_tokens": [
+        "neonatal_fever",
+        "lethargy",
+        "fast_breathing_neonate",
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "neonatal_infection",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag"
+    },
+    {
+      "case_id": "CB_211",
+      "condition_target": null,
+      "description": "Edge: empty input — engine must not crash, returns safe default",
+      "input_tokens": [],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": null,
+      "safety_critical": false,
+      "expected_urgency_source": "empty_default",
+      "note": "matches E3.5 Case 12 behaviour"
+    },
+    {
+      "case_id": "CB_212",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'abnormal_bleeding' with no other input -> emergency",
+      "input_tokens": [
+        "abnormal_bleeding"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_213",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'altered_consciousness' with no other input -> emergency",
+      "input_tokens": [
+        "altered_consciousness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_214",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'anaphylaxis_signs' with no other input -> emergency",
+      "input_tokens": [
+        "anaphylaxis_signs"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_215",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'blue_lips_face' with no other input -> emergency",
+      "input_tokens": [
+        "blue_lips_face"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_216",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'breathlessness_at_rest' with no other input -> emergency",
+      "input_tokens": [
+        "breathlessness_at_rest"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_217",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'circulatory_collapse' with no other input -> emergency",
+      "input_tokens": [
+        "circulatory_collapse"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_218",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'impaired_consciousness' with no other input -> emergency",
+      "input_tokens": [
+        "impaired_consciousness"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_219",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'inability_to_drink' with no other input -> emergency",
+      "input_tokens": [
+        "inability_to_drink"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_220",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'prostration' with no other input -> emergency",
+      "input_tokens": [
+        "prostration"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_221",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'respiratory_distress' with no other input -> emergency",
+      "input_tokens": [
+        "respiratory_distress"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_222",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'seizures' with no other input -> emergency",
+      "input_tokens": [
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_223",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'severe_dehydration' with no other input -> emergency",
+      "input_tokens": [
+        "severe_dehydration"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_224",
+      "condition_target": null,
+      "description": "Edge: single global danger sign 'shock' with no other input -> emergency",
+      "input_tokens": [
+        "shock"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": null,
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "tests one of the 13 global rules"
+    },
+    {
+      "case_id": "CB_225",
+      "condition_target": "malaria",
+      "description": "Edge: single common symptom 'fever' only",
+      "input_tokens": [
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": null,
+      "expected_top_condition": null,
+      "safety_critical": false,
+      "expected_urgency_source": "observe",
+      "note": "expected_top/urgency indeterminate without scorer — observe actual"
+    },
+    {
+      "case_id": "CB_226",
+      "condition_target": "acute_diarrhoea",
+      "description": "Edge: diarrhoea + SEVERE malnutrition (SAM) -> emergency",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting"
+      ],
+      "demographic_tokens": [
+        "severe_malnutrition_sam"
+      ],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": true,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "SAM = escalate_emergency"
+    },
+    {
+      "case_id": "CB_227",
+      "condition_target": "acute_diarrhoea",
+      "description": "Edge: diarrhoea + MODERATE malnutrition (MAM) -> urgent (NOT emergency)",
+      "input_tokens": [
+        "watery_stool",
+        "vomiting"
+      ],
+      "demographic_tokens": [
+        "moderate_malnutrition_mam"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "MAM = increase_urgency, one tier up from non_urgent default; must NOT be emergency"
+    },
+    {
+      "case_id": "CB_228",
+      "condition_target": "cough_common_cold",
+      "description": "Edge: cold + under-5 demographic, NO season -> non_urgent (one tier up from self_care)",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency alone, no seasonal"
+    },
+    {
+      "case_id": "CB_229",
+      "condition_target": "cough_common_cold",
+      "description": "Edge: cold + under-5 demographic + harmattan season -> urgent (Priority 4c)",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": "harmattan_season",
+      "expected_urgency": "urgent",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "increase_urgency + seasonal = Priority 4c -> urgent under Option B"
+    },
+    {
+      "case_id": "CB_230",
+      "condition_target": "malaria",
+      "description": "Edge: malaria + under-5 + rainy season, NO danger sign -> urgent (Case-04 Option B)",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "weakness"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": "rainy_season",
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "demographic_escalation",
+      "note": "Case-04 policy: URGENT not EMERGENCY when no danger sign present"
+    },
+    {
+      "case_id": "CB_231",
+      "condition_target": "malaria",
+      "description": "Edge: malaria + under-5 alone, NO season -> urgent (default already urgent, capped)",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "weakness"
+      ],
+      "demographic_tokens": [
+        "children_under_5"
+      ],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "escalate_one(urgent)=urgent"
+    },
+    {
+      "case_id": "CB_232",
+      "condition_target": null,
+      "description": "Edge: conflicting tokens from malaria + acute_diarrhoea -> observe top condition",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "watery_stool",
+        "vomiting"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": null,
+      "expected_top_condition": null,
+      "safety_critical": false,
+      "expected_urgency_source": "observe",
+      "note": "two-condition overlap; observe scorer behaviour"
+    },
+    {
+      "case_id": "CB_233",
+      "condition_target": null,
+      "description": "Edge: conflicting tokens from cardio + dizziness -> observe top condition",
+      "input_tokens": [
+        "chest_pain",
+        "dizziness",
+        "palpitations"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": null,
+      "expected_top_condition": null,
+      "safety_critical": false,
+      "expected_urgency_source": "observe",
+      "note": "observe scorer behaviour"
+    },
+    {
+      "case_id": "CB_234",
+      "condition_target": "cough_common_cold",
+      "description": "Edge: mild cold + global danger sign 'seizures' -> emergency (override)",
+      "input_tokens": [
+        "runny_nose",
+        "mild_cough",
+        "seizures"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "emergency",
+      "expected_top_condition": "cough_common_cold",
+      "safety_critical": true,
+      "expected_urgency_source": "global_red_flag",
+      "note": "danger sign overrides low-acuity condition"
+    }
+  ]
+}
