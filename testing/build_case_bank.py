@@ -31,7 +31,7 @@ import json, os, collections
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
-with open(os.path.join(ROOT, "kb.ng.v2.3.json")) as f:
+with open(os.path.join(ROOT, "kb.ng.v2.4.json")) as f:
     KB = json.load(f)
 with open(os.path.join(ROOT, "rules.ng.v2.1.json")) as f:
     RULES = json.load(f)
@@ -228,6 +228,19 @@ add("cough_common_cold", "Edge: mild cold + global danger sign 'seizures' -> eme
     ["runny_nose", "mild_cough", "seizures"], [], None, "emergency", None,
     safety=True, exp_source="global_red_flag", note="danger sign overrides low-acuity condition")
 
+# E8.2 Issue #8 validation: 'headache' token added to headache condition (weight 6).
+# Case A: isolated headache still routes to malaria (malaria carries 'headache' + base_weight 10);
+#         Option-2 ruling accepts this as clinically appropriate for Nigeria. Top = malaria.
+# Case B: febrile headache routes to malaria unchanged.
+add("malaria", "Edge (#8-A): headache alone, no fever -> top malaria (isolated headache routes to malaria; headache condition now reachable via head_pain/throbbing/pressure/one_sided tokens)",
+    ["headache"], [], None, "urgent", "malaria",
+    safety=False, exp_source="urgency_default",
+    note="Issue #8 Option 2: isolated headache routes to malaria by design; urgency=malaria default (urgent)")
+add("malaria", "Edge (#8-B): headache + fever + chills -> top malaria (febrile headache unchanged)",
+    ["headache", "fever", "chills"], [], None, "urgent", "malaria",
+    safety=False, exp_source="urgency_default",
+    note="Issue #8 validation: febrile headache routes to malaria as before")
+
 # ---- assemble + coverage metadata ---------------------------------------------
 safety_cases = [c for c in cases if c["safety_critical"]]
 covered = {c["condition_target"] for c in cases if c["condition_target"]}
@@ -240,7 +253,7 @@ bank = {
         "phase": "E8.1",
         "country": "ng",
         "built_from": {
-            "knowledge_base": "kb.ng.v2.3.json",
+            "knowledge_base": "kb.ng.v2.4.json",
             "rules": "rules.ng.v2.1.json",
             "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)",
         },

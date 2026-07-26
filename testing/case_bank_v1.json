@@ -5,12 +5,12 @@
     "phase": "E8.1",
     "country": "ng",
     "built_from": {
-      "knowledge_base": "kb.ng.v2.3.json",
+      "knowledge_base": "kb.ng.v2.4.json",
       "rules": "rules.ng.v2.1.json",
       "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)"
     },
     "valid_against_rules": "v2.1 and v2.2 — v2.2 removes rf_147 (RTI circulatory_collapse), which is behaviourally inert: circulatory_collapse still returns emergency via global rf_006. CB_159 already reflects this (source global_red_flag).",
-    "total_cases": 234,
+    "total_cases": 236,
     "safety_critical_cases": 150,
     "conditions_covered": 50,
     "global_red_flag_tokens_tested": 13,
@@ -53,7 +53,7 @@
       "intestinal_worms": 4,
       "lassa_fever": 5,
       "lower_respiratory_infection": 4,
-      "malaria": 7,
+      "malaria": 9,
       "malnutrition": 4,
       "measles": 4,
       "minor_injury": 4,
@@ -4260,6 +4260,38 @@
       "safety_critical": true,
       "expected_urgency_source": "global_red_flag",
       "note": "danger sign overrides low-acuity condition"
+    },
+    {
+      "case_id": "CB_235",
+      "condition_target": "malaria",
+      "description": "Edge (#8-A): headache alone, no fever -> top malaria (isolated headache routes to malaria; headache condition now reachable via head_pain/throbbing/pressure/one_sided tokens)",
+      "input_tokens": [
+        "headache"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "Issue #8 Option 2: isolated headache routes to malaria by design; urgency=malaria default (urgent)"
+    },
+    {
+      "case_id": "CB_236",
+      "condition_target": "malaria",
+      "description": "Edge (#8-B): headache + fever + chills -> top malaria (febrile headache unchanged)",
+      "input_tokens": [
+        "headache",
+        "fever",
+        "chills"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "Issue #8 validation: febrile headache routes to malaria as before"
     }
   ]
 }

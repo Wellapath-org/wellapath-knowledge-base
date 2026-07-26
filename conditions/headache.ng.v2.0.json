@@ -21,6 +21,10 @@
     {
       "token": "one_sided_headache",
       "weight": 5
+    },
+    {
+      "token": "headache",
+      "weight": 6
     }
   ],
   "red_flags": [
