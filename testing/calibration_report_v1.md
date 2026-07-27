@@ -120,6 +120,11 @@ Rationale:
 in the KB metadata or schema docs stating that `increase_urgency` on an urgent/emergency default is
 an intentional clinical-signal marker that does not change the tier), not to change data.
 
+> **Engineering-lead ruling (Option A confirmed):** *increase_urgency on already-urgent/emergency
+> conditions functions as a clinical-signal marker only. The urgency value does not change. This is
+> intentional for 31 modifiers across the KB.* The two MAM cases (`pneumonia_children`,
+> `malnutrition`) staying at `urgent` is confirmed correct per the E7 SAM/MAM split policy.
+
 **Two worth a closer clinical look (still Option A, flagged):** `pneumonia_children +
 moderate_malnutrition_mam` and `malnutrition + moderate_malnutrition_mam`. MAM genuinely raises
 deterioration risk; both are already `urgent`, and the real safety net is the **SAM**
@@ -163,6 +168,24 @@ case-bank cases (`headache` alone; `headache + fever`) after the change.
 **Proposed change:** add `{ "token": "headache", "weight": 6 }` to `headache.ng.v2.0.json` symptoms
 (and mirror into `kb.ng.v2.x`). Note the near-duplicate `head_pain`/`headache` pairing already
 flagged in the E9 token map — both would map to this condition, which is fine.
+
+> **Engineering-lead ruling (Option 2 — implemented in kb.ng.v2.4.json):** After the collision
+> below was surfaced, the ruling was to keep weight 6 and accept malaria routing for isolated
+> headache. Documentation note as approved:
+>
+> *"headache token added at weight 6 to improve condition reachability. Isolated headache (no fever)
+> continues to route to malaria given Nigeria's malaria burden — clinically acceptable. headache
+> condition reachable via specific headache-pattern tokens (head_pain, throbbing_headache,
+> pressure_headache, one_sided_headache) as designed."*
+>
+> **Collision found during implementation (why Option 2, not the naive weight-6 win):** malaria
+> carries the `headache` token *and* `base_weight` 10 (kept per Item 1), so for input `[headache]`
+> alone malaria scores 16 (base 10 + headache 6) vs the headache condition's 11 (base 5 + headache
+> 6). Weight 6 does **not** make the headache condition top-rank isolated headache — reaching that
+> would need token weight ≥ 12. Option 2 accepts malaria routing as clinically appropriate; the goal
+> was reachability of the headache condition (achieved via its pattern tokens), not top-ranking every
+> headache input. Validation cases CB_235 (headache alone → malaria) and CB_236 (headache+fever+chills
+> → malaria) added to `case_bank_v1.json`.
 
 ---
 
