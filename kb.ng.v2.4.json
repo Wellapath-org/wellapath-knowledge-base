@@ -4,7 +4,7 @@
     "version": "2.4",
     "schema_version": "1.0",
     "country": "ng",
-    "release_date": "2026-04-06",
+    "release_date": "2026-07-27",
     "total_conditions": 50,
     "description": "WellaPath Nigeria CDSS \u2014 Full Top-50 Knowledge Base",
     "conditions_list": [
@@ -64,7 +64,7 @@
       "pneumonia_children",
       "acute_diarrhoea"
     ],
-    "token_dictionary_version": "1.0",
+    "token_dictionary_version": "1.1",
     "patch_notes": [
       "Medical reviewer fix: split severe_malnutrition_sam_mam into sam/mam across 8 conditions",
       "Medical reviewer fix: hypertension severity_levels.severe populated",
