@@ -10,7 +10,7 @@
       "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)"
     },
     "valid_against_rules": "v2.1 and v2.2 — v2.2 removes rf_147 (RTI circulatory_collapse), which is behaviourally inert: circulatory_collapse still returns emergency via global rf_006. CB_159 already reflects this (source global_red_flag).",
-    "total_cases": 236,
+    "total_cases": 239,
     "safety_critical_cases": 150,
     "conditions_covered": 50,
     "global_red_flag_tokens_tested": 13,
@@ -26,7 +26,7 @@
   "coverage": {
     "cases_per_condition": {
       "abdominal_pain": 4,
-      "acute_diarrhoea": 6,
+      "acute_diarrhoea": 7,
       "allergic_reactions": 4,
       "anaemia": 4,
       "asthma": 4,
@@ -49,11 +49,11 @@
       "headache": 4,
       "hepatitis_b": 4,
       "hiv_symptomatic": 4,
-      "hypertension": 4,
+      "hypertension": 5,
       "intestinal_worms": 4,
       "lassa_fever": 5,
       "lower_respiratory_infection": 4,
-      "malaria": 9,
+      "malaria": 10,
       "malnutrition": 4,
       "measles": 4,
       "minor_injury": 4,
@@ -4292,6 +4292,57 @@
       "safety_critical": false,
       "expected_urgency_source": "urgency_default",
       "note": "Issue #8 validation: febrile headache routes to malaria as before"
+    },
+    {
+      "case_id": "CB_237",
+      "condition_target": "malaria",
+      "description": "E3.5 Case 03 — malaria classic, adult",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "headache",
+        "body_pain",
+        "sweating"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "urgent",
+      "expected_top_condition": "malaria",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_238",
+      "condition_target": "acute_diarrhoea",
+      "description": "E3.5 Case 08 — acute diarrhoea, adult, no red flags",
+      "input_tokens": [
+        "watery_stool",
+        "nausea",
+        "abdominal_cramps"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "acute_diarrhoea",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default"
+    },
+    {
+      "case_id": "CB_239",
+      "condition_target": "hypertension",
+      "description": "E3.5 Case 11 — headache + dizziness + fatigue",
+      "input_tokens": [
+        "headache",
+        "dizziness",
+        "fatigue"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_top_condition": "hypertension",
+      "safety_critical": false,
+      "expected_urgency_source": "urgency_default",
+      "note": "Original E3.5 expected self_care against a mock with reduced headache weights. Real KB returns non_urgent/hypertension. Updated per E8.2 calibration. (NB: hypertension ties anaemia at 17 on this input; both non_urgent, so urgency holds; top-condition tie-break resolved to hypertension in the engine run.)"
     }
   ]
 }

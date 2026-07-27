@@ -241,6 +241,22 @@ add("malaria", "Edge (#8-B): headache + fever + chills -> top malaria (febrile h
     safety=False, exp_source="urgency_default",
     note="Issue #8 validation: febrile headache routes to malaria as before")
 
+# E3.5 pilot cases re-verified against the real KB (v2.4). CB_239 expected value updated
+# from the original E3.5 mock (self_care) to what the real KB returns (non_urgent/hypertension).
+add("malaria", "E3.5 Case 03 — malaria classic, adult",
+    ["fever", "chills", "headache", "body_pain", "sweating"], [], None, "urgent", "malaria",
+    safety=False, exp_source="urgency_default")
+add("acute_diarrhoea", "E3.5 Case 08 — acute diarrhoea, adult, no red flags",
+    ["watery_stool", "nausea", "abdominal_cramps"], [], None, "non_urgent", "acute_diarrhoea",
+    safety=False, exp_source="urgency_default")
+add("hypertension", "E3.5 Case 11 — headache + dizziness + fatigue",
+    ["headache", "dizziness", "fatigue"], [], None, "non_urgent", "hypertension",
+    safety=False, exp_source="urgency_default",
+    note="Original E3.5 expected self_care against a mock with reduced headache weights. Real KB "
+         "returns non_urgent/hypertension. Updated per E8.2 calibration. (NB: hypertension ties "
+         "anaemia at 17 on this input; both non_urgent, so urgency holds; top-condition tie-break "
+         "resolved to hypertension in the engine run.)")
+
 # ---- assemble + coverage metadata ---------------------------------------------
 safety_cases = [c for c in cases if c["safety_critical"]]
 covered = {c["condition_target"] for c in cases if c["condition_target"]}
