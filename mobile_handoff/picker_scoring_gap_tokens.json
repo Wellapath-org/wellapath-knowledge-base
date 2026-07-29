@@ -1,0 +1,136 @@
+{
+  "_metadata": {
+    "artifact_id": "picker_scoring_gap_tokens",
+    "version": "1.0",
+    "country": "ng",
+    "phase": "E9 fast-follow (post beta tag, before external beta)",
+    "description": "9 symptom tokens that KB conditions score on but are not in the current symptom picker. These are SCORING gaps, not safety gaps — global red flags still fire and the case bank passed with zero under-triage. Adding them improves condition matching.",
+    "built_from": "kb.ng.v2.4.json (symptom usage) + E9 symptom_display_body_area_map.json (display/body_area)",
+    "total_tokens": 9
+  },
+  "tokens": [
+    {
+      "token": "chest_indrawing",
+      "display_name": "Skin pulling in between the ribs when breathing",
+      "body_area": "Chest",
+      "kb_usage": [
+        {
+          "condition_id": "pneumonia_children",
+          "weight": 10
+        }
+      ],
+      "priority": 1
+    },
+    {
+      "token": "blood_in_stool",
+      "display_name": "Blood in stool",
+      "body_area": "Abdomen",
+      "kb_usage": [
+        {
+          "condition_id": "dysentery",
+          "weight": 9
+        },
+        {
+          "condition_id": "vhf_suspected",
+          "weight": 8
+        }
+      ],
+      "priority": 2
+    },
+    {
+      "token": "vaginal_bleeding",
+      "display_name": "Vaginal bleeding",
+      "body_area": "Pelvis",
+      "kb_usage": [
+        {
+          "condition_id": "pregnancy_complications",
+          "weight": 9
+        }
+      ],
+      "priority": 3
+    },
+    {
+      "token": "bleeding_gums",
+      "display_name": "Bleeding gums",
+      "body_area": "Head",
+      "kb_usage": [
+        {
+          "condition_id": "vhf_suspected",
+          "weight": 10
+        }
+      ],
+      "priority": 4
+    },
+    {
+      "token": "dehydration",
+      "display_name": "Signs of dehydration (very thirsty, dry mouth, sunken eyes)",
+      "body_area": "General",
+      "kb_usage": [
+        {
+          "condition_id": "cholera",
+          "weight": 8
+        }
+      ],
+      "priority": 5
+    },
+    {
+      "token": "pallor",
+      "display_name": "Unusually pale skin",
+      "body_area": "Skin",
+      "kb_usage": [
+        {
+          "condition_id": "anaemia",
+          "weight": 8
+        },
+        {
+          "condition_id": "sth",
+          "weight": 6
+        }
+      ],
+      "priority": 6
+    },
+    {
+      "token": "severe_weakness",
+      "display_name": "Severe weakness",
+      "body_area": "General",
+      "kb_usage": [
+        {
+          "condition_id": "vhf_suspected",
+          "weight": 8
+        },
+        {
+          "condition_id": "lassa_fever",
+          "weight": 8
+        }
+      ],
+      "priority": 7
+    },
+    {
+      "token": "facial_swelling",
+      "display_name": "Swelling of the face",
+      "body_area": "Head",
+      "kb_usage": [
+        {
+          "condition_id": "pregnancy_complications",
+          "weight": 7
+        }
+      ],
+      "priority": 8
+    },
+    {
+      "token": "breathlessness",
+      "display_name": "Shortness of breath",
+      "body_area": "Chest",
+      "kb_usage": [
+        {
+          "condition_id": "lower_respiratory_infection",
+          "weight": 7
+        }
+      ],
+      "priority": 9,
+      "recommendation": "alias",
+      "alias_to": "shortness_of_breath",
+      "note": "Do NOT add a third near-identical 'shortness of breath' option. Alias to the existing shortness_of_breath picker token so lower_respiratory_infection's breathlessness weight (7) is not stranded. Near-duplicate flagged ambiguous in the E9 map."
+    }
+  ]
+}
