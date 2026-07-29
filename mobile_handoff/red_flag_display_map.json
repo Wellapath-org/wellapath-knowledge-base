@@ -1,0 +1,86 @@
+[
+  {
+    "token": "inability_to_drink",
+    "display_name": "Not able to drink or feed at all",
+    "body_area": "General",
+    "near_miss_tokens": ["poor_feeding", "poor_appetite"],
+    "note": "Red flag = completely unable to drink/feed. poor_feeding/poor_appetite are milder — use a clarifying question ('Is the person completely unable to drink or feed anything?') before firing emergency, rather than auto-escalating every poor-appetite selection."
+  },
+  {
+    "token": "altered_consciousness",
+    "display_name": "Confusion or unresponsiveness (not their normal self)",
+    "body_area": "Head",
+    "near_miss_tokens": ["confusion", "lethargy"],
+    "note": "New confusion is itself a danger sign — escalating a 'confusion' selection to this red flag is clinically safe. lethargy (unusually sleepy) is escalate-safe in a child; clarify in an adult. This is the lead's cited near-miss (confusion -> altered_consciousness)."
+  },
+  {
+    "token": "breathlessness_at_rest",
+    "display_name": "Struggling to breathe even while sitting still / at rest",
+    "body_area": "Chest",
+    "near_miss_tokens": ["difficulty_breathing", "breathlessness", "shortness_of_breath"],
+    "note": "Red flag is breathlessness AT REST. These near-misses can be mild-to-moderate — use a clarifying question ('Is it hard to breathe even when resting, not just on activity?') before firing emergency, to avoid over-triage. This is the lead's cited near-miss (difficulty_breathing -> breathlessness_at_rest). NB exertional_breathlessness deliberately excluded — it means 'with activity', not at rest."
+  },
+  {
+    "token": "circulatory_collapse",
+    "display_name": "Collapsed — cold, clammy skin, very weak or fainting",
+    "body_area": "General",
+    "near_miss_tokens": ["near_fainting", "pallor", "severe_weakness"],
+    "note": "Non-specific near-misses — clarify for cold/clammy skin + collapse before escalating. Overlaps with 'shock'. circulatory_collapse is also a global red flag already covered by rf_006; ensure the picker path reaches it."
+  },
+  {
+    "token": "prostration",
+    "display_name": "Too weak to stand, sit up, or feed without help",
+    "body_area": "General",
+    "near_miss_tokens": ["severe_weakness", "weakness", "lethargy"],
+    "note": "Prostration = cannot stand/sit/feed unaided. Escalate-safe for a child who cannot feed or sit; for an adult reporting general weakness, clarify ('Are they too weak to stand or sit up on their own?')."
+  },
+  {
+    "token": "abnormal_bleeding",
+    "display_name": "Heavy or uncontrolled bleeding",
+    "body_area": "General",
+    "near_miss_tokens": ["bleeding", "nosebleed", "vaginal_bleeding", "bleeding_gums", "blood_in_stool"],
+    "note": "Generic 'bleeding' is the primary near-miss. Escalation depends on severity/volume — clarify whether bleeding is heavy or won't stop. vaginal_bleeding in pregnancy is separately an obstetric emergency; a minor nosebleed or trace bleeding_gums should NOT auto-fire emergency."
+  },
+  {
+    "token": "blue_lips_face",
+    "display_name": "Blue or grey lips, tongue, or face",
+    "body_area": "Head",
+    "near_miss_tokens": ["pallor", "difficulty_breathing"],
+    "note": "GAP: no direct cyanosis near-miss token exists in the picker. pallor (pale) may be colour-confused and difficulty_breathing often co-occurs, but neither is close. RECOMMEND adding an explicit 'Blue lips or face' picker option — as it stands caregivers have no accurate way to report this danger sign, so it is the most likely of the 12 to be missed even after this mapping."
+  },
+  {
+    "token": "severe_dehydration",
+    "display_name": "Severe dehydration — sunken eyes, no tears, not passing urine, very drowsy",
+    "body_area": "General",
+    "near_miss_tokens": ["dehydration"],
+    "note": "The picker's existing 'dehydration' (thirsty, dry mouth) is the milder near-miss and the main confusion risk. Clarify for severe signs (sunken eyes + drowsy or not passing urine) before firing emergency — do not auto-escalate every 'dehydration' selection."
+  },
+  {
+    "token": "impaired_consciousness",
+    "display_name": "Hard to wake, very drowsy, or not responding normally",
+    "body_area": "Head",
+    "near_miss_tokens": ["lethargy", "confusion"],
+    "note": "Overlaps altered_consciousness. lethargy/confusion are escalate-safe in a child (both are IMCI danger signs); in an adult with mild drowsiness, clarify. Same near-miss tokens as altered_consciousness by design — the mobile engineer can route both red flags off the same picker selections."
+  },
+  {
+    "token": "respiratory_distress",
+    "display_name": "Working very hard to breathe — nostrils flaring, chest pulling in, or can't speak a full sentence",
+    "body_area": "Chest",
+    "near_miss_tokens": ["difficulty_breathing", "fast_breathing", "fast_breathing_child", "chest_indrawing"],
+    "note": "chest_indrawing and fast_breathing_child are strong distress indicators — escalate-safe in a child. difficulty_breathing / fast_breathing in an adult: clarify for signs of real distress (flaring, indrawing, unable to complete sentences) before firing emergency."
+  },
+  {
+    "token": "shock",
+    "display_name": "Cold hands and feet, fast weak pulse, very drowsy or fainting",
+    "body_area": "General",
+    "near_miss_tokens": ["pallor", "near_fainting", "lethargy", "severe_weakness"],
+    "note": "Overlaps circulatory_collapse — both are global red flags and the picker path should reach both. Near-misses are non-specific; clarify (cold peripheries + drowsy/fast pulse) before escalating a lone pallor or near_fainting selection."
+  },
+  {
+    "token": "anaphylaxis_signs",
+    "display_name": "Severe allergic reaction — face/throat swelling, widespread hives, and trouble breathing together",
+    "body_area": "General",
+    "near_miss_tokens": ["hives", "facial_swelling", "difficulty_breathing", "wheeze"],
+    "note": "The red flag is these signs TOGETHER after an allergen/sting/food/drug exposure. Any single one alone is not anaphylaxis and should not auto-fire emergency — but hives or facial_swelling WITH difficulty_breathing or wheeze should escalate. RECOMMEND a combined-trigger rule (swelling/hives + breathing difficulty) rather than mapping each token individually."
+  }
+]
