@@ -124,3 +124,88 @@ Full write-up: `docs/I2_W2_VOCABULARY_FOUNDATION.md`.
 5. **239-case regression re-run against kb 2.4** (mobile engineer). Does not block
    W2 Step 1, which publishes nothing; does block any later vocabulary change
    classified beyond search-only metadata.
+
+## I2 / W2 Step 3 — CB_211 / CB_232 adjudication
+
+Branch `feat/i2-w2-cb211-cb232-adjudication`. Evidence and disposition for the
+findings from the Mobile 239-case run (PR #71 @ `04dcf75`, base `678e300`,
+against token_dictionary 1.1 / kb 2.4 / rules 2.2 — 239 executed, 235 passed,
+1 failed, 3 human-review, **0 safety-critical under-triage**).
+**No clinical ruling made. Mobile PR #71 stays unmerged.**
+
+- **CB_211 — provenance proven, and the key document is not missing.** The
+  expectation was hardcoded in `testing/build_case_bank.py:174-177` at `ba7815e`
+  (PR #13) and never touched since, with the note *"matches E3.5 Case 12
+  behaviour"*. **E3.5 Case 12 is a live test**, not a lost spec:
+  `wellapath-mobile test/engine/pilot_case_validation_test.dart:422-439`
+  (commit `b34cfb8`, 2026-05-18). It asserts the engine must not crash and that
+  urgency is **any one of the four valid values — `urgent` explicitly included**.
+  It never mentions `empty_default`. So the engine *conforms* to the cited
+  source; the case bank narrowed a deliberately permissive assertion and invented
+  a source value.
+
+- **`empty_default` never existed.** Verified across all 5 historical revisions
+  of `urgency_determiner.dart` (`e20f45a`, `51afd89`, `7aeb13c`, `cfe1a25`,
+  `33a214e`) and every commit under `lib/`: the engine has only ever emitted
+  `global_red_flag`, `condition_specific_red_flag`, `demographic_escalation`,
+  `urgency_default`. Not a removed value — a value that was never implemented.
+
+- **Prior-run claim verified from committed evidence.** The identical mismatch
+  is in `testing/case_bank_results_v1.json` (234-case run, kb **2.3**) in three
+  places, byte-identical in every field. Recomputing CB_211 against kb 2.3 and
+  kb 2.4 gives the same result — **nothing regressed**. Tracked as
+  **wellapath-mobile issue #35** (OPEN), which carries its own open question to
+  the lead.
+
+- **Provisional engineering classification: `obsolete/stale case-bank
+  expectation`** — same conclusion Mobile reached, now grounded in the primary
+  artifact rather than a characterisation of it. Refinement worth keeping: this
+  is an **authoring-time over-constraint, not drift** — nothing was superseded,
+  so there is no earlier contract to restore. **Engineering classification only;
+  no clinical approval claimed or implied.**
+
+- **Reachability:** unreachable in product behind two tested guards —
+  `symptom_selection_screen.dart:83/250` (Continue disabled) and
+  `loading_screen.dart:71` (blocks before the engine). Reachable only by direct
+  engine invocation, which is what the case bank and
+  `engine_wiring_test.dart:218-229` do. Over-triage, not safety-critical, cannot
+  suppress a red flag (no tokens → no rule can match) and cannot change any
+  non-empty assessment.
+
+- **CB_232 — no tie, no tie-break, no regression.** malaria 26 vs
+  acute_diarrhoea 21, **margin 5**, one condition at top. Malaria leads on
+  symptom subtotal alone (`fever:9 + chills:7 = 16` vs `watery_stool:8 +
+  vomiting:5 = 13`) before its base weight of 10 is counted. Ranking and every
+  score are **identical between kb 2.3 and kb 2.4**. Not a safety concern
+  (urgency `urgent` is the conservative of the two candidates). The
+  mixed-presentation question it raises is the existing **Issue #38**
+  (malaria base_weight), not a new finding. CB_225 and CB_233 reproduced too.
+  Noted separately: the engine has **no documented tie-break**, and Dart's
+  `List.sort` is not stable — irrelevant to CB_232, but real for a future tie
+  between conditions with different urgency defaults (cf. CB_239's recorded tie).
+
+- **Proposed known-findings contract** (`testing/known_findings.json` +
+  `docs/KNOWN_FINDINGS_CONTRACT.md`) — **not wired into Mobile.** A registered
+  finding is a *pinned observation, never a suppressed failure*: the case still
+  executes, its exact observed output is asserted, and the run fails if anything
+  deviates — including an unexplained improvement. Follows the existing
+  `KNOWN_BASELINE_FINDINGS` precedent in `tools/report_baseline.py`.
+  `tools/validate_known_findings.py` (22 checks) enforces that the registry
+  quotes the case bank accurately, still matches reality, genuinely disagrees
+  with the expectation, claims no clinical authority, and carries an expiry.
+
+- **Checks:** `python3 tools/run_w2_checks.py` now runs **13** groups, all green.
+  Case bank, results file and generator are byte-identical; all four frozen
+  artifacts unchanged; candidate still `candidate_unapproved` / `may_publish:
+  false`; live manifest still on token_dictionary 1.1.
+
+### Still open (unchanged by this step)
+
+1. **CB_211 disposition** — options A/D (preserve + registry) vs B (correct the
+   expectation in a new versioned bank) vs C (engine-level empty-input result,
+   issue #35's question). **Engineering lead**, with clinical input on whether
+   `urgent` + a fabricated malaria differential is acceptable for empty input.
+2. Case bank v1.0 clinical sign-off — still absent, still no schema field for it.
+3. Issue #38 — malaria base_weight in mixed presentations; CB_232/CB_225 are
+   worked examples for that monitoring item.
+4. No documented tie-break in the scoring engine (new, low priority).

@@ -1,0 +1,158 @@
+{
+  "_metadata": {
+    "artifact_id": "known_findings",
+    "version": "1.0",
+    "country": "ng",
+    "schema_version": "1.0",
+    "status": "PROPOSED — not wired into any test runner",
+    "phase": "I2 / W2 Step 3",
+    "description": "Registry of case-bank findings that are known, adjudicated at engineering level, and awaiting a final decision. A record here does NOT waive a failure: the case still executes, its exact observed output is asserted, and any deviation fails the run.",
+    "not_yet_wired": [
+      "This file is a proposal. No Mobile test runner reads it, and this PR does not change Mobile.",
+      "Wiring it is a separate, separately reviewed Mobile change — see docs/KNOWN_FINDINGS_CONTRACT.md section 4."
+    ],
+    "governing_rule": "A known finding is a pinned observation, never a suppressed failure. If a registered case starts behaving differently — better or worse — the run must fail, because the registry's description of reality has become wrong.",
+    "precedent": "Mirrors KNOWN_BASELINE_FINDINGS in tools/report_baseline.py, which records pre-existing unresolved token references and fails on any NEW one."
+  },
+
+  "authoritative_fixture": {
+    "repository": "Wellapath-org/wellapath-knowledge-base",
+    "commit": "dceecde2ee7545664bf45ea5edfa137a52acdebd",
+    "path": "testing/case_bank_v1.json",
+    "version": "1.0",
+    "sha256": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+    "bytes": 138988,
+    "total_cases": 239,
+    "note": "A registry entry is valid only against this exact fixture. If the fixture hash changes, every entry must be re-adjudicated before the registry is used again."
+  },
+
+  "findings": [
+    {
+      "case_id": "CB_211",
+      "fixture_version": "1.0",
+      "fixture_sha256": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+
+      "classification": "obsolete_stale_case_bank_expectation",
+      "classification_authority": "engineering",
+      "classification_is_clinical_approval": false,
+
+      "input": {
+        "symptom_tokens": [],
+        "demographic_tokens": [],
+        "season": null
+      },
+
+      "expected_output": {
+        "urgency": "non_urgent",
+        "urgency_source": "empty_default",
+        "top_condition": null,
+        "source_of_expectation": "testing/build_case_bank.py:174-177, hardcoded, note 'matches E3.5 Case 12 behaviour'"
+      },
+
+      "observed_output": {
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "top_condition": "malaria",
+        "red_flag_triggered": false,
+        "observed_against": {
+          "token_dictionary": "1.1",
+          "knowledge_base": "2.4",
+          "rules": "2.2",
+          "mobile_pr": 71,
+          "mobile_head": "04dcf75"
+        },
+        "also_observed_in": {
+          "run": "234-case E8.1 run",
+          "results_file": "testing/case_bank_results_v1.json",
+          "knowledge_base": "2.3",
+          "rules": "2.2",
+          "identical_in_every_field": true
+        }
+      },
+
+      "safety_impact": {
+        "triage_direction": "over_triage",
+        "safety_critical": false,
+        "can_suppress_or_bypass_a_red_flag": false,
+        "can_change_a_non_empty_assessment_result": false,
+        "affects_other_cases": false,
+        "rationale": "With an empty token set no red-flag rule can match, so there is no flag to suppress. The behaviour is a consequence of the empty input alone and cannot alter any non-empty assessment."
+      },
+
+      "product_reachability": {
+        "reachable_via_normal_ui": false,
+        "reachable_via_direct_engine_invocation": true,
+        "guards": [
+          {
+            "layer": "symptom selection",
+            "file": "wellapath-mobile lib/features/assessment/symptom_selection_screen.dart",
+            "mechanism": "line 83 `final isEnabled = tokens.isNotEmpty;` gates line 250 `onPressed: isEnabled ? ... : null`",
+            "effect": "Continue is disabled while no symptom is selected"
+          },
+          {
+            "layer": "pre-engine",
+            "file": "wellapath-mobile lib/features/assessment/loading_screen.dart",
+            "mechanism": "line 71 `if (widget.assessmentController.symptomTokens.isEmpty)`",
+            "effect": "blocks before any engine work, records CompletionStatus.interrupted, shows 'Please select at least one symptom to continue.'"
+          }
+        ],
+        "guard_tests": [
+          "wellapath-mobile test/assessment/empty_input_guard_test.dart"
+        ],
+        "engine_behaviour_pinned_by": "wellapath-mobile test/engine/engine_wiring_test.dart:218-229"
+      },
+
+      "decision_status": "open_awaiting_engineering_lead_and_clinical",
+
+      "owner": {
+        "engine_contract_question": "engineering lead",
+        "clinical_acceptability_question": "clinical reviewer",
+        "case_bank_correction_if_chosen": "knowledge base / data engineering, on engineering-lead approval"
+      },
+
+      "resolution_options": ["A_preserve_unchanged", "B_correct_case_bank_expectation", "C_engine_level_empty_input_result", "D_registry_until_adjudicated"],
+
+      "evidence_references": [
+        "docs/CB_211_DECISION_PACKAGE.md",
+        "reports/case_findings_v1.json",
+        "testing/build_case_bank.py:174-177 — where the expectation was authored",
+        "testing/case_bank_results_v1.json — identical mismatch in the prior 234-case run",
+        "wellapath-mobile issue #35 (OPEN) — fix(engine): empty symptom input produces a fabricated result if it reaches the engine",
+        "wellapath-mobile test/engine/pilot_case_validation_test.dart:422-439 — E3.5 Case 12 primary source, accepts ANY of the four valid urgency values",
+        "wellapath-mobile lib/core/engine/models/engine_output.dart — urgencySource contract, four values, empty_default not among them",
+        "wellapath-mobile commit b34cfb8 — E3.5 pilot case tests added 2026-05-18",
+        "wellapath-knowledge-base commit ba7815e (PR #13) — CB_211 introduced, never modified since"
+      ],
+
+      "review_trigger": {
+        "expires_at_milestone": "external_beta",
+        "must_be_resolved_before": "external beta",
+        "re_review_if": [
+          "the case bank fixture hash changes",
+          "CB_211 observed output changes in any field",
+          "UrgencyDeterminer gains or removes an urgencySource value",
+          "either product guard is removed, weakened, or bypassed by a new entry point",
+          "a new caller invokes EngineController.run() without an empty-input check"
+        ]
+      }
+    }
+  ],
+
+  "runner_contract": {
+    "must": [
+      "execute CB_211 exactly as it is authored — never skip it, never filter it out",
+      "compare the observed output against `observed_output` in this registry, field by field",
+      "fail the run if any observed field differs from the registry",
+      "fail the run if any case NOT listed here mismatches its expected output",
+      "fail the run if the case bank fixture hash differs from `authoritative_fixture.sha256`",
+      "report every registry entry prominently in the run summary, with its decision_status"
+    ],
+    "must_not": [
+      "report a registered case as `passed`",
+      "count a registered case toward the pass total",
+      "silently downgrade a failure to a warning",
+      "treat an empty or unreadable registry as permission to ignore a failure"
+    ],
+    "reporting": "A run with registered findings and no other failures is reported as e.g. '238 passed, 1 known finding (CB_211, open — awaiting engineering lead and clinical), 0 unexpected failures'. The known-finding count is never folded into the pass count."
+  }
+}
