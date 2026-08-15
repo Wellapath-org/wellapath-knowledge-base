@@ -9,6 +9,8 @@ Exit code 0 means all of the following hold:
   * every committed report, fixture and generated artifact is reproducible
     from its generator (nothing was hand-edited);
   * the candidate conforms to schema 2.0 and passes all 45 validators;
+  * the CB_211 known-findings registry still describes reality and claims no
+    clinical approval;
   * every kb 2.4, rules 2.2 and question-flow token reference resolves;
   * the diff against the baseline contains no change class requiring clinical
     review;
@@ -33,8 +35,10 @@ STEPS = [
     ("search fixtures are current", ["tools/build_search_fixtures.py", "--check"]),
     ("invalid fixtures are current", ["tools/build_invalid_fixtures.py", "--check"]),
     ("migration and diff reports are current", ["tools/classify_vocabulary_diff.py", "--check"]),
+    ("case findings report is current", ["tools/report_case_findings.py", "--check"]),
     ("candidate passes schema and content validation", ["tools/validate_vocabulary.py"]),
     ("frozen consumers remain compatible", ["tools/check_compatibility.py"]),
+    ("known-findings registry is honest", ["tools/validate_known_findings.py"]),
     ("test suite", ["testing/vocabulary/test_vocabulary_v2.py"]),
 ]
 

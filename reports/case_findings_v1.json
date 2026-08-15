@@ -1,0 +1,815 @@
+{
+  "report_id": "case_findings",
+  "report_version": "1",
+  "phase": "I2 / W2 Step 3",
+  "generator": "tools/report_case_findings.py",
+  "generator_version": "1.0.0",
+  "purpose": "Reproduce the four case-bank findings from the authoritative artifacts so the decision packages cite computed evidence rather than a run log.",
+  "model_status": {
+    "is_an_engine": false,
+    "authoritative_engine": "wellapath-mobile lib/core/engine/ (Dart, on-device)",
+    "may_be_used_to_certify_clinical_behaviour": false,
+    "model_limitations": [
+      "Implements only base_weight + matched symptom weights. Demographic and seasonal modifier points are not implemented \u2014 none of the four cases supplies a demographic token or a season, so they contribute 0.",
+      "Does not implement red-flag evaluation ordering; it reports which red-flag tokens are present and confirms none are.",
+      "Does not implement UrgencyDeterminer priorities 1-4; it asserts priority 5 (urgency_default) is the only reachable path for these four cases and shows why.",
+      "Ties are reported but not broken: Dart List.sort is not a stable sort, so a tie has no defined winner. None of the four cases ties."
+    ]
+  },
+  "authoritative_inputs": {
+    "case_bank": {
+      "file": "testing/case_bank_v1.json",
+      "version": "1.0",
+      "sha256": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+      "sha256_matches_authoritative": true,
+      "total_cases": 239
+    },
+    "knowledge_base": {
+      "file": "kb.ng.v2.4.json",
+      "sha256": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b"
+    },
+    "rules": {
+      "file": "rules.ng.v2.2.json",
+      "sha256": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4"
+    },
+    "token_dictionary": {
+      "file": "token_dictionary.ng.v1.1.json",
+      "sha256": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    }
+  },
+  "mobile_run": {
+    "pr": 71,
+    "branch": "test/i2-w2-case-bank-239",
+    "head": "04dcf75",
+    "base": "678e300",
+    "executed": 239,
+    "passed": 235,
+    "failed": 1,
+    "human_review": 3,
+    "safety_critical_under_triage": 0,
+    "merged": false
+  },
+  "engine_urgency_source_contract": {
+    "values": [
+      "global_red_flag",
+      "condition_specific_red_flag",
+      "demographic_escalation",
+      "urgency_default"
+    ],
+    "source": "wellapath-mobile lib/core/engine/models/engine_output.dart, doc comment on EngineOutput.urgencySource",
+    "confirmed_against": "all 5 historical revisions of lib/core/engine/urgency_determiner.dart (e20f45a, 51afd89, 7aeb13c, cfe1a25, 33a214e) and every commit touching lib/",
+    "empty_default_present": false
+  },
+  "cb_211_prior_run": {
+    "results_file": "testing/case_bank_results_v1.json",
+    "run_size": 234,
+    "knowledge_base": "kb.ng.v2.3.json",
+    "rules": "rules.ng.v2.2.json",
+    "record": {
+      "case_id": "CB_211",
+      "wiring": "as_shipped",
+      "condition_target": "",
+      "description": "Edge: empty input \u2014 engine must not crash, returns safe default",
+      "input_tokens": [],
+      "demographic_tokens": [],
+      "season": null,
+      "expected_urgency": "non_urgent",
+      "expected_urgency_source": "empty_default",
+      "actual_urgency_source": "urgency_default",
+      "urgency_source_matched": false,
+      "observe_case": false,
+      "actual_urgency": "urgent",
+      "expected_top_condition": null,
+      "actual_top_condition": "malaria",
+      "pass": false,
+      "triage_direction": "over_triage",
+      "top_condition_matched": true,
+      "red_flag_triggered": false,
+      "matched_rule_id": null,
+      "safety_critical": false,
+      "safety_critical_failure": false,
+      "error": null
+    },
+    "identical_to_current_run": true
+  },
+  "findings": [
+    {
+      "case_id": "CB_211",
+      "description": "Edge: empty input \u2014 engine must not crash, returns safe default",
+      "input_tokens": [],
+      "demographic_tokens": [],
+      "season": null,
+      "expected": {
+        "urgency": "non_urgent",
+        "urgency_source": "empty_default",
+        "top_condition": null
+      },
+      "case_bank_note": "matches E3.5 Case 12 behaviour",
+      "safety_critical": false,
+      "mobile_actual": {
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "top_condition": "malaria"
+      },
+      "model_result": {
+        "top_condition": "malaria",
+        "urgency": "urgent",
+        "urgency_source": "urgency_default"
+      },
+      "model_matches_mobile_actual": true,
+      "red_flags": {
+        "global_red_flag_tokens_present": [],
+        "condition_specific_red_flag_tokens_present": [],
+        "red_flag_triggered": false
+      },
+      "demographic_escalation_applies": false,
+      "ranking": {
+        "top_score": 10,
+        "runner_up_score": 8,
+        "margin_over_runner_up": 2,
+        "conditions_tied_at_top": 1,
+        "tie_break_required": false,
+        "tied_condition_ids": [],
+        "tied_kb_array_positions": {},
+        "top_10": [
+          {
+            "condition_id": "malaria",
+            "base_weight": 10,
+            "matched_symptom_score": 0,
+            "total_score": 10,
+            "matched_symptoms": [],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "cough_common_cold",
+            "base_weight": 8,
+            "matched_symptom_score": 0,
+            "total_score": 8,
+            "matched_symptoms": [],
+            "urgency_default": "self_care"
+          },
+          {
+            "condition_id": "acute_diarrhoea",
+            "base_weight": 8,
+            "matched_symptom_score": 0,
+            "total_score": 8,
+            "matched_symptoms": [],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "urti",
+            "base_weight": 8,
+            "matched_symptom_score": 0,
+            "total_score": 8,
+            "matched_symptoms": [],
+            "urgency_default": "self_care"
+          },
+          {
+            "condition_id": "dysentery",
+            "base_weight": 7,
+            "matched_symptom_score": 0,
+            "total_score": 7,
+            "matched_symptoms": [],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "typhoid_fever",
+            "base_weight": 7,
+            "matched_symptom_score": 0,
+            "total_score": 7,
+            "matched_symptoms": [],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "gastroenteritis",
+            "base_weight": 7,
+            "matched_symptom_score": 0,
+            "total_score": 7,
+            "matched_symptoms": [],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "hypertension",
+            "base_weight": 7,
+            "matched_symptom_score": 0,
+            "total_score": 7,
+            "matched_symptoms": [],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "pneumonia_children",
+            "base_weight": 7,
+            "matched_symptom_score": 0,
+            "total_score": 7,
+            "matched_symptoms": [],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "cholera",
+            "base_weight": 6,
+            "matched_symptom_score": 0,
+            "total_score": 6,
+            "matched_symptoms": [],
+            "urgency_default": "emergency"
+          }
+        ]
+      },
+      "kb_version_delta": {
+        "kb_2_4_top": {
+          "condition_id": "malaria",
+          "score": 10,
+          "urgency_default": "urgent"
+        },
+        "kb_2_3_top": {
+          "condition_id": "malaria",
+          "score": 10,
+          "urgency_default": "urgent"
+        },
+        "ranking_identical": true,
+        "scores_identical": true,
+        "changed_between_2_3_and_2_4": false
+      }
+    },
+    {
+      "case_id": "CB_225",
+      "description": "Edge: single common symptom 'fever' only",
+      "input_tokens": [
+        "fever"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected": {
+        "urgency": null,
+        "urgency_source": "observe",
+        "top_condition": null
+      },
+      "case_bank_note": "expected_top/urgency indeterminate without scorer \u2014 observe actual",
+      "safety_critical": false,
+      "mobile_actual": {
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "top_condition": "malaria"
+      },
+      "model_result": {
+        "top_condition": "malaria",
+        "urgency": "urgent",
+        "urgency_source": "urgency_default"
+      },
+      "model_matches_mobile_actual": true,
+      "red_flags": {
+        "global_red_flag_tokens_present": [],
+        "condition_specific_red_flag_tokens_present": [],
+        "red_flag_triggered": false
+      },
+      "demographic_escalation_applies": false,
+      "ranking": {
+        "top_score": 19,
+        "runner_up_score": 13,
+        "margin_over_runner_up": 6,
+        "conditions_tied_at_top": 1,
+        "tie_break_required": false,
+        "tied_condition_ids": [],
+        "tied_kb_array_positions": {},
+        "top_10": [
+          {
+            "condition_id": "malaria",
+            "base_weight": 10,
+            "matched_symptom_score": 9,
+            "total_score": 19,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 9
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "dysentery",
+            "base_weight": 7,
+            "matched_symptom_score": 6,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "urti",
+            "base_weight": 8,
+            "matched_symptom_score": 5,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "self_care"
+          },
+          {
+            "condition_id": "pneumonia_children",
+            "base_weight": 7,
+            "matched_symptom_score": 6,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "lower_respiratory_infection",
+            "base_weight": 6,
+            "matched_symptom_score": 6,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "measles",
+            "base_weight": 5,
+            "matched_symptom_score": 7,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "uti",
+            "base_weight": 6,
+            "matched_symptom_score": 5,
+            "total_score": 11,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "sari",
+            "base_weight": 5,
+            "matched_symptom_score": 6,
+            "total_score": 11,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "lassa_fever",
+            "base_weight": 4,
+            "matched_symptom_score": 7,
+            "total_score": 11,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "csm",
+            "base_weight": 4,
+            "matched_symptom_score": 7,
+            "total_score": 11,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "emergency"
+          }
+        ]
+      },
+      "kb_version_delta": {
+        "kb_2_4_top": {
+          "condition_id": "malaria",
+          "score": 19,
+          "urgency_default": "urgent"
+        },
+        "kb_2_3_top": {
+          "condition_id": "malaria",
+          "score": 19,
+          "urgency_default": "urgent"
+        },
+        "ranking_identical": true,
+        "scores_identical": true,
+        "changed_between_2_3_and_2_4": false
+      }
+    },
+    {
+      "case_id": "CB_232",
+      "description": "Edge: conflicting tokens from malaria + acute_diarrhoea -> observe top condition",
+      "input_tokens": [
+        "fever",
+        "chills",
+        "watery_stool",
+        "vomiting"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected": {
+        "urgency": null,
+        "urgency_source": "observe",
+        "top_condition": null
+      },
+      "case_bank_note": "two-condition overlap; observe scorer behaviour",
+      "safety_critical": false,
+      "mobile_actual": {
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "top_condition": "malaria"
+      },
+      "model_result": {
+        "top_condition": "malaria",
+        "urgency": "urgent",
+        "urgency_source": "urgency_default"
+      },
+      "model_matches_mobile_actual": true,
+      "red_flags": {
+        "global_red_flag_tokens_present": [],
+        "condition_specific_red_flag_tokens_present": [],
+        "red_flag_triggered": false
+      },
+      "demographic_escalation_applies": false,
+      "ranking": {
+        "top_score": 26,
+        "runner_up_score": 21,
+        "margin_over_runner_up": 5,
+        "conditions_tied_at_top": 1,
+        "tie_break_required": false,
+        "tied_condition_ids": [],
+        "tied_kb_array_positions": {},
+        "top_10": [
+          {
+            "condition_id": "malaria",
+            "base_weight": 10,
+            "matched_symptom_score": 16,
+            "total_score": 26,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 9
+              },
+              {
+                "token": "chills",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "acute_diarrhoea",
+            "base_weight": 8,
+            "matched_symptom_score": 13,
+            "total_score": 21,
+            "matched_symptoms": [
+              {
+                "token": "watery_stool",
+                "weight": 8
+              },
+              {
+                "token": "vomiting",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "csm",
+            "base_weight": 4,
+            "matched_symptom_score": 12,
+            "total_score": 16,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 7
+              },
+              {
+                "token": "vomiting",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "yellow_fever",
+            "base_weight": 3,
+            "matched_symptom_score": 12,
+            "total_score": 15,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 7
+              },
+              {
+                "token": "vomiting",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "gastroenteritis",
+            "base_weight": 7,
+            "matched_symptom_score": 7,
+            "total_score": 14,
+            "matched_symptoms": [
+              {
+                "token": "vomiting",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "dysentery",
+            "base_weight": 7,
+            "matched_symptom_score": 6,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "cholera",
+            "base_weight": 6,
+            "matched_symptom_score": 7,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "vomiting",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "urti",
+            "base_weight": 8,
+            "matched_symptom_score": 5,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "self_care"
+          },
+          {
+            "condition_id": "pneumonia_children",
+            "base_weight": 7,
+            "matched_symptom_score": 6,
+            "total_score": 13,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "lower_respiratory_infection",
+            "base_weight": 6,
+            "matched_symptom_score": 6,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "fever",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          }
+        ]
+      },
+      "kb_version_delta": {
+        "kb_2_4_top": {
+          "condition_id": "malaria",
+          "score": 26,
+          "urgency_default": "urgent"
+        },
+        "kb_2_3_top": {
+          "condition_id": "malaria",
+          "score": 26,
+          "urgency_default": "urgent"
+        },
+        "ranking_identical": true,
+        "scores_identical": true,
+        "changed_between_2_3_and_2_4": false
+      }
+    },
+    {
+      "case_id": "CB_233",
+      "description": "Edge: conflicting tokens from cardio + dizziness -> observe top condition",
+      "input_tokens": [
+        "chest_pain",
+        "dizziness",
+        "palpitations"
+      ],
+      "demographic_tokens": [],
+      "season": null,
+      "expected": {
+        "urgency": null,
+        "urgency_source": "observe",
+        "top_condition": null
+      },
+      "case_bank_note": "observe scorer behaviour",
+      "safety_critical": false,
+      "mobile_actual": {
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "top_condition": "cardio_symptoms"
+      },
+      "model_result": {
+        "top_condition": "cardio_symptoms",
+        "urgency": "urgent",
+        "urgency_source": "urgency_default"
+      },
+      "model_matches_mobile_actual": true,
+      "red_flags": {
+        "global_red_flag_tokens_present": [],
+        "condition_specific_red_flag_tokens_present": [],
+        "red_flag_triggered": false
+      },
+      "demographic_escalation_applies": false,
+      "ranking": {
+        "top_score": 24,
+        "runner_up_score": 12,
+        "margin_over_runner_up": 12,
+        "conditions_tied_at_top": 1,
+        "tie_break_required": false,
+        "tied_condition_ids": [],
+        "tied_kb_array_positions": {},
+        "top_10": [
+          {
+            "condition_id": "cardio_symptoms",
+            "base_weight": 5,
+            "matched_symptom_score": 19,
+            "total_score": 24,
+            "matched_symptoms": [
+              {
+                "token": "chest_pain",
+                "weight": 8
+              },
+              {
+                "token": "palpitations",
+                "weight": 6
+              },
+              {
+                "token": "dizziness",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "sari",
+            "base_weight": 5,
+            "matched_symptom_score": 7,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "chest_pain",
+                "weight": 7
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "hypertension",
+            "base_weight": 7,
+            "matched_symptom_score": 5,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "dizziness",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "pregnancy_complications",
+            "base_weight": 6,
+            "matched_symptom_score": 6,
+            "total_score": 12,
+            "matched_symptoms": [
+              {
+                "token": "dizziness",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "anaemia",
+            "base_weight": 6,
+            "matched_symptom_score": 5,
+            "total_score": 11,
+            "matched_symptoms": [
+              {
+                "token": "dizziness",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "non_urgent"
+          },
+          {
+            "condition_id": "malaria",
+            "base_weight": 10,
+            "matched_symptom_score": 0,
+            "total_score": 10,
+            "matched_symptoms": [],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "tuberculosis_suspected",
+            "base_weight": 5,
+            "matched_symptom_score": 5,
+            "total_score": 10,
+            "matched_symptoms": [
+              {
+                "token": "chest_pain",
+                "weight": 5
+              }
+            ],
+            "urgency_default": "urgent"
+          },
+          {
+            "condition_id": "lassa_fever",
+            "base_weight": 4,
+            "matched_symptom_score": 6,
+            "total_score": 10,
+            "matched_symptoms": [
+              {
+                "token": "chest_pain",
+                "weight": 6
+              }
+            ],
+            "urgency_default": "emergency"
+          },
+          {
+            "condition_id": "cough_common_cold",
+            "base_weight": 8,
+            "matched_symptom_score": 0,
+            "total_score": 8,
+            "matched_symptoms": [],
+            "urgency_default": "self_care"
+          },
+          {
+            "condition_id": "acute_diarrhoea",
+            "base_weight": 8,
+            "matched_symptom_score": 0,
+            "total_score": 8,
+            "matched_symptoms": [],
+            "urgency_default": "non_urgent"
+          }
+        ]
+      },
+      "kb_version_delta": {
+        "kb_2_4_top": {
+          "condition_id": "cardio_symptoms",
+          "score": 24,
+          "urgency_default": "urgent"
+        },
+        "kb_2_3_top": {
+          "condition_id": "cardio_symptoms",
+          "score": 24,
+          "urgency_default": "urgent"
+        },
+        "ranking_identical": true,
+        "scores_identical": true,
+        "changed_between_2_3_and_2_4": false
+      }
+    }
+  ]
+}
