@@ -39,7 +39,10 @@ STEPS = [
     ("candidate passes schema and content validation", ["tools/validate_vocabulary.py"]),
     ("frozen consumers remain compatible", ["tools/check_compatibility.py"]),
     ("known-findings registry is honest", ["tools/validate_known_findings.py"]),
+    ("catalogue review package is current", ["tools/build_catalogue_review.py", "--check"]),
+    ("catalogue review package is valid", ["tools/validate_catalogue.py"]),
     ("test suite", ["testing/vocabulary/test_vocabulary_v2.py"]),
+    ("catalogue test suite", ["testing/test_catalogue_review.py"]),
 ]
 
 
