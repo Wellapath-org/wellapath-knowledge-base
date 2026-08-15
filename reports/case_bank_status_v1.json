@@ -1,0 +1,133 @@
+{
+  "report_id": "case_bank_status",
+  "report_version": "1",
+  "phase": "I2 / W2 Step 1",
+  "generator": "tools/report_case_bank_status.py",
+  "generator_version": "1.0.0",
+  "question_asked": "The W2 brief records that case_bank_v1.json is absent from the mobile repository's default case-bank path, causing six Top-50 case-bank tests to skip. Does a canonical case bank exist, and where?",
+  "discovery_result": {
+    "outcome": "canonical_case_bank_found",
+    "summary": "The canonical Top-50 case bank exists and is committed in THIS repository at testing/case_bank_v1.json. It was never missing. What is missing is a copy at the mobile repository's default fixture path \u2014 this is a distribution gap between two repositories, not absent case data.",
+    "sources_searched": [
+      "current repository working tree",
+      "current repository git history, all branches (git log --all -- testing/case_bank_v1.json)",
+      "tracked fixtures under testing/",
+      "release artifacts at the repository root",
+      "existing test definitions in the mobile repository, all branches",
+      "project-provided source documents under source/"
+    ],
+    "git_provenance": [
+      "ba7815e feat(testing): add E8.1 case bank - 234 scenarios across all 50 conditions (PR #13)",
+      "7ea1724 fix(testing,rules): apply E8.1 engineering-lead corrections + retire dead rf_147 (PR #15)",
+      "0d3a159 feat(kb): E8.2 headache token + kb.ng.v2.4.json (PR #18)",
+      "c974100 test(e8.2): add three re-verified E3.5 pilot cases (CB_237-239) (PR #19)"
+    ],
+    "no_content_invented": true,
+    "restoration_action": "None needed in this repository \u2014 the file is already at its canonical path, unmodified. No case was reinterpreted, renumbered, added or 'improved'. The file is byte identical to the E9 freeze and is asserted as such by tools/check_compatibility.py."
+  },
+  "case_data_availability": {
+    "status": "available",
+    "canonical_path": "testing/case_bank_v1.json",
+    "present": true,
+    "version": "1.0",
+    "phase": "E8.1",
+    "sha256": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+    "bytes": 138988,
+    "total_cases": 239,
+    "declared_total_cases": 239,
+    "count_matches_declaration": true,
+    "safety_critical_cases": 150,
+    "conditions_covered": 50,
+    "global_red_flag_tokens_tested": 13,
+    "expected_urgency_source_breakdown": {
+      "condition_specific_red_flag": 39,
+      "demographic_escalation": 36,
+      "empty_default": 1,
+      "global_red_flag": 85,
+      "observe": 3,
+      "urgency_default": 75
+    },
+    "built_from": {
+      "knowledge_base": "kb.ng.v2.4.json",
+      "rules": "rules.ng.v2.1.json",
+      "top5_tokens": "mobile_handoff/condition_top5_symptom_tokens.json (from feat/e9-symptom-token-mapping)"
+    },
+    "valid_against_rules": "v2.1 and v2.2 \u2014 v2.2 removes rf_147 (RTI circulatory_collapse), which is behaviourally inert: circulatory_collapse still returns emergency via global rf_006. CB_159 already reflects this (source global_red_flag).",
+    "expected_value_derivation": "See build_case_bank.py header. Expected values are spec-derived (KB urgency_default + red flag rules + Case-04 Option B escalation policy), independent of the engine implementation, so the run can catch engine bugs."
+  },
+  "harness_readiness": {
+    "status": "ready_but_not_wired",
+    "owner": "mobile engineering",
+    "harness_location": "wellapath-mobile test/engine/case_bank_validation_test.dart, with support code under test/engine/case_bank/",
+    "harness_branches": [
+      "develop",
+      "feat/e8-case-bank-testing",
+      "docs/i1-closure"
+    ],
+    "default_case_bank_path": "test/fixtures/case_bank_v1.json",
+    "override_mechanism": "--dart-define=CASE_BANK_PATH=<absolute path>",
+    "skip_behaviour": "Documented and intentional. The harness header states: 'Until then this file skips rather than fails - the harness's own behaviour is covered by case_bank_runner_test.dart, which does not need the bank.' The skip is therefore a correctly reported missing input, not a silent pass.",
+    "note": "The default fixture path holds no file on any mobile branch inspected. Nothing in this repository can populate it: this repository cannot commit to the mobile repository. The exact copy command is in the Mobile handoff."
+  },
+  "clinical_approval": {
+    "status": "not_evidenced_as_clinician_approved",
+    "what_is_evidenced": [
+      "Engineering-lead corrections were applied to the bank (commit 7ea1724, PR #15): red-flag cases' expected_top_condition set to null, 18 demographic cases moved to a demographic_escalation source, CB_159 reclassified to global_red_flag.",
+      "Expected values are spec-derived from kb + rules + the Case-04 Option B escalation policy, deliberately independent of the engine (testing/build_case_bank.py header).",
+      "CB_237-239 are described as 're-verified E3.5 pilot cases' (PR #19)."
+    ],
+    "what_is_not_evidenced": [
+      "No named clinical reviewer is recorded in the case bank _metadata.",
+      "No review date or approval record is recorded in the case bank _metadata.",
+      "The case bank schema has no reviewer or approval field at all."
+    ],
+    "conclusion": "The bank is engineering-approved and spec-derived. It is NOT recorded as clinician-signed-off. This is stated rather than assumed; W2 adds no reviewer metadata, because inventing one would fabricate an approval.",
+    "required_input": "A named clinical reviewer and approval date for case bank v1.0, or an explicit decision that engineering-lead approval is the accepted bar for this artifact."
+  },
+  "executable_regression_result": {
+    "status": "stale_not_rerun",
+    "last_recorded_run": {
+      "results_file": "testing/case_bank_results_v1.json",
+      "present": true,
+      "phase": "E8.1",
+      "artifacts": {
+        "knowledge_base": "kb.ng.v2.3.json",
+        "rules": "rules.ng.v2.2.json",
+        "token_dictionary": "token_dictionary.ng.v1.1.json"
+      },
+      "wiring": "as_shipped",
+      "total_cases": 234,
+      "graded_cases": 231,
+      "observe_cases": 3,
+      "passed": 230,
+      "failed": 1,
+      "under_triage": 0,
+      "over_triage": 1,
+      "safety_critical_failures": 0
+    },
+    "why_stale": [
+      "The recorded run covers 234 cases; the committed bank now has 239 (CB_235-239 were added afterwards).",
+      "The recorded run used knowledge_base 2.3; the frozen baseline is 2.4.",
+      "A 239-case re-run against kb 2.4 was requested at E9 and is not recorded in this repository."
+    ],
+    "w2_impact": "The W2 candidate cannot regress clinical output through this bank, because it changes no clinical input: kb 2.4, rules 2.2 and the accepted token set are all byte identical, proven by tools/check_compatibility.py. But 'cannot regress by construction' is not the same as 'proven unchanged by execution', and this report does not claim the latter.",
+    "certification_status": "NOT CERTIFIED \u2014 existing Top-50 behaviour is proven unchanged structurally (byte identity of every clinical input), not by an executed 239-case run against kb 2.4."
+  },
+  "blocked_items": [
+    {
+      "item": "Executed 239-case Top-50 regression against kb 2.4 / rules 2.2",
+      "blocked_on": "mobile engineering \u2014 copy the canonical bank to test/fixtures/case_bank_v1.json (or pass CASE_BANK_PATH) and run the harness",
+      "blocking_w2_step_1": false,
+      "reason_not_blocking": "W2 Step 1 publishes nothing and changes no clinical input. The re-run is required before any vocabulary change that is classified beyond search-only metadata."
+    },
+    {
+      "item": "Clinical reviewer sign-off on case bank v1.0",
+      "blocked_on": "clinical review",
+      "blocking_w2_step_1": false
+    }
+  ],
+  "missing_content_manifest": {
+    "applicable": false,
+    "reason": "A missing-content manifest applies only when no canonical case bank exists. One exists, is complete against its own declared coverage, and is byte identical to the E9 freeze."
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "fixture_id": "vocabulary_ambiguity_cases",
+  "fixture_version": "1",
+  "generator": "tools/build_search_fixtures.py",
+  "generator_version": "1.0.0",
+  "synthetic": true,
+  "WARNING": "Expectations are computed against a SYNTHETIC non-clinical vocabulary (synthetic_vocabulary_v1.json). No token here is clinical content.",
+  "vocabulary": {
+    "file": "testing/vocabulary/fixtures/search/synthetic_vocabulary_v1.json"
+  },
+  "normalization_version": "1.0.0",
+  "resolver_version": "1.0.0",
+  "cases": [
+    {
+      "query": "shared quux",
+      "tests": "exact alias shared by two tokens -> ambiguous, resolves to nothing",
+      "expected": {
+        "status": "ambiguous",
+        "query_normalized": "shared quux",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": [
+          "zorble_alpha",
+          "zorble_beta"
+        ]
+      }
+    },
+    {
+      "query": "SHARED  QUUX!",
+      "tests": "the same collision reached through normalization",
+      "expected": {
+        "status": "ambiguous",
+        "query_normalized": "shared quux",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": [
+          "zorble_alpha",
+          "zorble_beta"
+        ]
+      }
+    },
+    {
+      "query": "beta only",
+      "tests": "exact alias unique to one token -> exact_alias",
+      "expected": {
+        "status": "exact_alias",
+        "query_normalized": "beta only",
+        "resolved_token_id": "zorble_beta",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "zorble_beta"
+        ]
+      }
+    },
+    {
+      "query": "quibble widget",
+      "tests": "one token's canonical label collides with another token's ID form -> ambiguous",
+      "expected": {
+        "status": "ambiguous",
+        "query_normalized": "quibble widget",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": [
+          "quibble_widget",
+          "plaxo_thing"
+        ]
+      }
+    },
+    {
+      "query": "quibble_widget",
+      "tests": "the exact token ID wins over the colliding label -> exact_canonical",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "quibble widget",
+        "resolved_token_id": "quibble_widget",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "quibble_widget"
+        ]
+      }
+    },
+    {
+      "query": "frobnitz",
+      "tests": "exact canonical",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "frobnitz",
+        "resolved_token_id": "frobnitz",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "frobnitz"
+        ]
+      }
+    },
+    {
+      "query": "frob nitz",
+      "tests": "exact alias",
+      "expected": {
+        "status": "exact_alias",
+        "query_normalized": "frob nitz",
+        "resolved_token_id": "frobnitz",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "frobnitz"
+        ]
+      }
+    },
+    {
+      "query": "FROBNITZ!",
+      "tests": "exact alias reached byte-for-byte before normalization",
+      "expected": {
+        "status": "exact_alias",
+        "query_normalized": "frobnitz",
+        "resolved_token_id": "frobnitz",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "frobnitz"
+        ]
+      }
+    },
+    {
+      "query": "frobnitz!",
+      "tests": "normalized alias match",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "frobnitz",
+        "resolved_token_id": "frobnitz",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "frobnitz"
+        ]
+      }
+    },
+    {
+      "query": "zorble_alpha",
+      "tests": "exact canonical beats a shared alias",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "zorble alpha",
+        "resolved_token_id": "zorble_alpha",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "zorble_alpha"
+        ]
+      }
+    },
+    {
+      "query": "nothing here",
+      "tests": "no match",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "nothing here",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    }
+  ]
+}

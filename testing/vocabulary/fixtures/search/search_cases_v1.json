@@ -1,0 +1,431 @@
+{
+  "fixture_id": "vocabulary_search_cases",
+  "fixture_version": "1",
+  "generator": "tools/build_search_fixtures.py",
+  "generator_version": "1.0.0",
+  "synthetic": false,
+  "vocabulary": {
+    "file": "candidate/token_dictionary.ng.v2.0.json",
+    "version": "2.0",
+    "sha256": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d"
+  },
+  "normalization_version": "1.0.0",
+  "resolver_version": "1.0.0",
+  "authoring_rule": "Every query is an existing token ID or a mechanical variation of one (case, whitespace, punctuation, Unicode). No clinically meaningful synonym mapping is invented to pad coverage.",
+  "cases": [
+    {
+      "query": "chest_pain",
+      "tests": "exact canonical: the stable token ID itself",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "fever",
+      "tests": "exact canonical: single-word token ID",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "fever",
+        "resolved_token_id": "fever",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "fever"
+        ]
+      }
+    },
+    {
+      "query": "severe_malnutrition_sam",
+      "tests": "exact canonical: token added in artifact version 1.1",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "severe malnutrition sam",
+        "resolved_token_id": "severe_malnutrition_sam",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "severe_malnutrition_sam"
+        ]
+      }
+    },
+    {
+      "query": "Chest Pain",
+      "tests": "case + separator normalization of an existing token ID",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "CHEST PAIN",
+      "tests": "upper case normalization",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest pain",
+      "tests": "underscore-to-space normalization",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "  chest   pain  ",
+      "tests": "leading, trailing and repeated whitespace",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest-pain",
+      "tests": "ASCII hyphen folds to a space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest\u2014pain",
+      "tests": "em dash folds to a space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest\u2013pain",
+      "tests": "en dash folds to a space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest.pain",
+      "tests": "a full stop not between digits folds to a space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest, pain",
+      "tests": "comma not between digits folds to a space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest pain!",
+      "tests": "trailing punctuation is dropped",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "(chest pain)",
+      "tests": "surrounding punctuation is dropped",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest\u00a0pain",
+      "tests": "no-break space folds to an ASCII space",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "chest\u200bpain",
+      "tests": "zero width space folds to a space separator",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "\ufeffchest pain",
+      "tests": "byte order mark is stripped",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "ChEsT_pAiN",
+      "tests": "mixed case on the ID form",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "chest pain",
+        "resolved_token_id": "chest_pain",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "chest_pain"
+        ]
+      }
+    },
+    {
+      "query": "blood_in_stool",
+      "tests": "exact canonical: multi-word token ID",
+      "expected": {
+        "status": "exact_canonical",
+        "query_normalized": "blood in stool",
+        "resolved_token_id": "blood_in_stool",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "blood_in_stool"
+        ]
+      }
+    },
+    {
+      "query": "blood in stool",
+      "tests": "normalized form of a multi-word token ID",
+      "expected": {
+        "status": "normalized",
+        "query_normalized": "blood in stool",
+        "resolved_token_id": "blood_in_stool",
+        "scoring_eligible": true,
+        "candidate_token_ids": [
+          "blood_in_stool"
+        ]
+      }
+    },
+    {
+      "query": "no fever",
+      "tests": "negation is preserved and must NOT resolve to `fever`",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "no fever",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "not fever",
+      "tests": "negation variant must NOT resolve to `fever`",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "not fever",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "fever and chills",
+      "tests": "a multi-token phrase must NOT partially match a single token",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "fever and chills",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "feve",
+      "tests": "a prefix of a real token must NOT match \u2014 no fuzzy matching",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "feve",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "fevers",
+      "tests": "a plural of a real token must NOT match \u2014 no stemming",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "fevers",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "fver",
+      "tests": "a typo must NOT match \u2014 no edit-distance matching",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "fver",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "chestpain",
+      "tests": "removing the separator must NOT match \u2014 hyphens become spaces, not nothing",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "chestpain",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "",
+      "tests": "empty query",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "   ",
+      "tests": "whitespace-only query",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "!!!",
+      "tests": "punctuation-only query",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "zzzznotatoken",
+      "tests": "unknown term",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "zzzznotatoken",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "38.5",
+      "tests": "a decimal number survives normalization and matches nothing",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "38.5",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "140/90",
+      "tests": "a digit-internal solidus survives and matches nothing",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "140/90",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    },
+    {
+      "query": "1,000",
+      "tests": "a thousands separator is removed and matches nothing",
+      "expected": {
+        "status": "no_match",
+        "query_normalized": "1000",
+        "resolved_token_id": null,
+        "scoring_eligible": false,
+        "candidate_token_ids": []
+      }
+    }
+  ]
+}
