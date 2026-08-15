@@ -1,0 +1,74 @@
+name: W2 vocabulary validation
+
+# Scoped deliberately to the W2 vocabulary foundation. It validates the
+# candidate artifact, proves the frozen artifacts are byte identical, and
+# asserts that nothing was published. It does not touch, build or publish any
+# other pipeline in this repository.
+#
+# No dependencies are installed: every tool is standard-library Python 3, which
+# is the convention every generator in this repository already follows
+# (testing/build_case_bank.py, facilities/source/build_e5.py).
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate vocabulary candidate and frozen baseline
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Frozen artifacts are byte identical to the E9.1 baseline
+        # Runs before anything else and independently of the Python tooling.
+        # If a frozen clinical artifact changed, that is the finding, and no
+        # other result from this run is worth reading.
+        run: |
+          shasum -a 256 -c - <<'EOF'
+          0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019  token_dictionary.ng.v1.1.json
+          6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b  kb.ng.v2.4.json
+          1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4  rules.ng.v2.2.json
+          25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398  facilities.ng.v1.1.json
+          c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834  testing/case_bank_v1.json
+          EOF
+
+      - name: Run all W2 checks
+        run: python3 tools/run_w2_checks.py
+
+      - name: Candidate is not published
+        # A belt-and-braces guard on the one mistake that would actually be
+        # dangerous: an unapproved artifact appearing where the upload step
+        # looks for published files.
+        run: |
+          if [ -f token_dictionary.ng.v2.0.json ]; then
+            echo "::error::token_dictionary.ng.v2.0.json is at the repository root."
+            echo "The root is the published-artifact directory. An unapproved candidate"
+            echo "belongs in candidate/ until clinical review and lead approval are recorded."
+            exit 1
+          fi
+          python3 - <<'EOF'
+          import json, sys
+          with open("candidate/token_dictionary.ng.v2.0.json") as handle:
+              meta = json.load(handle)["_metadata"]
+          errors = []
+          if meta["release_status"] == "published":
+              errors.append("release_status is 'published'")
+          review = meta["clinical_review"]
+          if review["status"] == "reviewed" and not all(
+              review[field] for field in ("reviewer", "review_date", "evidence")
+          ):
+              errors.append("clinical review claimed without reviewer, date and evidence")
+          for error in errors:
+              print("::error::%s" % error)
+          sys.exit(1 if errors else 0)
+          EOF
