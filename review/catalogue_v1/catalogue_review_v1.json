@@ -1,0 +1,2179 @@
+{
+  "_metadata": {
+    "artifact_id": "vocabulary_catalogue_review",
+    "version": "1.0",
+    "country": "ng",
+    "generated_by": "tools/build_catalogue_review.py",
+    "generator_version": "1.0.0",
+    "schema": "schema/catalogue_review.schema.json",
+    "status": "ALL DECISIONS PENDING \u2014 NOTHING IN THIS FILE IS APPROVED",
+    "is_clinical_approval": false,
+    "is_product_approval": false,
+    "frozen_baseline": {
+      "token_dictionary_v1_1": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+      "candidate_v2_0": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+      "kb_v2_4": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b",
+      "rules_v2_2": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4",
+      "case_bank_v1": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+      "known_findings": "fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed"
+    },
+    "description": "Review-ready catalogue package. Every proposal carries its provenance and exactly one primary change class. Publication eligibility is computed from reviewer decisions; because every decision is pending, nothing is eligible."
+  },
+  "batches": [
+    {
+      "batch_id": "BATCH-01-display-labels",
+      "title": "Display-label proposals for existing tokens (low risk)",
+      "risk_tier": "low",
+      "approval_authorizes": [
+        "Showing an approved label for a token that already exists and already carries its current weight"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT set display_safe on any token",
+        "It does NOT add, rename, merge or deprecate any canonical token",
+        "It does NOT change any weight, rule, urgency or question",
+        "It does NOT approve the Vocabulary 2.0 candidate for publication"
+      ],
+      "required_reviewers": [
+        "product",
+        "clinical"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 8,
+      "proposals": [
+        {
+          "proposal_id": "VC1-0001",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Skin pulling in between the ribs when breathing",
+          "normalized_form": "skin pulling in between the ribs when breathing",
+          "locale": "en-NG",
+          "complaint_section": "breathing",
+          "proposed_target": {
+            "canonical_token_id": "chest_indrawing",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Chest",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == chest_indrawing (priority 1)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "pneumonia_children",
+              "weight": 10
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0002",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Blood in stool",
+          "normalized_form": "blood in stool",
+          "locale": "en-NG",
+          "complaint_section": "digestive",
+          "proposed_target": {
+            "canonical_token_id": "blood_in_stool",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Abdomen",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == blood_in_stool (priority 2)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "dysentery",
+              "weight": 9
+            },
+            {
+              "condition_id": "vhf_suspected",
+              "weight": 8
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0003",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Vaginal bleeding",
+          "normalized_form": "vaginal bleeding",
+          "locale": "en-NG",
+          "complaint_section": "maternal",
+          "proposed_target": {
+            "canonical_token_id": "vaginal_bleeding",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Pelvis",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == vaginal_bleeding (priority 3)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "pregnancy_complications",
+              "weight": 9
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0004",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Bleeding gums",
+          "normalized_form": "bleeding gums",
+          "locale": "en-NG",
+          "complaint_section": "neurological",
+          "proposed_target": {
+            "canonical_token_id": "bleeding_gums",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Head",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == bleeding_gums (priority 4)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "vhf_suspected",
+              "weight": 10
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0005",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Signs of dehydration (very thirsty, dry mouth, sunken eyes)",
+          "normalized_form": "signs of dehydration very thirsty dry mouth sunken eyes",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": "dehydration",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == dehydration (priority 5)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "cholera",
+              "weight": 8
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0006",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Unusually pale skin",
+          "normalized_form": "unusually pale skin",
+          "locale": "en-NG",
+          "complaint_section": "skin",
+          "proposed_target": {
+            "canonical_token_id": "pallor",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Skin",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == pallor (priority 6)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "sth",
+              "weight": 6
+            },
+            {
+              "condition_id": "anaemia",
+              "weight": 8
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0007",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Severe weakness",
+          "normalized_form": "severe weakness",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": "severe_weakness",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == severe_weakness (priority 7)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "vhf_suspected",
+              "weight": 8
+            },
+            {
+              "condition_id": "lassa_fever",
+              "weight": 8
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0008",
+          "batch_id": "BATCH-01-display-labels",
+          "phrase": "Swelling of the face",
+          "normalized_form": "swelling of the face",
+          "locale": "en-NG",
+          "complaint_section": "neurological",
+          "proposed_target": {
+            "canonical_token_id": "facial_swelling",
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Head",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "display_label_only",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == facial_swelling (priority 8)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Token already exists in token dictionary 1.1 and already carries kb weight; it is absent from the Mobile picker, so the gap is display reachability, not vocabulary. Approving a display label does not change any weight.",
+          "lost_context": [],
+          "kb_scoring_references": [
+            {
+              "condition_id": "pregnancy_complications",
+              "weight": 7
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "product_review_pending"
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "BATCH-02-search-aliases",
+      "title": "Search-only alias proposals",
+      "risk_tier": "low",
+      "approval_authorizes": [
+        "Adding a search phrase that resolves to exactly one existing canonical token"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT connect two existing scoring tokens",
+        "It does NOT change scoring eligibility or red-flag reachability",
+        "It does NOT authorise any alias that reaches a second canonical token"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 0,
+      "proposals": []
+    },
+    {
+      "batch_id": "BATCH-03-ambiguity",
+      "title": "Ambiguity sets \u2014 terms that must never auto-resolve",
+      "risk_tier": "medium",
+      "approval_authorizes": [
+        "Recording that a phrase maps to two or more candidates and must prompt the user"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT choose between the candidates",
+        "It does NOT make any candidate scoring-eligible from the phrase alone"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 0,
+      "proposals": []
+    },
+    {
+      "batch_id": "BATCH-04-metadata",
+      "title": "Metadata-only associations (body area, complaint group, severity, duration)",
+      "risk_tier": "medium",
+      "approval_authorizes": [
+        "Attaching search/filter metadata used to group and narrow the picker"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT make metadata a scoring input",
+        "It does NOT let a body area or severity label act as a clinical token"
+      ],
+      "required_reviewers": [
+        "product",
+        "clinical"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 0,
+      "proposals": []
+    },
+    {
+      "batch_id": "BATCH-05-scoring-affecting",
+      "title": "Scoring-affecting proposals \u2014 BLOCKING",
+      "risk_tier": "blocking",
+      "approval_authorizes": [
+        "Nothing on approval alone \u2014 these additionally require an engineering-lead sign-off and a regression run"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT authorise publication",
+        "It does NOT authorise a Mobile implementation without the case-bank regression re-run"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 0,
+      "proposals": []
+    },
+    {
+      "batch_id": "BATCH-06-red-flag-affecting",
+      "title": "Red-flag-affecting proposals \u2014 BLOCKING",
+      "risk_tier": "blocking",
+      "approval_authorizes": [
+        "Nothing on approval alone \u2014 red-flag reachability changes require clinical review plus engineering lead"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT authorise auto-escalating a near-miss token to a red flag",
+        "It does NOT authorise publication"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 12,
+      "proposals": [
+        {
+          "proposal_id": "VC1-0010",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Not able to drink or feed at all",
+          "normalized_form": "not able to drink or feed at all",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "inability_to_drink",
+              "poor_appetite",
+              "poor_feeding"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == inability_to_drink (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Red flag = completely unable to drink/feed. poor_feeding/poor_appetite are milder \u2014 use a clarifying question ('Is the person completely unable to drink or feed anything?') before firing emergency, rather than auto-escalating every poor-appetite selection. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:cough_common_cold",
+            "kb:acute_diarrhoea",
+            "kb:cholera",
+            "kb:pneumonia_children"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0011",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Confusion or unresponsiveness (not their normal self)",
+          "normalized_form": "confusion or unresponsiveness not their normal self",
+          "locale": "en-NG",
+          "complaint_section": "neurological",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "altered_consciousness",
+              "confusion",
+              "lethargy"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Head",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == altered_consciousness (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: New confusion is itself a danger sign \u2014 escalating a 'confusion' selection to this red flag is clinically safe. lethargy (unusually sleepy) is escalate-safe in a child; clarify in an adult. This is the lead's cited near-miss (confusion -> altered_consciousness). Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:cough_common_cold",
+            "kb:acute_diarrhoea",
+            "kb:dysentery",
+            "kb:typhoid_fever",
+            "kb:cholera",
+            "kb:lower_respiratory_infection",
+            "kb:skin_infections",
+            "kb:uti",
+            "kb:eye_infections",
+            "kb:gastroenteritis",
+            "kb:fever_unknown",
+            "kb:hepatitis_b",
+            "kb:tuberculosis_suspected",
+            "kb:hiv_symptomatic",
+            "kb:sari",
+            "kb:vhf_suspected",
+            "kb:rabies_exposure",
+            "kb:lassa_fever",
+            "kb:csm",
+            "kb:yellow_fever",
+            "kb:mpox",
+            "kb:hypertension",
+            "kb:diabetes",
+            "kb:asthma",
+            "kb:anaemia",
+            "kb:cardio_symptoms",
+            "kb:minor_injury",
+            "kb:snake_bite",
+            "kb:road_traffic_injury_minor",
+            "kb:malnutrition",
+            "kb:headache",
+            "kb:musculoskeletal_pain",
+            "kb:dizziness"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0012",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Struggling to breathe even while sitting still / at rest",
+          "normalized_form": "struggling to breathe even while sitting still at rest",
+          "locale": "en-NG",
+          "complaint_section": "breathing",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "breathlessness",
+              "breathlessness_at_rest",
+              "difficulty_breathing",
+              "shortness_of_breath"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Chest",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == breathlessness_at_rest (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Red flag is breathlessness AT REST. These near-misses can be mild-to-moderate \u2014 use a clarifying question ('Is it hard to breathe even when resting, not just on activity?') before firing emergency, to avoid over-triage. This is the lead's cited near-miss (difficulty_breathing -> breathlessness_at_rest). NB exertional_breathlessness deliberately excluded \u2014 it means 'with activity', not at rest. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:lower_respiratory_infection",
+            "kb:sari"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0013",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Collapsed \u2014 cold, clammy skin, very weak or fainting",
+          "normalized_form": "collapsed cold clammy skin very weak or fainting",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "circulatory_collapse",
+              "near_fainting",
+              "pallor",
+              "severe_weakness"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == circulatory_collapse (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Non-specific near-misses \u2014 clarify for cold/clammy skin + collapse before escalating. Overlaps with 'shock'. circulatory_collapse is also a global red flag already covered by rf_006; ensure the picker path reaches it. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:malaria"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0014",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Too weak to stand, sit up, or feed without help",
+          "normalized_form": "too weak to stand sit up or feed without help",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "lethargy",
+              "prostration",
+              "severe_weakness",
+              "weakness"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == prostration (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Prostration = cannot stand/sit/feed unaided. Escalate-safe for a child who cannot feed or sit; for an adult reporting general weakness, clarify ('Are they too weak to stand or sit up on their own?'). Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:malaria",
+            "kb:fatigue_weakness"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0015",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Heavy or uncontrolled bleeding",
+          "normalized_form": "heavy or uncontrolled bleeding",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "abnormal_bleeding",
+              "bleeding",
+              "bleeding_gums",
+              "blood_in_stool",
+              "nosebleed",
+              "vaginal_bleeding"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == abnormal_bleeding (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Generic 'bleeding' is the primary near-miss. Escalation depends on severity/volume \u2014 clarify whether bleeding is heavy or won't stop. vaginal_bleeding in pregnancy is separately an obstetric emergency; a minor nosebleed or trace bleeding_gums should NOT auto-fire emergency. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:malaria"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0016",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Blue or grey lips, tongue, or face",
+          "normalized_form": "blue or grey lips tongue or face",
+          "locale": "en-NG",
+          "complaint_section": "neurological",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "blue_lips_face",
+              "difficulty_breathing",
+              "pallor"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Head",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == blue_lips_face (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: GAP: no direct cyanosis near-miss token exists in the picker. pallor (pale) may be colour-confused and difficulty_breathing often co-occurs, but neither is close. RECOMMEND adding an explicit 'Blue lips or face' picker option \u2014 as it stands caregivers have no accurate way to report this danger sign, so it is the most likely of the 12 to be missed even after this mapping. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:lower_respiratory_infection",
+            "kb:asthma",
+            "kb:chronic_respiratory",
+            "kb:neonatal_infection"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0017",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Severe dehydration \u2014 sunken eyes, no tears, not passing urine, very drowsy",
+          "normalized_form": "severe dehydration sunken eyes no tears not passing urine very drowsy",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "dehydration",
+              "severe_dehydration"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == severe_dehydration (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: The picker's existing 'dehydration' (thirsty, dry mouth) is the milder near-miss and the main confusion risk. Clarify for severe signs (sunken eyes + drowsy or not passing urine) before firing emergency \u2014 do not auto-escalate every 'dehydration' selection. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:acute_diarrhoea",
+            "kb:dysentery",
+            "kb:gastroenteritis",
+            "kb:measles",
+            "kb:vhf_suspected",
+            "kb:malnutrition"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0018",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Hard to wake, very drowsy, or not responding normally",
+          "normalized_form": "hard to wake very drowsy or not responding normally",
+          "locale": "en-NG",
+          "complaint_section": "neurological",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "confusion",
+              "impaired_consciousness",
+              "lethargy"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Head",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == impaired_consciousness (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Overlaps altered_consciousness. lethargy/confusion are escalate-safe in a child (both are IMCI danger signs); in an adult with mild drowsiness, clarify. Same near-miss tokens as altered_consciousness by design \u2014 the mobile engineer can route both red flags off the same picker selections. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:malaria",
+            "kb:cough_common_cold",
+            "kb:dysentery",
+            "kb:urti",
+            "kb:uti",
+            "kb:ear_infections",
+            "kb:dental_oral",
+            "kb:gastroenteritis",
+            "kb:measles"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0019",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Working very hard to breathe \u2014 nostrils flaring, chest pulling in, or can't speak a full sentence",
+          "normalized_form": "working very hard to breathe nostrils flaring chest pulling in or cant speak a full sentence",
+          "locale": "en-NG",
+          "complaint_section": "breathing",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "chest_indrawing",
+              "difficulty_breathing",
+              "fast_breathing",
+              "fast_breathing_child",
+              "respiratory_distress"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Chest",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == respiratory_distress (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: chest_indrawing and fast_breathing_child are strong distress indicators \u2014 escalate-safe in a child. difficulty_breathing / fast_breathing in an adult: clarify for signs of real distress (flaring, indrawing, unable to complete sentences) before firing emergency. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:malaria",
+            "kb:cough_common_cold",
+            "kb:urti",
+            "kb:dental_oral",
+            "kb:fever_unknown",
+            "kb:measles",
+            "kb:tuberculosis_suspected",
+            "kb:hiv_symptomatic",
+            "kb:lassa_fever",
+            "kb:diphtheria",
+            "kb:mpox",
+            "kb:burns",
+            "kb:snake_bite",
+            "kb:neonatal_infection",
+            "kb:allergic_reactions"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0020",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Cold hands and feet, fast weak pulse, very drowsy or fainting",
+          "normalized_form": "cold hands and feet fast weak pulse very drowsy or fainting",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "lethargy",
+              "near_fainting",
+              "pallor",
+              "severe_weakness",
+              "shock"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "yes",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == shock (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: Overlaps circulatory_collapse \u2014 both are global red flags and the picker path should reach both. Near-misses are non-specific; clarify (cold peripheries + drowsy/fast pulse) before escalating a lone pallor or near_fainting selection. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [
+            "kb:acute_diarrhoea",
+            "kb:cholera",
+            "kb:skin_infections",
+            "kb:burns"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0021",
+          "batch_id": "BATCH-06-red-flag-affecting",
+          "phrase": "Severe allergic reaction \u2014 face/throat swelling, widespread hives, and trouble breathing together",
+          "normalized_form": "severe allergic reaction face throat swelling widespread hives and trouble breathing together",
+          "locale": "en-NG",
+          "complaint_section": "general_system",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "anaphylaxis_signs",
+              "difficulty_breathing",
+              "facial_swelling",
+              "hives",
+              "wheeze"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "General",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "red_flag_affecting_association",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "unresolved",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "unresolved"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/red_flag_display_map.json",
+            "source_commit": null,
+            "source_record": "entry where token == anaphylaxis_signs (near_miss_tokens)",
+            "authoring_context": "Engineering-authored red-flag display map recording near-miss tokens and the clarification the author believed necessary before escalating.",
+            "approval_record": "proposed_unreviewed",
+            "approval_evidence": null
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "Near-miss set for a red-flag token. Source note: The red flag is these signs TOGETHER after an allergen/sting/food/drug exposure. Any single one alone is not anaphylaxis and should not auto-fire emergency \u2014 but hives or facial_swelling WITH difficulty_breathing or wheeze should escalate. RECOMMEND a combined-trigger rule (swelling/hives + breathing difficulty) rather than mapping each token individually. Escalating a near-miss selection to the red flag changes red-flag reachability and must not be resolved automatically.",
+          "lost_context": [
+            "severity distinction between the red flag and its near misses"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:red_flag_affecting_association",
+            "clinical_review_pending",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:alters_red_flag_reachability",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "BATCH-07-token-identity",
+      "title": "Clinical-token-identity proposals \u2014 BLOCKING",
+      "risk_tier": "blocking",
+      "approval_authorizes": [
+        "Nothing on approval alone \u2014 each needs clinical review, engineering-lead approval and named regression cases"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT authorise mapping breathlessness to shortness_of_breath",
+        "It does NOT authorise any token merge",
+        "It does NOT authorise publication"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 1,
+      "proposals": [
+        {
+          "proposal_id": "VC1-0009",
+          "batch_id": "BATCH-07-token-identity",
+          "phrase": "Shortness of breath",
+          "normalized_form": "shortness of breath",
+          "locale": "en-NG",
+          "complaint_section": "breathing",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": [
+              "breathlessness",
+              "shortness_of_breath"
+            ]
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": "Chest",
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "clinical_token_identity",
+          "risk_flags": {
+            "affects_scoring": "yes",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "yes",
+            "erases_laterality": "no",
+            "erases_anatomical_location": "no",
+            "erases_severity": "no",
+            "erases_duration": "no",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "unresolved",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "Wellapath-org/wellapath-knowledge-base",
+            "source_path": "mobile_handoff/picker_scoring_gap_tokens.json",
+            "source_commit": null,
+            "source_record": "tokens[] where token == breathlessness (priority 9)",
+            "authoring_context": "PR #24, merged 2026-07-29, 'picker scoring-gap tokens \u2014 9 fast-follow additions (E9)'. Engineering-authored from kb 2.4 symptom usage. The merge records an engineering deliverable; it records no clinical review.",
+            "approval_record": "engineering_reviewed",
+            "approval_evidence": "https://github.com/Wellapath-org/wellapath-knowledge-base/pull/24"
+          },
+          "evidence_level": "engineering_inference",
+          "ambiguity_notes": "'breathlessness' and 'shortness_of_breath' are BOTH existing canonical scoring tokens. 'breathlessness' carries lower_respiratory_infection(7); 'shortness_of_breath' carries sari(9), asthma(8), cardio_symptoms(7). Mapping one to the other changes which conditions a user can reach and is therefore a clinical-token-identity change, not a search alias. It must not be implemented as an alias. Both tokens remain independent.",
+          "lost_context": [
+            "which of the two distinct tokens the user meant",
+            "the condition set reachable from each token differs"
+          ],
+          "kb_scoring_references": [
+            {
+              "condition_id": "lower_respiratory_infection",
+              "weight": 7
+            }
+          ],
+          "rules_red_flag_references": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "blocking_change_class:clinical_token_identity",
+            "clinical_review_pending",
+            "product_review_pending",
+            "unresolved_risk_flag:changes_scoring_eligibility"
+          ]
+        }
+      ]
+    },
+    {
+      "batch_id": "BATCH-08-evidence-gaps",
+      "title": "Unresolved evidence gaps \u2014 no proposal, review needed to decide whether one is possible",
+      "risk_tier": "blocking",
+      "approval_authorizes": [
+        "Nothing. These are questions, not proposals"
+      ],
+      "approval_does_not_authorize": [
+        "It does NOT assign any canonical token",
+        "Approving an item here only means 'a proposal may now be drafted'"
+      ],
+      "required_reviewers": [
+        "clinical",
+        "product"
+      ],
+      "batch_status": "pending",
+      "proposal_count": 4,
+      "proposals": [
+        {
+          "proposal_id": "VC1-0022",
+          "batch_id": "BATCH-08-evidence-gaps",
+          "phrase": "my lower back hurts",
+          "normalized_form": "my lower back hurts",
+          "locale": "en-NG",
+          "complaint_section": "unassigned",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": null,
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "insufficient_evidence_do_not_propose",
+          "risk_flags": {
+            "affects_scoring": "no",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "unresolved",
+            "erases_anatomical_location": "unresolved",
+            "erases_severity": "unresolved",
+            "erases_duration": "unresolved",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "(none \u2014 task brief)",
+            "source_path": "proposals/catalogue_v1/roadmap_examples.json",
+            "source_commit": null,
+            "source_record": "RME-001",
+            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "approval_record": "unresolved",
+            "approval_evidence": null
+          },
+          "evidence_level": "example_only",
+          "ambiguity_notes": "Product example, not a proposed mapping. Reviewer-visible candidate tokens sharing a normalized word: back_pain, back_spine, lower_abdominal_pain, lower_limb. This list is a review aid produced by word overlap; it is NOT a resolution and no token is assigned. The phrase carries context the vocabulary does not model as one token.",
+          "lost_context": [
+            "anatomical qualifier or laterality present in the phrase",
+            "first-person report vs. carer report",
+            "severity and duration are unstated"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [],
+          "reviewer_visible_candidates": [
+            "back_pain",
+            "back_spine",
+            "lower_abdominal_pain",
+            "lower_limb"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "insufficient_evidence",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:erases_anatomical_location",
+            "unresolved_risk_flag:erases_duration",
+            "unresolved_risk_flag:erases_laterality",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0023",
+          "batch_id": "BATCH-08-evidence-gaps",
+          "phrase": "my child is weak",
+          "normalized_form": "my child is weak",
+          "locale": "en-NG",
+          "complaint_section": "unassigned",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": null,
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "insufficient_evidence_do_not_propose",
+          "risk_flags": {
+            "affects_scoring": "no",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "unresolved",
+            "erases_anatomical_location": "unresolved",
+            "erases_severity": "unresolved",
+            "erases_duration": "unresolved",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "unresolved",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "(none \u2014 task brief)",
+            "source_path": "proposals/catalogue_v1/roadmap_examples.json",
+            "source_commit": null,
+            "source_record": "RME-002",
+            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "approval_record": "unresolved",
+            "approval_evidence": null
+          },
+          "evidence_level": "example_only",
+          "ambiguity_notes": "Product example, not a proposed mapping. Reviewer-visible candidate tokens sharing a normalized word: fast_breathing_child, not_eating_drinking_child. This list is a review aid produced by word overlap; it is NOT a resolution and no token is assigned. The phrase carries context the vocabulary does not model as one token.",
+          "lost_context": [
+            "age group \u2014 adult and paediatric concepts must not merge",
+            "first-person report vs. carer report",
+            "severity and duration are unstated"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [],
+          "reviewer_visible_candidates": [
+            "fast_breathing_child",
+            "not_eating_drinking_child"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "insufficient_evidence",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:erases_anatomical_location",
+            "unresolved_risk_flag:erases_duration",
+            "unresolved_risk_flag:erases_laterality",
+            "unresolved_risk_flag:erases_severity",
+            "unresolved_risk_flag:merges_adult_and_paediatric"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0024",
+          "batch_id": "BATCH-08-evidence-gaps",
+          "phrase": "my eye is painful",
+          "normalized_form": "my eye is painful",
+          "locale": "en-NG",
+          "complaint_section": "unassigned",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": null,
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "insufficient_evidence_do_not_propose",
+          "risk_flags": {
+            "affects_scoring": "no",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "unresolved",
+            "erases_anatomical_location": "unresolved",
+            "erases_severity": "unresolved",
+            "erases_duration": "unresolved",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "(none \u2014 task brief)",
+            "source_path": "proposals/catalogue_v1/roadmap_examples.json",
+            "source_commit": null,
+            "source_record": "RME-003",
+            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "approval_record": "unresolved",
+            "approval_evidence": null
+          },
+          "evidence_level": "example_only",
+          "ambiguity_notes": "Product example, not a proposed mapping. Reviewer-visible candidate tokens sharing a normalized word: eye, eye_discharge, eye_itchiness, eye_pain, eye_redness. This list is a review aid produced by word overlap; it is NOT a resolution and no token is assigned. The phrase carries context the vocabulary does not model as one token.",
+          "lost_context": [
+            "first-person report vs. carer report",
+            "severity and duration are unstated"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [],
+          "reviewer_visible_candidates": [
+            "eye",
+            "eye_discharge",
+            "eye_itchiness",
+            "eye_pain",
+            "eye_redness"
+          ],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "insufficient_evidence",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:erases_anatomical_location",
+            "unresolved_risk_flag:erases_duration",
+            "unresolved_risk_flag:erases_laterality",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        },
+        {
+          "proposal_id": "VC1-0025",
+          "batch_id": "BATCH-08-evidence-gaps",
+          "phrase": "I feel dizzy",
+          "normalized_form": "i feel dizzy",
+          "locale": "en-NG",
+          "complaint_section": "unassigned",
+          "proposed_target": {
+            "canonical_token_id": null,
+            "ambiguity_set": []
+          },
+          "proposed_complaint_group": null,
+          "proposed_body_area": null,
+          "proposed_severity_applicable": null,
+          "proposed_duration_applicable": null,
+          "display_safe_proposal": "not_proposed",
+          "primary_change_class": "insufficient_evidence_do_not_propose",
+          "risk_flags": {
+            "affects_scoring": "no",
+            "affects_red_flags": "no",
+            "connects_two_existing_scoring_tokens": "no",
+            "erases_laterality": "unresolved",
+            "erases_anatomical_location": "unresolved",
+            "erases_severity": "unresolved",
+            "erases_duration": "unresolved",
+            "erases_negation": "no",
+            "merges_adult_and_paediatric": "no",
+            "merges_pregnancy_specific_and_general": "no",
+            "merges_symptom_and_diagnosis": "no",
+            "changes_scoring_eligibility": "no",
+            "alters_red_flag_reachability": "no"
+          },
+          "provenance": {
+            "source_repository": "(none \u2014 task brief)",
+            "source_path": "proposals/catalogue_v1/roadmap_examples.json",
+            "source_commit": null,
+            "source_record": "RME-004",
+            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "approval_record": "unresolved",
+            "approval_evidence": null
+          },
+          "evidence_level": "example_only",
+          "ambiguity_notes": "Product example, not a proposed mapping. Reviewer-visible candidate tokens sharing a normalized word: none. This list is a review aid produced by word overlap; it is NOT a resolution and no token is assigned. The phrase carries context the vocabulary does not model as one token.",
+          "lost_context": [
+            "first-person report vs. carer report",
+            "severity and duration are unstated"
+          ],
+          "kb_scoring_references": [],
+          "rules_red_flag_references": [],
+          "reviewer_visible_candidates": [],
+          "clinical_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "product_review": {
+            "decision": "pending",
+            "reviewer": null,
+            "review_date": null,
+            "rationale": null,
+            "evidence": null
+          },
+          "publication_eligible": false,
+          "publication_blocked_by": [
+            "clinical_review_pending",
+            "insufficient_evidence",
+            "no_approval_record",
+            "product_review_pending",
+            "unresolved_risk_flag:erases_anatomical_location",
+            "unresolved_risk_flag:erases_duration",
+            "unresolved_risk_flag:erases_laterality",
+            "unresolved_risk_flag:erases_severity"
+          ]
+        }
+      ]
+    }
+  ]
+}

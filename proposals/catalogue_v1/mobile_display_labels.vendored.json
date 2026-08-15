@@ -1,0 +1,372 @@
+{
+  "_metadata": {
+    "artifact_id": "mobile_display_labels",
+    "version": "1.0",
+    "country": "ng",
+    "description": "Display labels currently shipped in the WellaPath Mobile symptom picker. Vendored so the catalogue generator has a deterministic, offline input; the Knowledge Base does not read the Mobile repository at build time.",
+    "vendored_from": {
+      "repository": "Wellapath-org/wellapath-mobile",
+      "commit": "ef66ad259f41c110f34ed53e5fef0ebd3041e222",
+      "path": "lib/core/constants/symptom_display_map.dart",
+      "symbol": "kSymptomDisplayMap"
+    },
+    "approval_note": "These labels ship in the product today. That is PRODUCT-SHIPPED status, not a recorded clinical or product APPROVAL of the wording for Vocabulary 2.0 display_safe purposes. No approval is implied by presence here.",
+    "distinct_tokens": 117,
+    "total_label_entries": 119
+  },
+  "labels": {
+    "abdominal_cramps": [
+      "Abdominal cramps"
+    ],
+    "abdominal_pain": [
+      "Stomach pain"
+    ],
+    "abnormal_bleeding": [
+      "Heavy or uncontrolled bleeding"
+    ],
+    "altered_consciousness": [
+      "Confusion or unresponsiveness (not their normal self)"
+    ],
+    "anaphylaxis_signs": [
+      "Severe allergic reaction — face/throat swelling, widespread hives, and trouble breathing together"
+    ],
+    "animal_bite": [
+      "Bitten by an animal"
+    ],
+    "back_pain": [
+      "Back pain"
+    ],
+    "bad_breath": [
+      "Bad breath"
+    ],
+    "bilateral_oedema": [
+      "Swelling in both feet/legs"
+    ],
+    "bite_mark": [
+      "Mark left by a bite"
+    ],
+    "bleeding": [
+      "Bleeding"
+    ],
+    "blistering": [
+      "Blisters on the skin"
+    ],
+    "blood_in_urine": [
+      "Blood in urine"
+    ],
+    "blue_lips_face": [
+      "Blue or grey lips, tongue, or face"
+    ],
+    "blurred_vision": [
+      "Blurry vision"
+    ],
+    "body_pain": [
+      "Body pain",
+      "Muscle pain"
+    ],
+    "boils": [
+      "Boils on the skin"
+    ],
+    "breathlessness_at_rest": [
+      "Struggling to breathe even while sitting still / at rest"
+    ],
+    "charred_skin": [
+      "Burnt / charred skin"
+    ],
+    "chest_pain": [
+      "Chest pain"
+    ],
+    "chest_tightness": [
+      "Tightness in the chest"
+    ],
+    "chills": [
+      "Chills"
+    ],
+    "chronic_cough": [
+      "Cough lasting more than 2-3 weeks"
+    ],
+    "chronic_diarrhoea": [
+      "Diarrhoea lasting more than 2 weeks"
+    ],
+    "circulatory_collapse": [
+      "Collapsed — cold, clammy skin, very weak or fainting"
+    ],
+    "confusion": [
+      "Confusion / not thinking clearly"
+    ],
+    "cough": [
+      "Cough"
+    ],
+    "dark_urine": [
+      "Dark urine"
+    ],
+    "diarrhoea": [
+      "Diarrhoea / watery stool"
+    ],
+    "difficulty_breathing": [
+      "Difficulty breathing"
+    ],
+    "difficulty_swallowing": [
+      "Difficulty swallowing"
+    ],
+    "dizziness": [
+      "Dizziness"
+    ],
+    "excessive_thirst": [
+      "Unusually thirsty"
+    ],
+    "exertional_breathlessness": [
+      "Breathless with activity or exercise"
+    ],
+    "eye_discharge": [
+      "Discharge from the eye"
+    ],
+    "eye_itchiness": [
+      "Itchy, irritated eyes"
+    ],
+    "eye_pain": [
+      "Eye pain"
+    ],
+    "eye_redness": [
+      "Red eyes"
+    ],
+    "fast_breathing": [
+      "Rapid breathing (adult)"
+    ],
+    "fast_breathing_child": [
+      "Fast breathing"
+    ],
+    "fast_breathing_neonate": [
+      "Fast breathing (in a newborn baby)"
+    ],
+    "fatigue": [
+      "Fatigue"
+    ],
+    "fever": [
+      "Fever"
+    ],
+    "frequent_urination": [
+      "Urinating more often than usual"
+    ],
+    "general_weakness": [
+      "General weakness"
+    ],
+    "head_pain": [
+      "Head pain"
+    ],
+    "headache": [
+      "Headache"
+    ],
+    "hives": [
+      "Itchy raised bumps on the skin (hives)"
+    ],
+    "hoarse_voice": [
+      "Hoarse or rough voice"
+    ],
+    "impaired_consciousness": [
+      "Hard to wake, very drowsy, or not responding normally"
+    ],
+    "inability_to_drink": [
+      "Not able to drink or feed at all"
+    ],
+    "irritability": [
+      "Unusually irritable or fussy"
+    ],
+    "itchy_eyes": [
+      "Itchy eyes"
+    ],
+    "itchy_rash": [
+      "Itchy rash"
+    ],
+    "joint_pain": [
+      "Joint pain"
+    ],
+    "leg_swelling": [
+      "Swelling in the leg"
+    ],
+    "lethargy": [
+      "Unusually sleepy or low energy"
+    ],
+    "light_headedness": [
+      "Feeling light-headed"
+    ],
+    "limb_weakness": [
+      "Weakness in an arm or leg"
+    ],
+    "limited_movement": [
+      "Difficulty moving normally"
+    ],
+    "local_swelling": [
+      "Swelling in one spot"
+    ],
+    "low_energy": [
+      "Low energy"
+    ],
+    "mild_cough": [
+      "Mild cough"
+    ],
+    "mild_headache": [
+      "Mild headache"
+    ],
+    "mild_sore_throat": [
+      "Mild sore throat"
+    ],
+    "mild_swelling": [
+      "Mild swelling"
+    ],
+    "mouth_sores": [
+      "Sores in the mouth"
+    ],
+    "muscle_stiffness": [
+      "Stiff muscles"
+    ],
+    "nausea": [
+      "Feeling sick or queasy",
+      "Nausea"
+    ],
+    "near_fainting": [
+      "Feeling like you might faint"
+    ],
+    "neonatal_fever": [
+      "Fever in a newborn baby"
+    ],
+    "night_sweats": [
+      "Sweating heavily at night"
+    ],
+    "nosebleed": [
+      "Nosebleed"
+    ],
+    "one_sided_headache": [
+      "Headache on one side of the head"
+    ],
+    "oral_thrush": [
+      "White patches in the mouth (thrush)"
+    ],
+    "pain": [
+      "Wrist pain"
+    ],
+    "pain_at_burn": [
+      "Pain at the burn site"
+    ],
+    "pain_on_chewing": [
+      "Pain when chewing"
+    ],
+    "palpitations": [
+      "Fast or pounding heartbeat (palpitations)"
+    ],
+    "poor_appetite": [
+      "Poor appetite"
+    ],
+    "poor_feeding": [
+      "Feeding poorly (baby or young child)"
+    ],
+    "poor_growth": [
+      "Poor growth (not gaining weight/height)"
+    ],
+    "pressure_headache": [
+      "Headache that feels like pressure"
+    ],
+    "prostration": [
+      "Too weak to stand, sit up, or feed without help"
+    ],
+    "ptosis": [
+      "Drooping eyelid"
+    ],
+    "pus_discharge": [
+      "Pus coming from the skin"
+    ],
+    "recurrent_infections": [
+      "Getting infections again and again"
+    ],
+    "reduced_daily_function": [
+      "Struggling with everyday activities"
+    ],
+    "repeated_infections": [
+      "Repeated infections"
+    ],
+    "respiratory_distress": [
+      "t speak a full sentence"
+    ],
+    "runny_nose": [
+      "Runny nose"
+    ],
+    "seizures": [
+      "Seizures"
+    ],
+    "severe_dehydration": [
+      "Severe dehydration — sunken eyes, no tears, not passing urine, very drowsy"
+    ],
+    "shock": [
+      "Cold hands and feet, fast weak pulse, very drowsy or fainting"
+    ],
+    "shortness_of_breath": [
+      "Shortness of breath"
+    ],
+    "skin_redness": [
+      "Redness of the skin"
+    ],
+    "skin_swelling": [
+      "Swelling of the skin"
+    ],
+    "sneezing": [
+      "Sneezing"
+    ],
+    "spinning_sensation": [
+      "Feeling like the room is spinning"
+    ],
+    "spreading_swelling": [
+      "Swelling that is spreading"
+    ],
+    "stridor": [
+      "Noisy, harsh sound when breathing in"
+    ],
+    "sweating": [
+      "Sweating"
+    ],
+    "swelling": [
+      "Swollen hands"
+    ],
+    "swollen_eyelids": [
+      "Swollen eyelids"
+    ],
+    "swollen_gums": [
+      "Swollen gums"
+    ],
+    "swollen_neck": [
+      "Swollen neck"
+    ],
+    "throat_membrane": [
+      "A grey-white coating in the throat"
+    ],
+    "throbbing_headache": [
+      "Throbbing headache"
+    ],
+    "tiredness": [
+      "Tiredness"
+    ],
+    "toothache": [
+      "Toothache"
+    ],
+    "unsteadiness": [
+      "Feeling unsteady on your feet"
+    ],
+    "vomiting": [
+      "Vomiting"
+    ],
+    "watery_stool": [
+      "Watery stool"
+    ],
+    "weakness": [
+      "Weakness"
+    ],
+    "weight_loss": [
+      "Losing weight without trying"
+    ],
+    "wheeze": [
+      "Wheeze / whistling sound when breathing"
+    ],
+    "wound_at_bite": [
+      "Wound where the bite happened"
+    ]
+  }
+}

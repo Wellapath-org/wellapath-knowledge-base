@@ -1,0 +1,44 @@
+{
+  "_metadata": {
+    "artifact_id": "roadmap_example_complaints",
+    "version": "1.0",
+    "country": "ng",
+    "description": "Product-roadmap example user complaints, recorded verbatim for assessment. These are ILLUSTRATIONS OF USER LANGUAGE, not proposed mappings. No canonical token is assigned to any of them here.",
+    "provenance": {
+      "source": "I2 / W2 Step 5 task brief (product roadmap examples)",
+      "repository_attributable": false,
+      "note": "These strings were supplied in the step brief. A search of this repository found no committed roadmap document containing them, so they carry no file, commit or line provenance. They are recorded with that limitation stated rather than back-filled with an invented source.",
+      "searched": [
+        "*.md and *.json across the repository at 550e8f17 — no match"
+      ]
+    },
+    "handling_rule": "Each example is assessed for candidate tokens, lost context and ambiguity. None may be assigned a canonical token without evidence and explicit clinical + product review. An example that cannot be mapped safely stays an identified content gap.",
+    "total_examples": 4
+  },
+  "examples": [
+    {
+      "example_id": "RME-001",
+      "phrase": "my lower back hurts",
+      "locale": "en-NG",
+      "assessment_hint": "anatomical_site_plus_pain"
+    },
+    {
+      "example_id": "RME-002",
+      "phrase": "my child is weak",
+      "locale": "en-NG",
+      "assessment_hint": "age_group_plus_nonspecific_symptom"
+    },
+    {
+      "example_id": "RME-003",
+      "phrase": "my eye is painful",
+      "locale": "en-NG",
+      "assessment_hint": "anatomical_site_plus_pain"
+    },
+    {
+      "example_id": "RME-004",
+      "phrase": "I feel dizzy",
+      "locale": "en-NG",
+      "assessment_hint": "direct_symptom_report"
+    }
+  ]
+}

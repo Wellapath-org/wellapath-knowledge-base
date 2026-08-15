@@ -1,0 +1,414 @@
+{
+  "_metadata": {
+    "artifact_id": "vocabulary_catalogue_risk_summary",
+    "version": "1.0",
+    "generated_by": "tools/build_catalogue_review.py"
+  },
+  "blocking_proposals": [
+    {
+      "proposal_id": "VC1-0001",
+      "phrase": "Skin pulling in between the ribs when breathing",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0002",
+      "phrase": "Blood in stool",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0003",
+      "phrase": "Vaginal bleeding",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0004",
+      "phrase": "Bleeding gums",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0005",
+      "phrase": "Signs of dehydration (very thirsty, dry mouth, sunken eyes)",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0006",
+      "phrase": "Unusually pale skin",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0007",
+      "phrase": "Severe weakness",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0008",
+      "phrase": "Swelling of the face",
+      "primary_change_class": "display_label_only",
+      "blocked_by": [
+        "clinical_review_pending",
+        "product_review_pending"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0010",
+      "phrase": "Not able to drink or feed at all",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0011",
+      "phrase": "Confusion or unresponsiveness (not their normal self)",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0012",
+      "phrase": "Struggling to breathe even while sitting still / at rest",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0013",
+      "phrase": "Collapsed \u2014 cold, clammy skin, very weak or fainting",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0014",
+      "phrase": "Too weak to stand, sit up, or feed without help",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0015",
+      "phrase": "Heavy or uncontrolled bleeding",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0016",
+      "phrase": "Blue or grey lips, tongue, or face",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0017",
+      "phrase": "Severe dehydration \u2014 sunken eyes, no tears, not passing urine, very drowsy",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0018",
+      "phrase": "Hard to wake, very drowsy, or not responding normally",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0019",
+      "phrase": "Working very hard to breathe \u2014 nostrils flaring, chest pulling in, or can't speak a full sentence",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0020",
+      "phrase": "Cold hands and feet, fast weak pulse, very drowsy or fainting",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0021",
+      "phrase": "Severe allergic reaction \u2014 face/throat swelling, widespread hives, and trouble breathing together",
+      "primary_change_class": "red_flag_affecting_association",
+      "blocked_by": [
+        "blocking_change_class:red_flag_affecting_association",
+        "clinical_review_pending",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:alters_red_flag_reachability",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0009",
+      "phrase": "Shortness of breath",
+      "primary_change_class": "clinical_token_identity",
+      "blocked_by": [
+        "blocking_change_class:clinical_token_identity",
+        "clinical_review_pending",
+        "product_review_pending",
+        "unresolved_risk_flag:changes_scoring_eligibility"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0022",
+      "phrase": "my lower back hurts",
+      "primary_change_class": "insufficient_evidence_do_not_propose",
+      "blocked_by": [
+        "clinical_review_pending",
+        "insufficient_evidence",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:erases_anatomical_location",
+        "unresolved_risk_flag:erases_duration",
+        "unresolved_risk_flag:erases_laterality",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0023",
+      "phrase": "my child is weak",
+      "primary_change_class": "insufficient_evidence_do_not_propose",
+      "blocked_by": [
+        "clinical_review_pending",
+        "insufficient_evidence",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:erases_anatomical_location",
+        "unresolved_risk_flag:erases_duration",
+        "unresolved_risk_flag:erases_laterality",
+        "unresolved_risk_flag:erases_severity",
+        "unresolved_risk_flag:merges_adult_and_paediatric"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0024",
+      "phrase": "my eye is painful",
+      "primary_change_class": "insufficient_evidence_do_not_propose",
+      "blocked_by": [
+        "clinical_review_pending",
+        "insufficient_evidence",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:erases_anatomical_location",
+        "unresolved_risk_flag:erases_duration",
+        "unresolved_risk_flag:erases_laterality",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0025",
+      "phrase": "I feel dizzy",
+      "primary_change_class": "insufficient_evidence_do_not_propose",
+      "blocked_by": [
+        "clinical_review_pending",
+        "insufficient_evidence",
+        "no_approval_record",
+        "product_review_pending",
+        "unresolved_risk_flag:erases_anatomical_location",
+        "unresolved_risk_flag:erases_duration",
+        "unresolved_risk_flag:erases_laterality",
+        "unresolved_risk_flag:erases_severity"
+      ]
+    }
+  ],
+  "unresolved_risk_flags": {
+    "alters_red_flag_reachability": [
+      "VC1-0010",
+      "VC1-0011",
+      "VC1-0012",
+      "VC1-0013",
+      "VC1-0014",
+      "VC1-0015",
+      "VC1-0016",
+      "VC1-0017",
+      "VC1-0018",
+      "VC1-0019",
+      "VC1-0020",
+      "VC1-0021"
+    ],
+    "changes_scoring_eligibility": [
+      "VC1-0009"
+    ],
+    "erases_anatomical_location": [
+      "VC1-0022",
+      "VC1-0023",
+      "VC1-0024",
+      "VC1-0025"
+    ],
+    "erases_duration": [
+      "VC1-0022",
+      "VC1-0023",
+      "VC1-0024",
+      "VC1-0025"
+    ],
+    "erases_laterality": [
+      "VC1-0022",
+      "VC1-0023",
+      "VC1-0024",
+      "VC1-0025"
+    ],
+    "erases_severity": [
+      "VC1-0010",
+      "VC1-0011",
+      "VC1-0012",
+      "VC1-0013",
+      "VC1-0014",
+      "VC1-0015",
+      "VC1-0016",
+      "VC1-0017",
+      "VC1-0018",
+      "VC1-0019",
+      "VC1-0020",
+      "VC1-0021",
+      "VC1-0022",
+      "VC1-0023",
+      "VC1-0024",
+      "VC1-0025"
+    ],
+    "merges_adult_and_paediatric": [
+      "VC1-0023"
+    ]
+  },
+  "connects_two_existing_scoring_tokens": [
+    "VC1-0010",
+    "VC1-0011",
+    "VC1-0012",
+    "VC1-0013",
+    "VC1-0014",
+    "VC1-0015",
+    "VC1-0016",
+    "VC1-0017",
+    "VC1-0018",
+    "VC1-0019",
+    "VC1-0020",
+    "VC1-0021",
+    "VC1-0009"
+  ],
+  "carried_forward_unresolved_issues": [
+    {
+      "id": "IMCI-TIER-KEYS",
+      "detail": "Three unresolved IMCI tier keys: pneumonia, severe_pneumonia, very_severe_disease.",
+      "status": "unresolved \u2014 not addressed in this step"
+    },
+    {
+      "id": "BREATHLESSNESS-SOB",
+      "detail": "breathlessness vs shortness_of_breath: both remain independent canonical scoring tokens. The mapping proposal is classified clinical_token_identity and remains unapproved and unimplemented.",
+      "status": "unresolved \u2014 decision required"
+    },
+    {
+      "id": "CASE-BANK-CLINICAL-SIGNOFF",
+      "detail": "The 239-case bank is engineering-approved and specification-derived with no recorded clinical approval.",
+      "status": "unresolved \u2014 clinical sign-off required"
+    },
+    {
+      "id": "CB_211",
+      "detail": "Option B (correct the case-bank expectation) vs Option C (engine-level empty-input result), due before external beta.",
+      "status": "unresolved \u2014 Option D registry holds it fail-closed meanwhile"
+    },
+    {
+      "id": "ISSUE-38",
+      "detail": "wellapath-mobile issue #38 \u2014 malaria base_weight dominates a mixed malaria/diarrhoea presentation (CB_232: malaria 26 vs acute_diarrhoea 21, margin 5).",
+      "status": "unresolved \u2014 clinical review requested"
+    },
+    {
+      "id": "NO-DOCUMENTED-TIE-BREAK",
+      "detail": "No scoring tie-break is documented. CB_232 is not a tie (margin 5), so no tie-break was exercised or implemented.",
+      "status": "unresolved \u2014 policy absent by design, not by oversight"
+    }
+  ]
+}

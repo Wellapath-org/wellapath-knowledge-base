@@ -225,3 +225,96 @@ external-beta approval, not production approval. **CB_211 remains unresolved.**
 3. Issue #38 — malaria base_weight in mixed presentations; CB_232/CB_225 are
    worked examples for that monitoring item.
 4. No documented tie-break in the scoring engine (new, low priority).
+
+---
+
+# I2 / W2 Step 5 — Vocabulary 2.0 Clinical/Product Catalogue Review Package
+
+**Branch:** `feat/i2-w2-catalogue-review-package` (off `develop` `550e8f17`)
+**Date:** 2026-08-15
+
+## Status: review-ready — nothing approved, nothing publishable
+
+Builds the package clinical and product reviewers need to decide the Vocabulary
+2.0 catalogue item by item. **Every decision is `pending`, all 25 proposals are
+publication-blocked, and the candidate artifact is byte-identical** to the one
+merged at `dceecde2` (`07f93596…4e34cd2d`).
+
+## What was produced
+
+| Artifact | Contents |
+|---|---|
+| `review/catalogue_v1/catalogue_review_v1.json` | 25 proposals, 8 batches |
+| `review/catalogue_v1/display_label_review_v1.json` | review rows for **all 295** tokens |
+| `review/catalogue_v1/impact_report_v1.json` | counts by class, section, batch, state |
+| `review/catalogue_v1/risk_summary_v1.json` | blockers and carried-forward issues |
+| `schema/catalogue_review.schema.json` | proposal + decision contract |
+| `tools/build_catalogue_review.py` | deterministic generator, `--check` mode |
+| `tools/validate_catalogue.py` | fail-closed validators |
+| `testing/test_catalogue_review.py` | 57 checks incl. the pending dry run |
+| `docs/VOCABULARY_CATALOGUE_GOVERNANCE.md` | governance workflow |
+
+Inputs are committed and provenance-bearing; Mobile display labels are vendored
+(`proposals/catalogue_v1/mobile_display_labels.vendored.json`) so the generator
+never reads another repository at build time.
+
+## Proposals
+
+| Primary class | Count |
+|---|---|
+| `display_label_only` | 8 |
+| `red_flag_affecting_association` | 12 |
+| `clinical_token_identity` | 1 |
+| `insufficient_evidence_do_not_propose` | 4 |
+
+9 affect scoring · 12 affect red flags · 13 ambiguity sets · **0 normalization
+collisions** · **0 publication-eligible**.
+
+## The nine picker scoring-gap tokens (PR #24)
+
+All nine **already exist** as canonical symptom tokens in v1.1 and already carry
+kb weight; none is reachable from the Mobile picker. So eight are
+`display_label_only` — a reachability gap, not new vocabulary. No new token is
+needed for any of them.
+
+The ninth is not: `breathlessness` → `shortness_of_breath` is proposed as an
+alias, but both are existing canonical scoring tokens —
+`breathlessness` carries `lower_respiratory_infection` (7), `shortness_of_breath`
+carries `sari` (9), `asthma` (8), `cardio_symptoms` (7). Mapping one to the other
+changes reachability across four conditions, so it is classified
+**`clinical_token_identity`**, is publication-blocked, and **is not implemented**.
+Both tokens remain independent and active.
+
+## Roadmap examples
+
+The four example complaints carry **no repository provenance** — a search found
+no committed roadmap document containing them. Each is recorded as
+`insufficient_evidence_do_not_propose` with its lost context named; **no
+canonical token is assigned to any of them.**
+
+## Local-language gap: OPEN
+
+No authoritative Hausa/Yoruba/Igbo/Pidgin source exists in this repository. **No
+local term was generated, translated or inferred.** A sourced catalogue is
+required before any non-English content can be proposed.
+
+## Verification
+
+`python3 tools/run_w2_checks.py` — **all 16 checks pass** (13 pre-existing plus
+3 new). Generation is byte-reproducible; the validator recomputes publication
+eligibility and fails if a stored value disagrees. A control test proves the
+eligibility gate is a real gate: a fully approved, low-risk, fully-provenanced
+item *does* become eligible.
+
+Dry run with all decisions pending: zero eligible proposals, candidate hash
+unchanged, alias count 0, association count 0, `display_safe` false for all 295,
+`release_status` still `candidate_unapproved`.
+
+## Still open (unchanged, none repaired here)
+
+1. **CB_211** — Option B vs C, due before external beta.
+2. **Case bank v1.0 clinical sign-off** — still absent.
+3. **Issue #38** — malaria base_weight in mixed presentations.
+4. **No documented tie-break** — CB_232's margin was 5, so none was exercised.
+5. **Three IMCI tier keys** — `pneumonia`, `severe_pneumonia`, `very_severe_disease`.
+6. **`breathlessness` vs `shortness_of_breath`** — decision required.
