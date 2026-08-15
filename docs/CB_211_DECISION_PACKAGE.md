@@ -1,8 +1,9 @@
 # CB_211 — Decision Package
 
 **Phase:** I2 / W2 Step 3 · **Owner of this document:** Knowledge Base / Data Engineering
-**Status:** provisional **engineering** classification — **no clinical ruling made or implied**
-**Blocks:** Mobile PR #71 remains unmerged until a disposition is recorded
+**Status:** **engineering disposition recorded — Option D adopted (I2/W2 Step 3A).**
+CB_211 remains **unresolved**; **no clinical ruling made or implied**
+**Registry:** `testing/known_findings.json` → `engineering_disposition: option_d_adopted`
 
 Machine-readable evidence: `reports/case_findings_v1.json`
 Reproduce: `python3 tools/report_case_findings.py`
@@ -290,6 +291,18 @@ does not pretend the failure is a pass.
 
 **Options B, C and D are not mutually exclusive.** D is the natural interim
 while B or C is decided.
+
+### Disposition recorded (I2/W2 Step 3A)
+
+> **Option D is ADOPTED as the engineering disposition.** CB_211 is preserved
+> byte-for-byte and registered in `testing/known_findings.json` as an explicit,
+> unresolved, fail-closed known discrepancy.
+>
+> **Options B and C are DEFERRED** for clinical/product adjudication **before
+> external beta**. CB_232 requires no scoring, KB, case-bank or tie-break change.
+>
+> This is an **engineering** disposition. It is not clinical approval, not
+> external-beta approval, and not production approval. CB_211 is **not resolved**.
 
 ---
 

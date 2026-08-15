@@ -4,11 +4,35 @@
     "version": "1.0",
     "country": "ng",
     "schema_version": "1.0",
-    "status": "PROPOSED — not wired into any test runner",
-    "phase": "I2 / W2 Step 3",
-    "description": "Registry of case-bank findings that are known, adjudicated at engineering level, and awaiting a final decision. A record here does NOT waive a failure: the case still executes, its exact observed output is asserted, and any deviation fails the run.",
+    "status": "ADOPTED (engineering disposition) — not yet wired into a test runner",
+    "phase": "I2 / W2 Step 3A",
+    "engineering_disposition": "option_d_adopted",
+    "engineering_disposition_record": {
+      "option": "D_registry_until_adjudicated",
+      "decided_by": "engineering lead",
+      "decided_at_step": "I2 / W2 Step 3A",
+      "authority": "engineering",
+      "is_clinical_approval": false,
+      "is_external_beta_approval": false,
+      "is_production_approval": false,
+      "what_it_authorises": [
+        "CB_211 is preserved byte-for-byte and registered as an explicit, unresolved, fail-closed known discrepancy.",
+        "CB_211 must execute on every regression run.",
+        "Its exact observed result must be asserted.",
+        "It must never be counted as passed.",
+        "Any change in its observed behaviour fails the run and requires registry review.",
+        "Any additional case mismatch fails the run."
+      ],
+      "what_it_does_not_authorise": [
+        "It does not resolve CB_211.",
+        "It does not decide between Option B and Option C — both are deferred for clinical/product adjudication before external beta.",
+        "It does not constitute clinical approval, external-beta approval or production approval.",
+        "It does not permit editing testing/case_bank_v1.json or any expected output."
+      ]
+    },
+    "description": "Registry of case-bank findings that are known, adjudicated at engineering level, and awaiting a final clinical/product decision. A record here does NOT waive a failure: the case still executes, its exact observed output is asserted, and any deviation fails the run.",
     "not_yet_wired": [
-      "This file is a proposal. No Mobile test runner reads it, and this PR does not change Mobile.",
+      "Option D is adopted as the engineering disposition, but no Mobile test runner reads this file yet.",
       "Wiring it is a separate, separately reviewed Mobile change — see docs/KNOWN_FINDINGS_CONTRACT.md section 4."
     ],
     "governing_rule": "A known finding is a pinned observation, never a suppressed failure. If a registered case starts behaving differently — better or worse — the run must fail, because the registry's description of reality has become wrong.",
@@ -102,7 +126,13 @@
         "engine_behaviour_pinned_by": "wellapath-mobile test/engine/engine_wiring_test.dart:218-229"
       },
 
-      "decision_status": "open_awaiting_engineering_lead_and_clinical",
+      "engineering_disposition": "option_d_adopted",
+      "decision_status": "open_option_d_adopted_awaiting_clinical_product_adjudication",
+      "decision_status_meaning": "The ENGINEERING disposition is settled: preserve CB_211 unchanged and hold it here, fail-closed, until adjudicated. The finding itself remains UNRESOLVED — the clinical/product choice between Option B (correct the expectation in a new versioned bank) and Option C (engine-level empty-input result) is deferred and must be made before external beta.",
+      "deferred_options": {
+        "B_correct_case_bank_expectation": "deferred — clinical/product adjudication required before external beta",
+        "C_engine_level_empty_input_result": "deferred — clinical/product adjudication required before external beta; see wellapath-mobile issue #35"
+      },
 
       "owner": {
         "engine_contract_question": "engineering lead",

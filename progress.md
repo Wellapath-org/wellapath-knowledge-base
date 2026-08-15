@@ -199,12 +199,28 @@ against token_dictionary 1.1 / kb 2.4 / rules 2.2 — 239 executed, 235 passed,
   artifacts unchanged; candidate still `candidate_unapproved` / `may_publish:
   false`; live manifest still on token_dictionary 1.1.
 
-### Still open (unchanged by this step)
+### Engineering disposition (Step 3A) — Option D adopted
 
-1. **CB_211 disposition** — options A/D (preserve + registry) vs B (correct the
-   expectation in a new versioned bank) vs C (engine-level empty-input result,
-   issue #35's question). **Engineering lead**, with clinical input on whether
-   `urgent` + a fabricated malaria differential is acceptable for empty input.
+The engineering lead adopted **Option D**: CB_211 is preserved byte-for-byte and
+registered as an explicit, unresolved, **fail-closed** known discrepancy. It must
+execute on every regression run, its exact observed result is asserted, it is
+**never counted as passed**, and any change in its observed behaviour — or any
+additional case mismatch — fails the run. Recorded in
+`testing/known_findings.json` as `engineering_disposition: option_d_adopted`,
+enforced by `tools/validate_known_findings.py` (28 checks).
+
+**Options B and C are deferred** for clinical/product adjudication **before
+external beta**. CB_232 requires no scoring, KB, case-bank or tie-break change.
+
+This is an **engineering** disposition only — not clinical approval, not
+external-beta approval, not production approval. **CB_211 remains unresolved.**
+
+### Still open
+
+1. **CB_211 final resolution** — B (correct the expectation in a **new versioned**
+   bank; v1 is immutable) vs C (engine-level empty-input result, issue #35's own
+   question). Needs clinical input on whether `urgent` + a fabricated malaria
+   differential is acceptable for empty input. **Due before external beta.**
 2. Case bank v1.0 clinical sign-off — still absent, still no schema field for it.
 3. Issue #38 — malaria base_weight in mixed presentations; CB_232/CB_225 are
    worked examples for that monitoring item.

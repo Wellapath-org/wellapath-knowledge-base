@@ -166,6 +166,33 @@ def run():
             "a resolved entry should be removed and the underlying issue fixed: %s"
             % entry["decision_status"],
         )
+        # An adopted engineering disposition must not quietly become a
+        # resolution. Option D is a holding position: the entry stays open, the
+        # deferred options stay deferred, and no clinical claim attaches to it.
+        check(
+            results,
+            "%s_records_an_engineering_disposition" % prefix,
+            entry.get("engineering_disposition") == "option_d_adopted",
+            "expected option_d_adopted, got %r" % entry.get("engineering_disposition"),
+        )
+        check(
+            results,
+            "%s_adopted_disposition_does_not_resolve_the_finding" % prefix,
+            entry.get("engineering_disposition") != "option_d_adopted"
+            or str(entry["decision_status"]).startswith("open"),
+            "Option D is a holding position, not a resolution",
+        )
+        check(
+            results,
+            "%s_defers_options_b_and_c" % prefix,
+            all(
+                str(v).startswith("deferred")
+                for v in (entry.get("deferred_options") or {}).values()
+            )
+            and set(entry.get("deferred_options") or {})
+            == {"B_correct_case_bank_expectation", "C_engine_level_empty_input_result"},
+            "deferred_options=%r" % entry.get("deferred_options"),
+        )
         check(
             results,
             "%s_has_a_review_trigger_with_an_expiry" % prefix,
@@ -210,7 +237,33 @@ def run():
         results,
         "registry_is_marked_not_wired",
         "not_yet_wired" in registry["_metadata"],
-        "the proposal must state that it is not wired into a runner",
+        "the registry must state that it is not yet wired into a runner",
+    )
+
+    disposition = registry["_metadata"].get("engineering_disposition")
+    record = registry["_metadata"].get("engineering_disposition_record", {})
+    check(
+        results,
+        "registry_records_the_adopted_engineering_disposition",
+        disposition == "option_d_adopted",
+        "engineering_disposition=%r" % disposition,
+    )
+    check(
+        results,
+        "adopted_disposition_claims_engineering_authority_only",
+        record.get("authority") == "engineering"
+        and record.get("is_clinical_approval") is False
+        and record.get("is_external_beta_approval") is False
+        and record.get("is_production_approval") is False,
+        json.dumps({k: record.get(k) for k in
+                    ("authority", "is_clinical_approval",
+                     "is_external_beta_approval", "is_production_approval")}),
+    )
+    check(
+        results,
+        "adopted_disposition_states_what_it_does_not_authorise",
+        len(record.get("what_it_does_not_authorise", [])) >= 3,
+        "%d statements" % len(record.get("what_it_does_not_authorise", [])),
     )
 
     return results

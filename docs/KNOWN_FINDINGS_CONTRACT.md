@@ -1,8 +1,13 @@
 # Known-Findings Contract
 
-**Status:** **PROPOSED** — not wired into any test runner, and this PR does not change Mobile
-**Record:** `testing/known_findings.json`
+**Status:** **ADOPTED** as the engineering disposition for CB_211 (Option D, I2/W2 Step 3A) — **not yet wired into a test runner**
+**Record:** `testing/known_findings.json` (`engineering_disposition: option_d_adopted`)
 **Validator:** `python3 tools/validate_known_findings.py`
+
+> Adoption is an **engineering** disposition. It is not clinical approval, not
+> external-beta approval, and not production approval. CB_211 remains
+> **unresolved**: Options B and C are deferred for clinical/product adjudication
+> **before external beta**.
 
 ---
 
@@ -115,10 +120,12 @@ item as due *"before external beta"* with owner *"Eng lead / clinical"*.
 An entry is **not** a permanent exemption. Reaching the milestone with the entry
 unresolved is itself the failure condition.
 
-## 7. What this proposal does not do
+## 7. What adoption does not do
 
-- It does not decide CB_211. See `docs/CB_211_DECISION_PACKAGE.md` §8.
+- It does not **resolve** CB_211. Options B and C stay deferred for
+  clinical/product adjudication before external beta — see
+  `docs/CB_211_DECISION_PACKAGE.md` §8.
 - It does not make any failing case pass.
 - It does not change the case bank, the engine, or any expected output.
-- It does not claim clinical approval for anything.
-- It is not wired into Mobile, and this PR touches no Mobile file.
+- It does not claim clinical, external-beta or production approval for anything.
+- It is not yet wired into Mobile; wiring is a separate reviewed change (§4).
