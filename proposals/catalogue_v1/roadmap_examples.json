@@ -5,11 +5,14 @@
     "country": "ng",
     "description": "Product-roadmap example user complaints, recorded verbatim for assessment. These are ILLUSTRATIONS OF USER LANGUAGE, not proposed mappings. No canonical token is assigned to any of them here.",
     "provenance": {
-      "source": "I2 / W2 Step 5 task brief (product roadmap examples)",
+      "product_source": "Approved WellaPath MVP Improvement Roadmap, supplied to the engineering process and carried into the I2 / W2 Step 5 brief.",
+      "product_source_identified": true,
       "repository_attributable": false,
-      "note": "These strings were supplied in the step brief. A search of this repository found no committed roadmap document containing them, so they carry no file, commit or line provenance. They are recorded with that limitation stated rather than back-filled with an invented source.",
+      "clinical_mapping_provenance": "absent",
+      "status": "unresolved evidence gap",
+      "note": "These are product examples with an identified product source: they appear in the approved MVP Improvement Roadmap provided to the engineering process. What they lack is repository-level provenance for any CLINICAL MAPPING — a search of this repository found no committed document containing them, and no clinician has mapped any of them to a token. They are therefore product examples only, not clinically approved mappings, and they remain unresolved evidence gaps. They are not source-less; the roadmap is their source. No canonical token is assigned to any of them here.",
       "searched": [
-        "*.md and *.json across the repository at 550e8f17 — no match"
+        "*.md and *.json across the repository at 550e8f17 — no committed copy of these strings"
       ]
     },
     "handling_rule": "Each example is assessed for candidate tokens, lost context and ambiguity. None may be assigned a canonical token without evidence and explicit clinical + product review. An example that cannot be mapped safely stays an identified content gap.",

@@ -120,11 +120,15 @@ def load_consumers():
 
     red_flag = {}
     for rule in rules["rules"]:
-        blob = json.dumps(rule)
-        for tok in rule.get("trigger_tokens", []) or []:
+        # The rules schema is single-token-per-rule and the field is `token`
+        # (schema/rules_schema_v1.0.json, _field_definitions.token). Reading a
+        # `trigger_tokens` array here matched nothing: all 75 rules carry
+        # `token`, none carries `trigger_tokens`, so every rule was invisible
+        # and rules-only red-flag tokens such as `anaphylaxis_signs` (rf_014,
+        # applies_to ["all"]) were silently reported as not red-flag-affecting.
+        tok = rule.get("token")
+        if tok:
             red_flag.setdefault(tok, []).append(rule.get("rule_id"))
-        # A token named anywhere else in a rule still couples it to that rule.
-        del blob
 
     for cond in kb["conditions"]:
         for tok in cond.get("red_flags", []) or []:
@@ -372,15 +376,20 @@ def build_proposals(candidate, scoring, red_flag):
                     else "no",
                 ),
                 "provenance": {
-                    "source_repository": "(none — task brief)",
+                    "source_repository": "(external — approved product roadmap)",
                     "source_path": "proposals/catalogue_v1/roadmap_examples.json",
                     "source_commit": None,
                     "source_record": ex["example_id"],
                     "authoring_context": (
-                        "Product-roadmap example user complaint supplied in the "
-                        "I2/W2 Step 5 brief. No committed roadmap document in "
-                        "this repository contains this string, so it has no "
-                        "file/commit provenance of its own."
+                        "Product example user complaint from the approved "
+                        "WellaPath MVP Improvement Roadmap supplied to the "
+                        "engineering process. Its PRODUCT source is identified; "
+                        "what is absent is repository-level provenance for any "
+                        "CLINICAL MAPPING — no committed document in this "
+                        "repository contains the string and no clinician has "
+                        "mapped it to a token. A product example only, not a "
+                        "clinically approved mapping, and an unresolved "
+                        "evidence gap. Not source-less."
                     ),
                     "approval_record": "unresolved",
                     "approval_evidence": None,

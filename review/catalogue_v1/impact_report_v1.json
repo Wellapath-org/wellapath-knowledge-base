@@ -41,7 +41,7 @@
     "product_pending": 25
   },
   "affecting_scoring": 21,
-  "affecting_red_flags": 11,
+  "affecting_red_flags": 12,
   "normalization_collisions": {},
   "normalization_collision_count": 0,
   "ambiguity_sets": [

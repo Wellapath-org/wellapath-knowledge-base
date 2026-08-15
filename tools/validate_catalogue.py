@@ -390,8 +390,12 @@ def main():
     }
     red_flag = set()
     for r in rules["rules"]:
-        for t in r.get("trigger_tokens", []) or []:
-            red_flag.add(t)
+        # Field is `token`, not `trigger_tokens` — see the note in
+        # tools/build_catalogue_review.py. Reading the wrong field made the
+        # red_flag_impact_declared check below inert for any token whose
+        # red-flag status comes from a rule rather than a kb red_flags list.
+        if r.get("token"):
+            red_flag.add(r["token"])
     for c in kb["conditions"]:
         for t in c.get("red_flags", []) or []:
             if isinstance(t, str):

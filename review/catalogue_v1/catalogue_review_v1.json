@@ -769,6 +769,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_001",
             "kb:cough_common_cold",
             "kb:acute_diarrhoea",
             "kb:cholera",
@@ -850,6 +851,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_003",
             "kb:cough_common_cold",
             "kb:acute_diarrhoea",
             "kb:dysentery",
@@ -961,6 +963,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_005",
             "kb:lower_respiratory_infection",
             "kb:sari"
           ],
@@ -1041,6 +1044,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_006",
             "kb:malaria"
           ],
           "clinical_review": {
@@ -1120,6 +1124,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_007",
             "kb:malaria",
             "kb:fatigue_weakness"
           ],
@@ -1202,6 +1207,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_008",
             "kb:malaria"
           ],
           "clinical_review": {
@@ -1280,6 +1286,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_009",
             "kb:lower_respiratory_infection",
             "kb:asthma",
             "kb:chronic_respiratory",
@@ -1360,6 +1367,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_010",
             "kb:acute_diarrhoea",
             "kb:dysentery",
             "kb:gastroenteritis",
@@ -1443,6 +1451,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_011",
             "kb:malaria",
             "kb:cough_common_cold",
             "kb:dysentery",
@@ -1531,6 +1540,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_012",
             "kb:malaria",
             "kb:cough_common_cold",
             "kb:urti",
@@ -1625,6 +1635,7 @@
           ],
           "kb_scoring_references": [],
           "rules_red_flag_references": [
+            "rf_013",
             "kb:acute_diarrhoea",
             "kb:cholera",
             "kb:skin_infections",
@@ -1679,7 +1690,7 @@
           "primary_change_class": "red_flag_affecting_association",
           "risk_flags": {
             "affects_scoring": "yes",
-            "affects_red_flags": "no",
+            "affects_red_flags": "yes",
             "connects_two_existing_scoring_tokens": "yes",
             "erases_laterality": "no",
             "erases_anatomical_location": "no",
@@ -1707,7 +1718,9 @@
             "severity distinction between the red flag and its near misses"
           ],
           "kb_scoring_references": [],
-          "rules_red_flag_references": [],
+          "rules_red_flag_references": [
+            "rf_014"
+          ],
           "clinical_review": {
             "decision": "pending",
             "reviewer": null,
@@ -1885,11 +1898,11 @@
             "alters_red_flag_reachability": "no"
           },
           "provenance": {
-            "source_repository": "(none \u2014 task brief)",
+            "source_repository": "(external \u2014 approved product roadmap)",
             "source_path": "proposals/catalogue_v1/roadmap_examples.json",
             "source_commit": null,
             "source_record": "RME-001",
-            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "authoring_context": "Product example user complaint from the approved WellaPath MVP Improvement Roadmap supplied to the engineering process. Its PRODUCT source is identified; what is absent is repository-level provenance for any CLINICAL MAPPING \u2014 no committed document in this repository contains the string and no clinician has mapped it to a token. A product example only, not a clinically approved mapping, and an unresolved evidence gap. Not source-less.",
             "approval_record": "unresolved",
             "approval_evidence": null
           },
@@ -1967,11 +1980,11 @@
             "alters_red_flag_reachability": "no"
           },
           "provenance": {
-            "source_repository": "(none \u2014 task brief)",
+            "source_repository": "(external \u2014 approved product roadmap)",
             "source_path": "proposals/catalogue_v1/roadmap_examples.json",
             "source_commit": null,
             "source_record": "RME-002",
-            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "authoring_context": "Product example user complaint from the approved WellaPath MVP Improvement Roadmap supplied to the engineering process. Its PRODUCT source is identified; what is absent is repository-level provenance for any CLINICAL MAPPING \u2014 no committed document in this repository contains the string and no clinician has mapped it to a token. A product example only, not a clinically approved mapping, and an unresolved evidence gap. Not source-less.",
             "approval_record": "unresolved",
             "approval_evidence": null
           },
@@ -2048,11 +2061,11 @@
             "alters_red_flag_reachability": "no"
           },
           "provenance": {
-            "source_repository": "(none \u2014 task brief)",
+            "source_repository": "(external \u2014 approved product roadmap)",
             "source_path": "proposals/catalogue_v1/roadmap_examples.json",
             "source_commit": null,
             "source_record": "RME-003",
-            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "authoring_context": "Product example user complaint from the approved WellaPath MVP Improvement Roadmap supplied to the engineering process. Its PRODUCT source is identified; what is absent is repository-level provenance for any CLINICAL MAPPING \u2014 no committed document in this repository contains the string and no clinician has mapped it to a token. A product example only, not a clinically approved mapping, and an unresolved evidence gap. Not source-less.",
             "approval_record": "unresolved",
             "approval_evidence": null
           },
@@ -2130,11 +2143,11 @@
             "alters_red_flag_reachability": "no"
           },
           "provenance": {
-            "source_repository": "(none \u2014 task brief)",
+            "source_repository": "(external \u2014 approved product roadmap)",
             "source_path": "proposals/catalogue_v1/roadmap_examples.json",
             "source_commit": null,
             "source_record": "RME-004",
-            "authoring_context": "Product-roadmap example user complaint supplied in the I2/W2 Step 5 brief. No committed roadmap document in this repository contains this string, so it has no file/commit provenance of its own.",
+            "authoring_context": "Product example user complaint from the approved WellaPath MVP Improvement Roadmap supplied to the engineering process. Its PRODUCT source is identified; what is absent is repository-level provenance for any CLINICAL MAPPING \u2014 no committed document in this repository contains the string and no clinician has mapped it to a token. A product example only, not a clinically approved mapping, and an unresolved evidence gap. Not source-less.",
             "approval_record": "unresolved",
             "approval_evidence": null
           },

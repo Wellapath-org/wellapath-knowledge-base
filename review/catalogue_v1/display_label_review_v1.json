@@ -6378,7 +6378,7 @@
       },
       "shipped_in_mobile_today": true,
       "affects_scoring": false,
-      "affects_red_flags": false,
+      "affects_red_flags": true,
       "language_flags": {
         "sensitive": false,
         "diagnostic_term_used_as_symptom": false,
@@ -7480,7 +7480,7 @@
       },
       "shipped_in_mobile_today": false,
       "affects_scoring": false,
-      "affects_red_flags": false,
+      "affects_red_flags": true,
       "language_flags": {
         "sensitive": false,
         "diagnostic_term_used_as_symptom": false,
@@ -7898,7 +7898,7 @@
       },
       "shipped_in_mobile_today": false,
       "affects_scoring": false,
-      "affects_red_flags": false,
+      "affects_red_flags": true,
       "language_flags": {
         "sensitive": false,
         "diagnostic_term_used_as_symptom": false,
