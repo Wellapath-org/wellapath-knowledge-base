@@ -1,0 +1,100 @@
+{
+  "fixture_id": "question_flow_invalid_fixtures",
+  "fixture_version": "1",
+  "synthetic": true,
+  "note": "Each file is the candidate with exactly one defect. None may be published or used as a source of question content.",
+  "fixtures": [
+    {
+      "file": "duplicate_question_id.json",
+      "expected_failing_check": "B.identity:question_ids_are_unique"
+    },
+    {
+      "file": "duplicate_answer_option_id.json",
+      "expected_failing_check": "B.identity:answer_option_ids_are_globally_unique"
+    },
+    {
+      "file": "unknown_next_question.json",
+      "expected_failing_check": "C.references:conditions_are_valid_and_resolve"
+    },
+    {
+      "file": "unknown_token.json",
+      "expected_failing_check": "C.references:produced_tokens_resolve_in_token_dictionary_1_1"
+    },
+    {
+      "file": "invalid_condition_operator.json",
+      "expected_failing_check": "C.references:no_operator_used_outside_the_declared_language"
+    },
+    {
+      "file": "condition_type_mismatch.json",
+      "expected_failing_check": "C.references:conditions_are_valid_and_resolve"
+    },
+    {
+      "file": "branch_cycle.json",
+      "expected_failing_check": "E.graph:no_branch_cycles"
+    },
+    {
+      "file": "unreachable_question.json",
+      "expected_failing_check": "E.graph:no_question_has_an_impossible_trigger"
+    },
+    {
+      "file": "contradictory_condition.json",
+      "expected_failing_check": "E.graph:no_question_has_an_impossible_trigger"
+    },
+    {
+      "file": "nondeterministic_priority_tie.json",
+      "expected_failing_check": "B.identity:question_ids_are_unique"
+    },
+    {
+      "file": "required_question_silently_skippable.json",
+      "expected_failing_check": "G.semantics:no_required_question_is_skippable"
+    },
+    {
+      "file": "skip_sentinel_produces_token.json",
+      "expected_failing_check": "G.semantics:no_skip_sentinel_produces_a_clinical_token"
+    },
+    {
+      "file": "red_flag_question_not_evaluated_immediately.json",
+      "expected_failing_check": "F.paths:every_red_flag_affecting_question_evaluates_immediately"
+    },
+    {
+      "file": "red_flag_impact_understated.json",
+      "expected_failing_check": "F.paths:red_flag_effect_and_hook_agree"
+    },
+    {
+      "file": "red_flag_question_behind_ordinary.json",
+      "expected_failing_check": "F.paths:red_flag_questions_never_queue_behind_ordinary_ones"
+    },
+    {
+      "file": "red_flag_truncation_not_exempt.json",
+      "expected_failing_check": "A.schema:conforms_to_question_flow_schema"
+    },
+    {
+      "file": "path_limit_starves_ordinary_questions.json",
+      "expected_failing_check": "E.graph:no_unreachable_question"
+    },
+    {
+      "file": "invalid_edit_dependency.json",
+      "expected_failing_check": "C.references:invalidation_targets_resolve"
+    },
+    {
+      "file": "self_invalidating_question.json",
+      "expected_failing_check": "G.semantics:no_question_invalidates_itself"
+    },
+    {
+      "file": "candidate_marked_publishable.json",
+      "expected_failing_check": "H.publication:may_publish_is_false_without_review"
+    },
+    {
+      "file": "published_without_clinical_review.json",
+      "expected_failing_check": "H.publication:release_status_is_not_published"
+    },
+    {
+      "file": "content_marked_approved_without_review.json",
+      "expected_failing_check": "H.publication:no_question_content_is_marked_approved"
+    },
+    {
+      "file": "vocabulary_2_0_activated.json",
+      "expected_failing_check": "H.publication:vocabulary_2_0_is_declared_unused"
+    }
+  ]
+}

@@ -1,0 +1,2966 @@
+{
+  "report_id": "question_baseline_freeze",
+  "report_version": "1",
+  "phase": "I2 / W3 Step 1",
+  "generator": "tools/report_question_baseline.py",
+  "generator_version": "1.0.0",
+  "architecture_finding": {
+    "question_artifact_exists": false,
+    "where_questions_live": "Dart source in the mobile repository \u2014 constants for the follow-up map and clarifiers, a static engine class for selection and ordering, screen widgets for the demographic questions, and the controller for state.",
+    "versioning": "none \u2014 no artifact version, no manifest entry, no independent rollback",
+    "consequence": "A question change ships only as an app release and cannot be rolled back the way kb/rules/token_dictionary can."
+  },
+  "sources": {
+    "repository": "Wellapath-org/wellapath-mobile",
+    "commit": "a269168e2ed9b3b1c0453797dce5c9f303366854",
+    "vendored_into": "baseline/questions_v1",
+    "files": [
+      {
+        "vendored_file": "followup_question_map.vendored.dart",
+        "mobile_path": "lib/core/constants/followup_question_map.dart",
+        "sha256": "074b5374b5729e613ab55490d1e483191fc1cf54823fae3d5cc008ba0710047d",
+        "bytes": 6859
+      },
+      {
+        "vendored_file": "red_flag_clarifiers.vendored.dart",
+        "mobile_path": "lib/core/constants/red_flag_clarifiers.dart",
+        "sha256": "f8050551af886ea98f6376052a5a53fcdaa0fb8ccbeec19f3ab0440dd17e922c",
+        "bytes": 2236
+      },
+      {
+        "vendored_file": "symptom_display_map.vendored.dart",
+        "mobile_path": "lib/core/constants/symptom_display_map.dart",
+        "sha256": "95197adc3a9ff6c03c3e64e9c3acd6fe5e93541802acee77e5fce971a84acd8b",
+        "bytes": 13967
+      },
+      {
+        "vendored_file": "question_engine.vendored.dart",
+        "mobile_path": "lib/features/assessment/question_engine.dart",
+        "sha256": "83e954acec978a15c390ae5e92704c6cbcdcc1ff173238c840053cafe834fdd5",
+        "bytes": 2716
+      },
+      {
+        "vendored_file": "assessment_controller.vendored.dart",
+        "mobile_path": "lib/features/assessment/assessment_controller.dart",
+        "sha256": "19dd1208a6efaf83b43545f7cadf904492c78a3ce30707938ecce35ddc493a0c",
+        "bytes": 4861
+      },
+      {
+        "vendored_file": "followup_screen.vendored.dart",
+        "mobile_path": "lib/features/assessment/followup_screen.dart",
+        "sha256": "7805228d29b544ce42638c4ebf18a17b4dc4a7d092dfbe6a19b77625c6ffba4c",
+        "bytes": 18073
+      },
+      {
+        "vendored_file": "followup_question.vendored.dart",
+        "mobile_path": "lib/features/assessment/models/followup_question.dart",
+        "sha256": "d81f19adf6bbedae4d74175d6f5ba08ca6ef48374ae4646b8d6853c732f63ae0",
+        "bytes": 500
+      }
+    ]
+  },
+  "counts": {
+    "followup_map_tokens": 18,
+    "authored_followup_questions": 40,
+    "red_flag_clarifiers": 3,
+    "default_fallback_questions": 1,
+    "total_question_definitions": 44,
+    "demographic_questions": 6,
+    "answer_options": 154,
+    "red_flag_affecting_questions": 3,
+    "scoring_affecting_questions": 18,
+    "picker_reachable_tokens": 121,
+    "body_areas": 10,
+    "by_type": {
+      "additionalSymptoms": 18,
+      "duration": 17,
+      "redFlagClarifier": 3,
+      "severity": 6
+    }
+  },
+  "question_ids": [
+    "Q-clarifier-breathlessness_at_rest-redFlagClarifier",
+    "Q-clarifier-inability_to_drink-redFlagClarifier",
+    "Q-clarifier-abnormal_bleeding-redFlagClarifier",
+    "Q-token-headache-severity",
+    "Q-token-headache-duration",
+    "Q-token-headache-additionalSymptoms",
+    "Q-token-fever-duration",
+    "Q-token-fever-additionalSymptoms",
+    "Q-token-cough-severity",
+    "Q-token-cough-duration",
+    "Q-token-cough-additionalSymptoms",
+    "Q-token-watery_stool-duration",
+    "Q-token-watery_stool-additionalSymptoms",
+    "Q-token-chills-duration",
+    "Q-token-chills-additionalSymptoms",
+    "Q-token-body_pain-severity",
+    "Q-token-body_pain-duration",
+    "Q-token-body_pain-additionalSymptoms",
+    "Q-token-weakness-duration",
+    "Q-token-weakness-additionalSymptoms",
+    "Q-token-nausea-duration",
+    "Q-token-nausea-additionalSymptoms",
+    "Q-token-sweating-duration",
+    "Q-token-sweating-additionalSymptoms",
+    "Q-token-vomiting-duration",
+    "Q-token-vomiting-additionalSymptoms",
+    "Q-token-abdominal_cramps-severity",
+    "Q-token-abdominal_cramps-duration",
+    "Q-token-abdominal_cramps-additionalSymptoms",
+    "Q-token-dizziness-duration",
+    "Q-token-dizziness-additionalSymptoms",
+    "Q-token-fatigue-duration",
+    "Q-token-fatigue-additionalSymptoms",
+    "Q-token-fast_breathing_child-severity",
+    "Q-token-fast_breathing_child-additionalSymptoms",
+    "Q-token-chest_indrawing_severe-additionalSymptoms",
+    "Q-token-dark_urine-duration",
+    "Q-token-dark_urine-additionalSymptoms",
+    "Q-token-pain-severity",
+    "Q-token-pain-duration",
+    "Q-token-pain-additionalSymptoms",
+    "Q-token-swelling-duration",
+    "Q-token-swelling-additionalSymptoms",
+    "Q-default-any_unmapped_symptom-duration"
+  ],
+  "questions": [
+    {
+      "question_id": "Q-clarifier-breathlessness_at_rest-redFlagClarifier",
+      "kind": "red_flag_clarifier",
+      "type": "redFlagClarifier",
+      "question_text": "Is it hard to breathe even when resting, not just on activity?",
+      "trigger_tokens": [
+        "difficulty_breathing",
+        "shortness_of_breath"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-breathlessness_at_rest-redFlagClarifier::Yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "breathlessness_at_rest"
+          ]
+        },
+        {
+          "answer_option_id": "Q-clarifier-breathlessness_at_rest-redFlagClarifier::No",
+          "label": "No",
+          "produces_tokens": []
+        }
+      ],
+      "produces_red_flag_token": "breathlessness_at_rest",
+      "red_flag_affecting": true,
+      "scoring_affecting": false,
+      "emission_rank": 0
+    },
+    {
+      "question_id": "Q-clarifier-inability_to_drink-redFlagClarifier",
+      "kind": "red_flag_clarifier",
+      "type": "redFlagClarifier",
+      "question_text": "Is the person completely unable to drink or feed anything?",
+      "trigger_tokens": [
+        "poor_feeding",
+        "poor_appetite"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-inability_to_drink-redFlagClarifier::Yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "inability_to_drink"
+          ]
+        },
+        {
+          "answer_option_id": "Q-clarifier-inability_to_drink-redFlagClarifier::No",
+          "label": "No",
+          "produces_tokens": []
+        }
+      ],
+      "produces_red_flag_token": "inability_to_drink",
+      "red_flag_affecting": true,
+      "scoring_affecting": false,
+      "emission_rank": 0
+    },
+    {
+      "question_id": "Q-clarifier-abnormal_bleeding-redFlagClarifier",
+      "kind": "red_flag_clarifier",
+      "type": "redFlagClarifier",
+      "question_text": "Is the bleeding heavy, or does it not stop?",
+      "trigger_tokens": [
+        "bleeding",
+        "nosebleed"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-abnormal_bleeding-redFlagClarifier::Yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "abnormal_bleeding"
+          ]
+        },
+        {
+          "answer_option_id": "Q-clarifier-abnormal_bleeding-redFlagClarifier::No",
+          "label": "No",
+          "produces_tokens": []
+        }
+      ],
+      "produces_red_flag_token": "abnormal_bleeding",
+      "red_flag_affecting": true,
+      "scoring_affecting": false,
+      "emission_rank": 0
+    },
+    {
+      "question_id": "Q-token-headache-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe is your headache?",
+      "trigger_tokens": [
+        "headache"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-headache-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-headache-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this headache?",
+      "trigger_tokens": [
+        "headache"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-headache-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-headache-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-headache-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "headache"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-headache-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-headache-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-headache-additionalSymptoms::vomiting",
+          "label": "vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-headache-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-headache-additionalSymptoms::dizziness",
+          "label": "dizziness",
+          "produces_tokens": [
+            "dizziness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-fever-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this fever?",
+      "trigger_tokens": [
+        "fever"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fever-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fever-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fever-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fever-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-fever-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "fever"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fever-additionalSymptoms::chills",
+          "label": "chills",
+          "produces_tokens": [
+            "chills"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fever-additionalSymptoms::sweating",
+          "label": "sweating",
+          "produces_tokens": [
+            "sweating"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fever-additionalSymptoms::body_pain",
+          "label": "body_pain",
+          "produces_tokens": [
+            "body_pain"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fever-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fever-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-cough-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe is your cough?",
+      "trigger_tokens": [
+        "cough"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-cough-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-cough-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this cough?",
+      "trigger_tokens": [
+        "cough"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-cough-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-cough-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-cough-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "cough"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-cough-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-cough-additionalSymptoms::fast_breathing_child",
+          "label": "fast_breathing_child",
+          "produces_tokens": [
+            "fast_breathing_child"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-cough-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-watery_stool-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had watery stool?",
+      "trigger_tokens": [
+        "watery_stool"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-watery_stool-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-watery_stool-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-watery_stool-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-watery_stool-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-watery_stool-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "watery_stool"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-watery_stool-additionalSymptoms::vomiting",
+          "label": "vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-watery_stool-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-watery_stool-additionalSymptoms::abdominal_cramps",
+          "label": "abdominal_cramps",
+          "produces_tokens": [
+            "abdominal_cramps"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-chills-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had chills?",
+      "trigger_tokens": [
+        "chills"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-chills-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-chills-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-chills-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-chills-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-chills-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "chills"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-chills-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-chills-additionalSymptoms::sweating",
+          "label": "sweating",
+          "produces_tokens": [
+            "sweating"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-chills-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-body_pain-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe is your body pain?",
+      "trigger_tokens": [
+        "body_pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-body_pain-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-body_pain-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this body pain?",
+      "trigger_tokens": [
+        "body_pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-body_pain-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-body_pain-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "body_pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-body_pain-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-body_pain-additionalSymptoms::fatigue",
+          "label": "fatigue",
+          "produces_tokens": [
+            "fatigue"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-weakness-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you felt this weakness?",
+      "trigger_tokens": [
+        "weakness"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-weakness-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-weakness-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-weakness-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-weakness-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-weakness-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "weakness"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-weakness-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-weakness-additionalSymptoms::fatigue",
+          "label": "fatigue",
+          "produces_tokens": [
+            "fatigue"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-weakness-additionalSymptoms::dizziness",
+          "label": "dizziness",
+          "produces_tokens": [
+            "dizziness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-nausea-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had nausea?",
+      "trigger_tokens": [
+        "nausea"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-nausea-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-nausea-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-nausea-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-nausea-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-nausea-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "nausea"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-nausea-additionalSymptoms::vomiting",
+          "label": "vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-nausea-additionalSymptoms::abdominal_cramps",
+          "label": "abdominal_cramps",
+          "produces_tokens": [
+            "abdominal_cramps"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-nausea-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-sweating-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had excessive sweating?",
+      "trigger_tokens": [
+        "sweating"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-sweating-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-sweating-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-sweating-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-sweating-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-sweating-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "sweating"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-sweating-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-sweating-additionalSymptoms::chills",
+          "label": "chills",
+          "produces_tokens": [
+            "chills"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-sweating-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-vomiting-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you been vomiting?",
+      "trigger_tokens": [
+        "vomiting"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-vomiting-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-vomiting-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-vomiting-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-vomiting-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-vomiting-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "vomiting"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-vomiting-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-vomiting-additionalSymptoms::abdominal_cramps",
+          "label": "abdominal_cramps",
+          "produces_tokens": [
+            "abdominal_cramps"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-vomiting-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-abdominal_cramps-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe are your abdominal cramps?",
+      "trigger_tokens": [
+        "abdominal_cramps"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-abdominal_cramps-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had these abdominal cramps?",
+      "trigger_tokens": [
+        "abdominal_cramps"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-abdominal_cramps-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "abdominal_cramps"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-additionalSymptoms::vomiting",
+          "label": "vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-abdominal_cramps-additionalSymptoms::watery_stool",
+          "label": "watery_stool",
+          "produces_tokens": [
+            "watery_stool"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-dizziness-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you felt dizzy?",
+      "trigger_tokens": [
+        "dizziness"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-dizziness-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dizziness-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dizziness-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dizziness-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-dizziness-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "dizziness"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-dizziness-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-dizziness-additionalSymptoms::fatigue",
+          "label": "fatigue",
+          "produces_tokens": [
+            "fatigue"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-dizziness-additionalSymptoms::headache",
+          "label": "headache",
+          "produces_tokens": [
+            "headache"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-fatigue-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you felt this fatigue?",
+      "trigger_tokens": [
+        "fatigue"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fatigue-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fatigue-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fatigue-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fatigue-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-fatigue-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "fatigue"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fatigue-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fatigue-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fatigue-additionalSymptoms::body_pain",
+          "label": "body_pain",
+          "produces_tokens": [
+            "body_pain"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-fast_breathing_child-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe is the fast breathing?",
+      "trigger_tokens": [
+        "fast_breathing_child"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-fast_breathing_child-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "fast_breathing_child"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-additionalSymptoms::cough",
+          "label": "cough",
+          "produces_tokens": [
+            "cough"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-fast_breathing_child-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-chest_indrawing_severe-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "chest_indrawing_severe"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-chest_indrawing_severe-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-chest_indrawing_severe-additionalSymptoms::cough",
+          "label": "cough",
+          "produces_tokens": [
+            "cough"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-chest_indrawing_severe-additionalSymptoms::fast_breathing_child",
+          "label": "fast_breathing_child",
+          "produces_tokens": [
+            "fast_breathing_child"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-dark_urine-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you noticed dark urine?",
+      "trigger_tokens": [
+        "dark_urine"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-dark_urine-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dark_urine-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dark_urine-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-dark_urine-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-dark_urine-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "dark_urine"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-dark_urine-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-dark_urine-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-dark_urine-additionalSymptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-pain-severity",
+      "kind": "token_followup",
+      "type": "severity",
+      "question_text": "How severe is this pain?",
+      "trigger_tokens": [
+        "pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-pain-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 1
+    },
+    {
+      "question_id": "Q-token-pain-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this pain?",
+      "trigger_tokens": [
+        "pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-pain-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-pain-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-pain-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "pain"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-pain-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-pain-additionalSymptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-token-swelling-duration",
+      "kind": "token_followup",
+      "type": "duration",
+      "question_text": "How long have you had this swelling?",
+      "trigger_tokens": [
+        "swelling"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-swelling-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-swelling-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-swelling-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-token-swelling-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    },
+    {
+      "question_id": "Q-token-swelling-additionalSymptoms",
+      "kind": "token_followup",
+      "type": "additionalSymptoms",
+      "question_text": "Do you have any of these symptoms too?",
+      "trigger_tokens": [
+        "swelling"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-token-swelling-additionalSymptoms::pain",
+          "label": "pain",
+          "produces_tokens": [
+            "pain"
+          ],
+          "reachable_in_ui": true
+        },
+        {
+          "answer_option_id": "Q-token-swelling-additionalSymptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "reachable_in_ui": true
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": true,
+      "emission_rank": 3
+    },
+    {
+      "question_id": "Q-default-any_unmapped_symptom-duration",
+      "kind": "default_fallback",
+      "type": "duration",
+      "question_text": "How long have you had this symptom?",
+      "trigger_tokens": [
+        "<any symptom token absent from kFollowupQuestionMap>"
+      ],
+      "answer_options": [
+        {
+          "answer_option_id": "Q-default-any_unmapped_symptom-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ]
+        },
+        {
+          "answer_option_id": "Q-default-any_unmapped_symptom-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ]
+        },
+        {
+          "answer_option_id": "Q-default-any_unmapped_symptom-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ]
+        },
+        {
+          "answer_option_id": "Q-default-any_unmapped_symptom-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ]
+        }
+      ],
+      "produces_red_flag_token": null,
+      "red_flag_affecting": false,
+      "scoring_affecting": false,
+      "emission_rank": 2
+    }
+  ],
+  "demographic_questions": [
+    {
+      "question_id": "Q-demo-sex",
+      "kind": "demographic_screen",
+      "screen": "sex_screen.dart",
+      "answer_options": [
+        "male",
+        "female"
+      ],
+      "produces_tokens": [],
+      "gates": [
+        "Q-demo-pregnancy"
+      ],
+      "note": "Sex itself produces no demographic token in the current implementation; it only gates the pregnancy screen."
+    },
+    {
+      "question_id": "Q-demo-age",
+      "kind": "demographic_screen",
+      "screen": "age_screen.dart",
+      "answer_options": [
+        "0\u201312",
+        "13\u201317",
+        "18\u201340",
+        "41\u201360",
+        "60+"
+      ],
+      "produces_tokens": [
+        "children_under_5",
+        "children_school_age",
+        "adults",
+        "over_40",
+        "elderly"
+      ],
+      "gates": []
+    },
+    {
+      "question_id": "Q-demo-pregnancy",
+      "kind": "demographic_screen",
+      "screen": "pregnancy_screen.dart",
+      "answer_options": [
+        "yes",
+        "no"
+      ],
+      "produces_tokens": [
+        "pregnancy"
+      ],
+      "shown_when": "sex == 'female'",
+      "gates": []
+    },
+    {
+      "question_id": "Q-demo-medical-conditions",
+      "kind": "demographic_screen",
+      "screen": "medical_conditions_screen.dart",
+      "answer_options": [
+        "Diabetes",
+        "Smoking",
+        "Hypertension",
+        "Allergy history"
+      ],
+      "produces_tokens": [
+        "diabetes_known",
+        "smoker",
+        "hypertension_known",
+        "known_allergy"
+      ],
+      "gates": []
+    },
+    {
+      "question_id": "Q-demo-body-area",
+      "kind": "demographic_screen",
+      "screen": "body_area_screen.dart",
+      "answer_options": [
+        "General",
+        "Head",
+        "Neck",
+        "Chest",
+        "Abdomen",
+        "Legs",
+        "Back",
+        "Pelvis",
+        "Buttocks",
+        "Skin symptoms"
+      ],
+      "produces_tokens": [],
+      "gates": [
+        "Q-symptom-selection"
+      ],
+      "note": "Filters the symptom picker only. Produces no token and does not reach the engine."
+    },
+    {
+      "question_id": "Q-symptom-selection",
+      "kind": "symptom_picker",
+      "screen": "symptom_selection_screen.dart",
+      "answer_options_count": 123,
+      "produces_tokens": [
+        "abdominal_cramps",
+        "abdominal_pain",
+        "abnormal_bleeding",
+        "altered_consciousness",
+        "anaphylaxis_signs",
+        "animal_bite",
+        "back_pain",
+        "bad_breath",
+        "bilateral_oedema",
+        "bite_mark",
+        "bleeding",
+        "blistering",
+        "blood_in_urine",
+        "blue_lips_face",
+        "blurred_vision",
+        "body_pain",
+        "boils",
+        "breathlessness_at_rest",
+        "charred_skin",
+        "chest_pain",
+        "chest_tightness",
+        "chills",
+        "chronic_cough",
+        "chronic_diarrhoea",
+        "circulatory_collapse",
+        "confusion",
+        "cough",
+        "dark_urine",
+        "diarrhoea",
+        "difficulty_breathing",
+        "difficulty_swallowing",
+        "dizziness",
+        "excessive_thirst",
+        "exertional_breathlessness",
+        "eye_discharge",
+        "eye_itchiness",
+        "eye_pain",
+        "eye_redness",
+        "fast_breathing",
+        "fast_breathing_child",
+        "fast_breathing_neonate",
+        "fatigue",
+        "fear_of_water",
+        "fever",
+        "frequent_urination",
+        "general_weakness",
+        "head_pain",
+        "headache",
+        "hives",
+        "hoarse_voice",
+        "impaired_consciousness",
+        "inability_to_drink",
+        "irritability",
+        "itchy_eyes",
+        "itchy_rash",
+        "joint_pain",
+        "leg_swelling",
+        "lethargy",
+        "light_headedness",
+        "limb_weakness",
+        "limited_movement",
+        "local_swelling",
+        "low_energy",
+        "mild_cough",
+        "mild_headache",
+        "mild_sore_throat",
+        "mild_swelling",
+        "mouth_sores",
+        "muscle_stiffness",
+        "nausea",
+        "near_fainting",
+        "neonatal_fever",
+        "night_sweats",
+        "nocturnal_cough",
+        "nosebleed",
+        "one_sided_headache",
+        "oral_thrush",
+        "pain",
+        "pain_at_burn",
+        "pain_on_chewing",
+        "palpitations",
+        "persistent_fatigue",
+        "persistent_fever",
+        "poor_appetite",
+        "poor_feeding",
+        "poor_growth",
+        "pressure_headache",
+        "prostration",
+        "ptosis",
+        "pus_discharge",
+        "recurrent_infections",
+        "reduced_daily_function",
+        "repeated_infections",
+        "respiratory_distress",
+        "runny_nose",
+        "seizures",
+        "severe_dehydration",
+        "shock",
+        "shortness_of_breath",
+        "skin_redness",
+        "skin_swelling",
+        "sneezing",
+        "spinning_sensation",
+        "spreading_swelling",
+        "stridor",
+        "sweating",
+        "swelling",
+        "swollen_eyelids",
+        "swollen_gums",
+        "swollen_neck",
+        "throat_membrane",
+        "throbbing_headache",
+        "tiredness",
+        "toothache",
+        "unsteadiness",
+        "vomiting",
+        "watery_stool",
+        "weakness",
+        "weight_loss",
+        "wheeze",
+        "wound_at_bite"
+      ],
+      "gates": [
+        "<all token_followup questions>"
+      ]
+    }
+  ],
+  "answer_value_mappings": {
+    "severity_bands": [
+      {
+        "max_value": 0.25,
+        "token": "mild"
+      },
+      {
+        "max_value": 0.5,
+        "token": "moderate"
+      },
+      {
+        "max_value": 0.75,
+        "token": "severe"
+      },
+      {
+        "max_value": 1.0,
+        "token": "very_severe"
+      }
+    ],
+    "duration_answer_to_token": [
+      {
+        "label": "Less than 3 days",
+        "token": "days_1_3"
+      },
+      {
+        "label": "3 to 7 days",
+        "token": "days_3_7"
+      },
+      {
+        "label": "8 to 14 days",
+        "token": "days_7_plus"
+      },
+      {
+        "label": "More than 14 days",
+        "token": "weeks_2_plus"
+      }
+    ],
+    "age_label_to_token": [
+      {
+        "label": "0\u201312",
+        "token": "children_under_5"
+      },
+      {
+        "label": "13\u201317",
+        "token": "children_school_age"
+      },
+      {
+        "label": "18\u201340",
+        "token": "adults"
+      },
+      {
+        "label": "41\u201360",
+        "token": "over_40"
+      },
+      {
+        "label": "60+",
+        "token": "elderly"
+      }
+    ],
+    "medical_condition_label_to_token": [
+      {
+        "label": "Diabetes",
+        "token": "diabetes_known"
+      },
+      {
+        "label": "Smoking",
+        "token": "smoker"
+      },
+      {
+        "label": "Hypertension",
+        "token": "hypertension_known"
+      },
+      {
+        "label": "Allergy history",
+        "token": "known_allergy"
+      }
+    ]
+  },
+  "ordering": {
+    "emission_order": [
+      "red_flag_clarifier",
+      "severity",
+      "duration",
+      "additional_symptoms"
+    ],
+    "dedupe_rule": "first token in the selected order wins for severity and duration; additional-symptom options are unioned preserving first-seen order",
+    "order_depends_on_symptom_selection_order": true,
+    "tie_resolution_declared": false
+  },
+  "path_length": {
+    "enforced_limit": 5,
+    "enforcement_site": "question_engine.dart generateQuestions final truncation",
+    "theoretical_maximum_before_truncation": 6,
+    "maximum_observed_path_length": 5,
+    "minimum_path_length": 1,
+    "truncation_is_red_flag_safe_by_construction": false,
+    "truncation_is_red_flag_safe_incidentally": true,
+    "demographic_screens_not_counted_toward_limit": true
+  },
+  "clinical_reference_integrity": {
+    "referenced_token_count": 140,
+    "unresolved_token_references": [],
+    "unresolved_count": 0,
+    "tokens_by_role": {
+      "produce_a_global_red_flag": [
+        "abnormal_bleeding",
+        "altered_consciousness",
+        "anaphylaxis_signs",
+        "blue_lips_face",
+        "breathlessness_at_rest",
+        "circulatory_collapse",
+        "impaired_consciousness",
+        "inability_to_drink",
+        "prostration",
+        "respiratory_distress",
+        "seizures",
+        "severe_dehydration",
+        "shock"
+      ],
+      "referenced_by_rules": [
+        "abnormal_bleeding",
+        "altered_consciousness",
+        "anaphylaxis_signs",
+        "blue_lips_face",
+        "breathlessness_at_rest",
+        "chest_indrawing_severe",
+        "circulatory_collapse",
+        "impaired_consciousness",
+        "inability_to_drink",
+        "prostration",
+        "respiratory_distress",
+        "seizures",
+        "severe_dehydration",
+        "shock"
+      ],
+      "carry_kb_scoring_weight": [
+        "abdominal_cramps",
+        "abdominal_pain",
+        "animal_bite",
+        "back_pain",
+        "bad_breath",
+        "bilateral_oedema",
+        "bite_mark",
+        "bleeding",
+        "blistering",
+        "blood_in_urine",
+        "blurred_vision",
+        "body_pain",
+        "boils",
+        "charred_skin",
+        "chest_pain",
+        "chest_tightness",
+        "chills",
+        "chronic_cough",
+        "chronic_diarrhoea",
+        "confusion",
+        "cough",
+        "dark_urine",
+        "diarrhoea",
+        "difficulty_breathing",
+        "difficulty_swallowing",
+        "dizziness",
+        "excessive_thirst",
+        "exertional_breathlessness",
+        "eye_discharge",
+        "eye_itchiness",
+        "eye_pain",
+        "eye_redness",
+        "fast_breathing",
+        "fast_breathing_child",
+        "fast_breathing_neonate",
+        "fatigue",
+        "fear_of_water",
+        "fever",
+        "frequent_urination",
+        "general_weakness",
+        "head_pain",
+        "headache",
+        "hives",
+        "hoarse_voice",
+        "irritability",
+        "itchy_eyes",
+        "itchy_rash",
+        "joint_pain",
+        "leg_swelling",
+        "lethargy",
+        "light_headedness",
+        "limb_weakness",
+        "limited_movement",
+        "local_swelling",
+        "low_energy",
+        "mild_cough",
+        "mild_headache",
+        "mild_sore_throat",
+        "mild_swelling",
+        "mouth_sores",
+        "muscle_stiffness",
+        "nausea",
+        "near_fainting",
+        "neonatal_fever",
+        "night_sweats",
+        "nocturnal_cough",
+        "nosebleed",
+        "one_sided_headache",
+        "oral_thrush",
+        "pain",
+        "pain_at_burn",
+        "pain_on_chewing",
+        "palpitations",
+        "persistent_fatigue",
+        "persistent_fever",
+        "poor_appetite",
+        "poor_feeding",
+        "poor_growth",
+        "pressure_headache",
+        "ptosis",
+        "pus_discharge",
+        "recurrent_infections",
+        "reduced_daily_function",
+        "repeated_infections",
+        "runny_nose",
+        "shortness_of_breath",
+        "skin_redness",
+        "skin_swelling",
+        "sneezing",
+        "spinning_sensation",
+        "spreading_swelling",
+        "stridor",
+        "sweating",
+        "swelling",
+        "swollen_eyelids",
+        "swollen_gums",
+        "swollen_neck",
+        "throat_membrane",
+        "throbbing_headache",
+        "tiredness",
+        "toothache",
+        "unsteadiness",
+        "vomiting",
+        "watery_stool",
+        "weakness",
+        "weight_loss",
+        "wheeze",
+        "wound_at_bite"
+      ],
+      "demographic": [
+        "adults",
+        "children_school_age",
+        "children_under_5",
+        "diabetes_known",
+        "elderly",
+        "hypertension_known",
+        "known_allergy",
+        "over_40",
+        "pregnancy",
+        "smoker"
+      ]
+    },
+    "references": {
+      "abdominal_cramps": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "abdominal_pain": [
+        "demographic_screen"
+      ],
+      "abnormal_bleeding": [
+        "clarifier.red_flag_token",
+        "demographic_screen"
+      ],
+      "adults": [
+        "demographic_screen"
+      ],
+      "altered_consciousness": [
+        "demographic_screen"
+      ],
+      "anaphylaxis_signs": [
+        "demographic_screen"
+      ],
+      "animal_bite": [
+        "demographic_screen"
+      ],
+      "back_pain": [
+        "demographic_screen"
+      ],
+      "bad_breath": [
+        "demographic_screen"
+      ],
+      "bilateral_oedema": [
+        "demographic_screen"
+      ],
+      "bite_mark": [
+        "demographic_screen"
+      ],
+      "bleeding": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "blistering": [
+        "demographic_screen"
+      ],
+      "blood_in_urine": [
+        "demographic_screen"
+      ],
+      "blue_lips_face": [
+        "demographic_screen"
+      ],
+      "blurred_vision": [
+        "demographic_screen"
+      ],
+      "body_pain": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "boils": [
+        "demographic_screen"
+      ],
+      "breathlessness_at_rest": [
+        "clarifier.red_flag_token",
+        "demographic_screen"
+      ],
+      "charred_skin": [
+        "demographic_screen"
+      ],
+      "chest_indrawing_severe": [
+        "followup_map.key"
+      ],
+      "chest_pain": [
+        "demographic_screen"
+      ],
+      "chest_tightness": [
+        "demographic_screen"
+      ],
+      "children_school_age": [
+        "demographic_screen"
+      ],
+      "children_under_5": [
+        "demographic_screen"
+      ],
+      "chills": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "chronic_cough": [
+        "demographic_screen"
+      ],
+      "chronic_diarrhoea": [
+        "demographic_screen"
+      ],
+      "circulatory_collapse": [
+        "demographic_screen"
+      ],
+      "confusion": [
+        "demographic_screen"
+      ],
+      "cough": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "dark_urine": [
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "days_1_3": [
+        "answer.duration"
+      ],
+      "days_3_7": [
+        "answer.duration"
+      ],
+      "days_7_plus": [
+        "answer.duration"
+      ],
+      "diabetes_known": [
+        "demographic_screen"
+      ],
+      "diarrhoea": [
+        "demographic_screen"
+      ],
+      "difficulty_breathing": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "difficulty_swallowing": [
+        "demographic_screen"
+      ],
+      "dizziness": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "elderly": [
+        "demographic_screen"
+      ],
+      "excessive_thirst": [
+        "demographic_screen"
+      ],
+      "exertional_breathlessness": [
+        "demographic_screen"
+      ],
+      "eye_discharge": [
+        "demographic_screen"
+      ],
+      "eye_itchiness": [
+        "demographic_screen"
+      ],
+      "eye_pain": [
+        "demographic_screen"
+      ],
+      "eye_redness": [
+        "demographic_screen"
+      ],
+      "fast_breathing": [
+        "demographic_screen"
+      ],
+      "fast_breathing_child": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "fast_breathing_neonate": [
+        "demographic_screen"
+      ],
+      "fatigue": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "fear_of_water": [
+        "demographic_screen"
+      ],
+      "fever": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "frequent_urination": [
+        "demographic_screen"
+      ],
+      "general_weakness": [
+        "demographic_screen"
+      ],
+      "head_pain": [
+        "demographic_screen"
+      ],
+      "headache": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "hives": [
+        "demographic_screen"
+      ],
+      "hoarse_voice": [
+        "demographic_screen"
+      ],
+      "hypertension_known": [
+        "demographic_screen"
+      ],
+      "impaired_consciousness": [
+        "demographic_screen"
+      ],
+      "inability_to_drink": [
+        "clarifier.red_flag_token",
+        "demographic_screen"
+      ],
+      "irritability": [
+        "demographic_screen"
+      ],
+      "itchy_eyes": [
+        "demographic_screen"
+      ],
+      "itchy_rash": [
+        "demographic_screen"
+      ],
+      "joint_pain": [
+        "demographic_screen"
+      ],
+      "known_allergy": [
+        "demographic_screen"
+      ],
+      "leg_swelling": [
+        "demographic_screen"
+      ],
+      "lethargy": [
+        "demographic_screen"
+      ],
+      "light_headedness": [
+        "demographic_screen"
+      ],
+      "limb_weakness": [
+        "demographic_screen"
+      ],
+      "limited_movement": [
+        "demographic_screen"
+      ],
+      "local_swelling": [
+        "demographic_screen"
+      ],
+      "low_energy": [
+        "demographic_screen"
+      ],
+      "mild": [
+        "answer.severity"
+      ],
+      "mild_cough": [
+        "demographic_screen"
+      ],
+      "mild_headache": [
+        "demographic_screen"
+      ],
+      "mild_sore_throat": [
+        "demographic_screen"
+      ],
+      "mild_swelling": [
+        "demographic_screen"
+      ],
+      "moderate": [
+        "answer.severity"
+      ],
+      "mouth_sores": [
+        "demographic_screen"
+      ],
+      "muscle_stiffness": [
+        "demographic_screen"
+      ],
+      "nausea": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "near_fainting": [
+        "demographic_screen"
+      ],
+      "neonatal_fever": [
+        "demographic_screen"
+      ],
+      "night_sweats": [
+        "demographic_screen"
+      ],
+      "nocturnal_cough": [
+        "demographic_screen"
+      ],
+      "nosebleed": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "one_sided_headache": [
+        "demographic_screen"
+      ],
+      "oral_thrush": [
+        "demographic_screen"
+      ],
+      "over_40": [
+        "demographic_screen"
+      ],
+      "pain": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "pain_at_burn": [
+        "demographic_screen"
+      ],
+      "pain_on_chewing": [
+        "demographic_screen"
+      ],
+      "palpitations": [
+        "demographic_screen"
+      ],
+      "persistent_fatigue": [
+        "demographic_screen"
+      ],
+      "persistent_fever": [
+        "demographic_screen"
+      ],
+      "poor_appetite": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "poor_feeding": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "poor_growth": [
+        "demographic_screen"
+      ],
+      "pregnancy": [
+        "demographic_screen"
+      ],
+      "pressure_headache": [
+        "demographic_screen"
+      ],
+      "prostration": [
+        "demographic_screen"
+      ],
+      "ptosis": [
+        "demographic_screen"
+      ],
+      "pus_discharge": [
+        "demographic_screen"
+      ],
+      "recurrent_infections": [
+        "demographic_screen"
+      ],
+      "reduced_daily_function": [
+        "demographic_screen"
+      ],
+      "repeated_infections": [
+        "demographic_screen"
+      ],
+      "respiratory_distress": [
+        "demographic_screen"
+      ],
+      "runny_nose": [
+        "demographic_screen"
+      ],
+      "seizures": [
+        "demographic_screen"
+      ],
+      "severe": [
+        "answer.severity"
+      ],
+      "severe_dehydration": [
+        "demographic_screen"
+      ],
+      "shock": [
+        "demographic_screen"
+      ],
+      "shortness_of_breath": [
+        "clarifier.trigger_token",
+        "demographic_screen"
+      ],
+      "skin_redness": [
+        "demographic_screen"
+      ],
+      "skin_swelling": [
+        "demographic_screen"
+      ],
+      "smoker": [
+        "demographic_screen"
+      ],
+      "sneezing": [
+        "demographic_screen"
+      ],
+      "spinning_sensation": [
+        "demographic_screen"
+      ],
+      "spreading_swelling": [
+        "demographic_screen"
+      ],
+      "stridor": [
+        "demographic_screen"
+      ],
+      "sweating": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "swelling": [
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "swollen_eyelids": [
+        "demographic_screen"
+      ],
+      "swollen_gums": [
+        "demographic_screen"
+      ],
+      "swollen_neck": [
+        "demographic_screen"
+      ],
+      "throat_membrane": [
+        "demographic_screen"
+      ],
+      "throbbing_headache": [
+        "demographic_screen"
+      ],
+      "tiredness": [
+        "demographic_screen"
+      ],
+      "toothache": [
+        "demographic_screen"
+      ],
+      "unsteadiness": [
+        "demographic_screen"
+      ],
+      "very_severe": [
+        "answer.severity"
+      ],
+      "vomiting": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "watery_stool": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "weakness": [
+        "answer.additional_symptom",
+        "demographic_screen",
+        "followup_map.key"
+      ],
+      "weeks_2_plus": [
+        "answer.duration"
+      ],
+      "weight_loss": [
+        "demographic_screen"
+      ],
+      "wheeze": [
+        "demographic_screen"
+      ],
+      "wound_at_bite": [
+        "demographic_screen"
+      ]
+    }
+  },
+  "dead_or_duplicated": {
+    "authored_answer_options_not_reachable_in_ui": [],
+    "authored_answer_options_not_reachable_count": 0,
+    "followup_map_tokens_not_picker_reachable": [
+      "chest_indrawing_severe"
+    ]
+  },
+  "current_behaviour": {
+    "skip_supported": false,
+    "answer_editing_supported": "backward navigation only \u2014 _onBack decrements the index and previously entered answers are retained; there is no dependency-based invalidation",
+    "cancellation": "a confirm dialog on the follow-up screen; cancelling discards the assessment",
+    "answer_storage": "in-memory Map<int, dynamic> on the follow-up screen widget state, committed to AssessmentController only at the end",
+    "red_flag_evaluation_points": [
+      "once, inside the engine, after all follow-up questions"
+    ],
+    "scoring_evaluation_points": [
+      "once, inside the engine, after red-flag evaluation"
+    ],
+    "offline_loading": "questions are compiled into the app binary, so they are always available offline; they cannot be updated without an app release",
+    "restored_state": "none \u2014 assessment state is in-memory and is lost if the flow is left"
+  },
+  "existing_tests": {
+    "test/assessment/question_engine_test.dart": 4,
+    "test/assessment/red_flag_clarifier_test.dart": 9,
+    "coverage_gaps": [
+      "no test asserts ordering stability against symptom-selection order (QB-005)",
+      "no test asserts truncation never drops a red-flag clarifier (QB-006)",
+      "no test covers answer editing or dependent invalidation",
+      "no test covers skip semantics (none exist to cover)",
+      "no test covers restored assessment state",
+      "no test asserts that every authored additionalSymptoms option is reachable (QB-007)"
+    ]
+  },
+  "known_defects_and_inconsistencies": [
+    {
+      "id": "QB-001",
+      "severity": "architectural",
+      "finding": "There is no versioned question artifact. The entire flow is Dart source in wellapath-mobile, so it carries no artifact version, no hash in any manifest, and cannot be rolled back independently of an app release.",
+      "evidence": "baseline/questions_v1/*.vendored.dart; no question entry exists in the backend /config artifacts map."
+    },
+    {
+      "id": "QB-002",
+      "severity": "high",
+      "finding": "Red-flag clarifier answers are not evaluated when answered. followup_screen.dart accumulates answers in a local map and calls _commitAnswers() only when the LAST follow-up question is answered, immediately before navigating to LoadingScreen. A 'yes' to a clarifier therefore does not interrupt the flow; the red flag is evaluated once, in the engine, after every follow-up question has been presented.",
+      "evidence": "followup_screen.vendored.dart _onNext/_commitAnswers; red-flag evaluation occurs only in lib/core/engine/red_flag_evaluator.dart.",
+      "w3_requirement": "W3 requires red-flag evaluation after every answer capable of affecting a red flag. This is a behaviour gap the candidate contract specifies but the current implementation does not meet."
+    },
+    {
+      "id": "QB-003",
+      "severity": "medium",
+      "finding": "The follow-up question list is computed once in initState from the symptom tokens selected before the screen opened. Tokens added by an additionalSymptoms answer do not generate further follow-up questions in the same assessment.",
+      "evidence": "followup_screen.vendored.dart initState -> QuestionEngine.generateQuestions(...); no recomputation on answer change."
+    },
+    {
+      "id": "QB-004",
+      "severity": "medium",
+      "finding": "Answers are keyed by list index (Map<int, dynamic>), not by a stable question ID. The index is only meaningful against the exact list generated at initState.",
+      "evidence": "followup_screen.vendored.dart `final Map<int, dynamic> _answers = {}`."
+    },
+    {
+      "id": "QB-005",
+      "severity": "medium",
+      "finding": "Question selection depends on the ORDER of the selected symptom tokens: severity and duration are taken from whichever selected token yields one first (`severityQuestion ??= question`). Two users selecting the same symptoms in a different order can be asked differently worded questions.",
+      "evidence": "question_engine.vendored.dart generateQuestions loop."
+    },
+    {
+      "id": "QB-006",
+      "severity": "medium",
+      "finding": "Truncation to 5 questions is applied to the whole list after clarifiers are prepended. It is only incidental that no red-flag clarifier is ever dropped: there are 3 clarifiers and they sort first. A fourth-plus clarifier firing alongside others could push a red-flag question out of the list.",
+      "evidence": "question_engine.vendored.dart `result.length > 5 ? result.sublist(0, 5) : result`."
+    },
+    {
+      "id": "QB-007",
+      "severity": "low",
+      "finding": "additionalSymptoms options are filtered at render time against kSymptomDisplayMap, and an authored option with no display label is silently dropped rather than surfaced as an authoring error. Measured on this baseline the filter currently drops NOTHING \u2014 all authored options have display labels \u2014 so this is a latent risk, not a live defect.",
+      "evidence": "followup_screen.vendored.dart `availableTokens = question.options.where((token) => _displayNameForToken(token) != null)`."
+    },
+    {
+      "id": "QB-008",
+      "severity": "low",
+      "finding": "There is no skip mechanism. No follow-up question can be skipped, and no question is marked optional; the only exits are answering or cancelling the assessment.",
+      "evidence": "followup_screen.vendored.dart contains no skip control."
+    },
+    {
+      "id": "QB-009",
+      "severity": "informational",
+      "finding": "The age band label '0\u201312' maps to the token `children_under_5`, so a 6-to-12-year-old is tokenised as under-5. `children_under_15` exists in the token dictionary and is unused.",
+      "evidence": "assessment_controller.vendored.dart _ageTokenMap."
+    },
+    {
+      "id": "QB-011",
+      "severity": "informational",
+      "finding": "The symptom picker maps 123 display labels onto 121 distinct tokens: `body_pain` is offered as both 'Body pain' and 'Muscle pain', and `nausea` as both 'Nausea' and 'Feeling sick or queasy'. This looks deliberate \u2014 two ways to say the same thing \u2014 but it means a picker entry is not uniquely identified by its token, so answer-option identity must key on the label, not the token.",
+      "evidence": "symptom_display_map.vendored.dart kSymptomDisplayMap."
+    },
+    {
+      "id": "QB-010",
+      "severity": "informational",
+      "finding": "Sex is captured but produces no demographic token; it only gates the pregnancy screen. `male` and `female` exist in demographic_tokens and are never emitted.",
+      "evidence": "assessment_controller.vendored.dart setSex."
+    }
+  ]
+}

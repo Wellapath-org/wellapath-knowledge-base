@@ -1,0 +1,296 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/question_flow.v1.schema.json",
+  "title": "WellaPath Adaptive Question Flow — schema 1.0",
+  "description": "Machine-validatable schema for question_flow artifacts. The current flow has no artifact at all; this is the first versioned representation of it. Prose field semantics live in schema/question_flow_schema_v1.0.json.",
+  "type": "object",
+  "required": ["_metadata", "condition_language", "path_controls", "questions"],
+  "additionalProperties": false,
+  "properties": {
+    "_metadata": { "$ref": "#/$defs/metadata" },
+    "condition_language": { "$ref": "#/$defs/conditionLanguage" },
+    "path_controls": { "$ref": "#/$defs/pathControls" },
+    "questions": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/question" }
+    }
+  },
+
+  "$defs": {
+    "questionId": {
+      "description": "Stable question identifier. Immutable once published.",
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 96,
+      "pattern": "^Q-[a-z0-9]+(-[a-z0-9_]+)*$"
+    },
+    "answerOptionId": {
+      "description": "Stable answer-option identifier, namespaced by its question: <question_id>::<local>.",
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 160,
+      "pattern": "^Q-[a-z0-9]+(-[a-z0-9_]+)*::[A-Za-z0-9_]+$"
+    },
+    "tokenId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$"
+    },
+    "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+
+    "metadata": {
+      "type": "object",
+      "required": [
+        "artifact_id", "version", "schema_version", "country", "release_status",
+        "release_date", "generated_at", "generator", "generator_version",
+        "source", "clinical_review", "may_publish", "changelog", "provenance"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": { "const": "question_flow" },
+        "version": { "$ref": "#/$defs/version" },
+        "schema_version": { "const": "1.0" },
+        "country": { "type": "string", "pattern": "^[a-z]{2}$" },
+        "release_status": {
+          "type": "string",
+          "enum": ["candidate_unapproved", "approved_unpublished", "published"]
+        },
+        "release_date": { "type": ["string", "null"], "format": "date" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "generator": { "type": "string", "minLength": 1 },
+        "generator_version": { "type": "string", "minLength": 1 },
+        "may_publish": {
+          "description": "Must be false unless clinical_review.status is 'reviewed' AND an engineering-lead approval is recorded.",
+          "type": "boolean"
+        },
+        "source": {
+          "description": "Where the projected behaviour came from. The current flow is Dart source, so this names a repository, a commit and hashed vendored files rather than a prior artifact version.",
+          "type": "object",
+          "required": ["repository", "commit", "vendored_files"],
+          "additionalProperties": true,
+          "properties": {
+            "repository": { "type": "string", "minLength": 1 },
+            "commit": { "type": "string", "minLength": 7 },
+            "vendored_files": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["file", "sha256"],
+                "additionalProperties": true,
+                "properties": {
+                  "file": { "type": "string" },
+                  "sha256": { "$ref": "#/$defs/sha256" }
+                }
+              }
+            }
+          }
+        },
+        "clinical_review": {
+          "type": "object",
+          "required": ["status", "reviewer", "review_date", "evidence"],
+          "additionalProperties": false,
+          "properties": {
+            "status": { "type": "string", "enum": ["not_reviewed", "in_review", "reviewed"] },
+            "reviewer": { "type": ["string", "null"], "minLength": 1 },
+            "review_date": { "type": ["string", "null"], "format": "date" },
+            "evidence": { "type": ["string", "null"], "minLength": 1 }
+          }
+        },
+        "changelog": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "provenance": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+
+    "conditionLanguage": {
+      "type": "object",
+      "required": ["version", "operators", "fields"],
+      "additionalProperties": false,
+      "properties": {
+        "version": { "type": "string", "minLength": 1 },
+        "operators": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": ["all", "any", "not", "equals", "one_of", "token_present",
+                     "token_absent", "prior_answer_equals", "age_range", "sex",
+                     "pregnancy", "always", "never"]
+          }
+        },
+        "fields": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["sex", "age_token", "body_area", "assessment_phase"] }
+        }
+      }
+    },
+
+    "condition": {
+      "description": "Exactly one operator key. Values are validated by tools/qflow/conditions.py, which rejects unknown operators, unknown fields and unresolvable cross-references.",
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 1
+    },
+
+    "pathControls": {
+      "type": "object",
+      "required": [
+        "max_questions_per_assessment", "max_followup_questions",
+        "red_flag_questions_exempt_from_truncation", "truncation_allowed",
+        "cycle_detection", "repeated_question_prevention", "thresholds_status"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "max_questions_per_assessment": { "type": "integer", "minimum": 1 },
+        "max_followup_questions": { "type": "integer", "minimum": 1 },
+        "max_questions_per_complaint_path": { "type": ["integer", "null"], "minimum": 1 },
+        "red_flag_questions_exempt_from_truncation": {
+          "description": "Must be true. A red-flag-affecting question is never dropped to satisfy a length limit.",
+          "const": true
+        },
+        "truncation_allowed": { "type": "boolean" },
+        "truncation_rule": { "type": ["string", "null"] },
+        "cycle_detection": { "const": "required" },
+        "repeated_question_prevention": { "const": "required" },
+        "thresholds_status": {
+          "type": "string",
+          "enum": ["measured_from_implementation", "product_approved"]
+        },
+        "proposed_options": { "type": "array", "items": { "type": "object" } },
+        "final_threshold_status": {
+          "description": "Must state that the final product threshold is pending approval until product and clinical sign off. A measured or proposed value is never an approved one.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+
+    "question": {
+      "type": "object",
+      "required": [
+        "question_id", "question_type", "content_ref", "answer_value_type",
+        "required", "skippable", "answer_options", "trigger_condition",
+        "priority", "path_length_contribution", "red_flag_evaluation",
+        "effects", "review", "provenance"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "question_id": { "$ref": "#/$defs/questionId" },
+        "question_type": {
+          "type": "string",
+          "enum": ["single_select", "multi_select", "scale_select", "yes_no"]
+        },
+        "clinical_role": {
+          "type": "string",
+          "enum": ["red_flag_clarifier", "severity", "duration", "additional_symptoms",
+                   "demographic", "body_area", "symptom_picker"]
+        },
+        "content_ref": {
+          "description": "Reference to approved display content. Verbatim source text is carried in `source_text` for traceability; a consumer renders approved content, never this field.",
+          "type": "object",
+          "required": ["content_id", "source_text", "content_approved"],
+          "additionalProperties": false,
+          "properties": {
+            "content_id": { "type": "string", "minLength": 1 },
+            "source_text": { "type": "string", "minLength": 1 },
+            "content_approved": { "type": "boolean" }
+          }
+        },
+        "answer_value_type": {
+          "type": "string",
+          "enum": ["option_id", "option_id_set", "boolean"]
+        },
+        "required": { "type": "boolean" },
+        "skippable": { "type": "boolean" },
+        "answer_options": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/answerOption" }
+        },
+        "trigger_condition": { "$ref": "#/$defs/condition" },
+        "branch_conditions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["when", "next_question_id"],
+            "additionalProperties": false,
+            "properties": {
+              "when": { "$ref": "#/$defs/condition" },
+              "next_question_id": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "terminal": { "type": "boolean" },
+        "priority": {
+          "description": "Lower runs first. Ties are broken by the declared tie_break_key, never by map or file order.",
+          "type": "integer",
+          "minimum": 0
+        },
+        "tie_break_key": { "type": "string", "minLength": 1 },
+        "path_length_contribution": { "type": "integer", "minimum": 0, "maximum": 1 },
+        "red_flag_evaluation": {
+          "type": "object",
+          "required": ["can_affect_red_flag", "evaluate_after_answer", "blocks_next_question"],
+          "additionalProperties": false,
+          "properties": {
+            "can_affect_red_flag": { "type": "boolean" },
+            "evaluate_after_answer": { "type": "boolean" },
+            "blocks_next_question": { "type": "boolean" }
+          }
+        },
+        "effects": {
+          "type": "object",
+          "required": ["produces_tokens", "affects_scoring", "affects_red_flags"],
+          "additionalProperties": false,
+          "properties": {
+            "produces_tokens": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": { "$ref": "#/$defs/tokenId" }
+            },
+            "affects_scoring": { "type": "boolean" },
+            "affects_red_flags": { "type": "boolean" }
+          }
+        },
+        "invalidates_on_change": {
+          "description": "Question IDs whose stored answers must be cleared when this question's answer changes.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string" }
+        },
+        "review": {
+          "type": "object",
+          "required": ["review_status", "clinical_reviewer", "review_date"],
+          "additionalProperties": false,
+          "properties": {
+            "review_status": { "type": "string", "enum": ["not_reviewed", "in_review", "reviewed"] },
+            "clinical_reviewer": { "type": ["string", "null"], "minLength": 1 },
+            "review_date": { "type": ["string", "null"], "format": "date" }
+          }
+        },
+        "provenance": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "answerOption": {
+      "type": "object",
+      "required": ["answer_option_id", "label", "produces_tokens", "is_skip_sentinel"],
+      "additionalProperties": false,
+      "properties": {
+        "answer_option_id": { "$ref": "#/$defs/answerOptionId" },
+        "label": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "produces_tokens": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/tokenId" }
+        },
+        "is_skip_sentinel": {
+          "description": "A skip is a distinct state, not an answer value. A skip sentinel must produce no clinical token.",
+          "type": "boolean"
+        },
+        "value": { "type": ["string", "number", "boolean", "null"] }
+      }
+    }
+  }
+}

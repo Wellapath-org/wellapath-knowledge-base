@@ -318,3 +318,130 @@ unchanged, alias count 0, association count 0, `display_safe` false for all 295,
 4. **No documented tie-break** — CB_232's margin was 5, so none was exercised.
 5. **Three IMCI tier keys** — `pneumonia`, `severe_pneumonia`, `very_severe_disease`.
 6. **`breathlessness` vs `shortness_of_breath`** — decision required.
+
+## I2 / W3 Step 1 — Adaptive Question Engine 2.0 contract
+
+Branch `feat/i2-w3-question-flow-contract`. Contract-defining step: freeze the
+existing question flow, define a versioned schema, project the current behaviour
+into a candidate, and hand Mobile an exact contract. **Nothing published, nothing
+approved, no Mobile or Backend file touched.**
+Full write-up: `docs/W3_QUESTION_FLOW_CONTRACT.md`.
+
+- **Headline finding: there is no question artifact.** The whole flow is Dart
+  source in wellapath-mobile — 18 token keys and 40 authored questions in
+  `followup_question_map.dart`, 3 red-flag clarifiers, one static engine class,
+  five screens and a controller. No version, no hash, no `/config` entry, and no
+  rollback independent of an app release. Six source files are vendored into
+  `baseline/questions_v1/` and hashed so the baseline is pinned to real bytes.
+
+- **Frozen baseline** (`reports/question_baseline_freeze_v1.json`): 44 question
+  definitions, 6 demographic questions, 154 answer options, 3 red-flag-affecting,
+  18 scoring-affecting, 121 picker-reachable tokens, 140 referenced tokens,
+  **0 unresolved references**, 0 dead options, enforced path limit 5.
+
+- **Eleven defects recorded, none repaired.** The important one is **QB-002**:
+  red-flag clarifier answers are **not evaluated when answered** —
+  `_commitAnswers()` runs only after the last follow-up question, so a "yes"
+  does not interrupt and the red flag is evaluated once, in the engine, after
+  every question has been shown. Also QB-005 (question wording depends on the
+  order symptoms were tapped), QB-006 (truncation is applied after clarifiers
+  are prepended; no clarifier is dropped today only because there are three),
+  QB-003 (no re-branching on newly derived tokens), QB-011 (123 picker labels
+  onto 121 tokens).
+
+- **Candidate** `candidate/question_flow.ng.v1.0.json` — schema 1.0, artifact
+  1.0, `candidate_unapproved`, `may_publish: false`. **50 questions, 300 answer
+  options.** Zero added, removed or reworded; zero answer meanings or token
+  effects changed; token output universe identical.
+
+- **Parity is claimed honestly.** Six impedance mismatches are recorded in the
+  artifact itself, and `parity_claim` says **"NOT identical"** — a test enforces
+  that it keeps saying so. IM-002 (immediate red-flag evaluation) is
+  clinically substantive and in the safe direction: **earlier, never later**.
+  IM-001 replaces the selection-order dependence with a declared tie-break.
+  Neither is implemented in Mobile here.
+
+- **Condition language:** 13 operators, 4 readable fields, closed and finite.
+  No expression parser, no scripting, no regex over clinical free text, no
+  network, no fuzzy or probabilistic branching. Fail-closed throughout: unknown
+  operator or field is an error, not `false`; unknown sex/pregnancy/age makes a
+  condition false, so a gated question is not asked rather than wrongly asked.
+
+- **Red-flag precedence** is structural: every red-flag-affecting question
+  declares immediate evaluation and blocks the next question, a validator fails
+  if any does not, and a second fails if the declared hook disagrees with the
+  computed effect. Truncation exemption is a schema **constant** — if red-flag
+  questions exceed the limit, the limit yields.
+
+- **Path controls:** limit 5 measured from the implementation, distribution
+  measured over 2,325 explored paths (max 5, min 1). **No final threshold
+  invented** — three bounded options proposed and `final_threshold_status` reads
+  PENDING product and clinical approval.
+
+- **Checks:** `python3 tools/run_w2_checks.py` now runs **22** groups, all green
+  — including 34 question-flow validators, 26 compatibility checks and 81
+  question-flow tests. 18 path scenarios + 3 edit scenarios; **23/23 invalid
+  fixtures** trip their named check. Exploration bound is declared, not glossed:
+  exhaustive over token subsets up to size 3, with the uncovered space stated.
+
+### Blocked on clinical / product input
+
+1. **IM-002 — immediate red-flag evaluation.** Safe direction, real behaviour
+   change. Engineering lead + clinical.
+2. **Question wording approval** — all 50 are `content_approved: false`.
+3. **Final path-length threshold** — three options proposed, none approved.
+4. **Whether any question may become skippable** — none is today.
+5. **QB-009** — the `0-12` age band maps to `children_under_5`, so a
+   6-to-12-year-old is tokenised as under-5; `children_under_15` is unused.
+   Pre-existing, not changed here.
+6. **Distribution model** — the flow is compiled into the app. Serving it as an
+   artifact needs a `/config` entry, a download path and last-known-good
+   fallback, none of which exists.
+
+### W3 Step 1A — dispositions recorded, full impedance disclosure
+
+Engineering-lead dispositions recorded in the candidate as
+`_metadata.engineering_dispositions`, enforced by 20 new fail-closed validators.
+
+- **Correction: there are SEVEN impedance mismatches, not six.** The artifact
+  always recorded IM-001 through IM-007; the PR description and contract doc
+  said "six". The artifact was right and the prose was wrong — now corrected,
+  and a validator asserts the enumerated list so a mismatch cannot be added
+  without being disclosed.
+
+- **Correction: IM-003 was under-classified.** It was recorded as "not
+  clinically substantive — can only ask more questions". Measured: newly
+  triggerable severity and duration questions produce tokens that carry **no**
+  kb weight and are **not** red-flag relevant, but newly triggerable
+  *additionalSymptoms* questions **do** affect scoring — they give the user
+  further chances to declare symptoms, which can change the token set and
+  therefore the top condition. Verified separately that **no** additionalSymptoms
+  option anywhere is a clarifier trigger token, so re-branching **cannot** raise
+  a red-flag clarifier that does not fire today. IM-003 is now classified
+  path-affecting, marked an activation blocker and **deferred**.
+
+- **Dispositions:** IM-001 adopted (ordering `(priority, tie_break_key,
+  question_id)`, regression evidence required before activation); IM-002 adopted
+  as a **required safety correction**; path limit **fixed at 5**; optional skips
+  **deferred** (candidate has zero); distribution **compiled-in / default-off /
+  internal only**, served distribution deferred to I3; wording preserved
+  byte-for-byte **without approval**. Every disposition states what it does
+  **not** authorize. Production, public-beta, external-beta, clinical and
+  product approval all **false**.
+
+- **QB-002 reproduced and measured** (`reports/qb002_evidence_v1.json`): a
+  clarifier answered "Yes" is followed by up to **4 further ordinary questions**
+  before the engine ever sees the red-flag token. `_commitAnswers()` runs only
+  on the last question. Scoring **cannot** override the eventual red flag —
+  `ScoringEngine.score` throws when `proceed_to_scoring` is false. So this is not
+  an under-triage defect; the harm is abandonment before the result. Earliest
+  safe interception point identified: `_onNext`, in the advance branch, before
+  `setState` and before the step-view event.
+
+- **Mobile IM-002 handoff** (`mobile_handoff/question_flow_v1/IM002_SAFETY_FIX.md`)
+  — the safety fix only, not the adaptive engine. 12 regression cases, telemetry
+  must not become a red-flag oracle, default-off flag for rollback.
+
+- No clinical-content change: question wording byte-identical (27 texts), token
+  output universe identical (139 tokens), 50 questions / 300 options unchanged.
+  Checks now **23 groups**, all green; 53 question-flow validators; 103 tests.

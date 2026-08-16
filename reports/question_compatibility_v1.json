@@ -1,0 +1,427 @@
+{
+  "report_id": "question_compatibility",
+  "report_version": "1",
+  "phase": "I2 / W3 Step 1",
+  "generator": "tools/check_question_compatibility.py",
+  "generator_version": "1.0.0",
+  "candidate": {
+    "file": "candidate/question_flow.ng.v1.0.json",
+    "version": "1.0",
+    "sha256": "c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998",
+    "release_status": "candidate_unapproved"
+  },
+  "parity": {
+    "question_content": "identical \u2014 every question, wording and answer label is copied from the vendored Dart",
+    "answer_meaning": "identical",
+    "token_effects": "identical",
+    "red_flag_effects": "identical",
+    "ordering": "deterministic; the one selection-order dependence in the current code is replaced by a declared tie-break (IM-001)",
+    "timing": "specified to be EARLIER for red-flag-affecting answers (IM-002); never later",
+    "claim": "behavioural equivalence for content and effects; NOT identical for timing and determinism, both documented as impedance mismatches"
+  },
+  "not_proven_here": {
+    "running_app_equivalence": "This repository holds no Flutter runtime and must not grow a second engine. Executable proof belongs in the mobile repository once the contract is implemented.",
+    "top_50_case_bank": "Unaffected by construction \u2014 the case bank supplies tokens directly to the engine and does not traverse the question flow. kb 2.4, rules 2.2 and the bank are byte-identical, so the recorded result (238 pass, CB_211 known finding) cannot change."
+  },
+  "impedance_mismatches": [
+    {
+      "id": "IM-001",
+      "area": "question selection and ordering",
+      "baseline_behaviour": "Severity and duration questions are chosen by `severityQuestion ??= question` / `durationQuestion ??= question` while iterating the SELECTED symptom tokens, so which wording is asked depends on the order the user tapped symptoms.",
+      "candidate_behaviour": "Selection is by the declared order key (priority, tie_break_key, question_id), with tie_break_key = the trigger token id. The same symptom set always yields the same question regardless of selection order.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/question_engine.vendored.dart:15 (for (final token in symptomTokens))",
+          "baseline/questions_v1/question_engine.vendored.dart:24,26 (??= first-wins)"
+        ],
+        "candidate": [
+          "questions[].priority",
+          "questions[].tie_break_key"
+        ]
+      },
+      "why_it_exists": "The current code has no tie-break at all; first-wins over an unordered user selection is the de-facto rule. W3 forbids ordering that depends on unstable iteration, and a tie with no declared resolution is a validation failure under this contract.",
+      "classification": {
+        "deterministic_only": true,
+        "safety_affecting": false,
+        "clinical_content_affecting": false,
+        "path_affecting": false,
+        "state_model_affecting": false,
+        "artifact_model_only": false
+      },
+      "affected_existing_paths": "Only paths where two or more selected tokens each offer the same question type. The competing questions differ ONLY in wording (e.g. 'How severe is your headache?' vs 'How severe is this pain?'); the question type, answer options and produced tokens are identical.",
+      "changes_production_behaviour": true,
+      "changes_token_output": false,
+      "status": "adopted_for_candidate",
+      "required_mobile_tests": [
+        "same symptom set selected in different orders yields an identical question sequence",
+        "order key is used for sorting; no reliance on List.sort stability or map iteration",
+        "regression evidence enumerating every path whose asked wording changes"
+      ],
+      "required_review": "product \u2014 confirm the deterministically chosen wording is the right one on each changed tie path",
+      "activation_blocker": true,
+      "activation_blocker_reason": "Production activation requires regression evidence showing every changed tie path."
+    },
+    {
+      "id": "IM-002",
+      "area": "red-flag evaluation timing",
+      "baseline_behaviour": "Answers accumulate in a local map and `_commitAnswers()` runs only when the LAST follow-up question is answered, immediately before navigating to LoadingScreen. A red-flag clarifier 'yes' does not interrupt; the red flag is evaluated once, in the engine, after every follow-up question has been presented.",
+      "candidate_behaviour": "Every red-flag-affecting question declares evaluate_after_answer=true and blocks_next_question=true, requiring evaluation immediately after that answer and before the next ordinary question or scoring.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/followup_screen.vendored.dart:69-80 (_onNext)",
+          "baseline/questions_v1/followup_screen.vendored.dart:90 (_commitAnswers)",
+          "wellapath-mobile lib/core/engine/red_flag_evaluator.dart (only evaluation site)"
+        ],
+        "candidate": [
+          "questions[].red_flag_evaluation.evaluate_after_answer",
+          "questions[].red_flag_evaluation.blocks_next_question"
+        ]
+      },
+      "why_it_exists": "The locked architecture states red flags run before scoring and override it. The current implementation satisfies that for the ENGINE but not for the QUESTION FLOW: the user keeps answering ordinary questions after declaring a danger sign. Recorded as defect QB-002.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": true,
+        "clinical_content_affecting": false,
+        "path_affecting": true,
+        "state_model_affecting": true,
+        "artifact_model_only": false
+      },
+      "affected_existing_paths": "Any path where a red-flag clarifier is raised and answered 'Yes' while further follow-up questions remain. With 3 clarifiers and a 5-question limit, up to 4 further questions can be presented after the danger sign is declared.",
+      "changes_production_behaviour": true,
+      "changes_token_output": false,
+      "safety_direction": "STRICTLY EARLIER, NEVER LATER. It cannot suppress a red flag that fires today; it fires the same red flag sooner. No red-flag token, rule or trigger is added or changed.",
+      "status": "adopted_required_safety_correction",
+      "required_mobile_tests": [
+        "clarifier answered Yes mid-sequence interrupts immediately; no further ordinary question is presented",
+        "scoring never runs before red-flag evaluation on that path",
+        "an ordinary (no red flag) path presents exactly the same questions as today",
+        "evaluation also runs after an edit and after restored state",
+        "telemetry cannot distinguish a red-flag path from an ordinary one"
+      ],
+      "required_review": "engineering lead + clinical \u2014 behaviour change, clinically safe direction",
+      "activation_blocker": false,
+      "activation_blocker_reason": "Adopted as a required safety correction and sequenced FIRST, ahead of the rest of the adaptive engine."
+    },
+    {
+      "id": "IM-003",
+      "area": "adaptive re-branching on newly derived tokens",
+      "baseline_behaviour": "`_questions` is computed once in initState from the symptom set selected before the screen opened. A token added by an additionalSymptoms answer generates no further questions in the same assessment.",
+      "candidate_behaviour": "trigger_condition is re-evaluated against current state, so a token derived from an answer can make a further question eligible.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/followup_screen.vendored.dart:40-44 (initState computes the list once)"
+        ],
+        "candidate": [
+          "questions[].trigger_condition evaluated against live state"
+        ]
+      },
+      "why_it_exists": "A flow that cannot react to its own answers is not adaptive. W3 requires conditional follow-up questions.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": false,
+        "clinical_content_affecting": false,
+        "path_affecting": true,
+        "state_model_affecting": true,
+        "artifact_model_only": false
+      },
+      "affected_existing_paths": "56 (source-token, option-token) pairs where an additionalSymptoms option is itself a key in kFollowupQuestionMap. Newly triggerable: 11 severity, 54 duration and 56 additionalSymptoms questions. Bounded by the 5-question limit.",
+      "changes_production_behaviour": true,
+      "changes_token_output": "INDIRECTLY YES \u2014 measured, not assumed. Newly triggerable severity and duration questions produce tokens that carry NO kb scoring weight and are NOT red-flag relevant (verified: mild/moderate/severe/very_severe and days_1_3/days_3_7/days_7_plus/weeks_2_plus appear in neither kb symptoms nor rules). But newly triggerable additionalSymptoms questions DO affect scoring: they give the user further opportunities to declare symptoms, which can change the final token set and therefore the score and top condition.",
+      "changes_red_flag_content": "NO \u2014 verified: not one additionalSymptoms option anywhere in the map is a red-flag clarifier trigger token, so re-branching cannot raise a clarifier that does not fire today.",
+      "status": "deferred_pending_product_and_clinical_review",
+      "required_mobile_tests": [
+        "re-branching is bounded by the path limit and cannot loop",
+        "a newly derived token never raises a red-flag clarifier that the baseline would not have raised",
+        "an assessment with no additionalSymptoms answer presents exactly the baseline questions"
+      ],
+      "required_review": "product + clinical \u2014 this can change which symptoms a user ends up declaring, and therefore the score and top condition. It is a path change, not a content change: no question, answer meaning or token effect differs.",
+      "activation_blocker": true,
+      "activation_blocker_reason": "Can change scoring inputs. Not required for the IM-002 safety correction and must not ship with it."
+    },
+    {
+      "id": "IM-004",
+      "area": "answer identity and storage",
+      "baseline_behaviour": "Answers are held in `Map<int, dynamic> _answers` keyed by the question's index in the list built at initState, and are meaningful only against that exact list.",
+      "candidate_behaviour": "Answers are keyed by stable question_id and answer_option_id.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/followup_screen.vendored.dart:30 (final Map<int, dynamic> _answers = {})"
+        ],
+        "candidate": [
+          "questions[].question_id",
+          "answer_options[].answer_option_id"
+        ]
+      },
+      "why_it_exists": "Dependency-based invalidation, restoration and editing all require an answer to be identifiable independently of list position. An index cannot survive a list that changes.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": false,
+        "clinical_content_affecting": false,
+        "path_affecting": false,
+        "state_model_affecting": true,
+        "artifact_model_only": false
+      },
+      "affected_existing_paths": "None observable. Every path presents the same questions with the same answers; only the internal key changes.",
+      "changes_production_behaviour": false,
+      "changes_token_output": false,
+      "status": "adopted_for_candidate",
+      "required_mobile_tests": [
+        "an answer survives a change to the question list without being reattributed to a different question",
+        "restoring state rebuilds answers by id, not by position"
+      ],
+      "required_review": "none \u2014 representation only",
+      "activation_blocker": false,
+      "activation_blocker_reason": "Prerequisite for IM-002 edit/restore handling; no user-visible effect."
+    },
+    {
+      "id": "IM-005",
+      "area": "truncation safety",
+      "baseline_behaviour": "`result.length > 5 ? result.sublist(0, 5) : result` truncates the whole list after clarifiers are prepended. No clarifier is dropped today ONLY because there are 3 of them and they sort first.",
+      "candidate_behaviour": "red_flag_questions_exempt_from_truncation is a schema constant `true`. A red-flag-affecting question is never dropped to satisfy a length limit; if red-flag questions alone exceed the limit, the limit yields.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/question_engine.vendored.dart:75 (sublist truncation)"
+        ],
+        "candidate": [
+          "path_controls.red_flag_questions_exempt_from_truncation",
+          "path_controls.truncation_rule"
+        ]
+      },
+      "why_it_exists": "An incidental safety property is not a safety property. A fourth clarifier firing alongside others could push a red-flag question out of the list under the baseline rule.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": true,
+        "clinical_content_affecting": false,
+        "path_affecting": false,
+        "state_model_affecting": false,
+        "artifact_model_only": true
+      },
+      "affected_existing_paths": "None on today's data \u2014 with 3 clarifiers and a limit of 5 the two rules produce identical output on every one of the 2,325 explored paths. The difference is latent, not observable now.",
+      "changes_production_behaviour": false,
+      "changes_token_output": false,
+      "status": "adopted_for_candidate",
+      "required_mobile_tests": [
+        "a synthetic set of 6 red-flag questions is presented in full rather than truncated to the limit",
+        "ordinary questions are the only ones dropped when the limit binds"
+      ],
+      "required_review": "none \u2014 makes an existing incidental property structural",
+      "activation_blocker": false,
+      "activation_blocker_reason": "Same observable behaviour on current data."
+    },
+    {
+      "id": "IM-006",
+      "area": "demographic questions as graph nodes",
+      "baseline_behaviour": "Sex, age, pregnancy, medical conditions and body area are separate Flutter screens with hardcoded navigation, not entries in any question list. The pregnancy gate is the getter `shouldShowPregnancyScreen => _sex == 'female'`.",
+      "candidate_behaviour": "Each is a question with a trigger_condition and a priority, so the whole flow is one ordered graph. The pregnancy gate is projected as {\"sex\": \"female\"} \u2014 the same predicate.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/assessment_controller.vendored.dart:47 (shouldShowPregnancyScreen)",
+          "baseline/questions_v1/assessment_controller.vendored.dart (_ageTokenMap, _medicalConditionTokenMap)"
+        ],
+        "candidate": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ]
+      },
+      "why_it_exists": "Path-length control, editing and invalidation cannot reason about a flow that is half data and half hardcoded navigation.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": false,
+        "clinical_content_affecting": false,
+        "path_affecting": false,
+        "state_model_affecting": true,
+        "artifact_model_only": true
+      },
+      "affected_existing_paths": "None. Verified: the pregnancy gate is true for female, false for male, and false for unknown \u2014 exactly the getter. Age and medical-condition token mappings are copied verbatim; body area produces no token, as today.",
+      "changes_production_behaviour": false,
+      "changes_token_output": false,
+      "status": "adopted_for_candidate",
+      "required_mobile_tests": [
+        "pregnancy is presented for female only and never for male or unknown",
+        "age and medical-condition answers produce exactly the baseline tokens",
+        "body area produces no token and only filters the picker"
+      ],
+      "required_review": "none \u2014 the predicate and token mappings are byte-identical",
+      "activation_blocker": false,
+      "activation_blocker_reason": "Representation only."
+    },
+    {
+      "id": "IM-007",
+      "area": "skip capability",
+      "baseline_behaviour": "No skip mechanism exists anywhere in the follow-up flow. Every presented question must be answered; the only other exit is cancelling the assessment.",
+      "candidate_behaviour": "The schema supports `skippable` and a skip sentinel, but every projected question is skippable:false and no skip sentinel exists. The projection introduces no skip.",
+      "source": {
+        "baseline": [
+          "baseline/questions_v1/followup_screen.vendored.dart (no skip control; zero occurrences of 'skip')"
+        ],
+        "candidate": [
+          "questions[].skippable (false on all 50)",
+          "answer_options[].is_skip_sentinel (false on all 300)"
+        ]
+      },
+      "why_it_exists": "W3 requires optional skip logic to be expressible. Expressing it is not the same as using it, and using it on a clinical question is a decision no one has taken.",
+      "classification": {
+        "deterministic_only": false,
+        "safety_affecting": false,
+        "clinical_content_affecting": false,
+        "path_affecting": false,
+        "state_model_affecting": false,
+        "artifact_model_only": true
+      },
+      "affected_existing_paths": "None. Capability without use.",
+      "changes_production_behaviour": false,
+      "changes_token_output": false,
+      "status": "capability_present_activation_deferred",
+      "required_mobile_tests": [
+        "no question is skippable in the shipped candidate",
+        "a required question can never be skipped",
+        "a skip sentinel, if ever added, produces no clinical token"
+      ],
+      "required_review": "product + clinical, per question, before ANY question is marked skippable",
+      "activation_blocker": false,
+      "activation_blocker_reason": "Nothing to activate: the projection contains zero skips."
+    }
+  ],
+  "summary": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "all_passed": true
+  },
+  "checks": [
+    {
+      "check": "frozen_artifact_unchanged:candidate/token_dictionary.ng.v2.0.json",
+      "passed": true,
+      "detail": "expected 07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d got 07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d"
+    },
+    {
+      "check": "frozen_artifact_unchanged:kb.ng.v2.4.json",
+      "passed": true,
+      "detail": "expected 6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b got 6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b"
+    },
+    {
+      "check": "frozen_artifact_unchanged:rules.ng.v2.2.json",
+      "passed": true,
+      "detail": "expected 1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4 got 1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4"
+    },
+    {
+      "check": "frozen_artifact_unchanged:testing/case_bank_v1.json",
+      "passed": true,
+      "detail": "expected c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834 got c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834"
+    },
+    {
+      "check": "frozen_artifact_unchanged:testing/known_findings.json",
+      "passed": true,
+      "detail": "expected fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed got fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed"
+    },
+    {
+      "check": "frozen_artifact_unchanged:token_dictionary.ng.v1.1.json",
+      "passed": true,
+      "detail": "expected 0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019 got 0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    },
+    {
+      "check": "every_existing_question_is_present",
+      "passed": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "no_question_was_added",
+      "passed": true,
+      "detail": "added=[]"
+    },
+    {
+      "check": "additional_symptom_options_produce_identical_tokens",
+      "passed": true,
+      "detail": "differing=[]"
+    },
+    {
+      "check": "duration_answers_produce_identical_tokens",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "severity_answers_produce_identical_tokens",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "red_flag_clarifier_behaviour_is_identical",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "pregnancy_gate_matches_the_implemented_predicate",
+      "passed": true,
+      "detail": "{\"sex\": \"female\"}"
+    },
+    {
+      "check": "pregnancy_shown_for_female_only",
+      "passed": true,
+      "detail": "female=True, male=False, unknown=False"
+    },
+    {
+      "check": "pregnancy_answer_produces_only_the_pregnancy_token",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "age_token_mapping_unchanged",
+      "passed": true,
+      "detail": "['adults', 'children_school_age', 'children_under_5', 'elderly', 'over_40'] vs ['adults', 'children_school_age', 'children_under_5', 'elderly', 'over_40']"
+    },
+    {
+      "check": "medical_condition_token_mapping_unchanged",
+      "passed": true,
+      "detail": "['diabetes_known', 'hypertension_known', 'known_allergy', 'smoker'] vs ['diabetes_known', 'hypertension_known', 'known_allergy', 'smoker']"
+    },
+    {
+      "check": "token_output_universe_is_identical",
+      "passed": true,
+      "detail": "only_in_dart=[] only_in_candidate=[]"
+    },
+    {
+      "check": "red_flag_timing_is_never_later_than_today",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "vocabulary_2_0_is_not_used",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "vocabulary_2_0_has_no_aliases_that_could_affect_eligibility",
+      "passed": true,
+      "detail": "0 aliases"
+    },
+    {
+      "check": "no_alias_or_vocabulary_metadata_appears_in_any_condition",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_backend_dependency",
+      "passed": true,
+      "detail": "conditions are pure functions of on-device state"
+    },
+    {
+      "check": "candidate_is_unpublished",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "may_publish_is_false",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_clinical_approval_claimed",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

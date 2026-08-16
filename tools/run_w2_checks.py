@@ -41,8 +41,15 @@ STEPS = [
     ("known-findings registry is honest", ["tools/validate_known_findings.py"]),
     ("catalogue review package is current", ["tools/build_catalogue_review.py", "--check"]),
     ("catalogue review package is valid", ["tools/validate_catalogue.py"]),
+    ("question baseline freeze is current", ["tools/report_question_baseline.py", "--check"]),
+    ("question flow candidate is reproducible", ["tools/build_question_candidate.py", "--check"]),
+    ("question fixtures are current", ["tools/build_question_fixtures.py", "--check"]),
+    ("question flow is valid", ["tools/validate_question_flow.py"]),
+    ("question flow stays compatible", ["tools/check_question_compatibility.py"]),
+    ("QB-002 evidence is current", ["tools/report_qb002_evidence.py", "--check"]),
     ("test suite", ["testing/vocabulary/test_vocabulary_v2.py"]),
     ("catalogue test suite", ["testing/test_catalogue_review.py"]),
+    ("question flow test suite", ["testing/questions/test_question_flow.py"]),
 ]
 
 
