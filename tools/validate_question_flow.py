@@ -14,6 +14,7 @@ Groups:
   F. path analysis: enumeration, length limits, red-flag precedence
   G. skip and edit semantics
   H. publication fail-closed
+  I. impedance disclosure and engineering dispositions
 """
 
 import argparse
@@ -385,6 +386,157 @@ def check_publication(results, artifact):
                 metadata["vocabulary_2_0"]["used"] is False)
 
 
+# --- I. impedance disclosure and engineering dispositions ---------------------
+
+REQUIRED_MISMATCH_IDS = ["IM-001", "IM-002", "IM-003", "IM-004", "IM-005", "IM-006", "IM-007"]
+
+REQUIRED_MISMATCH_FIELDS = [
+    "id", "area", "baseline_behaviour", "candidate_behaviour", "source",
+    "why_it_exists", "classification", "affected_existing_paths",
+    "changes_production_behaviour", "changes_token_output", "status",
+    "required_mobile_tests", "required_review", "activation_blocker",
+    "activation_blocker_reason",
+]
+
+REQUIRED_CLASSIFICATION_KEYS = [
+    "deterministic_only", "safety_affecting", "clinical_content_affecting",
+    "path_affecting", "state_model_affecting", "artifact_model_only",
+]
+
+REQUIRED_DISPOSITIONS = [
+    "im_001_deterministic_ordering",
+    "im_002_immediate_red_flag_evaluation",
+    "path_length_limit",
+    "skip_behaviour",
+    "distribution_model",
+    "question_wording",
+    "im_003_adaptive_re_branching",
+]
+
+
+def check_dispositions(results, artifact):
+    metadata = artifact["_metadata"]
+    mismatches = metadata.get("impedance_mismatches", [])
+    ids = [m.get("id") for m in mismatches]
+
+    # The count is asserted against the enumerated list, not a bare number, so
+    # adding a mismatch without disclosing it fails rather than passing quietly.
+    results.add("I.disclosure", "every_impedance_mismatch_is_enumerated",
+                ids == REQUIRED_MISMATCH_IDS,
+                "found=%r expected=%r" % (ids, REQUIRED_MISMATCH_IDS))
+    results.add("I.disclosure", "mismatch_count_matches_the_enumeration",
+                metadata.get("impedance_mismatch_count") == len(mismatches)
+                == len(REQUIRED_MISMATCH_IDS),
+                "declared=%r actual=%d" % (metadata.get("impedance_mismatch_count"),
+                                           len(mismatches)))
+
+    incomplete = [
+        "%s missing %r" % (m.get("id"), sorted(set(REQUIRED_MISMATCH_FIELDS) - set(m)))
+        for m in mismatches if set(REQUIRED_MISMATCH_FIELDS) - set(m)
+    ]
+    results.add("I.disclosure", "every_mismatch_is_fully_described",
+                not incomplete, _fmt(incomplete, 4))
+
+    unclassified = [
+        m.get("id") for m in mismatches
+        if set(REQUIRED_CLASSIFICATION_KEYS) - set(m.get("classification", {}))
+    ]
+    results.add("I.disclosure", "every_mismatch_carries_a_complete_classification",
+                not unclassified, _fmt(unclassified))
+
+    undisposed = [m.get("id") for m in mismatches if not m.get("status")]
+    results.add("I.disclosure", "every_mismatch_carries_a_disposition",
+                not undisposed, _fmt(undisposed))
+
+    # The stop condition: content must never change. A mismatch that alters
+    # clinical content is not something this contract may carry silently.
+    content_changing = [
+        m.get("id") for m in mismatches
+        if m.get("classification", {}).get("clinical_content_affecting")
+    ]
+    results.add("I.disclosure", "no_mismatch_changes_clinical_content",
+                not content_changing, _fmt(content_changing))
+
+    unsourced = [m.get("id") for m in mismatches if not m.get("source", {}).get("baseline")]
+    results.add("I.disclosure", "every_mismatch_cites_its_baseline_source",
+                not unsourced, _fmt(unsourced))
+
+    dispositions = metadata.get("engineering_dispositions", {})
+    decisions = dispositions.get("decisions", {})
+    missing = sorted(set(REQUIRED_DISPOSITIONS) - set(decisions))
+    results.add("I.dispositions", "every_required_disposition_is_recorded",
+                not missing, _fmt(missing))
+
+    silent = [name for name, d in decisions.items() if not d.get("does_not_authorize")]
+    results.add("I.dispositions", "every_disposition_states_what_it_does_not_authorize",
+                not silent, _fmt(silent))
+
+    results.add("I.dispositions", "dispositions_claim_engineering_authority_only",
+                dispositions.get("authority") == "engineering"
+                and dispositions.get("is_clinical_approval") is False
+                and dispositions.get("is_product_approval") is False,
+                json.dumps({k: dispositions.get(k) for k in
+                            ("authority", "is_clinical_approval", "is_product_approval")}))
+
+    results.add("I.dispositions", "im_001_ordering_is_adopted_and_deterministic",
+                decisions.get("im_001_deterministic_ordering", {}).get("ordering")
+                == ["priority", "tie_break_key", "question_id"],
+                json.dumps(decisions.get("im_001_deterministic_ordering", {}).get("ordering")))
+
+    im002 = decisions.get("im_002_immediate_red_flag_evaluation", {})
+    results.add("I.dispositions", "im_002_is_adopted_as_a_required_safety_correction",
+                im002.get("status") == "adopted_required_safety_correction", im002.get("status"))
+    required_points = im002.get("requires_evaluation", [])
+    results.add("I.dispositions", "im_002_requires_all_five_evaluation_points",
+                len(required_points) == 5
+                and any("before scoring" in p for p in required_points)
+                and any("before the next ordinary question" in p for p in required_points),
+                _fmt(required_points))
+
+    results.add("I.dispositions", "path_limit_is_fixed_at_5",
+                decisions.get("path_length_limit", {}).get("value")
+                == artifact["path_controls"]["max_followup_questions"] == 5,
+                "disposition=%r artifact=%r"
+                % (decisions.get("path_length_limit", {}).get("value"),
+                   artifact["path_controls"]["max_followup_questions"]))
+
+    results.add("I.dispositions", "skip_activation_is_deferred_and_candidate_has_zero_skips",
+                decisions.get("skip_behaviour", {}).get("optional_skips_in_candidate") == 0
+                and not any(q["skippable"] for q in artifact["questions"])
+                and not any(o["is_skip_sentinel"] for q in artifact["questions"]
+                            for o in q["answer_options"]))
+
+    distribution = decisions.get("distribution_model", {})
+    results.add("I.dispositions", "distribution_is_compiled_in_internal_only",
+                distribution.get("backend_distribution") is False
+                and distribution.get("config_entry") is False
+                and distribution.get("r2_upload") is False
+                and distribution.get("live_manifest_entry") is False,
+                json.dumps(distribution))
+
+    wording = decisions.get("question_wording", {})
+    results.add("I.dispositions", "wording_preserved_without_approval",
+                wording.get("content_approved") is False
+                and all(not q["content_ref"]["content_approved"] for q in artifact["questions"]))
+
+    activation = dispositions.get("activation", {})
+    results.add("I.dispositions", "production_and_beta_activation_remain_prohibited",
+                activation.get("production") is False
+                and activation.get("public_beta") is False
+                and activation.get("external_beta") is False
+                and activation.get("clinical_approval") is False
+                and activation.get("product_approval") is False,
+                json.dumps(activation))
+
+    # IM-002 must never be weakened into a later evaluation.
+    im002_record = next((m for m in mismatches if m.get("id") == "IM-002"), {})
+    results.add("I.dispositions", "red_flag_evaluation_can_never_move_later",
+                "EARLIER" in (im002_record.get("safety_direction") or "").upper()
+                and all(q["red_flag_evaluation"]["evaluate_after_answer"]
+                        for q in artifact["questions"] if q["effects"]["affects_red_flags"]),
+                im002_record.get("safety_direction", "")[:60])
+
+
 def analyse_graph(artifact):
     """Bounded exhaustive exploration of the follow-up graph."""
     questions = artifact["questions"]
@@ -496,6 +648,7 @@ def run(artifact_path):
         check_paths(results, artifact, analysis)
         check_skip_and_edit(results, artifact)
         check_publication(results, artifact)
+        check_dispositions(results, artifact)
     return results, analysis, artifact
 
 

@@ -397,3 +397,51 @@ Full write-up: `docs/W3_QUESTION_FLOW_CONTRACT.md`.
 6. **Distribution model** — the flow is compiled into the app. Serving it as an
    artifact needs a `/config` entry, a download path and last-known-good
    fallback, none of which exists.
+
+### W3 Step 1A — dispositions recorded, full impedance disclosure
+
+Engineering-lead dispositions recorded in the candidate as
+`_metadata.engineering_dispositions`, enforced by 20 new fail-closed validators.
+
+- **Correction: there are SEVEN impedance mismatches, not six.** The artifact
+  always recorded IM-001 through IM-007; the PR description and contract doc
+  said "six". The artifact was right and the prose was wrong — now corrected,
+  and a validator asserts the enumerated list so a mismatch cannot be added
+  without being disclosed.
+
+- **Correction: IM-003 was under-classified.** It was recorded as "not
+  clinically substantive — can only ask more questions". Measured: newly
+  triggerable severity and duration questions produce tokens that carry **no**
+  kb weight and are **not** red-flag relevant, but newly triggerable
+  *additionalSymptoms* questions **do** affect scoring — they give the user
+  further chances to declare symptoms, which can change the token set and
+  therefore the top condition. Verified separately that **no** additionalSymptoms
+  option anywhere is a clarifier trigger token, so re-branching **cannot** raise
+  a red-flag clarifier that does not fire today. IM-003 is now classified
+  path-affecting, marked an activation blocker and **deferred**.
+
+- **Dispositions:** IM-001 adopted (ordering `(priority, tie_break_key,
+  question_id)`, regression evidence required before activation); IM-002 adopted
+  as a **required safety correction**; path limit **fixed at 5**; optional skips
+  **deferred** (candidate has zero); distribution **compiled-in / default-off /
+  internal only**, served distribution deferred to I3; wording preserved
+  byte-for-byte **without approval**. Every disposition states what it does
+  **not** authorize. Production, public-beta, external-beta, clinical and
+  product approval all **false**.
+
+- **QB-002 reproduced and measured** (`reports/qb002_evidence_v1.json`): a
+  clarifier answered "Yes" is followed by up to **4 further ordinary questions**
+  before the engine ever sees the red-flag token. `_commitAnswers()` runs only
+  on the last question. Scoring **cannot** override the eventual red flag —
+  `ScoringEngine.score` throws when `proceed_to_scoring` is false. So this is not
+  an under-triage defect; the harm is abandonment before the result. Earliest
+  safe interception point identified: `_onNext`, in the advance branch, before
+  `setState` and before the step-view event.
+
+- **Mobile IM-002 handoff** (`mobile_handoff/question_flow_v1/IM002_SAFETY_FIX.md`)
+  — the safety fix only, not the adaptive engine. 12 regression cases, telemetry
+  must not become a red-flag oracle, default-off flag for rollback.
+
+- No clinical-content change: question wording byte-identical (27 texts), token
+  output universe identical (139 tokens), 50 questions / 300 options unchanged.
+  Checks now **23 groups**, all green; 53 question-flow validators; 103 tests.

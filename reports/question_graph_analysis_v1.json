@@ -7,7 +7,7 @@
   "artifact": {
     "file": "candidate/question_flow.ng.v1.0.json",
     "version": "1.0",
-    "sha256": "1699db0447e22db01220a5ea10f11b3b2a69651c6df28333b31b0626e672dc0b"
+    "sha256": "c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998"
   },
   "questions": 50,
   "answer_options": 300,
@@ -48,8 +48,8 @@
     "paths_with_a_red_flag_question_behind_an_ordinary_one": []
   },
   "summary": {
-    "total": 34,
-    "passed": 34,
+    "total": 53,
+    "passed": 53,
     "failed": 0,
     "all_passed": true
   }

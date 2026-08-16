@@ -41,6 +41,7 @@ from vocab.artifact_io import (  # noqa: E402
 import build_question_candidate as bqc  # noqa: E402
 import build_question_fixtures as bqf  # noqa: E402
 import check_question_compatibility as cqc  # noqa: E402
+import report_qb002_evidence as rqe  # noqa: E402
 import report_question_baseline as rqb  # noqa: E402
 import validate_question_flow as vqf  # noqa: E402
 
@@ -510,16 +511,147 @@ class PublicationSafetyTests(unittest.TestCase):
 
     def test_impedance_mismatches_are_recorded_not_hidden(self):
         mismatches = CANDIDATE["_metadata"]["impedance_mismatches"]
-        self.assertGreaterEqual(len(mismatches), 5)
+        self.assertEqual(len(mismatches), 7)
         ids = {m["id"] for m in mismatches}
         self.assertIn("IM-002", ids)  # the red-flag timing gap
         for mismatch in mismatches:
-            self.assertIn("justification", mismatch)
-            self.assertIn("requires_review", mismatch)
+            self.assertIn("why_it_exists", mismatch)
+            self.assertIn("required_review", mismatch)
+            self.assertIn("classification", mismatch)
+            self.assertIn("activation_blocker", mismatch)
 
     def test_parity_claim_does_not_overstate(self):
         claim = CANDIDATE["_metadata"]["parity_claim"]
         self.assertIn("NOT identical", claim)
+
+
+class ImpedanceDisclosureTests(unittest.TestCase):
+    """All seven mismatches disclosed, classified and disposed."""
+
+    MISMATCHES = CANDIDATE["_metadata"]["impedance_mismatches"]
+
+    def test_all_seven_are_enumerated(self):
+        self.assertEqual([m["id"] for m in self.MISMATCHES],
+                         ["IM-001", "IM-002", "IM-003", "IM-004", "IM-005", "IM-006", "IM-007"])
+
+    def test_declared_count_matches(self):
+        self.assertEqual(CANDIDATE["_metadata"]["impedance_mismatch_count"], len(self.MISMATCHES))
+
+    def test_every_mismatch_is_fully_classified(self):
+        keys = {"deterministic_only", "safety_affecting", "clinical_content_affecting",
+                "path_affecting", "state_model_affecting", "artifact_model_only"}
+        for m in self.MISMATCHES:
+            self.assertEqual(set(m["classification"]), keys, m["id"])
+
+    def test_no_mismatch_changes_clinical_content(self):
+        """The stop condition. Content must be identical."""
+        for m in self.MISMATCHES:
+            self.assertFalse(m["classification"]["clinical_content_affecting"], m["id"])
+
+    def test_every_mismatch_cites_a_baseline_source(self):
+        for m in self.MISMATCHES:
+            self.assertTrue(m["source"]["baseline"], m["id"])
+
+    def test_every_mismatch_has_a_status_and_review(self):
+        for m in self.MISMATCHES:
+            self.assertTrue(m["status"], m["id"])
+            self.assertTrue(m["required_review"], m["id"])
+            self.assertIn("activation_blocker", m)
+
+    def test_im_003_discloses_its_scoring_input_effect(self):
+        """IM-003 can change which symptoms a user declares. Say so."""
+        im003 = next(m for m in self.MISMATCHES if m["id"] == "IM-003")
+        self.assertTrue(im003["classification"]["path_affecting"])
+        self.assertIn("INDIRECTLY YES", str(im003["changes_token_output"]))
+        self.assertTrue(im003["activation_blocker"])
+        self.assertTrue(str(im003["status"]).startswith("deferred"))
+
+    def test_im_003_cannot_raise_a_new_red_flag_clarifier(self):
+        """Verified from the source, not asserted."""
+        im003 = next(m for m in self.MISMATCHES if m["id"] == "IM-003")
+        self.assertIn("NO", str(im003["changes_red_flag_content"]))
+        triggers = {t for c in PARSED["red_flag_clarifiers"] for t in c["trigger_tokens"]}
+        options = {opt for entries in PARSED["followup_question_map"]["entries"].values()
+                   for e in entries if e["type"] == "additionalSymptoms" for opt in e["options"]}
+        self.assertEqual(triggers & options, set())
+
+    def test_im_002_is_the_only_safety_affecting_behaviour_change(self):
+        changing = [m["id"] for m in self.MISMATCHES
+                    if m["classification"]["safety_affecting"] and m["changes_production_behaviour"]]
+        self.assertEqual(changing, ["IM-002"])
+
+
+class EngineeringDispositionTests(unittest.TestCase):
+    DISPOSITIONS = CANDIDATE["_metadata"]["engineering_dispositions"]
+
+    def test_all_required_dispositions_recorded(self):
+        for name in ["im_001_deterministic_ordering", "im_002_immediate_red_flag_evaluation",
+                     "path_length_limit", "skip_behaviour", "distribution_model",
+                     "question_wording", "im_003_adaptive_re_branching"]:
+            self.assertIn(name, self.DISPOSITIONS["decisions"], name)
+
+    def test_every_disposition_states_what_it_does_not_authorize(self):
+        for name, decision in self.DISPOSITIONS["decisions"].items():
+            self.assertTrue(decision.get("does_not_authorize"), name)
+
+    def test_dispositions_are_engineering_authority_only(self):
+        self.assertEqual(self.DISPOSITIONS["authority"], "engineering")
+        self.assertIs(self.DISPOSITIONS["is_clinical_approval"], False)
+        self.assertIs(self.DISPOSITIONS["is_product_approval"], False)
+
+    def test_activation_remains_prohibited(self):
+        activation = self.DISPOSITIONS["activation"]
+        for gate in ("production", "public_beta", "external_beta",
+                     "clinical_approval", "product_approval"):
+            self.assertIs(activation[gate], False, gate)
+        self.assertIs(activation["internal_engineering_evaluation"], True)
+
+    def test_path_limit_fixed_at_5_everywhere(self):
+        self.assertEqual(self.DISPOSITIONS["decisions"]["path_length_limit"]["value"], 5)
+        self.assertEqual(CANDIDATE["path_controls"]["max_followup_questions"], 5)
+
+    def test_distribution_is_internal_only(self):
+        d = self.DISPOSITIONS["decisions"]["distribution_model"]
+        for gate in ("backend_distribution", "config_entry", "r2_upload", "live_manifest_entry"):
+            self.assertIs(d[gate], False, gate)
+
+    def test_im_002_requires_evaluation_before_scoring(self):
+        points = self.DISPOSITIONS["decisions"]["im_002_immediate_red_flag_evaluation"]["requires_evaluation"]
+        self.assertEqual(len(points), 5)
+        self.assertTrue(any("before scoring" in p for p in points))
+
+    def test_wording_preserved_without_approval(self):
+        self.assertIs(
+            self.DISPOSITIONS["decisions"]["question_wording"]["content_approved"], False)
+
+
+class QB002EvidenceTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.report = rqe.build_report()
+
+    def test_the_defect_reproduces(self):
+        self.assertGreater(self.report["timing"]["worst_case_delay_in_questions"], 0)
+        self.assertGreater(self.report["timing"]["scenarios_measured"], 0)
+
+    def test_scoring_can_never_override_the_eventual_red_flag(self):
+        self.assertIs(
+            self.report["safety_analysis"]["can_scoring_override_the_eventual_red_flag"], False)
+
+    def test_mobile_was_not_modified(self):
+        self.assertIs(self.report["defect"]["mobile_unmodified"], True)
+        self.assertIs(self.report["scope"]["mobile_modified"], False)
+        self.assertIs(self.report["scope"]["fix_included_here"], False)
+
+    def test_every_scenario_names_the_questions_asked_after_the_danger_sign(self):
+        for scenario in self.report["timing"]["scenarios"]:
+            self.assertEqual(len(scenario["questions_after_ids"]),
+                             scenario["questions_presented_after_the_yes"])
+
+    def test_interception_point_is_before_the_step_event(self):
+        point = self.report["earliest_safe_interception_point"]
+        self.assertIn("_onNext", point["point"])
+        self.assertTrue(any("telemetry" in w or "step event" in w for w in point["why_here"]))
 
 
 class PrivacyTests(unittest.TestCase):

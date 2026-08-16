@@ -46,6 +46,7 @@ STEPS = [
     ("question fixtures are current", ["tools/build_question_fixtures.py", "--check"]),
     ("question flow is valid", ["tools/validate_question_flow.py"]),
     ("question flow stays compatible", ["tools/check_question_compatibility.py"]),
+    ("QB-002 evidence is current", ["tools/report_qb002_evidence.py", "--check"]),
     ("test suite", ["testing/vocabulary/test_vocabulary_v2.py"]),
     ("catalogue test suite", ["testing/test_catalogue_review.py"]),
     ("question flow test suite", ["testing/questions/test_question_flow.py"]),

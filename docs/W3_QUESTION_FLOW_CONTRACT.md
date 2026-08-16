@@ -86,7 +86,7 @@ question, label and produced token is **copied**, not authored.
 
 ### Impedance mismatches — where projection is not identity
 
-Six are recorded in `_metadata.impedance_mismatches`. The artifact's
+**Seven** are recorded in `_metadata.impedance_mismatches`. The artifact's
 `parity_claim` says **"NOT identical"** out loud, and a test enforces that it
 keeps saying so.
 
@@ -94,7 +94,7 @@ keeps saying so.
 |---|---|---|---|
 | **IM-001** | Selection-order dependence → declared tie-break | No — competing questions differ only in wording | Removes non-determinism |
 | **IM-002** | Red-flag questions evaluate immediately | **Yes** | **Strictly earlier, never later.** Cannot suppress a red flag that fires today. Mobile work in a later step; **not implemented here.** |
-| IM-003 | Re-branching on newly derived tokens | No | Can only ask *more*, bounded by the limit |
+| **IM-003** | Re-branching on newly derived tokens | **Path-affecting** — can change scoring *inputs* | **Deferred.** Cannot raise a new red-flag clarifier (verified); can offer further symptom questions, so the declared token set and therefore the score can change |
 | IM-004 | Index-keyed → ID-keyed answers | No | Representation only |
 | IM-005 | Truncation exemption made structural | No | Same behaviour on today's data |
 | IM-006 | Demographic screens become graph nodes | No | Pregnancy gate projected exactly |
