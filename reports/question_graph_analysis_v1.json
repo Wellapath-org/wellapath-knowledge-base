@@ -1,0 +1,56 @@
+{
+  "report_id": "question_graph_analysis",
+  "report_version": "1",
+  "phase": "I2 / W3 Step 1",
+  "generator": "tools/validate_question_flow.py",
+  "generator_version": "1.0.0",
+  "artifact": {
+    "file": "candidate/question_flow.ng.v1.0.json",
+    "version": "1.0",
+    "sha256": "1699db0447e22db01220a5ea10f11b3b2a69651c6df28333b31b0626e672dc0b"
+  },
+  "questions": 50,
+  "answer_options": 300,
+  "analysis": {
+    "exploration": {
+      "strategy": "exhaustive over every subset of the 24 trigger tokens up to size 3",
+      "driving_token_count": 24,
+      "max_tokens_per_combination": 3,
+      "combinations_explored": 2325,
+      "exhaustive_over_full_state_space": false,
+      "uncovered_state_space": "Token subsets larger than 3. The full state space is the powerset of the 24 picker-reachable symptom tokens, which is not enumerable. Larger subsets can only ADD eligible questions, and truncation plus the red-flag exemption are both verified on every explored subset, so the bound is a coverage limit rather than a soundness gap."
+    },
+    "path_lengths": {
+      "min": 1,
+      "max": 5,
+      "limit": 5,
+      "distribution": {
+        "1": 2,
+        "2": 30,
+        "3": 161,
+        "4": 340,
+        "5": 1792
+      }
+    },
+    "unreachable_questions": [],
+    "dead_answer_options": [],
+    "demographic_questions_not_explored": [
+      "Q-demo-age",
+      "Q-demo-body-area",
+      "Q-demo-medical-conditions",
+      "Q-demo-pregnancy",
+      "Q-demo-sex",
+      "Q-symptom-selection"
+    ],
+    "demographic_answer_options_not_explored": 146,
+    "paths_exceeding_followup_limit": [],
+    "paths_where_a_red_flag_question_was_dropped": [],
+    "paths_with_a_red_flag_question_behind_an_ordinary_one": []
+  },
+  "summary": {
+    "total": 34,
+    "passed": 34,
+    "failed": 0,
+    "all_passed": true
+  }
+}

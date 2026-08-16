@@ -1,0 +1,236 @@
+{
+  "report_id": "question_compatibility",
+  "report_version": "1",
+  "phase": "I2 / W3 Step 1",
+  "generator": "tools/check_question_compatibility.py",
+  "generator_version": "1.0.0",
+  "candidate": {
+    "file": "candidate/question_flow.ng.v1.0.json",
+    "version": "1.0",
+    "sha256": "1699db0447e22db01220a5ea10f11b3b2a69651c6df28333b31b0626e672dc0b",
+    "release_status": "candidate_unapproved"
+  },
+  "parity": {
+    "question_content": "identical \u2014 every question, wording and answer label is copied from the vendored Dart",
+    "answer_meaning": "identical",
+    "token_effects": "identical",
+    "red_flag_effects": "identical",
+    "ordering": "deterministic; the one selection-order dependence in the current code is replaced by a declared tie-break (IM-001)",
+    "timing": "specified to be EARLIER for red-flag-affecting answers (IM-002); never later",
+    "claim": "behavioural equivalence for content and effects; NOT identical for timing and determinism, both documented as impedance mismatches"
+  },
+  "not_proven_here": {
+    "running_app_equivalence": "This repository holds no Flutter runtime and must not grow a second engine. Executable proof belongs in the mobile repository once the contract is implemented.",
+    "top_50_case_bank": "Unaffected by construction \u2014 the case bank supplies tokens directly to the engine and does not traverse the question flow. kb 2.4, rules 2.2 and the bank are byte-identical, so the recorded result (238 pass, CB_211 known finding) cannot change."
+  },
+  "impedance_mismatches": [
+    {
+      "id": "IM-001",
+      "area": "question selection",
+      "current_behaviour": "Severity and duration questions are chosen by `severityQuestion ??= question` while iterating the SELECTED symptom tokens, so which wording is asked depends on the order the user tapped symptoms.",
+      "candidate_behaviour": "Selection is by a declared deterministic tie_break_key (the trigger token id, ascending), so the same symptom set always yields the same question regardless of selection order.",
+      "is_behaviour_change": true,
+      "clinically_substantive": false,
+      "justification": "The competing questions differ only in wording ('How severe is your headache?' vs 'How severe is this pain?'). No token effect, weight, red flag or urgency differs. The current behaviour is non-deterministic in a way W3 explicitly forbids, and a tie with no declared resolution is a validation failure under this contract.",
+      "requires_review": "product \u2014 wording selection only"
+    },
+    {
+      "id": "IM-002",
+      "area": "red-flag timing",
+      "current_behaviour": "Answers are committed only after the LAST follow-up question, so a red-flag clarifier 'yes' does not interrupt; the red flag is evaluated once, in the engine, after every question has been shown.",
+      "candidate_behaviour": "Every red-flag-affecting question declares evaluate_after_answer=true and blocks_next_question=true, requiring evaluation immediately after that answer.",
+      "is_behaviour_change": true,
+      "clinically_substantive": true,
+      "justification": "This makes red-flag detection strictly EARLIER, never later. It cannot suppress a red flag that fires today; it can only fire the same red flag sooner. Implementing it is Mobile work in a later W3 step and is NOT done here.",
+      "requires_review": "engineering lead \u2014 behaviour change in Mobile, clinically safe direction"
+    },
+    {
+      "id": "IM-003",
+      "area": "adaptive re-branching",
+      "current_behaviour": "The question list is computed once from the pre-screen symptom set. Tokens added by an additionalSymptoms answer generate no further questions.",
+      "candidate_behaviour": "trigger_condition is re-evaluated against current state, so a newly derived token can make a further question eligible.",
+      "is_behaviour_change": true,
+      "clinically_substantive": false,
+      "justification": "Strictly additive: it can only ask MORE questions, never fewer, and the truncation limit still bounds the total. No existing question is removed or reworded.",
+      "requires_review": "product \u2014 path length impact"
+    },
+    {
+      "id": "IM-004",
+      "area": "answer identity",
+      "current_behaviour": "Answers are keyed by list index (Map<int, dynamic>), meaningful only against the exact list built at initState.",
+      "candidate_behaviour": "Answers are keyed by stable question_id and answer_option_id.",
+      "is_behaviour_change": false,
+      "clinically_substantive": false,
+      "justification": "A representation change with no user-visible effect. Required before answer editing can invalidate dependents safely.",
+      "requires_review": "none"
+    },
+    {
+      "id": "IM-005",
+      "area": "truncation safety",
+      "current_behaviour": "Truncation to 5 is applied to the whole list. No clarifier is dropped today only because there are 3 of them and they sort first.",
+      "candidate_behaviour": "red_flag_questions_exempt_from_truncation is a schema constant `true`; a red-flag-affecting question is never dropped to satisfy a length limit.",
+      "is_behaviour_change": false,
+      "clinically_substantive": false,
+      "justification": "Makes an incidental property structural. Same observable behaviour on today's data.",
+      "requires_review": "none"
+    },
+    {
+      "id": "IM-006",
+      "area": "demographic screens",
+      "current_behaviour": "Sex, age, pregnancy, medical conditions and body area are separate Flutter screens with hardcoded navigation, not entries in any question list.",
+      "candidate_behaviour": "Represented as questions with trigger_condition and priority, so the whole flow is one ordered graph.",
+      "is_behaviour_change": false,
+      "clinically_substantive": false,
+      "justification": "The pregnancy gate is projected exactly as implemented: {\"sex\": \"female\"}. Age and medical-condition token mappings are copied verbatim. Body area produces no token, as today.",
+      "requires_review": "none"
+    },
+    {
+      "id": "IM-007",
+      "area": "skip",
+      "current_behaviour": "No skip mechanism exists. Every presented question must be answered or the assessment cancelled.",
+      "candidate_behaviour": "The schema supports `skippable`, but every projected question is `skippable: false` \u2014 the projection introduces no skip.",
+      "is_behaviour_change": false,
+      "clinically_substantive": false,
+      "justification": "Capability without use. Making any question skippable is a separate, reviewed decision.",
+      "requires_review": "product + clinical, per question, before any question is marked skippable"
+    }
+  ],
+  "summary": {
+    "total": 26,
+    "passed": 26,
+    "failed": 0,
+    "all_passed": true
+  },
+  "checks": [
+    {
+      "check": "frozen_artifact_unchanged:candidate/token_dictionary.ng.v2.0.json",
+      "passed": true,
+      "detail": "expected 07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d got 07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d"
+    },
+    {
+      "check": "frozen_artifact_unchanged:kb.ng.v2.4.json",
+      "passed": true,
+      "detail": "expected 6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b got 6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b"
+    },
+    {
+      "check": "frozen_artifact_unchanged:rules.ng.v2.2.json",
+      "passed": true,
+      "detail": "expected 1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4 got 1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4"
+    },
+    {
+      "check": "frozen_artifact_unchanged:testing/case_bank_v1.json",
+      "passed": true,
+      "detail": "expected c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834 got c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834"
+    },
+    {
+      "check": "frozen_artifact_unchanged:testing/known_findings.json",
+      "passed": true,
+      "detail": "expected fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed got fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed"
+    },
+    {
+      "check": "frozen_artifact_unchanged:token_dictionary.ng.v1.1.json",
+      "passed": true,
+      "detail": "expected 0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019 got 0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    },
+    {
+      "check": "every_existing_question_is_present",
+      "passed": true,
+      "detail": "missing=[]"
+    },
+    {
+      "check": "no_question_was_added",
+      "passed": true,
+      "detail": "added=[]"
+    },
+    {
+      "check": "additional_symptom_options_produce_identical_tokens",
+      "passed": true,
+      "detail": "differing=[]"
+    },
+    {
+      "check": "duration_answers_produce_identical_tokens",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "severity_answers_produce_identical_tokens",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "red_flag_clarifier_behaviour_is_identical",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "pregnancy_gate_matches_the_implemented_predicate",
+      "passed": true,
+      "detail": "{\"sex\": \"female\"}"
+    },
+    {
+      "check": "pregnancy_shown_for_female_only",
+      "passed": true,
+      "detail": "female=True, male=False, unknown=False"
+    },
+    {
+      "check": "pregnancy_answer_produces_only_the_pregnancy_token",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "age_token_mapping_unchanged",
+      "passed": true,
+      "detail": "['adults', 'children_school_age', 'children_under_5', 'elderly', 'over_40'] vs ['adults', 'children_school_age', 'children_under_5', 'elderly', 'over_40']"
+    },
+    {
+      "check": "medical_condition_token_mapping_unchanged",
+      "passed": true,
+      "detail": "['diabetes_known', 'hypertension_known', 'known_allergy', 'smoker'] vs ['diabetes_known', 'hypertension_known', 'known_allergy', 'smoker']"
+    },
+    {
+      "check": "token_output_universe_is_identical",
+      "passed": true,
+      "detail": "only_in_dart=[] only_in_candidate=[]"
+    },
+    {
+      "check": "red_flag_timing_is_never_later_than_today",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "vocabulary_2_0_is_not_used",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "vocabulary_2_0_has_no_aliases_that_could_affect_eligibility",
+      "passed": true,
+      "detail": "0 aliases"
+    },
+    {
+      "check": "no_alias_or_vocabulary_metadata_appears_in_any_condition",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_backend_dependency",
+      "passed": true,
+      "detail": "conditions are pure functions of on-device state"
+    },
+    {
+      "check": "candidate_is_unpublished",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "may_publish_is_false",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "no_clinical_approval_claimed",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

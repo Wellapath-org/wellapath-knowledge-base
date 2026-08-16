@@ -13,6 +13,7 @@ Supported keywords:
     properties, required, additionalProperties, patternProperties,
     items, prefixItems, minItems, maxItems, uniqueItems,
     minLength, maxLength, pattern, minimum, maximum,
+    minProperties, maxProperties,
     allOf, anyOf, oneOf, not, propertyNames,
     format ("date" and "date-time" only, asserted rather than annotated).
 
@@ -28,7 +29,7 @@ _SUPPORTED = frozenset(
         "$ref", "$id", "$schema", "$defs", "$comment", "title", "description",
         "type", "enum", "const", "default", "examples",
         "properties", "required", "additionalProperties", "patternProperties",
-        "propertyNames",
+        "propertyNames", "minProperties", "maxProperties",
         "items", "prefixItems", "minItems", "maxItems", "uniqueItems",
         "minLength", "maxLength", "pattern",
         "minimum", "maximum",
@@ -171,6 +172,16 @@ def _validate_array(instance, schema, root, path):
 
 def _validate_object(instance, schema, root, path):
     errors = []
+    if "minProperties" in schema and len(instance) < schema["minProperties"]:
+        errors.append(
+            "%s: %d properties < minProperties %d"
+            % (path, len(instance), schema["minProperties"])
+        )
+    if "maxProperties" in schema and len(instance) > schema["maxProperties"]:
+        errors.append(
+            "%s: %d properties > maxProperties %d"
+            % (path, len(instance), schema["maxProperties"])
+        )
     for name in schema.get("required", []):
         if name not in instance:
             errors.append("%s: missing required property %r" % (path, name))

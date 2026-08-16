@@ -1,0 +1,961 @@
+{
+  "fixture_id": "question_flow_paths",
+  "fixture_version": "1",
+  "generator": "tools/build_question_fixtures.py",
+  "generator_version": "1.0.0",
+  "synthetic": true,
+  "note": "All inputs are synthetic and spec-derived. No real-user assessment data is used, and no new symptom combination is invented beyond tokens that already exist.",
+  "artifact": {
+    "file": "candidate/question_flow.ng.v1.0.json",
+    "version": "1.0",
+    "sha256": "1699db0447e22db01220a5ea10f11b3b2a69651c6df28333b31b0626e672dc0b"
+  },
+  "lifecycle_states": {
+    "assessment_completed": "every required, eligible question has an answer; the flow proceeds to scoring",
+    "assessment_abandoned": "the user cancels; no result is produced and no state is retained",
+    "assessment_interrupted_by_red_flag": "a red-flag-affecting answer fires a rule; branching stops and emergency presentation wins",
+    "question_not_applicable": "trigger_condition is false \u2014 no answer state is stored at all",
+    "optional_skipped": "an optional question with an explicit skip sentinel; no clinical token is produced",
+    "required_unanswered": "a required question with no answer; the flow cannot advance past it",
+    "invalidated_by_edit": "an upstream edit cleared the answer; the question returns to unanswered"
+  },
+  "cases": [
+    {
+      "fixture_id": "male_pregnancy_skipped",
+      "description": "Male path \u2014 the pregnancy question is not applicable and is never presented",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "headache"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 3,
+        "total_questions": 8,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "female_pregnancy_applicable",
+      "description": "Female path \u2014 pregnancy applicable and answered yes",
+      "input_state": {
+        "sex": "female",
+        "age_token": "adults",
+        "pregnancy": true,
+        "body_area": null,
+        "tokens": [
+          "headache"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 3,
+        "total_questions": 9,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "female_pregnancy_not_applicable",
+      "description": "Female path \u2014 pregnancy applicable and answered no",
+      "input_state": {
+        "sex": "female",
+        "age_token": "adults",
+        "pregnancy": false,
+        "body_area": null,
+        "tokens": [
+          "headache"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 3,
+        "total_questions": 9,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "shortest_valid_path",
+      "description": "Single symptom with no authored follow-up \u2014 the default duration question only",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "boils"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-default-duration"
+        ],
+        "presented_followups": [
+          "Q-followup-default-duration"
+        ],
+        "truncated": [],
+        "followup_count": 1,
+        "total_questions": 6,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "longest_reachable_path",
+      "description": "Three clarifiers plus severity, duration and additional symptoms \u2014 truncation applies",
+      "input_state": {
+        "sex": "female",
+        "age_token": "adults",
+        "pregnancy": false,
+        "body_area": null,
+        "tokens": [
+          "bleeding",
+          "difficulty_breathing",
+          "fever",
+          "headache",
+          "poor_feeding"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-clarifier-abnormal_bleeding",
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-clarifier-inability_to_drink",
+          "Q-followup-headache-severity",
+          "Q-followup-fever-duration",
+          "Q-followup-headache-duration",
+          "Q-followup-fever-additional_symptoms",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-clarifier-abnormal_bleeding",
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-clarifier-inability_to_drink",
+          "Q-followup-headache-severity",
+          "Q-followup-fever-duration"
+        ],
+        "truncated": [
+          "Q-followup-headache-duration",
+          "Q-followup-fever-additional_symptoms",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "followup_count": 5,
+        "total_questions": 11,
+        "red_flag_questions": [
+          "Q-clarifier-abnormal_bleeding",
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-clarifier-inability_to_drink"
+        ],
+        "red_flag_evaluation_points": [
+          "Q-clarifier-abnormal_bleeding",
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-clarifier-inability_to_drink"
+        ]
+      }
+    },
+    {
+      "fixture_id": "multiple_eligible_followups",
+      "description": "Two authored tokens both offering severity and duration",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "body_pain",
+          "headache"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-body_pain-severity",
+          "Q-followup-headache-severity",
+          "Q-followup-body_pain-duration",
+          "Q-followup-headache-duration",
+          "Q-followup-body_pain-additional_symptoms",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-body_pain-severity",
+          "Q-followup-headache-severity",
+          "Q-followup-body_pain-duration",
+          "Q-followup-headache-duration",
+          "Q-followup-body_pain-additional_symptoms"
+        ],
+        "truncated": [
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "followup_count": 5,
+        "total_questions": 10,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "no_eligible_followup",
+      "description": "No symptom selected \u2014 no follow-up question is eligible",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-default-duration"
+        ],
+        "presented_followups": [
+          "Q-followup-default-duration"
+        ],
+        "truncated": [],
+        "followup_count": 1,
+        "total_questions": 6,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "branch_convergence",
+      "description": "Two different symptoms converging on the same duration question",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "chills",
+          "fever"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-chills-duration",
+          "Q-followup-fever-duration",
+          "Q-followup-chills-additional_symptoms",
+          "Q-followup-fever-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-chills-duration",
+          "Q-followup-fever-duration",
+          "Q-followup-chills-additional_symptoms",
+          "Q-followup-fever-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 4,
+        "total_questions": 9,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "global_red_flag_clarifier",
+      "description": "A near-miss token raises its clarifier",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "difficulty_breathing"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-followup-default-duration"
+        ],
+        "presented_followups": [
+          "Q-clarifier-breathlessness_at_rest",
+          "Q-followup-default-duration"
+        ],
+        "truncated": [],
+        "followup_count": 2,
+        "total_questions": 7,
+        "red_flag_questions": [
+          "Q-clarifier-breathlessness_at_rest"
+        ],
+        "red_flag_evaluation_points": [
+          "Q-clarifier-breathlessness_at_rest"
+        ]
+      }
+    },
+    {
+      "fixture_id": "red_flag_already_selected",
+      "description": "The red flag itself is selected, so its clarifier is suppressed",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "breathlessness_at_rest",
+          "difficulty_breathing"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-default-duration"
+        ],
+        "presented_followups": [
+          "Q-followup-default-duration"
+        ],
+        "truncated": [],
+        "followup_count": 1,
+        "total_questions": 6,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "condition_specific_context",
+      "description": "Chest indrawing \u2014 a paediatric severity token with an authored follow-up",
+      "input_state": {
+        "sex": "male",
+        "age_token": "children_under_5",
+        "pregnancy": null,
+        "body_area": null,
+        "tokens": [
+          "chest_indrawing_severe"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-chest_indrawing_severe-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-chest_indrawing_severe-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 1,
+        "total_questions": 6,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "demographic_escalation_context",
+      "description": "Under-5 with fever \u2014 demographic token present alongside a follow-up",
+      "input_state": {
+        "sex": "female",
+        "age_token": "children_under_5",
+        "pregnancy": false,
+        "body_area": null,
+        "tokens": [
+          "fever"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-fever-duration",
+          "Q-followup-fever-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-fever-duration",
+          "Q-followup-fever-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 2,
+        "total_questions": 8,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "body_area_general",
+      "description": "General body area with a systemic symptom",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": "General",
+        "tokens": [
+          "weakness"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-weakness-duration",
+          "Q-followup-weakness-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-weakness-duration",
+          "Q-followup-weakness-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 2,
+        "total_questions": 7,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "body_area_head",
+      "description": "Head body area",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": "Head",
+        "tokens": [
+          "headache"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-headache-severity",
+          "Q-followup-headache-duration",
+          "Q-followup-headache-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 3,
+        "total_questions": 8,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "body_area_chest",
+      "description": "Chest body area",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": "Chest",
+        "tokens": [
+          "cough"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-cough-severity",
+          "Q-followup-cough-duration",
+          "Q-followup-cough-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-cough-severity",
+          "Q-followup-cough-duration",
+          "Q-followup-cough-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 3,
+        "total_questions": 8,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "body_area_abdomen",
+      "description": "Abdomen body area",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": "Abdomen",
+        "tokens": [
+          "vomiting"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-vomiting-duration",
+          "Q-followup-vomiting-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-vomiting-duration",
+          "Q-followup-vomiting-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 2,
+        "total_questions": 7,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "body_area_skin",
+      "description": "Skin body area",
+      "input_state": {
+        "sex": "male",
+        "age_token": "adults",
+        "pregnancy": null,
+        "body_area": "Skin symptoms",
+        "tokens": [
+          "swelling"
+        ],
+        "assessment_phase": "followup"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-swelling-duration",
+          "Q-followup-swelling-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-swelling-duration",
+          "Q-followup-swelling-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 2,
+        "total_questions": 7,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    },
+    {
+      "fixture_id": "restored_offline_assessment",
+      "description": "State restored from disk mid-flow \u2014 eligibility recomputed from state alone",
+      "input_state": {
+        "sex": "female",
+        "age_token": "adults",
+        "pregnancy": true,
+        "body_area": null,
+        "tokens": [
+          "fever",
+          "vomiting"
+        ],
+        "assessment_phase": "restored"
+      },
+      "expected": {
+        "demographic_questions": [
+          "Q-demo-sex",
+          "Q-demo-age",
+          "Q-demo-pregnancy",
+          "Q-demo-medical-conditions",
+          "Q-demo-body-area",
+          "Q-symptom-selection"
+        ],
+        "eligible_followups_before_truncation": [
+          "Q-followup-fever-duration",
+          "Q-followup-vomiting-duration",
+          "Q-followup-fever-additional_symptoms",
+          "Q-followup-vomiting-additional_symptoms"
+        ],
+        "presented_followups": [
+          "Q-followup-fever-duration",
+          "Q-followup-vomiting-duration",
+          "Q-followup-fever-additional_symptoms",
+          "Q-followup-vomiting-additional_symptoms"
+        ],
+        "truncated": [],
+        "followup_count": 4,
+        "total_questions": 10,
+        "red_flag_questions": [],
+        "red_flag_evaluation_points": []
+      }
+    }
+  ],
+  "edit_cases": [
+    {
+      "fixture_id": "edit_sex_female_to_male_clears_pregnancy",
+      "description": "Upstream edit: changing sex from female to male invalidates the pregnancy answer and its token",
+      "before": {
+        "tokens": [
+          "headache"
+        ],
+        "sex": "female",
+        "pregnancy": true,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-pregnancy",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "presented_followups": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "truncated": [],
+          "followup_count": 3,
+          "total_questions": 9,
+          "red_flag_questions": [],
+          "red_flag_evaluation_points": []
+        }
+      },
+      "after": {
+        "tokens": [
+          "headache"
+        ],
+        "sex": "male",
+        "pregnancy": null,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "presented_followups": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "truncated": [],
+          "followup_count": 3,
+          "total_questions": 8,
+          "red_flag_questions": [],
+          "red_flag_evaluation_points": []
+        }
+      },
+      "expected_invalidated_questions": [
+        "Q-demo-pregnancy"
+      ],
+      "expected_no_longer_presented": [],
+      "expected_newly_presented": []
+    },
+    {
+      "fixture_id": "edit_removes_symptom_invalidates_followup",
+      "description": "Upstream edit: deselecting a symptom makes its follow-up questions ineligible and removes their derived tokens",
+      "before": {
+        "tokens": [
+          "fever",
+          "headache"
+        ],
+        "sex": "male",
+        "pregnancy": null,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-followup-headache-severity",
+            "Q-followup-fever-duration",
+            "Q-followup-headache-duration",
+            "Q-followup-fever-additional_symptoms",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "presented_followups": [
+            "Q-followup-headache-severity",
+            "Q-followup-fever-duration",
+            "Q-followup-headache-duration",
+            "Q-followup-fever-additional_symptoms",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "truncated": [],
+          "followup_count": 5,
+          "total_questions": 10,
+          "red_flag_questions": [],
+          "red_flag_evaluation_points": []
+        }
+      },
+      "after": {
+        "tokens": [
+          "fever"
+        ],
+        "sex": "male",
+        "pregnancy": null,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-followup-fever-duration",
+            "Q-followup-fever-additional_symptoms"
+          ],
+          "presented_followups": [
+            "Q-followup-fever-duration",
+            "Q-followup-fever-additional_symptoms"
+          ],
+          "truncated": [],
+          "followup_count": 2,
+          "total_questions": 7,
+          "red_flag_questions": [],
+          "red_flag_evaluation_points": []
+        }
+      },
+      "expected_invalidated_questions": [
+        "Q-followup-headache-severity",
+        "Q-followup-headache-duration",
+        "Q-followup-headache-additional_symptoms"
+      ],
+      "expected_no_longer_presented": [
+        "Q-followup-headache-additional_symptoms",
+        "Q-followup-headache-duration",
+        "Q-followup-headache-severity"
+      ],
+      "expected_newly_presented": []
+    },
+    {
+      "fixture_id": "edit_removes_red_flag_trigger",
+      "description": "Upstream edit: deselecting the near-miss token retires its red-flag clarifier and any red flag it produced",
+      "before": {
+        "tokens": [
+          "difficulty_breathing"
+        ],
+        "sex": "male",
+        "pregnancy": null,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-clarifier-breathlessness_at_rest",
+            "Q-followup-default-duration"
+          ],
+          "presented_followups": [
+            "Q-clarifier-breathlessness_at_rest",
+            "Q-followup-default-duration"
+          ],
+          "truncated": [],
+          "followup_count": 2,
+          "total_questions": 7,
+          "red_flag_questions": [
+            "Q-clarifier-breathlessness_at_rest"
+          ],
+          "red_flag_evaluation_points": [
+            "Q-clarifier-breathlessness_at_rest"
+          ]
+        }
+      },
+      "after": {
+        "tokens": [
+          "headache"
+        ],
+        "sex": "male",
+        "pregnancy": null,
+        "path": {
+          "demographic_questions": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ],
+          "eligible_followups_before_truncation": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "presented_followups": [
+            "Q-followup-headache-severity",
+            "Q-followup-headache-duration",
+            "Q-followup-headache-additional_symptoms"
+          ],
+          "truncated": [],
+          "followup_count": 3,
+          "total_questions": 8,
+          "red_flag_questions": [],
+          "red_flag_evaluation_points": []
+        }
+      },
+      "expected_invalidated_questions": [
+        "Q-clarifier-breathlessness_at_rest"
+      ],
+      "expected_no_longer_presented": [
+        "Q-clarifier-breathlessness_at_rest",
+        "Q-followup-default-duration"
+      ],
+      "expected_newly_presented": [
+        "Q-followup-headache-additional_symptoms",
+        "Q-followup-headache-duration",
+        "Q-followup-headache-severity"
+      ]
+    }
+  ]
+}
