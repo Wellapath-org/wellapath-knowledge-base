@@ -1,0 +1,62 @@
+{
+  "_metadata": {
+    "report_id": "im001_option_order_decision",
+    "version": "1",
+    "phase": "I2 / W3 Step 5B",
+    "generator": "tools/report_im001_option_ordering.py",
+    "generator_version": "1.0.0",
+    "authoritative": true,
+    "note": "ONE global Product decision covering every option-order contest. The 903 contest groups are evidence, not 903 approvals: they are all the same question and every clinical dimension is identical across all of them."
+  },
+  "evidence_binding": {
+    "path": "reports/im001_option_order_evidence_v1.json",
+    "sha256": "fd4391a21c5db85c4881c2b5d238f968def58b999d6caa28580d28830e181939",
+    "group_count": 903,
+    "affected_path_count": 1872,
+    "note": "This decision is valid only against the evidence table with this exact hash. Regenerating the evidence regenerates the binding; a drifted hash fails validation."
+  },
+  "decision": {
+    "decision_id": "IM001-ORD-GLOBAL-001",
+    "decision_type": "deterministic_option_ordering_rule",
+    "status": "pending",
+    "reviewer_role": "Product",
+    "reviewer_identity": null,
+    "review_date": null,
+    "rationale": null,
+    "candidate_rule_under_review": "Within a grouped question, answer options are emitted in a declared deterministic order derived from the candidate's option ordering, rather than in the order the engine happened to visit the selected tokens.",
+    "baseline_behaviour": "Option order follows selected-token visitation order, so the same symptom set tapped in a different order yields a different option sequence.",
+    "candidate_behaviour": "Deterministic ordering defined by Question Flow 1.1.",
+    "affected_option_order_groups": 903,
+    "affected_paths": 1872,
+    "option_membership_differences": 0,
+    "reachable_token_differences": 0,
+    "scoring_affecting_differences": 0,
+    "red_flag_affecting_differences": 0,
+    "clinical_review_required": false,
+    "clinical_review_required_is_conditional": true,
+    "clinical_review_condition": "Product review alone is sufficient ONLY while option membership, option-to-token mapping, reachable tokens, scoring reachability and red-flag reachability all remain zero. If any becomes non-zero this classification is invalid, clinical review becomes mandatory, and validation fails.",
+    "activation_blocker": true,
+    "activation_blocker_reason": "IM-001 stays blocked until this decision is approved.",
+    "approval_authorizes": [
+      "deterministic ordering of the same existing options within a grouped question"
+    ],
+    "approval_does_not_authorize": [
+      "rewording any question",
+      "adding an option",
+      "removing an option",
+      "changing an option-to-token mapping",
+      "changing scoring, ranking or urgency",
+      "changing any red-flag token, rule or trigger",
+      "IM-003 adaptive re-branching",
+      "publication of any candidate",
+      "production or beta activation"
+    ]
+  },
+  "im_001_gate": {
+    "wording_decisions_pending": 135,
+    "ordering_rule_decisions_pending": 1,
+    "total_product_decisions_required": 136,
+    "im_001_resolved": false,
+    "note": "IM-001 requires 136 Product decisions: 135 wording selections plus one global ordering rule. The two are separate and neither is combined into the other."
+  }
+}
