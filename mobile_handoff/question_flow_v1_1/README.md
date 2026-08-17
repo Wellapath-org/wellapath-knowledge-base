@@ -38,6 +38,9 @@ grouping, and now matches real live output on **2,325 of 2,325**.
 | `reports/question_grouping_coverage_v1_1.json` | Transcription validation + sizes 4–5 |
 | `reports/question_no_clinical_change_v1_1.json` | 1.1 vs 1.0 clinical diff, GF-006/GF-008 regressions, PHI scan |
 | `reports/im001_product_review_v1_1.json` | The 135 wording decisions Product must sign off |
+| `reports/im001_option_order_evidence_v1.json` | 903 option-order contest groups (evidence, not 903 approvals) |
+| `reports/im001_option_order_decision_v1.json` | The ONE global pending Product decision for deterministic option ordering |
+| `docs/IM001_OPTION_ORDERING.md` | How the option-order evidence was verified and why one decision covers 903 groups |
 | `testing/questions/fixtures/oracle/…provenance.json` | Immutable provenance record for the oracle |
 | `testing/questions/fixtures/oracle/…harness.dart.txt` | Reproduction harness for the capture |
 
@@ -174,12 +177,60 @@ order, not alphabetical.
 - Do not publish, upload to R2, or add a `/config` entry.
 - Do not enable any candidate question flow in a user-facing build.
 - **Do not treat IM-001 as resolved.** It is still an activation blocker,
-  pending Product sign-off on the 135 wording decisions in
-  `reports/im001_product_review_v1_1.json`. Merging 1.1 into the knowledge base
-  did not change that.
+  pending **136** Product decisions: the **135** wording selections in
+  `reports/im001_product_review_v1_1.json` **plus one** global
+  deterministic-option-ordering rule in
+  `reports/im001_option_order_decision_v1.json`. Merging 1.1 into the knowledge
+  base did not change that, and neither did incorporating your PR #75 evidence.
 - Do not implement IM-003 dynamic re-branching, restoration, editing or skips.
 - Do not change the live `QuestionEngine`. The correction lives in the artifact;
   changing the engine to match is a separate, reviewed step.
 - Do not treat sizes 4–5 evidence as live output.
 - Do not claim clinical or product approval. Content is `content_approved:
   false` throughout and review status is `not_reviewed`.
+
+---
+
+## Option-order instability — your PR #75 evidence, now incorporated
+
+Your addendum is **incorporated and superseded as the authority**. Its hash and
+byte count were verified directly against PR #75 head `dd9c6d0`
+(`371443cf…`, 1,252,307 bytes — both matched), and then **every count was
+recomputed independently** from this repository's captured-Dart oracle. All 22
+reconciled dimensions agree, with zero unpaired reversed cases.
+
+The authoritative records are now
+`reports/im001_option_order_evidence_v1.json` and
+`reports/im001_option_order_decision_v1.json`. Cite those, not the addendum.
+
+**What the evidence says:** option sequences differ on **1,872** paths. Option
+membership and option-to-token mappings **do not differ on any path**. This is
+**display-order instability only** — every dimension governing what a user can
+declare is identical in both selection orders across all 2,300 comparisons, so
+option order cannot change reachable tokens, scoring inputs, ranked conditions,
+the top condition, urgency, red-flag interruption or path length.
+
+**What that means for you:**
+
+- The 903 contest groups collapse to **one** Product decision
+  (`IM001-ORD-GLOBAL-001`, status `pending`). Do not build anything that expects
+  903 separate approvals.
+- Product review alone is sufficient **conditionally**. If a future change makes
+  option membership, token mapping, reachable tokens, scoring reachability or
+  red-flag reachability differ, the Product-only classification becomes invalid,
+  clinical review becomes mandatory, and our validators fail closed.
+- **Do not change the live `QuestionEngine` option ordering** on the strength of
+  this evidence. It is evidence for a decision, not the decision.
+
+### For PR #75 itself
+
+1. Keep the addendum where it is — it is the provenance for our incorporation.
+2. Update its `_metadata.status` from `pending_knowledge_base_incorporation` to
+   `incorporated_superseded_by_knowledge_base`, and reference
+   `reports/im001_option_order_decision_v1.json` as the authority. Leave
+   `authoritative: false`.
+3. Do not restate the counts as approved findings; cite the knowledge-base
+   reports.
+4. PR #75 may merge on its own merits once the above is done. Merging it does
+   **not** resolve IM-001 and does **not** authorize an ordering change.
+

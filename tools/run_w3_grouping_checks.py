@@ -57,7 +57,11 @@ STEPS = [
      ["tools/report_grouping_coverage.py", "--check"]),
     ("IM-001 product-review decisions are reproducible",
      ["tools/report_im001_product_review.py", "--check"]),
+    ("IM-001 option-order evidence is current",
+     ["tools/report_im001_option_ordering.py", "--check"]),
+    ("IM-001 decision set is valid", ["tools/validate_im001_decisions.py"]),
 ]
+
 
 #: Clinical inputs that this step must not have touched. The expected hashes are
 #: read from candidate 1.0's own frozen_clinical_inputs block rather than

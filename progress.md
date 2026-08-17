@@ -581,3 +581,69 @@ Verification found **two defects in the Step 4 work itself**, both fixed before 
   blocker regardless of this merge.
 
 `tools/run_w3_grouping_checks.py` — **23 checks, 0 failed**.
+
+## I2 / W3 Step 5B — Mobile IM-001 option-ordering evidence incorporated
+
+Branch `feat/i2-w3-im001-option-ordering`. Mobile PR #75 produced a
+non-authoritative addendum decomposing the live option-list instability; this
+step verifies it, recomputes every count independently, and creates **one**
+global pending Product decision. **No decision approved. No candidate or clinical
+artifact changed.** Full write-up: `docs/IM001_OPTION_ORDERING.md`.
+
+- **Provenance verified against Mobile PR #75 head `dd9c6d0`:**
+  `docs/evidence/im001_option_instability_addendum_v1.json`, sha256
+  `371443cf1914b9870ecdd0a3ebe6838bd7322edd59f827058b1db3635f0e57a3`,
+  **1,252,307 bytes** — both matched exactly.
+
+- **Independently reproduced, not copied.** Every count recomputed from this
+  repository's captured-Dart oracle and the frozen artifacts;
+  `tools/report_im001_option_ordering.py` stores Mobile's figures only to
+  reconcile against and never reads them as an input. **All 22 dimensions agree,
+  zero unpaired reversed cases.** 2,300 comparisons = 413 identical + 1,665
+  wording-and-order + 207 order-only + 15 wording-only. Wording differs on 1,680;
+  option ID/label/token-mapping **sequence** differs on **1,872**.
+
+- **Every clinical dimension is zero** — option ID set, label set,
+  option-to-token mapping set, reachable tokens, scoring reachability, red-flag
+  reachability, question identity, role sequence, truncation, required/skip. Not
+  one token is reachable in one order and not the other. The engine **unions**
+  additional-symptom options, and a union is a set operation, so reversing visit
+  order changes only the order options are appended in. **Display-order
+  instability only.**
+
+- **One decision, not 903.** `IM001-ORD-GLOBAL-001`, type
+  `deterministic_option_ordering_rule`, status **pending**, reviewer role
+  **Product**, reviewer/date/rationale **null**, activation blocker **true**.
+  Bound by SHA256 to a 903-group evidence table
+  (`reports/im001_option_order_evidence_v1.json`); a drifted hash fails
+  validation. All 903 groups retained with membership, token mappings, path
+  counts and per-group classification (`display_order_only` on all 903).
+
+- **Product-only is conditional and enforced.** The generator **refuses to emit
+  the decision at all** if any clinical dimension is non-zero, and
+  `tools/validate_im001_decisions.py` (51 checks) fails on
+  `product_only_classification_is_justified`.
+
+- **One definitional correction recorded.** A first pass defined question
+  identity as `(role, question_text)`, reporting 1,680 identity differences and
+  correctly tripping the safety gate. That was a defect in the definition, not a
+  clinical finding — which wording fills a slot is already the `wording`
+  dimension and the subject of the 135 wording decisions. Identity is now
+  `(role, red_flag_token)`, which yields 0 and matches Mobile.
+
+- **135 wording decisions untouched** — file byte-identical to develop, all still
+  `PENDING`, none merged into the ordering rule.
+
+- **IM-001 remains blocked on 136 Product decisions**: 135 wording selections +
+  1 ordering rule. `im_001_resolved: false`.
+
+- **Checks:** W3 grouping suite **25/25**, W2/W3 suite **23/23**, IM-001
+  validators **51/51**, content safety **93 files, 0 PHI hits, 0/13 controls
+  failed**. Candidate 1.1, candidate 1.0, schema, the wording review and the
+  oracle all byte-identical; all frozen clinical artifacts byte-identical; path
+  limit still 5; optional skips still 0; IM-003 still deferred.
+
+**Note on repository location:** the working copy moved from
+`~/wellapath-knowledge-base` to `~/dev/wellapath-knowledge-base` during this
+step. Nothing was lost — the move was verified against the remote and every
+frozen hash re-checked.
