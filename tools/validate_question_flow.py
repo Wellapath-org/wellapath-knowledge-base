@@ -146,8 +146,25 @@ def apply_truncation(ordered, controls):
     return sorted(kept, key=order_key)
 
 
+#: Schema per artifact schema_version. A version with no entry is refused
+#: rather than validated against the nearest match — validating 1.1 against the
+#: 1.0 schema would reject every grouping block as an unknown field, and
+#: validating 1.0 against 1.1 would let a grouping typo through unnoticed.
+SCHEMA_BY_VERSION = {
+    "1.0": SCHEMA_PATH,
+    "1.1": repo_path("schema", "question_flow.v1_1.schema.json"),
+}
+
+
 def check_schema(results, artifact):
-    errors = schema_validate(artifact, load_json(SCHEMA_PATH))
+    declared = artifact.get("_metadata", {}).get("schema_version")
+    schema_path = SCHEMA_BY_VERSION.get(declared)
+    if schema_path is None:
+        results.add("A.schema", "conforms_to_question_flow_schema", False,
+                    "schema_version %r has no schema in this repository; refusing to "
+                    "validate against a different version" % declared)
+        return False
+    errors = schema_validate(artifact, load_json(schema_path))
     results.add("A.schema", "conforms_to_question_flow_schema", not errors, _fmt(errors, 8))
     return not errors
 

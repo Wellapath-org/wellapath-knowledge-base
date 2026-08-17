@@ -1,0 +1,1142 @@
+{
+  "_metadata": {
+    "fixture_id": "question_grouping_paths",
+    "fixture_version": "1.1",
+    "generator": "tools/build_grouping_path_fixtures.py",
+    "synthetic": true,
+    "note": "All inputs are synthetic and spec-derived. No real-user assessment data is used and no symptom combination is invented beyond tokens that already exist in the picker.",
+    "artifact": {
+      "file": "candidate/question_flow.ng.v1.1.json",
+      "version": "1.1",
+      "schema_version": "1.1",
+      "sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b"
+    },
+    "oracle": {
+      "file": "testing/questions/fixtures/oracle/live_question_oracle_v1.json",
+      "sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+      "source_commit": "657739cc1745104dd1194a57ef14cc9793c9b98e"
+    },
+    "case_count": 16,
+    "cases_with_captured_live_output": 11,
+    "cases_without_captured_live_output": 5,
+    "how_to_use": "A Mobile test must assert `expected.presented_questions` exactly. Where `live_evidence` is `captured`, it must ALSO assert that the live questions listed agree on role, red-flag token and option labels \u2014 a consumer that only agrees with the model proves nothing."
+  },
+  "cases": [
+    {
+      "fixture_id": "no_symptom_selected",
+      "description": "Nothing selected \u2014 no follow-up question at all. Candidate 1.0 wrongly asked the default duration question here.",
+      "selected_tokens": [],
+      "expected": {
+        "presented_questions": [],
+        "presented_count": 0,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": []
+    },
+    {
+      "fixture_id": "single_token_all_three_roles",
+      "description": "One token offering severity, duration and additional symptoms \u2014 one question each, not one per role per token",
+      "selected_tokens": [
+        "headache"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe is your headache?",
+            "representative_source": "followup_question_map.headache.severity",
+            "contributing_sources": [
+              "followup_question_map.headache.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this headache?",
+            "representative_source": "followup_question_map.headache.duration",
+            "contributing_sources": [
+              "followup_question_map.headache.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.headache.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.headache.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "nausea",
+              "vomiting",
+              "weakness",
+              "dizziness"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 3,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "severity",
+          "question_text": "How severe is your headache?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this headache?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "fever",
+            "nausea",
+            "vomiting",
+            "weakness",
+            "dizziness"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "two_tokens_one_severity_question",
+      "description": "Two tokens both offering severity \u2014 the group presents ONE severity question, worded from the lower source_order_index",
+      "selected_tokens": [
+        "body_pain",
+        "headache"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe is your body pain?",
+            "representative_source": "followup_question_map.body_pain.severity",
+            "contributing_sources": [
+              "followup_question_map.body_pain.severity",
+              "followup_question_map.headache.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this body pain?",
+            "representative_source": "followup_question_map.body_pain.duration",
+            "contributing_sources": [
+              "followup_question_map.body_pain.duration",
+              "followup_question_map.headache.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.body_pain.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.body_pain.additional_symptoms",
+              "followup_question_map.headache.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "weakness",
+              "fatigue",
+              "nausea",
+              "vomiting",
+              "dizziness"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 3,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "severity",
+          "question_text": "How severe is your body pain?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this body pain?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "fever",
+            "weakness",
+            "fatigue",
+            "nausea",
+            "vomiting",
+            "dizziness"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "three_tokens_option_union",
+      "description": "Three tokens contributing additional-symptom options \u2014 the presented options are the union of the triggered sources only",
+      "selected_tokens": [
+        "cough",
+        "fever",
+        "headache"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe is your cough?",
+            "representative_source": "followup_question_map.cough.severity",
+            "contributing_sources": [
+              "followup_question_map.cough.severity",
+              "followup_question_map.headache.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this cough?",
+            "representative_source": "followup_question_map.cough.duration",
+            "contributing_sources": [
+              "followup_question_map.cough.duration",
+              "followup_question_map.fever.duration",
+              "followup_question_map.headache.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.cough.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.cough.additional_symptoms",
+              "followup_question_map.fever.additional_symptoms",
+              "followup_question_map.headache.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "fast_breathing_child",
+              "weakness",
+              "chills",
+              "sweating",
+              "body_pain",
+              "nausea",
+              "vomiting",
+              "dizziness"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 3,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "severity",
+          "question_text": "How severe is your cough?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this cough?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "fever",
+            "fast_breathing_child",
+            "weakness",
+            "chills",
+            "sweating",
+            "body_pain",
+            "nausea",
+            "vomiting",
+            "dizziness"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "token_without_severity_entry",
+      "description": "A token offering duration and additional symptoms but no severity \u2014 no severity question is presented",
+      "selected_tokens": [
+        "fever"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this fever?",
+            "representative_source": "followup_question_map.fever.duration",
+            "contributing_sources": [
+              "followup_question_map.fever.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.fever.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.fever.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "chills",
+              "sweating",
+              "body_pain",
+              "weakness",
+              "nausea"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 2,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this fever?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "chills",
+            "sweating",
+            "body_pain",
+            "weakness",
+            "nausea"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "mapped_token_without_duration_entry",
+      "description": "chest_indrawing_severe has no duration entry; alone it triggers neither a grouped duration nor the fallback",
+      "selected_tokens": [
+        "chest_indrawing_severe"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.chest_indrawing_severe.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "cough",
+              "fast_breathing_child"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 1,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "fever",
+            "cough",
+            "fast_breathing_child"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "unmapped_token_uses_default_duration",
+      "description": "A selectable token with no authored follow-up \u2014 the default duration question fires",
+      "selected_tokens": [
+        "boils"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-default-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this symptom?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 1,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "not_captured",
+      "live_evidence_note": "This token set is outside the captured oracle (it mixes driving tokens with picker tokens the oracle does not enumerate). The expectation is model-derived and is NOT presented as live output."
+    },
+    {
+      "fixture_id": "duration_less_mapped_token_plus_unmapped",
+      "description": "The GF-006 case: a mapped token with no duration entry plus an unmapped one. Live asks the default duration; candidate 1.0 did not.",
+      "selected_tokens": [
+        "boils",
+        "chest_indrawing_severe"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-default-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this symptom?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.chest_indrawing_severe.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "cough",
+              "fast_breathing_child"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 2,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "not_captured",
+      "live_evidence_note": "This token set is outside the captured oracle (it mixes driving tokens with picker tokens the oracle does not enumerate). The expectation is model-derived and is NOT presented as live output."
+    },
+    {
+      "fixture_id": "unmapped_token_suppressed_by_grouped_duration",
+      "description": "An unmapped token alongside a duration-bearing token \u2014 the grouped duration wins and the fallback stays silent",
+      "selected_tokens": [
+        "boils",
+        "fever"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this fever?",
+            "representative_source": "followup_question_map.fever.duration",
+            "contributing_sources": [
+              "followup_question_map.fever.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.fever.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.fever.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "chills",
+              "sweating",
+              "body_pain",
+              "weakness",
+              "nausea"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 2,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "not_captured",
+      "live_evidence_note": "This token set is outside the captured oracle (it mixes driving tokens with picker tokens the oracle does not enumerate). The expectation is model-derived and is NOT presented as live output."
+    },
+    {
+      "fixture_id": "single_clarifier",
+      "description": "A near-miss token raises its clarifier; the clarifier is never grouped",
+      "selected_tokens": [
+        "difficulty_breathing"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-clarifier-breathlessness_at_rest",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is it hard to breathe even when resting, not just on activity?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "breathlessness_at_rest"
+          },
+          {
+            "question_id": "Q-followup-default-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this symptom?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 2,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "red_flag_clarifier",
+          "question_text": "Is it hard to breathe even when resting, not just on activity?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "red_flag_token": "breathlessness_at_rest"
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this symptom?",
+          "options": [],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "clarifier_suppressed_when_red_flag_selected",
+      "description": "The red-flag token itself is selected, so its clarifier is suppressed",
+      "selected_tokens": [
+        "breathlessness_at_rest",
+        "difficulty_breathing"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-default-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this symptom?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 1,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "not_captured",
+      "live_evidence_note": "This token set is outside the captured oracle (it mixes driving tokens with picker tokens the oracle does not enumerate). The expectation is model-derived and is NOT presented as live output."
+    },
+    {
+      "fixture_id": "two_clarifiers_declaration_order",
+      "description": "Two clarifiers present. Emission order is kRedFlagClarifiers declaration order, NOT alphabetical by red-flag token (GF-008).",
+      "selected_tokens": [
+        "bleeding",
+        "difficulty_breathing"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-clarifier-breathlessness_at_rest",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is it hard to breathe even when resting, not just on activity?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "breathlessness_at_rest"
+          },
+          {
+            "question_id": "Q-clarifier-abnormal_bleeding",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is the bleeding heavy, or does it not stop?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "abnormal_bleeding"
+          },
+          {
+            "question_id": "Q-followup-default-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this symptom?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 3,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "red_flag_clarifier",
+          "question_text": "Is it hard to breathe even when resting, not just on activity?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "red_flag_token": "breathlessness_at_rest"
+        },
+        {
+          "clinical_role": "red_flag_clarifier",
+          "question_text": "Is the bleeding heavy, or does it not stop?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "red_flag_token": "abnormal_bleeding"
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this symptom?",
+          "options": [],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "three_clarifiers_at_the_limit",
+      "description": "All three clarifiers plus grouped follow-ups \u2014 truncation applies, and no clarifier is dropped",
+      "selected_tokens": [
+        "bleeding",
+        "difficulty_breathing",
+        "fever",
+        "headache",
+        "poor_feeding"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-clarifier-breathlessness_at_rest",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is it hard to breathe even when resting, not just on activity?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "breathlessness_at_rest"
+          },
+          {
+            "question_id": "Q-clarifier-inability_to_drink",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is the person completely unable to drink or feed anything?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "inability_to_drink"
+          },
+          {
+            "question_id": "Q-clarifier-abnormal_bleeding",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is the bleeding heavy, or does it not stop?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "abnormal_bleeding"
+          },
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe is your headache?",
+            "representative_source": "followup_question_map.headache.severity",
+            "contributing_sources": [
+              "followup_question_map.headache.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this fever?",
+            "representative_source": "followup_question_map.fever.duration",
+            "contributing_sources": [
+              "followup_question_map.fever.duration",
+              "followup_question_map.headache.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 5,
+        "truncated_question_ids": [
+          "Q-followup-additional-symptoms"
+        ],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "not_captured",
+      "live_evidence_note": "This token set is outside the captured oracle (it mixes driving tokens with picker tokens the oracle does not enumerate). The expectation is model-derived and is NOT presented as live output."
+    },
+    {
+      "fixture_id": "clarifiers_plus_all_three_groups",
+      "description": "Two clarifiers plus severity, duration and additional symptoms \u2014 exactly the limit of 5",
+      "selected_tokens": [
+        "bleeding",
+        "difficulty_breathing",
+        "headache"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-clarifier-breathlessness_at_rest",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is it hard to breathe even when resting, not just on activity?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "breathlessness_at_rest"
+          },
+          {
+            "question_id": "Q-clarifier-abnormal_bleeding",
+            "clinical_role": "red_flag_clarifier",
+            "question_text": "Is the bleeding heavy, or does it not stop?",
+            "representative_source": null,
+            "contributing_sources": null,
+            "presented_option_labels": [
+              "Yes",
+              "No"
+            ],
+            "red_flag_token": "abnormal_bleeding"
+          },
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe is your headache?",
+            "representative_source": "followup_question_map.headache.severity",
+            "contributing_sources": [
+              "followup_question_map.headache.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this headache?",
+            "representative_source": "followup_question_map.headache.duration",
+            "contributing_sources": [
+              "followup_question_map.headache.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.headache.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.headache.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "fever",
+              "nausea",
+              "vomiting",
+              "weakness",
+              "dizziness"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 5,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "red_flag_clarifier",
+          "question_text": "Is it hard to breathe even when resting, not just on activity?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "red_flag_token": "breathlessness_at_rest"
+        },
+        {
+          "clinical_role": "red_flag_clarifier",
+          "question_text": "Is the bleeding heavy, or does it not stop?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "red_flag_token": "abnormal_bleeding"
+        },
+        {
+          "clinical_role": "severity",
+          "question_text": "How severe is your headache?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this headache?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "fever",
+            "nausea",
+            "vomiting",
+            "weakness",
+            "dizziness"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "order_sensitive_baseline",
+      "description": "A selection where the live engine's wording depends on tap order. The candidate is stable; this fixture pins WHICH wording it picks.",
+      "selected_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "cough"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-severity",
+            "clinical_role": "severity",
+            "question_text": "How severe are your abdominal cramps?",
+            "representative_source": "followup_question_map.abdominal_cramps.severity",
+            "contributing_sources": [
+              "followup_question_map.abdominal_cramps.severity",
+              "followup_question_map.body_pain.severity",
+              "followup_question_map.cough.severity"
+            ],
+            "presented_option_labels": [
+              "mild",
+              "moderate",
+              "severe",
+              "very_severe"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had these abdominal cramps?",
+            "representative_source": "followup_question_map.abdominal_cramps.duration",
+            "contributing_sources": [
+              "followup_question_map.abdominal_cramps.duration",
+              "followup_question_map.body_pain.duration",
+              "followup_question_map.cough.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.abdominal_cramps.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.abdominal_cramps.additional_symptoms",
+              "followup_question_map.body_pain.additional_symptoms",
+              "followup_question_map.cough.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "vomiting",
+              "nausea",
+              "watery_stool",
+              "fever",
+              "weakness",
+              "fatigue",
+              "fast_breathing_child"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 3,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "severity",
+          "question_text": "How severe are your abdominal cramps?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had these abdominal cramps?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "vomiting",
+            "nausea",
+            "watery_stool",
+            "fever",
+            "weakness",
+            "fatigue",
+            "fast_breathing_child"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    },
+    {
+      "fixture_id": "maximum_option_union",
+      "description": "Three additional-symptom sources with overlapping options \u2014 the union de-duplicates by option id",
+      "selected_tokens": [
+        "fever",
+        "nausea",
+        "vomiting"
+      ],
+      "expected": {
+        "presented_questions": [
+          {
+            "question_id": "Q-followup-duration",
+            "clinical_role": "duration",
+            "question_text": "How long have you had this fever?",
+            "representative_source": "followup_question_map.fever.duration",
+            "contributing_sources": [
+              "followup_question_map.fever.duration",
+              "followup_question_map.nausea.duration",
+              "followup_question_map.vomiting.duration"
+            ],
+            "presented_option_labels": [
+              "Less than 3 days",
+              "3 to 7 days",
+              "8 to 14 days",
+              "More than 14 days"
+            ],
+            "red_flag_token": null
+          },
+          {
+            "question_id": "Q-followup-additional-symptoms",
+            "clinical_role": "additional_symptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "representative_source": "followup_question_map.fever.additional_symptoms",
+            "contributing_sources": [
+              "followup_question_map.fever.additional_symptoms",
+              "followup_question_map.nausea.additional_symptoms",
+              "followup_question_map.vomiting.additional_symptoms"
+            ],
+            "presented_option_labels": [
+              "chills",
+              "sweating",
+              "body_pain",
+              "weakness",
+              "nausea",
+              "vomiting",
+              "abdominal_cramps",
+              "fever"
+            ],
+            "red_flag_token": null
+          }
+        ],
+        "presented_count": 2,
+        "truncated_question_ids": [],
+        "red_flag_questions_dropped": []
+      },
+      "live_evidence": "captured",
+      "live_questions": [
+        {
+          "clinical_role": "duration",
+          "question_text": "How long have you had this fever?",
+          "options": [],
+          "red_flag_token": null
+        },
+        {
+          "clinical_role": "additional_symptoms",
+          "question_text": "Do you have any of these symptoms too?",
+          "options": [
+            "chills",
+            "sweating",
+            "body_pain",
+            "weakness",
+            "nausea",
+            "vomiting",
+            "abdominal_cramps",
+            "fever"
+          ],
+          "red_flag_token": null
+        }
+      ]
+    }
+  ]
+}
