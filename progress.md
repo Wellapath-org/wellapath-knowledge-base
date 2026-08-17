@@ -445,3 +445,139 @@ Engineering-lead dispositions recorded in the candidate as
 - No clinical-content change: question wording byte-identical (27 texts), token
   output universe identical (139 tokens), 50 questions / 300 options unchanged.
   Checks now **23 groups**, all green; 53 question-flow validators; 103 tests.
+
+## I2 / W3 Step 4 — Reconcile the question candidate with live de-duplication
+
+**Status: parity achieved, activation still blocked.** Candidate 1.1 and schema
+1.1 are unpublished, clinically unreviewed and consumed by no build. Candidate
+1.0 and schema 1.0 are retained unmodified.
+
+- **The blocker from Step 3 is cleared.** Candidate 1.0 planned a different
+  question SET on 1,930 of 2,325 paths because it modelled one question per
+  token per role while the live engine de-duplicates. Candidate 1.1 models the
+  grouping and is now **identical to real live output on 2,325 of 2,325 paths** —
+  0 question-set, 0 order, 0 wording, 0 option-set, 0 option-order, 0
+  token-effect, 0 red-flag, 0 truncation differences, 0 red-flag questions
+  dropped, path limit never exceeded.
+
+- **Measured against the real Dart engine, not a reimplementation.** The oracle
+  (`testing/questions/fixtures/oracle/`, 4,625 cases, 4.0 MB) is the actual
+  output of `QuestionEngine.generateQuestions` at Mobile `657739cc`, captured by
+  running it. A model compared against itself would have proved nothing.
+
+- **IM-001 is narrowed to what it always should have been.** It no longer changes
+  which questions are asked, only which of two existing wordings is shown where
+  the baseline has no stable answer. Under reversed selection order the live
+  engine **disagrees with itself on 1,680 of 2,300 paths**; the candidate is
+  unstable on **0**. 1.0's superseded IM-001 statement — which called it
+  `path_affecting: false` before measurement showed otherwise — is carried in the
+  record rather than overwritten.
+
+- **Two defects found by measurement, not by reading code.** GF-006: 1.0's
+  default-duration trigger fired on the empty selection and missed
+  `{chest_indrawing_severe, boils}` — two mapped tokens have no duration entry.
+  GF-008: every clarifier had priority 0, so ordering fell to the tie-break key,
+  i.e. alphabetical; `kRedFlagClarifiers` is not alphabetical, so the first and
+  third clarifier swapped on 168 paths. **Declaration order was already stable —
+  removing nondeterminism elsewhere is not a licence to reorder deterministic
+  output.**
+
+- **Two defects in my own tooling, corrected rather than worked around.** The
+  parity comparator derived option labels by splitting option ids and reported
+  1,249 false differences (`::yes` is not `Yes`). The containment check posed
+  `source AND NOT question` to `is_never_satisfiable`, which cannot discharge it,
+  and flagged all 40 sources; it now decides containment **exactly** by
+  enumerating the referenced token subsets, and refuses above 20 tokens rather
+  than approximating.
+
+- **Schema 1.1 is computed from 1.0, not hand-written.** `additionalProperties:
+  false` on a question made grouping inexpressible under 1.0. The generator loads
+  1.0, adds `$defs.grouping`, `$defs.groupSource`, `question.grouping`,
+  `metadata.grouping_semantics` and `pathControls.grouping_phase`, and re-proves
+  additivity on every run — refusing to write if any required field, enum value
+  or const was narrowed. One constraint widened: `schema_version` from
+  `const "1.0"` to `enum ["1.0","1.1"]`.
+
+- **Grouping is declared, not inferred:** `group_key` (distinct from
+  `tie_break_key`, which orders and never groups), `merge_strategy`,
+  `representative_selection` = `lowest_source_order_index`, `option_union_rule`,
+  `conflict_resolution`, and 40 explicit `sources`. Red-flag clarifiers are
+  **prohibited** from grouping. Grouping runs **before** truncation.
+
+- **Guards:** 10 grouping checks, all passing; **22 invalid fixtures, 22
+  rejected by the intended check** (rejection by a different check counts as a
+  failure). The existing 53-check validator passes on 1.1 **and** still passes
+  unchanged on 1.0. `tools/run_w3_grouping_checks.py` — 18 checks, 0 failed.
+
+- **Coverage beyond the oracle is labelled honestly.** The Python transcription
+  was first validated against all 4,625 real cases (0 mismatches) and only then
+  used to reach sizes 4 and 5: 53,130 further paths, 0 differences on every
+  dimension. That evidence is **model-derived and marked as such** — weaker than
+  live output, and not presented as it.
+
+- **Nothing clinical moved.** kb 2.4, rules 2.2, token dictionary 1.1 and 2.0,
+  candidate 1.0 and schema 1.0 all verified byte-unchanged. No question added,
+  removed or reworded; no answer meaning, produced token or red-flag rule
+  changed; IM-002 timing untouched; IM-003 not implemented; path limit still 5.
+
+- **Activation remains blocked** on product sign-off for representative wording,
+  unapproved content, absent clinical review, and publication — not on path
+  content, which is now measured at zero change.
+
+### Step 4A — final verification before merge
+
+Verification found **two defects in the Step 4 work itself**, both fixed before merge.
+
+- **Schema 1.1 was not additive.** `grouping_semantics` had been added to
+  `_metadata.required`, so candidate 1.0 no longer validated under 1.1 — exactly
+  what an additive extension may not do. The additivity guard had missed it
+  because it only checked that 1.0's constraints *survived*, never that new ones
+  were *added*. The guard now rejects a grown `required`, a changed `const` and
+  any new restricting keyword, and is **mutation-tested against all three**. The
+  requirement itself moved to where it belongs — the artifact version, enforced
+  by validator check G01, proven by the `grouping_semantics_absent` fixture.
+  Compatibility is now proven twice, structurally and behaviourally: candidate
+  1.0 validates under both schemas, candidate 1.1 is correctly refused by schema
+  1.0, and **23 schema-invalid 1.0 fixtures were re-checked under 1.1 with 0
+  newly accepted**.
+
+- **Oracle provenance was incomplete.** The capture used a temporary Mobile test
+  that was deleted and is committed nowhere. `tools/validate_oracle_provenance.py`
+  now re-derives the bounded enumeration, input ordering, reversed-case rule,
+  field sets, role vocabulary and question limit **from first principles** —
+  none of it read from the fixture's own metadata — and pins the fixture in a
+  **sidecar** record, so captured evidence is never edited to describe itself.
+  The reproduction harness is recorded in the KB and explicitly **not** claimed
+  to be byte-identical to the deleted test; the fixture's authenticity rests on
+  the structural re-derivation plus the independent 4,625-case transcription
+  match, not on that file.
+
+- **The PHI scan's first revision was wrong in both directions.** It reported 27
+  "phone numbers" that were fragments of the candidate 1.0 SHA256, and flagged
+  the token-dictionary schema's own sentence *"No PHI fields — no name, dob,
+  phone, email, address"* — the prose forbidding PHI. Patterns were narrowed
+  precisely rather than loosened generally, and the scan now carries **9 positive
+  and 4 negative controls** so a pattern narrowed into uselessness fails instead
+  of passing. 91 files, 0 hits.
+
+- **No clinical or runtime change, computed not asserted:** 33 question texts
+  identical · 169 answer labels, none changed in meaning · 139-token output
+  universe identical · red-flag effects identical · path limit 5 · zero skips ·
+  zero skip sentinels · IM-003 deferred and structurally absent · Vocabulary 2.0
+  unused with no alias operator in any condition.
+
+- **GF-006 and GF-008 re-measured against captured output.** GF-006: candidate
+  1.0 was wrong on 3 of 6 named cases; 1.1 matches live on all 6, and no duration
+  entry was invented for the two mapped tokens that lack one. GF-008: of **248**
+  captured paths presenting two or more clarifiers, 1.0's ordering differed from
+  live on **168**; 1.1 differs on **0**. The 168 figure is now computed, not
+  recalled.
+
+- **IM-001 is now actionable for Product.** `reports/im001_product_review_v1_1.json`
+  collapses the 1,680 order-dependent captured paths into **135 distinct wording
+  decisions**, each listing the selected wording, the rejected alternatives and
+  the paths riding on it. Every wording involved already exists in the live app.
+  All 135 are `PENDING`; until they are signed off, IM-001 remains an activation
+  blocker regardless of this merge.
+
+`tools/run_w3_grouping_checks.py` — **23 checks, 0 failed**.

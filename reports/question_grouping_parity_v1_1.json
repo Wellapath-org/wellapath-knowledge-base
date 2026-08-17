@@ -1,0 +1,102 @@
+{
+  "_metadata": {
+    "report_id": "question_grouping_parity",
+    "version": "1.1",
+    "generator": "tools/report_question_grouping_parity.py",
+    "description": "Path-by-path comparison of candidate 1.1 against real live-engine output. Every target below is COMPUTED from the comparison, never asserted.",
+    "candidate": {
+      "path": "candidate/question_flow.ng.v1.1.json",
+      "sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+      "version": "1.1",
+      "schema_version": "1.1"
+    },
+    "oracle": {
+      "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.json",
+      "sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+      "source_commit": "657739cc1745104dd1194a57ef14cc9793c9b98e",
+      "source_symbol": "QuestionEngine.generateQuestions",
+      "captured_by": "running the real Dart implementation, not a reimplementation"
+    },
+    "mobile_source_commit": "a269168e2ed9b3b1c0453797dce5c9f303366854",
+    "comparison_keys": {
+      "question_set": "multiset of (clinical_role, red_flag_token)",
+      "wording": "question_text, positionally, reported separately",
+      "options": "labels, for roles whose live FollowupQuestion carries options: additional_symptoms, red_flag_clarifier",
+      "options_not_compared": "severity and duration carry an empty options list in the live Dart model \u2014 their answers come from the severity slider and duration chips. There is nothing to compare, and no match is claimed.",
+      "tokens": "set of tokens any presented answer could produce",
+      "red_flags": "set of red-flag tokens whose clarifier is presented"
+    }
+  },
+  "bounded_path_set": {
+    "driving_tokens": [
+      "abdominal_cramps",
+      "bleeding",
+      "body_pain",
+      "chest_indrawing_severe",
+      "chills",
+      "cough",
+      "dark_urine",
+      "difficulty_breathing",
+      "dizziness",
+      "fast_breathing_child",
+      "fatigue",
+      "fever",
+      "headache",
+      "nausea",
+      "nosebleed",
+      "pain",
+      "poor_appetite",
+      "poor_feeding",
+      "shortness_of_breath",
+      "sweating",
+      "swelling",
+      "vomiting",
+      "watery_stool",
+      "weakness"
+    ],
+    "max_tokens_per_combination": 3,
+    "forward_paths": 2325,
+    "reversed_paths": 2300
+  },
+  "forward": {
+    "paths_compared": 2325,
+    "identical": 2325,
+    "question_set_differences": 0,
+    "question_order_differences": 0,
+    "wording_differences": 0,
+    "option_set_differences": 0,
+    "option_order_differences": 0,
+    "token_effect_differences": 0,
+    "red_flag_effect_differences": 0,
+    "red_flag_questions_dropped": 0,
+    "truncation_count_differences": 0,
+    "path_limit_exceeded": 0
+  },
+  "reversed": {
+    "paths_compared": 2300,
+    "live_disagrees_with_itself": 1680,
+    "candidate_unstable": 0,
+    "candidate_matches_reversed_live_wording": 620,
+    "candidate_matches_forward_live_wording_only": 1680
+  },
+  "targets": {
+    "zero_question_set_differences": true,
+    "zero_option_set_differences": true,
+    "zero_token_effect_differences": true,
+    "zero_red_flag_effect_differences": true,
+    "zero_truncation_set_differences": true,
+    "zero_red_flag_questions_dropped": true,
+    "path_limit_never_exceeded": true,
+    "candidate_order_independent": true
+  },
+  "all_targets_met": true,
+  "failing_paths": [],
+  "failing_path_sample_truncated_at": 50,
+  "candidate_instability_sample": [],
+  "coverage_limits": [
+    "Token subsets are bounded at size 3 over the 24 driving tokens (2,325 paths). Larger selections are representable in the app and are NOT covered here.",
+    "The 24 driving tokens are those that reach a follow-up question or a clarifier trigger. The other 97 picker tokens exercise only the default-duration fallback, which IS covered.",
+    "Demographic gating (sex, age, pregnancy) does not affect follow-up selection in the live engine and is not varied here.",
+    "Answer VALUES are not varied: the live engine computes the question set before any follow-up answer exists. IM-003 would change that, and is not implemented."
+  ]
+}

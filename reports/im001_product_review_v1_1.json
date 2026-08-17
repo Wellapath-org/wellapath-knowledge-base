@@ -1,0 +1,4088 @@
+{
+  "_metadata": {
+    "report_id": "im001_product_review",
+    "version": "1.1",
+    "generator": "tools/report_im001_product_review.py",
+    "candidate": {
+      "path": "candidate/question_flow.ng.v1.1.json",
+      "sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+      "version": "1.1"
+    },
+    "oracle": {
+      "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.json",
+      "sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+      "evidence_class": "CAPTURED_DART"
+    },
+    "what_product_is_being_asked": "For each decision below, confirm the selected wording is the right one to show. Every wording listed \u2014 selected and rejected alike \u2014 already exists in the live app; the live engine shows one or the other depending on the order the user tapped their symptoms.",
+    "what_product_is_NOT_being_asked": "Not to approve question CONTENT \u2014 that is a separate clinical and content review, still outstanding, and `content_approved` is false throughout. Not to approve publication. Not to approve activation.",
+    "selection_rule_under_review": "lowest_source_order_index \u2014 among the sources whose token was selected, the wording belonging to the alphabetically first canonical token id. Deterministic and independent of tap order. Accepted as the ENGINEERING proposal; this report is the product half."
+  },
+  "scope": {
+    "captured_reversed_paths": 2300,
+    "paths_where_live_is_order_dependent": 1680,
+    "distinct_wording_decisions": 135,
+    "note": "1680 affected paths collapse to 135 distinct decisions, because the same wording contests recur. Reviewing the decisions covers every path."
+  },
+  "invariants_not_under_review": {
+    "question_set_changes": 0,
+    "option_set_changes": 0,
+    "token_effect_changes": 0,
+    "red_flag_effect_changes": 0,
+    "truncation_changes": 0,
+    "basis": "reports/question_grouping_parity_v1_1.json, 2,325 captured paths."
+  },
+  "decisions": [
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 23,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "weakness"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "weakness"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D001",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe are your abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.severity",
+      "rejected_wordings": [
+        "How severe is this pain?"
+      ],
+      "captured_paths_affected": 23,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "pain"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D002",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 22,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "watery_stool"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "watery_stool"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D003",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 22,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "weakness"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "weakness"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D004",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe are your abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.severity",
+      "rejected_wordings": [
+        "How severe is your headache?"
+      ],
+      "captured_paths_affected": 22,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "headache"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "headache"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D005",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your body pain?",
+      "selected_source": "followup_question_map.body_pain.severity",
+      "rejected_wordings": [
+        "How severe is this pain?"
+      ],
+      "captured_paths_affected": 22,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "pain"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "pain"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D006",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "weakness"
+        ],
+        [
+          "chills",
+          "cough",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D007",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "vomiting"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "vomiting"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D008",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "watery_stool"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "watery_stool"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D009",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe are your abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.severity",
+      "rejected_wordings": [
+        "How severe is the fast breathing?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "fast_breathing_child"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "fast_breathing_child"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "fast_breathing_child"
+        ]
+      ],
+      "decision_id": "IM001-D010",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your body pain?",
+      "selected_source": "followup_question_map.body_pain.severity",
+      "rejected_wordings": [
+        "How severe is your headache?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "headache"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "headache"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D011",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your cough?",
+      "selected_source": "followup_question_map.cough.severity",
+      "rejected_wordings": [
+        "How severe is this pain?"
+      ],
+      "captured_paths_affected": 21,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "pain"
+        ],
+        [
+          "chills",
+          "cough",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D012",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "watery_stool"
+        ],
+        [
+          "chills",
+          "cough",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D013",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "swelling"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "swelling"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D014",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "vomiting"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "vomiting"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D015",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "weakness"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D016",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe are your abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.severity",
+      "rejected_wordings": [
+        "How severe is your cough?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "cough"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "cough"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "cough"
+        ]
+      ],
+      "decision_id": "IM001-D017",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is the fast breathing?",
+      "selected_source": "followup_question_map.fast_breathing_child.severity",
+      "rejected_wordings": [
+        "How severe is this pain?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "fast_breathing_child",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fast_breathing_child",
+          "pain"
+        ],
+        [
+          "chills",
+          "fast_breathing_child",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D018",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your body pain?",
+      "selected_source": "followup_question_map.body_pain.severity",
+      "rejected_wordings": [
+        "How severe is the fast breathing?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "fast_breathing_child"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "fast_breathing_child"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "fast_breathing_child"
+        ]
+      ],
+      "decision_id": "IM001-D019",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your cough?",
+      "selected_source": "followup_question_map.cough.severity",
+      "rejected_wordings": [
+        "How severe is your headache?"
+      ],
+      "captured_paths_affected": 20,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "headache"
+        ],
+        [
+          "chills",
+          "cough",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D020",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "vomiting"
+        ],
+        [
+          "chills",
+          "cough",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D021",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "sweating"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "sweating"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D022",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "swelling"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "swelling"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D023",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "watery_stool"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D024",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "weakness"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D025",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe are your abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.severity",
+      "rejected_wordings": [
+        "How severe is your body pain?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "body_pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "chest_indrawing_severe"
+        ]
+      ],
+      "decision_id": "IM001-D026",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is the fast breathing?",
+      "selected_source": "followup_question_map.fast_breathing_child.severity",
+      "rejected_wordings": [
+        "How severe is your headache?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "fast_breathing_child",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fast_breathing_child",
+          "headache"
+        ],
+        [
+          "chills",
+          "fast_breathing_child",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D027",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your body pain?",
+      "selected_source": "followup_question_map.body_pain.severity",
+      "rejected_wordings": [
+        "How severe is your cough?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "cough"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "cough"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "cough"
+        ]
+      ],
+      "decision_id": "IM001-D028",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your cough?",
+      "selected_source": "followup_question_map.cough.severity",
+      "rejected_wordings": [
+        "How severe is the fast breathing?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "fast_breathing_child"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "fast_breathing_child"
+        ],
+        [
+          "chills",
+          "cough",
+          "fast_breathing_child"
+        ]
+      ],
+      "decision_id": "IM001-D029",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "severity",
+      "selected_wording": "How severe is your headache?",
+      "selected_source": "followup_question_map.headache.severity",
+      "rejected_wordings": [
+        "How severe is this pain?"
+      ],
+      "captured_paths_affected": 19,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "pain"
+        ],
+        [
+          "chills",
+          "headache",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D030",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D031",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "swelling"
+        ],
+        [
+          "chills",
+          "cough",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D032",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "pain"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D033",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "sweating"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "sweating"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D034",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "vomiting"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D035",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 18,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "watery_stool"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D036",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D037",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D038",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "sweating"
+        ],
+        [
+          "chills",
+          "cough",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D039",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "nausea"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "nausea"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D040",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "pain"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "pain"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D041",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "swelling"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D042",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 17,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "vomiting"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D043",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D044",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D045",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "pain"
+        ],
+        [
+          "chills",
+          "cough",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D046",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "headache"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "headache"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D047",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "nausea"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "nausea"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D048",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "sweating"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D049",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D050",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 16,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "swelling"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D051",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D052",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D053",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "nausea"
+        ],
+        [
+          "chills",
+          "cough",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D054",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "fever"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "fever"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D055",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "headache"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "headache"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D056",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "pain"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D057",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D058",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D059",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 15,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "sweating"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D060",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D061",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D062",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "headache"
+        ],
+        [
+          "chills",
+          "cough",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D063",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D064",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "fatigue"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "fatigue"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D065",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "fever"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "fever"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D066",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "nausea"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D067",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D068",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D069",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 14,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "pain"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D070",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "pain"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D071",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D072",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "fever"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "fever"
+        ],
+        [
+          "chills",
+          "cough",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D073",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D074",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you felt dizzy?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "dizziness"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "dizziness"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "dizziness"
+        ]
+      ],
+      "decision_id": "IM001-D075",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "fatigue"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "fatigue"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D076",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "headache"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D077",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D078",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D079",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this pain?",
+      "selected_source": "followup_question_map.pain.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "pain",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "pain",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "pain",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D080",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 13,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "nausea"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D081",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "nausea"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D082",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "pain"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D083",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "fatigue"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "fatigue"
+        ],
+        [
+          "chills",
+          "cough",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D084",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had excessive sweating?",
+      "selected_source": "followup_question_map.sweating.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "sweating",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "sweating",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "sweating",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D085",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D086",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you noticed dark urine?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "dark_urine"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "dark_urine"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "dark_urine"
+        ]
+      ],
+      "decision_id": "IM001-D087",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you felt dizzy?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "dizziness"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "dizziness"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "dizziness"
+        ]
+      ],
+      "decision_id": "IM001-D088",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "fever"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "fever"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D089",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D090",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D091",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this pain?",
+      "selected_source": "followup_question_map.pain.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "pain",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "pain",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "pain",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D092",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 12,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "headache"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D093",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "headache"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D094",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "nausea"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D095",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you felt dizzy?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "dizziness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "dizziness"
+        ],
+        [
+          "chills",
+          "cough",
+          "dizziness"
+        ]
+      ],
+      "decision_id": "IM001-D096",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had excessive sweating?",
+      "selected_source": "followup_question_map.sweating.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "sweating",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "sweating",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "sweating",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D097",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D098",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this cough?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "cough"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "cough"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "cough"
+        ]
+      ],
+      "decision_id": "IM001-D099",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you noticed dark urine?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "dark_urine"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "dark_urine"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "dark_urine"
+        ]
+      ],
+      "decision_id": "IM001-D100",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "fatigue"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "fatigue"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D101",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "pain"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D102",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D103",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this pain?",
+      "selected_source": "followup_question_map.pain.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "pain",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "pain",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "pain",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D104",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this swelling?",
+      "selected_source": "followup_question_map.swelling.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "swelling",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "swelling",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "swelling",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D105",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 11,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "fever"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "fever"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D106",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you been vomiting?",
+      "selected_source": "followup_question_map.vomiting.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "vomiting",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "vomiting",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "vomiting",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D107",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "fever"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "fever"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D108",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "headache"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D109",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you noticed dark urine?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "dark_urine"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "dark_urine"
+        ],
+        [
+          "chills",
+          "cough",
+          "dark_urine"
+        ]
+      ],
+      "decision_id": "IM001-D110",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had excessive sweating?",
+      "selected_source": "followup_question_map.sweating.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "sweating",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "sweating",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "sweating",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D111",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D112",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had chills?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "chills"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "chills"
+        ],
+        [
+          "abdominal_cramps",
+          "chest_indrawing_severe",
+          "chills"
+        ]
+      ],
+      "decision_id": "IM001-D113",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had this cough?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "cough"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "cough"
+        ],
+        [
+          "body_pain",
+          "chills",
+          "cough"
+        ]
+      ],
+      "decision_id": "IM001-D114",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you felt dizzy?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "dizziness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "dizziness"
+        ],
+        [
+          "cough",
+          "dark_urine",
+          "dizziness"
+        ]
+      ],
+      "decision_id": "IM001-D115",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "nausea"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D116",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "pain"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D117",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this pain?",
+      "selected_source": "followup_question_map.pain.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "pain",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "pain",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "pain",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D118",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this swelling?",
+      "selected_source": "followup_question_map.swelling.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "swelling",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "swelling",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "swelling",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D119",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 10,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "fatigue"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "fatigue"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D120",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you been vomiting?",
+      "selected_source": "followup_question_map.vomiting.duration",
+      "rejected_wordings": [
+        "How long have you had watery stool?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "vomiting",
+          "watery_stool"
+        ],
+        [
+          "chest_indrawing_severe",
+          "vomiting",
+          "watery_stool"
+        ],
+        [
+          "difficulty_breathing",
+          "vomiting",
+          "watery_stool"
+        ]
+      ],
+      "decision_id": "IM001-D121",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt dizzy?",
+      "selected_source": "followup_question_map.dizziness.duration",
+      "rejected_wordings": [
+        "How long have you felt this fatigue?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "dizziness",
+          "fatigue"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dizziness",
+          "fatigue"
+        ],
+        [
+          "difficulty_breathing",
+          "dizziness",
+          "fatigue"
+        ]
+      ],
+      "decision_id": "IM001-D122",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you felt this fatigue?",
+      "selected_source": "followup_question_map.fatigue.duration",
+      "rejected_wordings": [
+        "How long have you had this fever?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "fatigue",
+          "fever"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fatigue",
+          "fever"
+        ],
+        [
+          "difficulty_breathing",
+          "fatigue",
+          "fever"
+        ]
+      ],
+      "decision_id": "IM001-D123",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had chills?",
+      "selected_source": "followup_question_map.chills.duration",
+      "rejected_wordings": [
+        "How long have you had this cough?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "chills",
+          "cough"
+        ],
+        [
+          "chest_indrawing_severe",
+          "chills",
+          "cough"
+        ],
+        [
+          "chills",
+          "cough"
+        ]
+      ],
+      "decision_id": "IM001-D124",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had excessive sweating?",
+      "selected_source": "followup_question_map.sweating.duration",
+      "rejected_wordings": [
+        "How long have you had this swelling?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "sweating",
+          "swelling"
+        ],
+        [
+          "chest_indrawing_severe",
+          "sweating",
+          "swelling"
+        ],
+        [
+          "difficulty_breathing",
+          "sweating",
+          "swelling"
+        ]
+      ],
+      "decision_id": "IM001-D125",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had nausea?",
+      "selected_source": "followup_question_map.nausea.duration",
+      "rejected_wordings": [
+        "How long have you had this pain?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "nausea",
+          "pain"
+        ],
+        [
+          "chest_indrawing_severe",
+          "nausea",
+          "pain"
+        ],
+        [
+          "difficulty_breathing",
+          "nausea",
+          "pain"
+        ]
+      ],
+      "decision_id": "IM001-D126",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had these abdominal cramps?",
+      "selected_source": "followup_question_map.abdominal_cramps.duration",
+      "rejected_wordings": [
+        "How long have you had this body pain?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "abdominal_cramps",
+          "bleeding",
+          "body_pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain"
+        ],
+        [
+          "abdominal_cramps",
+          "body_pain",
+          "chest_indrawing_severe"
+        ]
+      ],
+      "decision_id": "IM001-D127",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this body pain?",
+      "selected_source": "followup_question_map.body_pain.duration",
+      "rejected_wordings": [
+        "How long have you had chills?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "body_pain",
+          "chills"
+        ],
+        [
+          "body_pain",
+          "chest_indrawing_severe",
+          "chills"
+        ],
+        [
+          "body_pain",
+          "chills"
+        ]
+      ],
+      "decision_id": "IM001-D128",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this cough?",
+      "selected_source": "followup_question_map.cough.duration",
+      "rejected_wordings": [
+        "How long have you noticed dark urine?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "cough",
+          "dark_urine"
+        ],
+        [
+          "chest_indrawing_severe",
+          "cough",
+          "dark_urine"
+        ],
+        [
+          "cough",
+          "dark_urine"
+        ]
+      ],
+      "decision_id": "IM001-D129",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this fever?",
+      "selected_source": "followup_question_map.fever.duration",
+      "rejected_wordings": [
+        "How long have you had this headache?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "fever",
+          "headache"
+        ],
+        [
+          "chest_indrawing_severe",
+          "fever",
+          "headache"
+        ],
+        [
+          "difficulty_breathing",
+          "fever",
+          "headache"
+        ]
+      ],
+      "decision_id": "IM001-D130",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this headache?",
+      "selected_source": "followup_question_map.headache.duration",
+      "rejected_wordings": [
+        "How long have you had nausea?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "headache",
+          "nausea"
+        ],
+        [
+          "chest_indrawing_severe",
+          "headache",
+          "nausea"
+        ],
+        [
+          "difficulty_breathing",
+          "headache",
+          "nausea"
+        ]
+      ],
+      "decision_id": "IM001-D131",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this pain?",
+      "selected_source": "followup_question_map.pain.duration",
+      "rejected_wordings": [
+        "How long have you had excessive sweating?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "pain",
+          "sweating"
+        ],
+        [
+          "chest_indrawing_severe",
+          "pain",
+          "sweating"
+        ],
+        [
+          "difficulty_breathing",
+          "pain",
+          "sweating"
+        ]
+      ],
+      "decision_id": "IM001-D132",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had this swelling?",
+      "selected_source": "followup_question_map.swelling.duration",
+      "rejected_wordings": [
+        "How long have you been vomiting?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "swelling",
+          "vomiting"
+        ],
+        [
+          "chest_indrawing_severe",
+          "swelling",
+          "vomiting"
+        ],
+        [
+          "difficulty_breathing",
+          "swelling",
+          "vomiting"
+        ]
+      ],
+      "decision_id": "IM001-D133",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you had watery stool?",
+      "selected_source": "followup_question_map.watery_stool.duration",
+      "rejected_wordings": [
+        "How long have you felt this weakness?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "watery_stool",
+          "weakness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "watery_stool",
+          "weakness"
+        ],
+        [
+          "difficulty_breathing",
+          "watery_stool",
+          "weakness"
+        ]
+      ],
+      "decision_id": "IM001-D134",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    },
+    {
+      "clinical_role": "duration",
+      "selected_wording": "How long have you noticed dark urine?",
+      "selected_source": "followup_question_map.dark_urine.duration",
+      "rejected_wordings": [
+        "How long have you felt dizzy?"
+      ],
+      "captured_paths_affected": 9,
+      "example_selections": [
+        [
+          "bleeding",
+          "dark_urine",
+          "dizziness"
+        ],
+        [
+          "chest_indrawing_severe",
+          "dark_urine",
+          "dizziness"
+        ],
+        [
+          "dark_urine",
+          "difficulty_breathing",
+          "dizziness"
+        ]
+      ],
+      "decision_id": "IM001-D135",
+      "product_verdict": "PENDING",
+      "product_reviewer": null,
+      "review_date": null
+    }
+  ],
+  "sign_off": {
+    "status": "PENDING",
+    "reviewer": null,
+    "review_date": null,
+    "blocks_activation": true,
+    "note": "Until every decision carries a product_verdict, IM-001 remains an activation blocker. Merging candidate 1.1 into the knowledge base does not change that: the artifact is an engineering contract, not a release."
+  }
+}
