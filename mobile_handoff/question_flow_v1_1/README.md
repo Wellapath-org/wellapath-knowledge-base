@@ -36,6 +36,10 @@ grouping, and now matches real live output on **2,325 of 2,325**.
 | `testing/questions/fixtures/oracle/live_question_oracle_v1.json` | Real captured Dart output, 4,625 cases |
 | `reports/question_grouping_parity_v1_1.json` | Path-by-path parity vs real output |
 | `reports/question_grouping_coverage_v1_1.json` | Transcription validation + sizes 4–5 |
+| `reports/question_no_clinical_change_v1_1.json` | 1.1 vs 1.0 clinical diff, GF-006/GF-008 regressions, PHI scan |
+| `reports/im001_product_review_v1_1.json` | The 135 wording decisions Product must sign off |
+| `testing/questions/fixtures/oracle/…provenance.json` | Immutable provenance record for the oracle |
+| `testing/questions/fixtures/oracle/…harness.dart.txt` | Reproduction harness for the capture |
 
 Candidate **1.0 and schema 1.0 are retained unmodified.** 1.0's sha256 is
 unchanged and still matches the copy already vendored into Mobile — verify that
@@ -130,10 +134,49 @@ this wrong in both directions (GF-006).
 
 ---
 
+## What Mobile must reproduce
+
+These are the acceptance conditions for the 1.1 consumer update. Each is a
+number your test suite should compute, not copy:
+
+| | Expected |
+|---|---|
+| Captured-oracle paths compared | **2,325** |
+| Paths identical to live | **2,325** |
+| Question-set / order / wording differences | **0 / 0 / 0** |
+| Option-set / option-order differences | **0 / 0** |
+| Token-effect / red-flag-effect differences | **0 / 0** |
+| Truncation differences · red-flag questions dropped | **0 · 0** |
+| Path-limit violations | **0** |
+| Reversed-order paths compared | **2,300** |
+| **Live** engine differs from itself | **1,680** |
+| **Candidate** differs from itself | **0** |
+
+The last two lines matter as much as the parity table. Reproducing only the
+parity result would leave you unable to tell a correct implementation from one
+that has quietly reintroduced an order dependence — the candidate must be stable
+under reversed selection order, and the live baseline must not be.
+
+GF-006 and GF-008 need their own regressions: the default-duration trigger must
+fire for `{chest_indrawing_severe, boils}` and stay silent on the empty
+selection, and two clarifiers must emit in `kRedFlagClarifiers` declaration
+order, not alphabetical.
+
+---
+
 ## What Mobile must NOT do with this
 
+- **Update the isolated consumer to 1.1 — and no further.** Do not connect it to
+  any screen, controller, route or widget. The runtime isolation asserted for
+  1.0 must hold unchanged: no live assessment source imports it, it imports no
+  networking, telemetry, scoring or `AssessmentController`, and there is no
+  `fromEnvironment` that could switch it on.
 - Do not publish, upload to R2, or add a `/config` entry.
 - Do not enable any candidate question flow in a user-facing build.
+- **Do not treat IM-001 as resolved.** It is still an activation blocker,
+  pending Product sign-off on the 135 wording decisions in
+  `reports/im001_product_review_v1_1.json`. Merging 1.1 into the knowledge base
+  did not change that.
 - Do not implement IM-003 dynamic re-branching, restoration, editing or skips.
 - Do not change the live `QuestionEngine`. The correction lives in the artifact;
   changing the engine to match is a separate, reviewed step.

@@ -212,6 +212,19 @@ artifact is broken and not that the guard works.
 `tools/validate_question_flow.py` — the existing 53 checks, now schema-aware,
 pass on candidate 1.1 **and** still pass unchanged on candidate 1.0.
 
+`tools/validate_oracle_provenance.py` re-derives the oracle's bounded
+enumeration, input ordering, reversed-case rule, field sets, role vocabulary and
+question limit from first principles and checks the fixture against them — none
+of it read from the fixture's own metadata. It also confirms the fixture records
+**no demographic state**, because `generateQuestions` reads none.
+
+`tools/verify_no_clinical_change.py` compares 1.1 against 1.0 on question texts
+(33, identical), answer meanings (169 labels, none changed), the token output
+universe (139, identical) and red-flag effects (identical); re-measures GF-006
+and GF-008 against captured output; and runs a PHI/content-safety scan over 90
+files with **9 positive and 4 negative controls**, so a pattern narrowed into
+uselessness fails rather than passes.
+
 ---
 
 ## 5. Schema 1.1 is additive, and provably so
@@ -223,10 +236,33 @@ hoping it stayed a superset, **1.1 is computed from 1.0** by
 additivity on every run and refuses to write otherwise.
 
 Added: `$defs.grouping`, `$defs.groupSource`, `question.grouping` (optional),
-`metadata.grouping_semantics`, `pathControls.grouping_phase`.
+`metadata.grouping_semantics` (**optional**), `pathControls.grouping_phase`.
 
 One existing constraint **widened**: `metadata.schema_version` from
-`const "1.0"` to `enum ["1.0", "1.1"]`. A 1.0 artifact still validates.
+`const "1.0"` to `enum ["1.0", "1.1"]`.
+
+`grouping_semantics` is deliberately **not** in `required`. An earlier revision
+made it required; that narrows the schema, and candidate 1.0 stopped validating
+under 1.1 — the exact thing an additive extension may not do. The structural
+guard had missed it because it only checked that 1.0's constraints *survived*,
+never that new ones were *added*. It now rejects a grown `required` and any new
+restricting keyword, and is mutation-tested against all three narrowing classes.
+
+The requirement itself is real and did not go away — it moved to where it
+belongs, the artifact version rather than the schema. `validate_question_grouping.py`
+G01 rejects a 1.1 artifact that groups questions without declaring how, and the
+`grouping_semantics_absent` fixture proves it fails closed.
+
+Compatibility is proven twice, structurally and behaviourally
+(`tools/check_schema_additivity.py`):
+
+| | schema 1.0 | schema 1.1 |
+|---|---|---|
+| candidate 1.0 | 0 errors | **0 errors** |
+| candidate 1.1 | 5 errors — correctly refused | 0 errors |
+
+23 schema-invalid 1.0 fixtures were re-checked under 1.1: **0 newly accepted**.
+Widening what is accepted must not start accepting what was correctly rejected.
 
 ---
 

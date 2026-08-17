@@ -523,3 +523,61 @@ Engineering-lead dispositions recorded in the candidate as
 - **Activation remains blocked** on product sign-off for representative wording,
   unapproved content, absent clinical review, and publication — not on path
   content, which is now measured at zero change.
+
+### Step 4A — final verification before merge
+
+Verification found **two defects in the Step 4 work itself**, both fixed before merge.
+
+- **Schema 1.1 was not additive.** `grouping_semantics` had been added to
+  `_metadata.required`, so candidate 1.0 no longer validated under 1.1 — exactly
+  what an additive extension may not do. The additivity guard had missed it
+  because it only checked that 1.0's constraints *survived*, never that new ones
+  were *added*. The guard now rejects a grown `required`, a changed `const` and
+  any new restricting keyword, and is **mutation-tested against all three**. The
+  requirement itself moved to where it belongs — the artifact version, enforced
+  by validator check G01, proven by the `grouping_semantics_absent` fixture.
+  Compatibility is now proven twice, structurally and behaviourally: candidate
+  1.0 validates under both schemas, candidate 1.1 is correctly refused by schema
+  1.0, and **23 schema-invalid 1.0 fixtures were re-checked under 1.1 with 0
+  newly accepted**.
+
+- **Oracle provenance was incomplete.** The capture used a temporary Mobile test
+  that was deleted and is committed nowhere. `tools/validate_oracle_provenance.py`
+  now re-derives the bounded enumeration, input ordering, reversed-case rule,
+  field sets, role vocabulary and question limit **from first principles** —
+  none of it read from the fixture's own metadata — and pins the fixture in a
+  **sidecar** record, so captured evidence is never edited to describe itself.
+  The reproduction harness is recorded in the KB and explicitly **not** claimed
+  to be byte-identical to the deleted test; the fixture's authenticity rests on
+  the structural re-derivation plus the independent 4,625-case transcription
+  match, not on that file.
+
+- **The PHI scan's first revision was wrong in both directions.** It reported 27
+  "phone numbers" that were fragments of the candidate 1.0 SHA256, and flagged
+  the token-dictionary schema's own sentence *"No PHI fields — no name, dob,
+  phone, email, address"* — the prose forbidding PHI. Patterns were narrowed
+  precisely rather than loosened generally, and the scan now carries **9 positive
+  and 4 negative controls** so a pattern narrowed into uselessness fails instead
+  of passing. 91 files, 0 hits.
+
+- **No clinical or runtime change, computed not asserted:** 33 question texts
+  identical · 169 answer labels, none changed in meaning · 139-token output
+  universe identical · red-flag effects identical · path limit 5 · zero skips ·
+  zero skip sentinels · IM-003 deferred and structurally absent · Vocabulary 2.0
+  unused with no alias operator in any condition.
+
+- **GF-006 and GF-008 re-measured against captured output.** GF-006: candidate
+  1.0 was wrong on 3 of 6 named cases; 1.1 matches live on all 6, and no duration
+  entry was invented for the two mapped tokens that lack one. GF-008: of **248**
+  captured paths presenting two or more clarifiers, 1.0's ordering differed from
+  live on **168**; 1.1 differs on **0**. The 168 figure is now computed, not
+  recalled.
+
+- **IM-001 is now actionable for Product.** `reports/im001_product_review_v1_1.json`
+  collapses the 1,680 order-dependent captured paths into **135 distinct wording
+  decisions**, each listing the selected wording, the rejected alternatives and
+  the paths riding on it. Every wording involved already exists in the live app.
+  All 135 are `PENDING`; until they are signed off, IM-001 remains an activation
+  blocker regardless of this merge.
+
+`tools/run_w3_grouping_checks.py` — **23 checks, 0 failed**.

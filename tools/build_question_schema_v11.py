@@ -275,7 +275,12 @@ def build_schema():
     if "grouping_semantics" in metadata["properties"]:
         raise SystemExit("metadata already carries grouping_semantics — refusing to overwrite")
     metadata["properties"]["grouping_semantics"] = copy.deepcopy(GROUPING_SEMANTICS_DEF)
-    metadata["required"] = sorted(set(metadata["required"]) | {"grouping_semantics"})
+    # Deliberately NOT added to `required`. Adding it narrows the schema and a
+    # valid 1.0 artifact stops validating — which is precisely what an additive
+    # extension may not do. The semantic requirement is real, but it belongs to
+    # the artifact VERSION, not the schema: `validate_question_grouping.py` G01
+    # rejects a 1.1 artifact that groups questions without declaring how, and
+    # the `grouping_semantics_absent` fixture proves it fails closed.
 
     # The one existing constraint that must widen rather than be added to.
     # Left as const "1.0" the new schema could not validate the artifact it was
@@ -304,10 +309,35 @@ def build_schema():
     return schema
 
 
+#: Keywords that RESTRICT what validates. Adding one, or extending `required`,
+#: makes the schema narrower even though nothing was removed — the failure mode
+#: that let a required `grouping_semantics` through a green additivity run.
+NARROWING_KEYWORDS = frozenset([
+    "required", "additionalProperties", "minItems", "maxItems", "minLength",
+    "maxLength", "pattern", "minimum", "maximum", "minProperties",
+    "maxProperties", "uniqueItems", "const", "not", "allOf", "oneOf",
+    "propertyNames", "prefixItems", "format",
+])
+
+
 def additive_violations(old, new, path="$"):
     """Every way ``new`` could be narrower than ``old``. Empty means additive."""
     problems = []
     if isinstance(old, dict) and isinstance(new, dict):
+        # Constraints present in the new schema and absent from the old one.
+        for key in sorted(set(new) - set(old)):
+            if key == "required":
+                problems.append("%s.required is new (%s); requiring a field that 1.0 "
+                                "did not makes the schema narrower"
+                                % (path, new[key]))
+            elif key in NARROWING_KEYWORDS:
+                problems.append("%s.%s is a new restricting keyword (%r)"
+                                % (path, key, new[key]))
+        if "required" in old and "required" in new:
+            added = [r for r in new["required"] if r not in old["required"]]
+            if added:
+                problems.append("%s.required gained %s; a 1.0 artifact without those "
+                                "fields no longer validates" % (path, added))
         for key, value in old.items():
             if key not in new:
                 if key == "const" and value in new.get("enum", []):

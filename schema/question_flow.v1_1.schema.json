@@ -60,20 +60,19 @@
       "type": "object",
       "required": [
         "artifact_id",
-        "changelog",
-        "clinical_review",
+        "version",
+        "schema_version",
         "country",
+        "release_status",
+        "release_date",
         "generated_at",
         "generator",
         "generator_version",
-        "grouping_semantics",
-        "may_publish",
-        "provenance",
-        "release_date",
-        "release_status",
-        "schema_version",
         "source",
-        "version"
+        "clinical_review",
+        "may_publish",
+        "changelog",
+        "provenance"
       ],
       "additionalProperties": true,
       "properties": {

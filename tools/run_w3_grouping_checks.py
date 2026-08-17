@@ -43,10 +43,20 @@ STEPS = [
      ["tools/validate_question_grouping.py"]),
     ("every invalid grouping fixture is rejected by its intended check",
      ["tools/validate_question_grouping.py", "--fixtures"]),
+    ("captured-oracle provenance verifies from first principles",
+     ["tools/validate_oracle_provenance.py", "--check"]),
+    ("PHI pattern controls (9 positive, 4 negative)",
+     ["tools/verify_no_clinical_change.py", "--self-test"]),
+    ("no clinical/runtime change, GF-006/GF-008 regressions, content safety",
+     ["tools/verify_no_clinical_change.py", "--check"]),
+    ("candidate 1.0 still validates under schema 1.1 (additivity)",
+     ["tools/check_schema_additivity.py"]),
     ("grouping parity vs real live output is reproducible and clean",
      ["tools/report_question_grouping_parity.py", "--check"]),
     ("transcription validation and extended coverage are reproducible and clean",
      ["tools/report_grouping_coverage.py", "--check"]),
+    ("IM-001 product-review decisions are reproducible",
+     ["tools/report_im001_product_review.py", "--check"]),
 ]
 
 #: Clinical inputs that this step must not have touched. The expected hashes are
