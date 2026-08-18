@@ -151,6 +151,13 @@
     "added_token_count": 10,
     "closure_depth": 3,
     "converged": true,
+    "scenario_description": "Three clarifiers already eligible plus grouped follow-ups; the limit of 5 is already reached before re-branching.",
+    "path_limit_validity": {
+      "path_limit": 5,
+      "scenario_intent": "Three clarifiers already eligible plus grouped follow-ups; the limit of 5 is already reached before re-branching.",
+      "valid_under_the_authoritative_measurement_input": true,
+      "why": "The scenario is one of the 12 authoritative_supplied inputs, and the measurement is of SCORING, which the path limit does not bound: the limit caps how many follow-up questions are PRESENTED, not how many tokens an answered assessment carries. The 10 additive tokens are the converged closure of the seed set, so this is the scoring state the limit permits at its most loaded, not a state beyond it."
+    },
     "before_after_matrix": {
       "baseline": {
         "tokens": [
@@ -202,6 +209,66 @@
           "headache",
           "poor_feeding"
         ],
+        "kb_ranked_order_top_8": [
+          {
+            "rank": 1,
+            "condition_id": "lassa_fever",
+            "score": 26,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 2,
+            "condition_id": "malaria",
+            "score": 25,
+            "urgency_default": "urgent"
+          },
+          {
+            "rank": 3,
+            "condition_id": "snake_bite",
+            "score": 23,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 4,
+            "condition_id": "pneumonia_children",
+            "score": 21,
+            "urgency_default": "urgent"
+          },
+          {
+            "rank": 5,
+            "condition_id": "yellow_fever",
+            "score": 15,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 6,
+            "condition_id": "neonatal_infection",
+            "score": 14,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 7,
+            "condition_id": "dysentery",
+            "score": 13,
+            "urgency_default": "urgent"
+          },
+          {
+            "rank": 8,
+            "condition_id": "urti",
+            "score": 13,
+            "urgency_default": "self_care"
+          }
+        ],
+        "engine_ranked_condition_ids": [
+          "lassa_fever",
+          "malaria",
+          "snake_bite"
+        ],
+        "engine_score_by_condition": {
+          "lassa_fever": 26,
+          "malaria": 25,
+          "snake_bite": 23
+        },
         "lassa_fever": {
           "condition_id": "lassa_fever",
           "base_weight": 4,
@@ -272,6 +339,66 @@
           "watery_stool",
           "weakness"
         ],
+        "kb_ranked_order_top_8": [
+          {
+            "rank": 1,
+            "condition_id": "malaria",
+            "score": 52,
+            "urgency_default": "urgent"
+          },
+          {
+            "rank": 2,
+            "condition_id": "acute_diarrhoea",
+            "score": 30,
+            "urgency_default": "non_urgent"
+          },
+          {
+            "rank": 3,
+            "condition_id": "lassa_fever",
+            "score": 26,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 4,
+            "condition_id": "gastroenteritis",
+            "score": 25,
+            "urgency_default": "non_urgent"
+          },
+          {
+            "rank": 5,
+            "condition_id": "dysentery",
+            "score": 24,
+            "urgency_default": "urgent"
+          },
+          {
+            "rank": 6,
+            "condition_id": "yellow_fever",
+            "score": 24,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 7,
+            "condition_id": "snake_bite",
+            "score": 23,
+            "urgency_default": "emergency"
+          },
+          {
+            "rank": 8,
+            "condition_id": "anaemia",
+            "score": 22,
+            "urgency_default": "non_urgent"
+          }
+        ],
+        "engine_ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "lassa_fever"
+        ],
+        "engine_score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "lassa_fever": 26
+        },
         "lassa_fever": {
           "condition_id": "lassa_fever",
           "base_weight": 4,
@@ -430,6 +557,31 @@
         "check": "closure_converged",
         "passed": true,
         "detail": ""
+      },
+      {
+        "check": "baseline_ranked_order_puts_lassa_fever_first",
+        "passed": true,
+        "detail": "['lassa_fever', 'malaria', 'snake_bite']"
+      },
+      {
+        "check": "expanded_ranked_order_puts_malaria_first",
+        "passed": true,
+        "detail": "['malaria', 'acute_diarrhoea', 'lassa_fever']"
+      },
+      {
+        "check": "kb_ranking_agrees_with_the_engine_ranking",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "lassa_fever_remains_a_scored_candidate_when_expanded",
+        "passed": true,
+        "detail": "it is out-ranked, not eliminated \u2014 relevant to review question 3"
+      },
+      {
+        "check": "every_additive_token_is_recorded",
+        "passed": true,
+        "detail": "10"
       }
     ],
     "all_grounded": true

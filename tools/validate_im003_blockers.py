@@ -8,7 +8,9 @@
 Fails if:
   * the Mobile evidence hash, byte count or binding changes;
   * any of the 63 scenarios disappears, or an aggregate count drifts;
-  * the de-escalation is omitted;
+  * the de-escalation is omitted, flipped to an escalation, or its ranked
+    order, additive tokens or exact S10 arithmetic are altered;
+  * the primary and overlapping top-condition counts are conflated;
   * IM003-SB-001 is marked resolved without reviewer identity, role, date and rationale;
   * D004 is approved while the blocker is open;
   * IM-003 is described as activation-ready;
@@ -117,6 +119,13 @@ def run(measurement=None, blockers=None, package=None):
                 overlap["top_condition_changed_total"] == 31
                 and overlap["top_condition_changed_and_urgency_changed"]
                 + overlap["top_condition_changed_urgency_unchanged"] == 31)
+    results.add("B.counts", "primary_and_overlapping_counts_are_not_conflated",
+                partition["top_condition_change"] == 6
+                and overlap["top_condition_changed_total"] == 31
+                and partition["top_condition_change"] != overlap["top_condition_changed_total"]
+                and partition["sum"] == 63,
+                "partition=%s overlapping=%s" % (partition["top_condition_change"],
+                                                 overlap["top_condition_changed_total"]))
     results.add("B.counts", "every_changed_top_condition_became_malaria",
                 measurement["category_definitions"]["every_changed_top_condition_became_malaria"] is True)
 
@@ -137,6 +146,46 @@ def run(measurement=None, blockers=None, package=None):
                 matrix["baseline"]["lassa_fever_score"] == 26
                 and matrix["baseline"]["malaria_score"] == 25
                 and matrix["expanded"]["malaria_score"] == 52)
+    severity = {"non_urgent": 0, "routine": 0, "urgent": 1, "emergency": 2}
+    before = severity.get(matrix["baseline"]["urgency"])
+    after = severity.get(matrix["expanded"]["urgency"])
+    results.add("C.deescalation", "direction_is_a_de_escalation_not_an_escalation",
+                before is not None and after is not None and after < before,
+                "%s -> %s" % (matrix["baseline"]["urgency"], matrix["expanded"]["urgency"]))
+    results.add("C.deescalation", "top_condition_moved_lassa_fever_to_malaria",
+                matrix["baseline"]["top_condition"] == "lassa_fever"
+                and matrix["expanded"]["top_condition"] == "malaria",
+                "%s -> %s" % (matrix["baseline"]["top_condition"],
+                              matrix["expanded"]["top_condition"]))
+    # The ranked order must be present, or the top-condition transition is an
+    # assertion rather than an observation.
+    arithmetic = grounding.get("kb_arithmetic", {})
+    ranked_ok = True
+    for side in ("baseline", "expanded"):
+        entry = arithmetic.get(side, {})
+        kb_rank = [r["condition_id"] for r in entry.get("kb_ranked_order_top_8", [])]
+        engine_rank = entry.get("engine_ranked_condition_ids") or []
+        if not kb_rank or not engine_rank or kb_rank[:len(engine_rank)] != engine_rank:
+            ranked_ok = False
+    results.add("C.deescalation", "ranked_order_present_and_kb_reproduces_the_engine_order",
+                ranked_ok,
+                str([[r["condition_id"] for r in arithmetic.get(side, {}).get(
+                    "kb_ranked_order_top_8", [])][:3] for side in ("baseline", "expanded")]))
+    results.add("C.deescalation", "out_ranked_emergency_condition_still_recorded",
+                any(r["condition_id"] == "lassa_fever" for r in
+                    arithmetic.get("expanded", {}).get("kb_ranked_order_top_8", [])),
+                "lassa_fever remains a scored candidate; relevant to review question 3")
+    # Every additive token must survive: dropping one understates the closure.
+    results.add("C.deescalation", "all_additive_tokens_recorded",
+                len(grounding["added_tokens"]) == 10
+                and grounding["added_token_count"] == len(grounding["added_tokens"])
+                and set(matrix["expanded"]["tokens"])
+                == set(matrix["baseline"]["tokens"]) | set(grounding["added_tokens"]),
+                "added=%d declared=%s" % (len(grounding["added_tokens"]),
+                                          grounding["added_token_count"]))
+    results.add("C.deescalation", "path_limit_validity_is_recorded_and_reasoned",
+                bool(grounding.get("path_limit_validity", {}).get("why"))
+                and grounding["path_limit_validity"].get("path_limit") == 5)
     results.add("C.deescalation", "grounded_in_kb_2_4", grounding["all_grounded"] is True,
                 json.dumps([c for c in grounding["grounding_checks"] if not c["passed"]])[:200])
     # The statement must explicitly deny the inference, not merely be filed under
@@ -313,6 +362,45 @@ def _m_binding_inconsistent(m, b, p):
     return m, b, p, "H.consistency:blocker_binds_to_the_same_evidence_as_the_report"
 
 
+def _m_deescalation_flipped_to_escalation(m, b, p):
+    matrix = m["im003_sb_001_grounding"]["before_after_matrix"]
+    matrix["baseline"]["urgency"] = "urgent"
+    matrix["expanded"]["urgency"] = "emergency"
+    return m, b, p, "C.deescalation:direction_is_a_de_escalation_not_an_escalation"
+
+
+def _m_s10_score_changed(m, b, p):
+    m["im003_sb_001_grounding"]["before_after_matrix"]["expanded"]["malaria_score"] = 40
+    return m, b, p, "C.deescalation:scores_are_the_recorded_ones"
+
+
+def _m_s10_condition_changed(m, b, p):
+    m["im003_sb_001_grounding"]["before_after_matrix"]["baseline"]["top_condition"] = "malaria"
+    return m, b, p, "C.deescalation:top_condition_moved_lassa_fever_to_malaria"
+
+
+def _m_ranked_order_removed(m, b, p):
+    m["im003_sb_001_grounding"]["kb_arithmetic"]["expanded"]["kb_ranked_order_top_8"] = []
+    return m, b, p, "C.deescalation:ranked_order_present_and_kb_reproduces_the_engine_order"
+
+
+def _m_additive_token_omitted(m, b, p):
+    grounding = m["im003_sb_001_grounding"]
+    grounding["added_tokens"] = grounding["added_tokens"][:-1]
+    return m, b, p, "C.deescalation:all_additive_tokens_recorded"
+
+
+def _m_path_limit_validity_dropped(m, b, p):
+    m["im003_sb_001_grounding"].pop("path_limit_validity", None)
+    return m, b, p, "C.deescalation:path_limit_validity_is_recorded_and_reasoned"
+
+
+def _m_categories_conflated(m, b, p):
+    # The classic misreading: quoting the overlapping 31 as the primary count.
+    m["category_definitions"]["mutually_exclusive_partition"]["top_condition_change"] = 31
+    return m, b, p, "B.counts:primary_and_overlapping_counts_are_not_conflated"
+
+
 MUTATIONS = [
     ("evidence hash drift", _m_hash_drift),
     ("a scenario disappears", _m_scenario_lost),
@@ -324,6 +412,13 @@ MUTATIONS = [
     ("PR #76 described as authorized to merge", _m_pr76_authorized),
     ("IM-003 activation described as authorized", _m_activation_authorized),
     ("evidence binding made inconsistent", _m_binding_inconsistent),
+    ("the de-escalation flipped to an escalation", _m_deescalation_flipped_to_escalation),
+    ("the exact S10 score changed", _m_s10_score_changed),
+    ("the S10 top condition changed", _m_s10_condition_changed),
+    ("the ranked order removed", _m_ranked_order_removed),
+    ("an additive token omitted", _m_additive_token_omitted),
+    ("path-limit validity dropped", _m_path_limit_validity_dropped),
+    ("primary and overlapping categories conflated", _m_categories_conflated),
 ]
 
 

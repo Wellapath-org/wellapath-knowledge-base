@@ -133,12 +133,23 @@ def ground_s10(evidence):
         winners = sorted(c for c, v in scored.items() if v == top)
         return top, winners
 
+    def ranked(tokens, limit=8):
+        """Full KB ranking, so the top-condition transition is shown, not asserted."""
+        scored = sorted(((score(cid, tokens)["total"], cid) for cid in kb),
+                        key=lambda pair: (-pair[0], pair[1]))
+        return [{"rank": i + 1, "condition_id": cid, "score": total,
+                 "urgency_default": kb[cid]["urgency_default"]}
+                for i, (total, cid) in enumerate(scored[:limit])]
+
     result = {}
     for side in ("baseline", "expanded"):
         tokens = record[side]["tokens"]
         top_score, winners = rank(tokens)
         result[side] = {
             "tokens": sorted(tokens),
+            "kb_ranked_order_top_8": ranked(tokens),
+            "engine_ranked_condition_ids": record[side]["ranked_condition_ids"],
+            "engine_score_by_condition": record[side]["score_by_condition"],
             "lassa_fever": score("lassa_fever", tokens),
             "malaria": score("malaria", tokens),
             "kb_top_score": top_score,
@@ -191,6 +202,24 @@ def ground_s10(evidence):
     check("recorded_ties_show_a_single_winner_each_side",
           len(b["recorded_top_score_ties"]) == 1 and len(e["recorded_top_score_ties"]) == 1)
     check("closure_converged", record["converged"] is True)
+    check("baseline_ranked_order_puts_lassa_fever_first",
+          result["baseline"]["kb_ranked_order_top_8"][0]["condition_id"] == "lassa_fever"
+          and result["baseline"]["kb_ranked_order_top_8"][1]["condition_id"] == "malaria",
+          str([r["condition_id"] for r in result["baseline"]["kb_ranked_order_top_8"][:3]]))
+    check("expanded_ranked_order_puts_malaria_first",
+          result["expanded"]["kb_ranked_order_top_8"][0]["condition_id"] == "malaria",
+          str([r["condition_id"] for r in result["expanded"]["kb_ranked_order_top_8"][:3]]))
+    check("kb_ranking_agrees_with_the_engine_ranking",
+          [r["condition_id"] for r in result["baseline"]["kb_ranked_order_top_8"][:3]]
+          == result["baseline"]["engine_ranked_condition_ids"]
+          and [r["condition_id"] for r in result["expanded"]["kb_ranked_order_top_8"][:3]]
+          == result["expanded"]["engine_ranked_condition_ids"])
+    check("lassa_fever_remains_a_scored_candidate_when_expanded",
+          any(r["condition_id"] == "lassa_fever"
+              for r in result["expanded"]["kb_ranked_order_top_8"]),
+          "it is out-ranked, not eliminated — relevant to review question 3")
+    check("every_additive_token_is_recorded", len(record["added_tokens"]) == 10
+          and record["added_token_count"] == 10, str(len(record["added_tokens"])))
 
     return record, result, checks
 
@@ -319,6 +348,21 @@ def build():
             "added_token_count": record["added_token_count"],
             "closure_depth": record["closure_depth"],
             "converged": record["converged"],
+            "scenario_description": record["description"],
+            "path_limit_validity": {
+                "path_limit": 5,
+                "scenario_intent": record["description"],
+                "valid_under_the_authoritative_measurement_input": True,
+                "why": (
+                    "The scenario is one of the 12 authoritative_supplied inputs, and the "
+                    "measurement is of SCORING, which the path limit does not bound: the limit "
+                    "caps how many follow-up questions are PRESENTED, not how many tokens an "
+                    "answered assessment carries. The %d additive tokens are the converged "
+                    "closure of the seed set, so this is the scoring state the limit permits at "
+                    "its most loaded, not a state beyond it."
+                    % record["added_token_count"]
+                ),
+            },
             "before_after_matrix": {
                 "baseline": {
                     "tokens": s10["baseline"]["tokens"],

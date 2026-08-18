@@ -9,7 +9,7 @@
 | Blocker registry | `reports/im003_safety_blockers_v1.json` |
 | Reconciliation | `reports/im003_mobile_measurement_v1.json` |
 | Vendored Mobile evidence | `baseline/im003_mobile_v1/im003_mobile_scoring_measurement_v1.vendored.json` |
-| Validators | `python3 tools/validate_im003_blockers.py` (59 checks, 10 mutation proofs) |
+| Validators | `python3 tools/validate_im003_blockers.py` (66 checks, 17 mutation proofs) |
 
 ---
 
@@ -60,6 +60,28 @@ higher bucket; the remaining **6** are the primary top-condition changes.
 | Urgency | **emergency** | **urgent** |
 | Urgency source | `urgency_default` | `urgency_default` |
 | Red flag triggered | `false` | `false` |
+
+**Ranked order — the transition, observed rather than asserted.** Re-ranking the
+whole of KB 2.4 over each token set reproduces the shipped engine's ranking
+exactly on both sides:
+
+| Rank | Baseline | Expanded |
+|---:|---|---|
+| 1 | **lassa_fever** 26 · `emergency` | **malaria** 52 · `urgent` |
+| 2 | malaria 25 · `urgent` | acute_diarrhoea 30 · `non_urgent` |
+| 3 | snake_bite 23 · `emergency` | **lassa_fever** 26 · `emergency` |
+
+`lassa_fever` is **out-ranked, not eliminated** — it holds the same score, 26,
+and the same `urgency_default: emergency` on both sides. It simply stops being
+the condition urgency is read from. This is the substance of review question 3.
+
+**Path-limit validity.** The scenario is one of the 12 `authoritative_supplied`
+inputs, seeded to the point where "the limit of 5 is already reached before
+re-branching". The limit caps how many follow-up questions are *presented*, not
+how many tokens an answered assessment carries, and scoring is what is measured
+here. The ten additive tokens are the converged closure (depth 3) of the seed
+set, so this is the most loaded scoring state the limit permits — not a state
+beyond it.
 
 Independently re-derived from `kb.ng.v2.4.json`:
 
@@ -117,9 +139,11 @@ These are **questions**, not proposed answers.
 
 3. **Should urgency combine the highest applicable urgency across credible
    ranked conditions, rather than only the top condition's default?** In S10,
-   lassa_fever remained a scored candidate at 26 with `urgency_default:
-   emergency` — it was out-ranked, not eliminated. Should a credible
-   emergency-default condition still be able to hold urgency?
+   lassa_fever remained the **third**-ranked candidate at 26 with
+   `urgency_default: emergency` — it was out-ranked, not eliminated, and its
+   score did not move. `snake_bite` (23, `emergency`) sat third in the baseline
+   ranking on the same evidence. Should a credible emergency-default condition
+   still be able to hold urgency when it is no longer ranked first?
 
 4. **Is `S10_path_limit_pressure` clinically plausible and in scope?** It seeds
    five tokens including `bleeding` and `poor_feeding`, then adds ten. Is that a
