@@ -27,7 +27,13 @@ STEPS = [
      ["tools/validate_im003.py", "--fixtures"]),
     ("W3 grouping suite still passes", ["tools/run_w3_grouping_checks.py"]),
     ("W2 suite still passes", ["tools/run_w2_checks.py"]),
+    ("Mobile measurement reconciliation is current",
+     ["tools/report_im003_mobile_measurement.py", "--check"]),
+    ("IM-003 safety blockers are valid", ["tools/validate_im003_blockers.py"]),
+    ("blocker validators bite (mutation proofs)",
+     ["tools/validate_im003_blockers.py", "--mutations"]),
 ]
+
 
 #: Everything this step must NOT have touched.
 FROZEN = [

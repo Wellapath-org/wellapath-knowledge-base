@@ -760,3 +760,66 @@ removed, no decision approved, IM-003 still disabled.
 Also corrected: `docs/IM001_OPTION_ORDERING.md` still read "All 22 reconciled
 dimensions agree" — the 21-dimension fix had been applied to `progress.md` only.
 Prose-only; no evidence value, hash, conclusion or decision changed.
+
+## I2 / W3 Step 8 — Mobile IM-003 measurement reconciled; IM003-SB-001 registered
+
+Branch `feat/i2-w3-im003-mobile-measurement`. Mobile PR #76 measured IM-003 with
+the **shipped** engine. This step verifies that evidence, reconciles every count
+independently, and registers a potential safety blocker. **No clinical
+adjudication, no approval, no implementation.** Full package:
+`docs/IM003_SB_001_ADJUDICATION.md`.
+
+- **Source verified at the exact PR head** `13be0d4937b1c49d6a49ddf096c5d5b6a47c2091`:
+  `docs/evidence/im003_mobile_scoring_measurement_v1.json`, sha256
+  `fb5aefab…`, **176,163 bytes**, CI `Flutter Lint & Build Check` **success** on
+  that same SHA. Vendored into `baseline/im003_mobile_v1/` at the identical hash.
+
+- **Methodology validated from the diff, not from CI passing.** The harness
+  imports the shipped `EngineController`, `RedFlagEvaluator` and `ScoringEngine`,
+  and throws `StateError` if a controller topCause id or score disagrees with the
+  shipped scorer, or if the scorer produces conditions while a red flag is
+  active. `lib/` is untouched — PR #76 changes only `PROGRESS.md`, `docs/` and
+  `test/`. Isolation tests assert nothing under `lib/` imports it, no build flag,
+  no pubspec asset, no clinical-artifact mutation.
+
+- **All counts reconciled independently:** 63 scenarios (12 authoritative + 51
+  graph-derived) · 0 red-flag changes · 25 urgency changes (24 escalations,
+  **1 de-escalation**) · 0 urgency-source changes · 31 top-condition changes
+  (overlapping) · 6 primary · 29 ranking-only · 0 score-only · 3 no-effect.
+  Graph facts re-reproduced: 18 nodes, 56 edges, 15 two-cycles, 0 self-loops,
+  **15** newly reachable tokens, **31** affected conditions, closure 14, depth 5,
+  0 monotonicity violations, `pain` present at `minor_injury` +6.
+
+- **Category definitions pinned.** The partition is by highest-order effect and
+  sums to 63 (25+6+29+0+3). **31 is an overlapping metric** — 25 of those also
+  changed urgency and are counted there; 6 are primary. 25+6=31. **All 31 changed
+  top conditions became malaria.**
+
+- **IM003-SB-001 registered**, status
+  `open_awaiting_clinical_and_product_adjudication`. S10_path_limit_pressure:
+  urgency **emergency → urgent**, red flag **false → false**, top condition
+  **lassa_fever (26) → malaria (25 → 52)**. Every value re-derived from KB 2.4:
+  lassa_fever 26 = 4+7+5+10; malaria 25 = 10+9+6; malaria 52 = 10+9+7+6+6+5+5+4.
+  No rule token present either side, so no rule was omitted; a single condition
+  holds the top score each side, so no tie explains it.
+
+- **Mechanism recorded, not repaired.** Additive answers → more scoring tokens →
+  changed scores → different top condition → different `urgency_default` →
+  de-escalation without any red-flag change. **Red-flag invariance does not prove
+  urgency invariance** — 0 red-flag changes and 25 urgency changes across the
+  same 63 scenarios. No weight, `urgency_default`, scoring, ranking, red-flag
+  rule, candidate question, path limit or Mobile behaviour changed.
+
+- **D004 updated and still pending** — evidence now carries the shipped-engine
+  measurement and names the blocker; requires clinical review; cannot be taken
+  while the blocker is open. The earlier *"B with conditions, then C separately"*
+  recommendation is **narrowed** (`NARROWED_PENDING_IM003_SB_001`) with its
+  original text retained verbatim rather than deleted.
+
+- **Checks:** IM-003 suite **24 groups, 0 failed** (stable over repeat runs) ·
+  blocker validators **59/59** · **10/10 mutation proofs** trip their intended
+  check · W3 grouping 25/25 · W2/W3 23/23 · content safety 117 files, 0 hits.
+  All 13 frozen artifacts byte-identical; both candidates still
+  `candidate_unapproved`, `branch_conditions: 0`, limit 5, IM-003 deferred;
+  R2 404; no `/config` entry. **Mobile PR #76 and this KB PR both remain
+  unmerged.**
