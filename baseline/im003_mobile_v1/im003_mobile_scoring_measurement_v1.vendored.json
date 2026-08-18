@@ -1,0 +1,6445 @@
+{
+  "_metadata": {
+    "report_id": "im003_mobile_scoring_measurement",
+    "schema_version": "1",
+    "phase": "I2 / W3 Step 7",
+    "generator": "test/im003/im003_measurement_test.dart",
+    "im_003_implemented": false,
+    "clinical_approval": false,
+    "product_approval": false,
+    "activation_approval": false,
+    "d004_status": "pending",
+    "mobile_base_commit": "d820d6cfc3b96cbbba9d434ef4684b9a36140991",
+    "knowledge_base_commit": "5a8563bf8702bd506a7b67ccc6c9a8faef8ef574",
+    "measurement_method": "Every clinical value is produced by the SHIPPED EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter) over the pinned KB 2.4, rules 2.2 and token dictionary 1.1. No scoring, ranking or urgency is reimplemented, inferred or approximated here. The full scored-condition list comes from the same shipped ScoringEngine because OutputFormatter truncates topCauses to three; the controller remains the authority for urgency and red flags and the two are cross-checked on every run.",
+    "source_files": [
+      {
+        "knowledge_base_path": "reports/im003_impact_analysis_v1.json",
+        "mobile_path": "test/fixtures/im003/evidence/im003_impact_analysis_v1.json",
+        "sha256": "3589e1a0fada38a9754f31d4629a9681a7098f4f7c28fb39d716edce25ca1fe9",
+        "bytes": 164499
+      },
+      {
+        "knowledge_base_path": "reports/im003_decision_package_v1.json",
+        "mobile_path": "test/fixtures/im003/evidence/im003_decision_package_v1.json",
+        "sha256": "62ef20ffceae1a49bf3f92ad653c1e290edc25651973d8b50b87a5863a080f46",
+        "bytes": 40181
+      },
+      {
+        "knowledge_base_path": "docs/IM003_IMPACT_ANALYSIS.md",
+        "mobile_path": "test/fixtures/im003/docs/IM003_IMPACT_ANALYSIS.md",
+        "sha256": "9e6ad05261343963e89d463d73bb29ff611170b05cefef83975e40e74faf9efb",
+        "bytes": 13415
+      },
+      {
+        "knowledge_base_path": "mobile_handoff/im003/README.md",
+        "mobile_path": "test/fixtures/im003/handoff/README.md",
+        "sha256": "da525a0b99b5a175d4ace12a2305ad41eae212408b32f57b55e23c459a04f2ed",
+        "bytes": 4665
+      },
+      {
+        "knowledge_base_path": "testing/questions/fixtures/invalid_im003/index.json",
+        "mobile_path": "test/fixtures/im003/invalid_im003/index.json",
+        "sha256": "88d63ab809a5b2892f4b7be4449b1f5373feed39ce5d635fc766a265325280fa",
+        "bytes": 4287
+      }
+    ],
+    "frozen_artifacts": {
+      "kb_version": "2.4",
+      "rules_version": "2.2",
+      "token_dictionary_version": "1.1"
+    }
+  },
+  "reproduced_graph_counts": {
+    "trigger_nodes": 18,
+    "trigger_edges": 56,
+    "two_cycles": 15,
+    "self_loops": 0,
+    "newly_reachable_tokens": 15,
+    "affected_conditions": 31,
+    "monotonicity_violations": 0,
+    "pain_present": true,
+    "pain_condition": "minor_injury",
+    "pain_declared_weight": 6,
+    "independently_reproduced": true
+  },
+  "scenarios": {
+    "total": 63,
+    "authoritative_supplied": 12,
+    "graph_boundary_derived": 51
+  },
+  "aggregate": {
+    "red_flag_changes": 0,
+    "urgency_changes": 25,
+    "urgency_source_changes": 0,
+    "top_condition_changes": 6,
+    "ranking_changes_without_top_condition_change": 29,
+    "score_only_changes": 0,
+    "no_effect": 3
+  },
+  "urgency_direction": {
+    "escalations": 24,
+    "de_escalations": 1,
+    "de_escalation_scenarios": [
+      {
+        "scenario_id": "S10_path_limit_pressure",
+        "provenance": "authoritative_supplied",
+        "seed_tokens": [
+          "bleeding",
+          "difficulty_breathing",
+          "fever",
+          "headache",
+          "poor_feeding"
+        ],
+        "added_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "baseline_urgency": "emergency",
+        "expanded_urgency": "urgent",
+        "baseline_urgency_source": "urgency_default",
+        "expanded_urgency_source": "urgency_default",
+        "baseline_top_condition": "lassa_fever",
+        "expanded_top_condition": "malaria",
+        "baseline_red_flag": false,
+        "expanded_red_flag": false,
+        "mechanism": "No red flag fired in either run. Urgency came from the urgency_default of whichever condition ranked first, so the re-ranking alone moved it."
+      }
+    ],
+    "note": "\"Urgency changed\" is not one finding. An escalation and a de-escalation carry opposite clinical risk, so the direction is counted separately. A de-escalation is reported as a POTENTIAL SAFETY BLOCKER for clinical review; this report does not judge whether it is acceptable."
+  },
+  "potential_safety_blockers": [
+    {
+      "id": "IM003-SB-001",
+      "title": "Additive re-branching de-escalated urgency on at least one measured path",
+      "measured_count": 1,
+      "severity": "potential_safety_blocker",
+      "status": "open_for_clinical_review",
+      "why_it_matters": "The knowledge-base analysis established that no newly reachable token touches any red-flag pathway, which is correct and is reproduced here. It does not follow that urgency cannot move: urgency also derives from the urgency_default of the top-ranked condition, so adding scoring tokens can re-rank a lower-urgency condition above a higher-urgency one. The knowledge base explicitly warned against treating unchanged red-flag membership as proof urgency is stable, and this is the case that warning was protecting against.",
+      "informs_decision": "IM003-D004-SCORING-REACHABILITY",
+      "this_report_does_not_judge_acceptability": true
+    }
+  ],
+  "measurements": [
+    {
+      "scenario_id": "S01_no_rebranch_change",
+      "description": "A token with no additional-symptoms question: nothing new can be unlocked, so static and dynamic agree.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "chest_indrawing_severe"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "cough",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 14,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chest_indrawing_severe"
+        ],
+        "urgency": "emergency",
+        "urgency_source": "condition_specific_red_flag",
+        "red_flag_triggered": true,
+        "matched_rule_id": "rf_107",
+        "top_condition": null,
+        "ranked_condition_ids": [],
+        "score_by_condition": {},
+        "top_score_ties": []
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chest_indrawing_severe",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "emergency",
+        "urgency_source": "condition_specific_red_flag",
+        "red_flag_triggered": true,
+        "matched_rule_id": "rf_107",
+        "top_condition": null,
+        "ranked_condition_ids": [],
+        "score_by_condition": {},
+        "top_score_ties": []
+      },
+      "primary_outcome": "no_effect",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": false,
+      "ties_changed": false,
+      "score_delta_by_condition": {},
+      "score_delta_condition_count": 0,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S02_inert_severity_unlocked",
+      "description": "Answering an option whose token offers a severity question. The severity answer tokens carry no scoring weight today.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "fever",
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "headache"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "lassa_fever",
+          "yellow_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 25,
+          "lassa_fever": 16,
+          "yellow_fever": 15
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "lassa_fever": -16,
+        "malaria": 27,
+        "yellow_fever": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S03_inert_duration_unlocked",
+      "description": "Answering an option whose token offers a duration question.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "fever",
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "headache"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "lassa_fever",
+          "yellow_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 25,
+          "lassa_fever": 16,
+          "yellow_fever": 15
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "lassa_fever": -16,
+        "malaria": 27,
+        "yellow_fever": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S04_additional_symptoms_unlocked",
+      "description": "Answering an option that unlocks a further additional-symptoms question — the clinically active case.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "cough",
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough",
+          "fever"
+        ],
+        "urgency": "self_care",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "urti",
+        "ranked_condition_ids": [
+          "urti",
+          "pneumonia_children",
+          "malaria"
+        ],
+        "score_by_condition": {
+          "urti": 20,
+          "pneumonia_children": 19,
+          "malaria": 19
+        },
+        "top_score_ties": [
+          "urti"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 33,
+        "pneumonia_children": 9,
+        "urti": -20
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S05_one_new_scoring_token",
+      "description": "A single newly reachable scoring token.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "dizziness",
+        "fatigue"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dizziness",
+          "fatigue"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "anaemia",
+        "ranked_condition_ids": [
+          "anaemia",
+          "pregnancy_complications",
+          "hypertension"
+        ],
+        "score_by_condition": {
+          "anaemia": 17,
+          "pregnancy_complications": 12,
+          "hypertension": 12
+        },
+        "top_score_ties": [
+          "anaemia"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -17,
+        "gastroenteritis": 25,
+        "hypertension": -12,
+        "malaria": 52,
+        "pregnancy_complications": -12
+      },
+      "score_delta_condition_count": 6,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S06_multiple_new_scoring_tokens",
+      "description": "Several newly reachable scoring tokens from one answer.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "abdominal_cramps",
+        "nausea",
+        "vomiting"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "sweating",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 9,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps",
+          "nausea",
+          "vomiting"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "malaria"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 25,
+          "acute_diarrhoea": 22,
+          "malaria": 14
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 8,
+        "malaria": 38
+      },
+      "score_delta_condition_count": 2,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S07_recursive_chain",
+      "description": "A chain: seed unlocks a token that unlocks another.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "cough",
+        "fever",
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough",
+          "fever",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "urti",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 24,
+          "urti": 20,
+          "pneumonia_children": 19
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 28,
+        "pneumonia_children": 9,
+        "urti": -20
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S08_two_cycle_convergence",
+      "description": "A two-cycle (a offers b, b offers a). Additive state growth means the iteration still reaches a fixed point.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "chills",
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chills",
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 26,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 26,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S09_duplicate_token_idempotent",
+      "description": "Answering an option for a token already in state adds nothing.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 19,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 33,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S10_path_limit_pressure",
+      "description": "Three clarifiers already eligible plus grouped follow-ups; the limit of 5 is already reached before re-branching.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "bleeding",
+        "difficulty_breathing",
+        "fever",
+        "headache",
+        "poor_feeding"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "bleeding",
+          "difficulty_breathing",
+          "fever",
+          "headache",
+          "poor_feeding"
+        ],
+        "urgency": "emergency",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "lassa_fever",
+        "ranked_condition_ids": [
+          "lassa_fever",
+          "malaria",
+          "snake_bite"
+        ],
+        "score_by_condition": {
+          "lassa_fever": 26,
+          "malaria": 25,
+          "snake_bite": 23
+        },
+        "top_score_ties": [
+          "lassa_fever"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "bleeding",
+          "body_pain",
+          "chills",
+          "difficulty_breathing",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "poor_feeding",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "lassa_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "lassa_fever": 26
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": -1,
+      "urgency_escalated": false,
+      "urgency_de_escalated": true,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 27,
+        "snake_bite": -23
+      },
+      "score_delta_condition_count": 3,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S11_widest_closure",
+      "description": "The seed with the largest reachable closure.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "cough",
+        "fever",
+        "nausea",
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "headache",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 2,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough",
+          "fever",
+          "nausea",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "urti",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 28,
+          "urti": 20,
+          "pneumonia_children": 19
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 24,
+        "pneumonia_children": 9,
+        "urti": -20
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "S12_no_additional_answer",
+      "description": "The user answers no additional-symptoms option: the baseline question set must be presented exactly.",
+      "provenance": "authoritative_supplied",
+      "seed_tokens": [
+        "fever",
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "headache"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "lassa_fever",
+          "yellow_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 25,
+          "lassa_fever": 16,
+          "yellow_fever": 15
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "lassa_fever": -16,
+        "malaria": 27,
+        "yellow_fever": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_abdominal_cramps",
+      "description": "Single newly reachable token abdominal_cramps as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "abdominal_cramps"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "acute_diarrhoea",
+        "ranked_condition_ids": [
+          "acute_diarrhoea",
+          "dysentery",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "acute_diarrhoea": 13,
+          "dysentery": 13,
+          "gastroenteritis": 12
+        },
+        "top_score_ties": [
+          "acute_diarrhoea",
+          "dysentery"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 17,
+        "dysentery": -13,
+        "gastroenteritis": 13,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_body_pain",
+      "description": "Single newly reachable token body_pain as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "body_pain"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "body_pain"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 15,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 37
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_chills",
+      "description": "Single newly reachable token chills as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "chills"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chills"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 17,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 35
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_cough",
+      "description": "Single newly reachable token cough as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "cough"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 13,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough"
+        ],
+        "urgency": "self_care",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "urti",
+        "ranked_condition_ids": [
+          "urti",
+          "pneumonia_children",
+          "sari"
+        ],
+        "score_by_condition": {
+          "urti": 15,
+          "pneumonia_children": 13,
+          "sari": 12
+        },
+        "top_score_ties": [
+          "urti"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 52,
+        "pneumonia_children": 15,
+        "sari": -12,
+        "urti": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_dizziness",
+      "description": "Single newly reachable token dizziness as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "dizziness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dizziness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "pregnancy_complications",
+        "ranked_condition_ids": [
+          "pregnancy_complications",
+          "hypertension",
+          "anaemia"
+        ],
+        "score_by_condition": {
+          "pregnancy_complications": 12,
+          "hypertension": 12,
+          "anaemia": 11
+        },
+        "top_score_ties": [
+          "hypertension",
+          "pregnancy_complications"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -11,
+        "gastroenteritis": 25,
+        "hypertension": -12,
+        "malaria": 52,
+        "pregnancy_complications": -12
+      },
+      "score_delta_condition_count": 6,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_fast_breathing_child",
+      "description": "Single newly reachable token fast_breathing_child as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fast_breathing_child"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "cough",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 13,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fast_breathing_child"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "pneumonia_children",
+        "ranked_condition_ids": [
+          "pneumonia_children",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "pneumonia_children": 16,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "pneumonia_children"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "malaria": 42,
+        "pneumonia_children": 12
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_fatigue",
+      "description": "Single newly reachable token fatigue as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fatigue"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fatigue"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "anaemia",
+        "ranked_condition_ids": [
+          "anaemia",
+          "fever_unknown",
+          "diabetes"
+        ],
+        "score_by_condition": {
+          "anaemia": 12,
+          "fever_unknown": 11,
+          "diabetes": 11
+        },
+        "top_score_ties": [
+          "anaemia"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -12,
+        "diabetes": -11,
+        "fever_unknown": -11,
+        "gastroenteritis": 25,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 6,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_fever",
+      "description": "Single newly reachable token fever as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 19,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 33,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_headache",
+      "description": "Single newly reachable token headache as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "headache"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "hypertension",
+          "typhoid_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 16,
+          "hypertension": 12,
+          "typhoid_fever": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "hypertension": -12,
+        "malaria": 36,
+        "typhoid_fever": -12
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_nausea",
+      "description": "Single newly reachable token nausea as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "nausea"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "nausea"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "gastroenteritis",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 14,
+          "gastroenteritis": 13,
+          "acute_diarrhoea": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 18,
+        "gastroenteritis": 12,
+        "malaria": 38
+      },
+      "score_delta_condition_count": 3,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_pain",
+      "description": "Single newly reachable token pain as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "pain"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "pain"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "minor_injury",
+        "ranked_condition_ids": [
+          "minor_injury",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "minor_injury": 11,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "minor_injury"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 42,
+        "minor_injury": -11
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_sweating",
+      "description": "Single newly reachable token sweating as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "sweating"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "sweating"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 16,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 36
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_vomiting",
+      "description": "Single newly reachable token vomiting as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "vomiting"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "vomiting"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "cholera"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 14,
+          "acute_diarrhoea": 13,
+          "cholera": 13
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 17,
+        "cholera": -13,
+        "gastroenteritis": 11,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_watery_stool",
+      "description": "Single newly reachable token watery_stool as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "watery_stool"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "watery_stool"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "acute_diarrhoea",
+        "ranked_condition_ids": [
+          "acute_diarrhoea",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "acute_diarrhoea": 16,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "acute_diarrhoea"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 14,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 42
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_token_weakness",
+      "description": "Single newly reachable token weakness as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "dysentery",
+          "typhoid_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 15,
+          "dysentery": 12,
+          "typhoid_fever": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -12,
+        "gastroenteritis": 25,
+        "malaria": 37,
+        "typhoid_fever": -12
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_abdominal_cramps_nausea",
+      "description": "Two-cycle abdominal_cramps <-> nausea.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "abdominal_cramps",
+        "nausea"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps",
+          "nausea"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "malaria"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 18,
+          "acute_diarrhoea": 17,
+          "malaria": 14
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 13,
+        "gastroenteritis": 7,
+        "malaria": 38
+      },
+      "score_delta_condition_count": 3,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_abdominal_cramps_vomiting",
+      "description": "Two-cycle abdominal_cramps <-> vomiting.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "abdominal_cramps",
+        "vomiting"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps",
+          "vomiting"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 19,
+          "acute_diarrhoea": 18,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 12,
+        "dysentery": -13,
+        "gastroenteritis": 6,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_abdominal_cramps_watery_stool",
+      "description": "Two-cycle abdominal_cramps <-> watery_stool.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "abdominal_cramps",
+        "watery_stool"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps",
+          "watery_stool"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "acute_diarrhoea",
+        "ranked_condition_ids": [
+          "acute_diarrhoea",
+          "dysentery",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "acute_diarrhoea": 21,
+          "dysentery": 13,
+          "gastroenteritis": 12
+        },
+        "top_score_ties": [
+          "acute_diarrhoea"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 9,
+        "dysentery": -13,
+        "gastroenteritis": 13,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_body_pain_fatigue",
+      "description": "Two-cycle body_pain <-> fatigue.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "body_pain",
+        "fatigue"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "chills",
+        "dizziness",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "body_pain",
+          "fatigue"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "anaemia",
+          "fever_unknown"
+        ],
+        "score_by_condition": {
+          "malaria": 15,
+          "anaemia": 12,
+          "fever_unknown": 11
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -12,
+        "fever_unknown": -11,
+        "gastroenteritis": 25,
+        "malaria": 37
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_body_pain_fever",
+      "description": "Two-cycle body_pain <-> fever.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "body_pain",
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "body_pain",
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 24,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 28,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_chills_fever",
+      "description": "Two-cycle chills <-> fever.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "chills",
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chills",
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 26,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 26,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_chills_sweating",
+      "description": "Two-cycle chills <-> sweating.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "chills",
+        "sweating"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chills",
+          "sweating"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 23,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 29
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_cough_fast_breathing_child",
+      "description": "Two-cycle cough <-> fast_breathing_child.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "cough",
+        "fast_breathing_child"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough",
+          "fast_breathing_child"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "pneumonia_children",
+        "ranked_condition_ids": [
+          "pneumonia_children",
+          "urti",
+          "sari"
+        ],
+        "score_by_condition": {
+          "pneumonia_children": 22,
+          "urti": 15,
+          "sari": 12
+        },
+        "top_score_ties": [
+          "pneumonia_children"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 52,
+        "pneumonia_children": 6,
+        "sari": -12,
+        "urti": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_dizziness_headache",
+      "description": "Two-cycle dizziness <-> headache.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "dizziness",
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fatigue",
+        "fever",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dizziness",
+          "headache"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "hypertension",
+        "ranked_condition_ids": [
+          "hypertension",
+          "malaria",
+          "typhoid_fever"
+        ],
+        "score_by_condition": {
+          "hypertension": 17,
+          "malaria": 16,
+          "typhoid_fever": 12
+        },
+        "top_score_ties": [
+          "hypertension"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "hypertension": -17,
+        "malaria": 36,
+        "typhoid_fever": -12
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_dizziness_weakness",
+      "description": "Two-cycle dizziness <-> weakness.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "dizziness",
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dizziness",
+          "weakness"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "anaemia",
+        "ranked_condition_ids": [
+          "anaemia",
+          "malaria",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "anaemia": 16,
+          "malaria": 15,
+          "dysentery": 12
+        },
+        "top_score_ties": [
+          "anaemia"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -16,
+        "dysentery": -12,
+        "gastroenteritis": 25,
+        "malaria": 37
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_fatigue_weakness",
+      "description": "Two-cycle fatigue <-> weakness.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fatigue",
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fatigue",
+          "weakness"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "anaemia",
+        "ranked_condition_ids": [
+          "anaemia",
+          "malaria",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "anaemia": 17,
+          "malaria": 15,
+          "dysentery": 12
+        },
+        "top_score_ties": [
+          "anaemia"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -17,
+        "dysentery": -12,
+        "gastroenteritis": 25,
+        "malaria": 37
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_fever_nausea",
+      "description": "Two-cycle fever <-> nausea.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever",
+        "nausea"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "nausea"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "yellow_fever",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 23,
+          "yellow_fever": 14,
+          "pneumonia_children": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "malaria": 29,
+        "pneumonia_children": -13,
+        "yellow_fever": -14
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_fever_sweating",
+      "description": "Two-cycle fever <-> sweating.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever",
+        "sweating"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "sweating"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 25,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 27,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_fever_weakness",
+      "description": "Two-cycle fever <-> weakness.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever",
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "dysentery",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 24,
+          "dysentery": 18,
+          "pneumonia_children": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -18,
+        "gastroenteritis": 25,
+        "malaria": 28,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_cycle_nausea_vomiting",
+      "description": "Two-cycle nausea <-> vomiting.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "nausea",
+        "vomiting"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "sweating",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 10,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "nausea",
+          "vomiting"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "malaria"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 20,
+          "acute_diarrhoea": 17,
+          "malaria": 14
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 13,
+        "gastroenteritis": 5,
+        "malaria": 38
+      },
+      "score_delta_condition_count": 3,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_abdominal_cramps",
+      "description": "Trigger-graph node abdominal_cramps as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "abdominal_cramps"
+      ],
+      "added_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "abdominal_cramps"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "acute_diarrhoea",
+        "ranked_condition_ids": [
+          "acute_diarrhoea",
+          "dysentery",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "acute_diarrhoea": 13,
+          "dysentery": 13,
+          "gastroenteritis": 12
+        },
+        "top_score_ties": [
+          "acute_diarrhoea",
+          "dysentery"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 17,
+        "dysentery": -13,
+        "gastroenteritis": 13,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_body_pain",
+      "description": "Trigger-graph node body_pain as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "body_pain"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "body_pain"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 15,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 37
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_chest_indrawing_severe",
+      "description": "Trigger-graph node chest_indrawing_severe as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "chest_indrawing_severe"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "cough",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 14,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chest_indrawing_severe"
+        ],
+        "urgency": "emergency",
+        "urgency_source": "condition_specific_red_flag",
+        "red_flag_triggered": true,
+        "matched_rule_id": "rf_107",
+        "top_condition": null,
+        "ranked_condition_ids": [],
+        "score_by_condition": {},
+        "top_score_ties": []
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chest_indrawing_severe",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "emergency",
+        "urgency_source": "condition_specific_red_flag",
+        "red_flag_triggered": true,
+        "matched_rule_id": "rf_107",
+        "top_condition": null,
+        "ranked_condition_ids": [],
+        "score_by_condition": {},
+        "top_score_ties": []
+      },
+      "primary_outcome": "no_effect",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": false,
+      "ties_changed": false,
+      "score_delta_by_condition": {},
+      "score_delta_condition_count": 0,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_chills",
+      "description": "Trigger-graph node chills as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "chills"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "chills"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 17,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 35
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_cough",
+      "description": "Trigger-graph node cough as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "cough"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 13,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "cough"
+        ],
+        "urgency": "self_care",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "urti",
+        "ranked_condition_ids": [
+          "urti",
+          "pneumonia_children",
+          "sari"
+        ],
+        "score_by_condition": {
+          "urti": 15,
+          "pneumonia_children": 13,
+          "sari": 12
+        },
+        "top_score_ties": [
+          "urti"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "malaria": 52,
+        "pneumonia_children": 15,
+        "sari": -12,
+        "urti": -15
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_dark_urine",
+      "description": "Trigger-graph node dark_urine as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "dark_urine"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dark_urine"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "hepatitis_b",
+        "ranked_condition_ids": [
+          "hepatitis_b",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "hepatitis_b": 12,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "hepatitis_b"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dark_urine",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "hepatitis_b": -12,
+        "malaria": 42
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_dizziness",
+      "description": "Trigger-graph node dizziness as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "dizziness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "dizziness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "pregnancy_complications",
+        "ranked_condition_ids": [
+          "pregnancy_complications",
+          "hypertension",
+          "anaemia"
+        ],
+        "score_by_condition": {
+          "pregnancy_complications": 12,
+          "hypertension": 12,
+          "anaemia": 11
+        },
+        "top_score_ties": [
+          "hypertension",
+          "pregnancy_complications"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -11,
+        "gastroenteritis": 25,
+        "hypertension": -12,
+        "malaria": 52,
+        "pregnancy_complications": -12
+      },
+      "score_delta_condition_count": 6,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_fast_breathing_child",
+      "description": "Trigger-graph node fast_breathing_child as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fast_breathing_child"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "cough",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 13,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fast_breathing_child"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "pneumonia_children",
+        "ranked_condition_ids": [
+          "pneumonia_children",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "pneumonia_children": 16,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "pneumonia_children"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "pneumonia_children"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "pneumonia_children": 28
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "malaria": 42,
+        "pneumonia_children": 12
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_fatigue",
+      "description": "Trigger-graph node fatigue as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fatigue"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fatigue"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "anaemia",
+        "ranked_condition_ids": [
+          "anaemia",
+          "fever_unknown",
+          "diabetes"
+        ],
+        "score_by_condition": {
+          "anaemia": 12,
+          "fever_unknown": 11,
+          "diabetes": 11
+        },
+        "top_score_ties": [
+          "anaemia"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "anaemia": -12,
+        "diabetes": -11,
+        "fever_unknown": -11,
+        "gastroenteritis": 25,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 6,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_fever",
+      "description": "Trigger-graph node fever as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 19,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 33,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_headache",
+      "description": "Trigger-graph node headache as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "headache"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "headache"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "hypertension",
+          "typhoid_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 16,
+          "hypertension": 12,
+          "typhoid_fever": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "hypertension": -12,
+        "malaria": 36,
+        "typhoid_fever": -12
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_nausea",
+      "description": "Trigger-graph node nausea as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "nausea"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "nausea"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "gastroenteritis",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 14,
+          "gastroenteritis": 13,
+          "acute_diarrhoea": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 18,
+        "gastroenteritis": 12,
+        "malaria": 38
+      },
+      "score_delta_condition_count": 3,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_pain",
+      "description": "Trigger-graph node pain as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "pain"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "pain"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "minor_injury",
+        "ranked_condition_ids": [
+          "minor_injury",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "minor_injury": 11,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "minor_injury"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 42,
+        "minor_injury": -11
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_sweating",
+      "description": "Trigger-graph node sweating as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "sweating"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "sweating"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "cough_common_cold",
+          "acute_diarrhoea"
+        ],
+        "score_by_condition": {
+          "malaria": 16,
+          "cough_common_cold": 8,
+          "acute_diarrhoea": 8
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 22,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 36
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_swelling",
+      "description": "Trigger-graph node swelling as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "swelling"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "pain",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 13,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "swelling"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "minor_injury",
+        "ranked_condition_ids": [
+          "minor_injury",
+          "malaria",
+          "road_traffic_injury_minor"
+        ],
+        "score_by_condition": {
+          "minor_injury": 10,
+          "malaria": 10,
+          "road_traffic_injury_minor": 9
+        },
+        "top_score_ties": [
+          "malaria",
+          "minor_injury"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "swelling",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "gastroenteritis": 25,
+        "malaria": 42,
+        "minor_injury": -10,
+        "road_traffic_injury_minor": -9
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_vomiting",
+      "description": "Trigger-graph node vomiting as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "vomiting"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "vomiting"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "gastroenteritis",
+        "ranked_condition_ids": [
+          "gastroenteritis",
+          "acute_diarrhoea",
+          "cholera"
+        ],
+        "score_by_condition": {
+          "gastroenteritis": 14,
+          "acute_diarrhoea": 13,
+          "cholera": 13
+        },
+        "top_score_ties": [
+          "gastroenteritis"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 17,
+        "cholera": -13,
+        "gastroenteritis": 11,
+        "malaria": 52
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_watery_stool",
+      "description": "Trigger-graph node watery_stool as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "watery_stool"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 5,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "watery_stool"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "acute_diarrhoea",
+        "ranked_condition_ids": [
+          "acute_diarrhoea",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "acute_diarrhoea": 16,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "acute_diarrhoea"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 14,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 42
+      },
+      "score_delta_condition_count": 4,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_node_weakness",
+      "description": "Trigger-graph node weakness as the sole seed.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "weakness"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "dysentery",
+          "typhoid_fever"
+        ],
+        "score_by_condition": {
+          "malaria": 15,
+          "dysentery": 12,
+          "typhoid_fever": 12
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -12,
+        "gastroenteritis": 25,
+        "malaria": 37,
+        "typhoid_fever": -12
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_no_op_closure",
+      "description": "A token outside the trigger graph — closure adds nothing.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "boils"
+      ],
+      "added_tokens": [],
+      "added_token_count": 0,
+      "closure_depth": 0,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "boils"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "skin_infections",
+        "ranked_condition_ids": [
+          "skin_infections",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "skin_infections": 12,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "skin_infections"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "boils"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "skin_infections",
+        "ranked_condition_ids": [
+          "skin_infections",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "skin_infections": 12,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "skin_infections"
+        ]
+      },
+      "primary_outcome": "no_effect",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": false,
+      "ties_changed": false,
+      "score_delta_by_condition": {},
+      "score_delta_condition_count": 0,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_duplicate_seed",
+      "description": "The same token seeded twice — closure must be idempotent.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "fever",
+        "fever"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 11,
+      "closure_depth": 3,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "fever",
+          "fever"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "pneumonia_children",
+          "dysentery"
+        ],
+        "score_by_condition": {
+          "malaria": 19,
+          "pneumonia_children": 13,
+          "dysentery": 13
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "ranking_change_without_top_condition_change",
+      "red_flag_changed": false,
+      "urgency_changed": false,
+      "urgency_direction": 0,
+      "urgency_escalated": false,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": false,
+      "ranking_changed": true,
+      "ties_changed": false,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "dysentery": -13,
+        "gastroenteritis": 25,
+        "malaria": 33,
+        "pneumonia_children": -13
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    },
+    {
+      "scenario_id": "GB_pain_minor_injury",
+      "description": "pain, the token a second-hop-only computation dropped, contributing weight 6 to minor_injury.",
+      "provenance": "graph_boundary_derived",
+      "seed_tokens": [
+        "pain"
+      ],
+      "added_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "added_token_count": 12,
+      "closure_depth": 4,
+      "converged": true,
+      "baseline": {
+        "tokens": [
+          "pain"
+        ],
+        "urgency": "non_urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "minor_injury",
+        "ranked_condition_ids": [
+          "minor_injury",
+          "malaria",
+          "cough_common_cold"
+        ],
+        "score_by_condition": {
+          "minor_injury": 11,
+          "malaria": 10,
+          "cough_common_cold": 8
+        },
+        "top_score_ties": [
+          "minor_injury"
+        ]
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false,
+        "matched_rule_id": null,
+        "top_condition": "malaria",
+        "ranked_condition_ids": [
+          "malaria",
+          "acute_diarrhoea",
+          "gastroenteritis"
+        ],
+        "score_by_condition": {
+          "malaria": 52,
+          "acute_diarrhoea": 30,
+          "gastroenteritis": 25
+        },
+        "top_score_ties": [
+          "malaria"
+        ]
+      },
+      "primary_outcome": "urgency_change",
+      "red_flag_changed": false,
+      "urgency_changed": true,
+      "urgency_direction": 1,
+      "urgency_escalated": true,
+      "urgency_de_escalated": false,
+      "urgency_source_changed": false,
+      "top_condition_changed": true,
+      "ranking_changed": true,
+      "ties_changed": true,
+      "score_delta_by_condition": {
+        "acute_diarrhoea": 30,
+        "cough_common_cold": -8,
+        "gastroenteritis": 25,
+        "malaria": 42,
+        "minor_injury": -11
+      },
+      "score_delta_condition_count": 5,
+      "measured_with": "shipped EngineController (RedFlagEvaluator + ScoringEngine + UrgencyDeterminer + OutputFormatter)"
+    }
+  ],
+  "uncovered_state_space": [
+    "Demographic and seasonal inputs are not varied: every measurement uses the symptom-token path only, so demographic escalation and seasonal modifiers are exercised only where the token set alone reaches them.",
+    "Answer SEQUENCES are not modelled. The closure is the fixed point, not a per-answer trajectory, so intermediate states between the baseline and the closure are not measured.",
+    "Removal, invalidation, answer-edit and restoration re-branching are out of scope and unmeasured.",
+    "The 239-case bank carries no answer sequence and cannot exercise IM-003; it is not used here as adaptive-branching evidence.",
+    "Seeds are single tokens, declared graph pairs and the authoritative scenarios. Arbitrary larger user selections are not enumerated."
+  ],
+  "does_not_authorize": [
+    "implementing IM-003 or any dynamic re-branching",
+    "approving any IM-003 decision, including D004",
+    "clinical approval",
+    "product approval",
+    "external beta or production activation",
+    "publishing either question-flow candidate",
+    "any change to the live QuestionEngine, ScoringEngine, RedFlagEvaluator or urgency logic"
+  ],
+  "interpretation": {
+    "note": "This report states what changed. It does not characterise any difference as safe, acceptable, clinically correct or activation-ready — that is for the knowledge base and the Product/clinical reviewers assessing D004.",
+    "informs_decision": "IM003-D004-SCORING-REACHABILITY"
+  }
+}

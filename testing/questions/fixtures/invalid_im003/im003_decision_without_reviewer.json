@@ -5707,7 +5707,7 @@
           "adding or removing an option",
           "activation before the Mobile scoring delta is measured"
         ],
-        "clinical_impact": "CHANGES SCORING INPUT. The exact per-condition weight delta is published; the resulting ranked conditions, top condition and urgency are NOT computed here and must be measured in Mobile before this decision is taken.",
+        "clinical_impact": "CHANGES SCORING INPUT, and the shipped-engine measurement is now in: 15 newly reachable tokens touching 31 of 50 conditions; 63 scenarios measured; 25 urgency changes, of which 24 escalate and ONE DE-ESCALATES emergency to urgent with no red-flag change (IM003-SB-001). Red-flag invariance did not imply urgency invariance. This decision cannot be taken while that blocker is open, and no IM-003 activation is permitted meanwhile.",
         "decision_id": "IM003-D004-SCORING-REACHABILITY",
         "evidence": {
           "conditions_touched": 31,
@@ -5728,8 +5728,27 @@
             "watery_stool",
             "weakness"
           ],
+          "open_safety_blocker": {
+            "blocker_id": "IM003-SB-001",
+            "registry": "reports/im003_safety_blockers_v1.json",
+            "status": "open_awaiting_clinical_and_product_adjudication",
+            "summary": "S10_path_limit_pressure de-escalated urgency from emergency to urgent with no red-flag change, because additive tokens re-ranked lassa_fever (26, emergency) below malaria (25 -> 52, urgent)."
+          },
           "per_condition_weight_delta": "scoring_input_delta.by_condition",
-          "score_urgency_ranking_delta": "NOT COMPUTED — requires the Mobile ScoringEngine. See the handoff for the harness.",
+          "score_urgency_ranking_delta": {
+            "every_changed_top_condition_became": "malaria",
+            "mobile_head": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+            "mobile_pull_request": 76,
+            "open_safety_blocker": "IM003-SB-001",
+            "red_flag_changes": 0,
+            "scenarios_measured": 63,
+            "source": "reports/im003_mobile_measurement_v1.json",
+            "status": "MEASURED with the shipped Mobile engine",
+            "top_condition_changes_overlapping": 31,
+            "urgency_changes": 25,
+            "urgency_de_escalations": 1,
+            "urgency_escalations": 24
+          },
           "scoring_affecting_count": 15
         },
         "product_impact": "Users may declare symptoms they would otherwise not have been asked about — arguably better assessment, arguably a longer flow.",
@@ -5921,7 +5940,10 @@
       }
     ],
     "decomposition_recommendation": {
+      "authorizes_activation": false,
+      "authorizes_implementation": false,
       "engineering_recommendation": "B with conditions, then C separately. The evidence supports a clean split that is STRUCTURALLY enforceable rather than a prose convention: a newly eligible question whose answer tokens carry no scoring weight and no red-flag reference (severity and duration today) is clinically inert against the current artifacts, while a newly eligible additional-symptoms question makes new scoring tokens reachable and is not. The two have different risk and should not share one approval.",
+      "narrowing_note": "Recorded at I2/W3 Step 8. The recommendation below was written BEFORE the shipped-engine measurement existed, and its 'then C separately' clause could be read as permitting scoring-affecting re-branching once C was reviewed. That reading is now suspended: IM003-SB-001 is open, and no subset — inert or otherwise — may be implemented or activated while it is. The original text is retained verbatim below rather than edited, so the reasoning that led here stays auditable.",
       "options_considered": {
         "A": "Keep IM-003 entirely deferred.",
         "B": "Permit an inert, presentation-only subset.",
@@ -5930,11 +5952,15 @@
         "E": "Another evidence-supported decomposition."
       },
       "recommendation": "B_WITH_CONDITIONS",
+      "status": "NARROWED_PENDING_IM003_SB_001",
+      "still_an_engineering_recommendation_only": true,
       "structural_enforcement": {
         "mechanism": "The split must be enforced by the artifact and a validator, not by reviewer discipline. The proposed shape is a per-question declaration — for example a `rebranch_class` of `inert` or `scoring_affecting` — COMPUTED by the generator from the token's clinical references and re-validated on every clinical artifact change, so a KB revision that gives `severe` a weight reclassifies the question automatically instead of silently invalidating an approval.",
         "not_proposed_here": "No schema change is made in this step. The shape above is a recommendation for a future step to design and review.",
         "required": true
       },
+      "suspended_because": "IM003-SB-001 is open_awaiting_clinical_and_product_adjudication",
+      "suspended_clause": "then C separately",
       "this_is_not_approval": true,
       "why_not_A": "Deferring everything indefinitely leaves a known defect — a flow that cannot react to its own answers — unaddressed, and the inert subset carries no measured clinical risk.",
       "why_not_C_yet": "The scoring-affecting subset changes the scoring input on 30 of 50 conditions and its score/urgency/ranking delta has NOT been measured, because that requires the Mobile engine. Approving it before that measurement would be approving an unquantified change to triage input.",

@@ -1,0 +1,466 @@
+{
+  "_metadata": {
+    "report_id": "im003_mobile_measurement_reconciliation",
+    "version": "1",
+    "phase": "I2 / W3 Step 8",
+    "generator": "tools/report_im003_mobile_measurement.py",
+    "generator_version": "1.0.0",
+    "authoritative": true,
+    "purpose": "Independent reconciliation of the Mobile shipped-engine IM-003 measurement, and registration of IM003-SB-001.",
+    "what_this_is_not": [
+      "not clinical adjudication",
+      "not approval of IM-003, of any subset, or of Mobile PR #76",
+      "not a judgement that the de-escalation is safe, correct, conservative or acceptable"
+    ],
+    "rejected_python_scoring_model_used": false,
+    "rejected_python_scoring_model_note": "The Python scoring approximation (234/239 top-condition, 217/239 urgency agreement) supplies nothing here. Clinical values come from Mobile's shipped engine. This report independently re-derives the SCORE ARITHMETIC those records imply from kb.ng.v2.4.json \u2014 checking the numbers add up, which is not the same as re-running a scorer, and is not claimed to be.",
+    "mobile_source": {
+      "repository": "Wellapath-org/wellapath-mobile",
+      "pull_request": 76,
+      "pull_request_state_at_incorporation": "OPEN_UNMERGED",
+      "head": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+      "path": "docs/evidence/im003_mobile_scoring_measurement_v1.json",
+      "sha256": "fb5aefab9915957f327b70de73e21f02ce0f574163d3b6c9dafa2e43c1f027c5",
+      "bytes": 176163,
+      "ci": {
+        "check": "Flutter Lint & Build Check",
+        "conclusion": "success",
+        "checked_head_sha": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091"
+      },
+      "mobile_base_commit": "d820d6cfc3b96cbbba9d434ef4684b9a36140991",
+      "knowledge_base_commit": "5a8563bf8702bd506a7b67ccc6c9a8faef8ef574",
+      "generator": "test/im003/im003_measurement_test.dart",
+      "authoritative_for_clinical_values": true,
+      "authoritative_for_decisions": false
+    },
+    "vendored_copy": {
+      "path": "baseline/im003_mobile_v1/im003_mobile_scoring_measurement_v1.vendored.json",
+      "sha256": "fb5aefab9915957f327b70de73e21f02ce0f574163d3b6c9dafa2e43c1f027c5",
+      "bytes": 176163,
+      "matches_mobile_head": true
+    },
+    "frozen_clinical_inputs": {
+      "kb_v2_4": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b",
+      "rules_v2_2": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4",
+      "token_dictionary_v1_1": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    }
+  },
+  "methodology_verification": {
+    "clinical_values_from_shipped_engine": true,
+    "engine_symbols_imported": [
+      "package:wellapath_mobile/core/engine/engine_controller.dart",
+      "package:wellapath_mobile/core/engine/red_flag_evaluator.dart",
+      "package:wellapath_mobile/core/engine/scoring_engine.dart"
+    ],
+    "controller_cross_checked_against_full_scorer": true,
+    "cross_check_mechanism": "The harness throws StateError if a controller topCause id or score disagrees with the shipped ScoringEngine ranking, and if the scorer produces conditions while a red flag is active.",
+    "copied_scoring_model_supplied_conclusions": false,
+    "production_lib_changed_in_pr_76": false,
+    "pr_76_changed_paths": [
+      "PROGRESS.md",
+      "docs/",
+      "test/"
+    ],
+    "harness_is_test_only": true,
+    "harness_absent_from_release_binaries": true,
+    "isolation_evidence": [
+      "test/im003/im003_isolation_test.dart asserts nothing under lib/ imports the harness",
+      "asserts engine, UI, controller and startup contain no im003 reference",
+      "asserts the harness declares no build flag",
+      "asserts the harness never mutates a clinical artifact",
+      "asserts pubspec declares no im003 asset and no new dependency"
+    ],
+    "all_63_scenarios_executed": true,
+    "no_scenario_silently_filtered": true,
+    "all_de_escalations_promoted_to_blockers": true,
+    "generation_deterministic_and_fail_closed": true,
+    "accepted_solely_because_ci_passed": false
+  },
+  "reconciliation": {
+    "all_counts_agree": true,
+    "drift": {},
+    "counts": {
+      "affected_conditions": 31,
+      "authoritative_supplied": 12,
+      "de_escalations": 1,
+      "escalations": 24,
+      "graph_boundary_derived": 51,
+      "max_closure": 14,
+      "max_depth": 5,
+      "monotonicity_violations": 0,
+      "newly_reachable_tokens": 15,
+      "no_effect": 3,
+      "ranking_only": 29,
+      "red_flag_changes": 0,
+      "score_only": 0,
+      "self_loops": 0,
+      "top_condition_change_primary": 6,
+      "top_condition_changed_overlapping": 31,
+      "total": 63,
+      "trigger_edges": 56,
+      "trigger_nodes": 18,
+      "two_cycles": 15,
+      "urgency_changes": 25,
+      "urgency_source_changes": 0
+    }
+  },
+  "category_definitions": {
+    "partition_is_by_highest_order_effect": true,
+    "mutually_exclusive_partition": {
+      "urgency_change": 25,
+      "top_condition_change": 6,
+      "ranking_change_without_top_condition_change": 29,
+      "score_only_change": 0,
+      "no_effect": 3,
+      "sum": 63,
+      "sums_to_total": true
+    },
+    "overlapping_metrics": {
+      "top_condition_changed_total": 31,
+      "explanation": "31 is the OVERLAPPING count of scenarios whose top condition changed. 6 is the mutually exclusive PRIMARY-outcome count: top condition changed and urgency did NOT. The other 25 also changed top condition but are classified under the higher-order urgency_change bucket. 25 + 6 = 31. Reporting 31 alongside the partition without this note would double-count.",
+      "top_condition_changed_and_urgency_changed": 25,
+      "top_condition_changed_urgency_unchanged": 6
+    },
+    "every_changed_top_condition_became_malaria": true,
+    "changed_top_condition_targets": [
+      "malaria"
+    ]
+  },
+  "im003_sb_001_grounding": {
+    "scenario_id": "S10_path_limit_pressure",
+    "provenance": "authoritative_supplied",
+    "seed_tokens": [
+      "bleeding",
+      "difficulty_breathing",
+      "fever",
+      "headache",
+      "poor_feeding"
+    ],
+    "added_tokens": [
+      "abdominal_cramps",
+      "body_pain",
+      "chills",
+      "dizziness",
+      "fatigue",
+      "nausea",
+      "sweating",
+      "vomiting",
+      "watery_stool",
+      "weakness"
+    ],
+    "added_token_count": 10,
+    "closure_depth": 3,
+    "converged": true,
+    "before_after_matrix": {
+      "baseline": {
+        "tokens": [
+          "bleeding",
+          "difficulty_breathing",
+          "fever",
+          "headache",
+          "poor_feeding"
+        ],
+        "top_condition": "lassa_fever",
+        "lassa_fever_score": 26,
+        "malaria_score": 25,
+        "urgency": "emergency",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "bleeding",
+          "body_pain",
+          "chills",
+          "difficulty_breathing",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "poor_feeding",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "top_condition": "malaria",
+        "lassa_fever_score": 26,
+        "malaria_score": 52,
+        "urgency": "urgent",
+        "urgency_source": "urgency_default",
+        "red_flag_triggered": false
+      }
+    },
+    "kb_arithmetic": {
+      "baseline": {
+        "tokens": [
+          "bleeding",
+          "difficulty_breathing",
+          "fever",
+          "headache",
+          "poor_feeding"
+        ],
+        "lassa_fever": {
+          "condition_id": "lassa_fever",
+          "base_weight": 4,
+          "matched": [
+            {
+              "token": "fever",
+              "weight": 7
+            },
+            {
+              "token": "headache",
+              "weight": 5
+            },
+            {
+              "token": "bleeding",
+              "weight": 10
+            }
+          ],
+          "total": 26,
+          "urgency_default": "emergency"
+        },
+        "malaria": {
+          "condition_id": "malaria",
+          "base_weight": 10,
+          "matched": [
+            {
+              "token": "fever",
+              "weight": 9
+            },
+            {
+              "token": "headache",
+              "weight": 6
+            }
+          ],
+          "total": 25,
+          "urgency_default": "urgent"
+        },
+        "kb_top_score": 26,
+        "kb_top_condition_ids": [
+          "lassa_fever"
+        ],
+        "kb_top_is_unique": true,
+        "kb_top_urgency_default": "emergency",
+        "recorded_top_condition": "lassa_fever",
+        "recorded_urgency": "emergency",
+        "recorded_urgency_source": "urgency_default",
+        "recorded_red_flag_triggered": false,
+        "recorded_top_score_ties": [
+          "lassa_fever"
+        ],
+        "rule_tokens_present": [],
+        "global_rule_tokens_present": []
+      },
+      "expanded": {
+        "tokens": [
+          "abdominal_cramps",
+          "bleeding",
+          "body_pain",
+          "chills",
+          "difficulty_breathing",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "poor_feeding",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "lassa_fever": {
+          "condition_id": "lassa_fever",
+          "base_weight": 4,
+          "matched": [
+            {
+              "token": "fever",
+              "weight": 7
+            },
+            {
+              "token": "headache",
+              "weight": 5
+            },
+            {
+              "token": "bleeding",
+              "weight": 10
+            }
+          ],
+          "total": 26,
+          "urgency_default": "emergency"
+        },
+        "malaria": {
+          "condition_id": "malaria",
+          "base_weight": 10,
+          "matched": [
+            {
+              "token": "fever",
+              "weight": 9
+            },
+            {
+              "token": "chills",
+              "weight": 7
+            },
+            {
+              "token": "headache",
+              "weight": 6
+            },
+            {
+              "token": "sweating",
+              "weight": 6
+            },
+            {
+              "token": "body_pain",
+              "weight": 5
+            },
+            {
+              "token": "weakness",
+              "weight": 5
+            },
+            {
+              "token": "nausea",
+              "weight": 4
+            }
+          ],
+          "total": 52,
+          "urgency_default": "urgent"
+        },
+        "kb_top_score": 52,
+        "kb_top_condition_ids": [
+          "malaria"
+        ],
+        "kb_top_is_unique": true,
+        "kb_top_urgency_default": "urgent",
+        "recorded_top_condition": "malaria",
+        "recorded_urgency": "urgent",
+        "recorded_urgency_source": "urgency_default",
+        "recorded_red_flag_triggered": false,
+        "recorded_top_score_ties": [
+          "malaria"
+        ],
+        "rule_tokens_present": [],
+        "global_rule_tokens_present": []
+      }
+    },
+    "grounding_checks": [
+      {
+        "check": "baseline_lassa_fever_is_26",
+        "passed": true,
+        "detail": "26"
+      },
+      {
+        "check": "baseline_malaria_is_25",
+        "passed": true,
+        "detail": "25"
+      },
+      {
+        "check": "expanded_malaria_is_52",
+        "passed": true,
+        "detail": "52"
+      },
+      {
+        "check": "expanded_lassa_fever_unchanged_at_26",
+        "passed": true,
+        "detail": "26"
+      },
+      {
+        "check": "kb_ranks_lassa_fever_first_at_baseline",
+        "passed": true,
+        "detail": "['lassa_fever']"
+      },
+      {
+        "check": "kb_ranks_malaria_first_when_expanded",
+        "passed": true,
+        "detail": "['malaria']"
+      },
+      {
+        "check": "kb_ranking_matches_the_recorded_top_condition",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "lassa_fever_urgency_default_is_emergency",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "malaria_urgency_default_is_urgent",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "recorded_urgency_matches_the_top_conditions_default",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "urgency_moved_emergency_to_urgent",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "urgency_source_is_urgency_default_on_both_sides",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "no_red_flag_fired_on_either_side",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "no_rule_token_is_present_so_no_rule_was_omitted",
+        "passed": true,
+        "detail": "baseline=[] expanded=[]"
+      },
+      {
+        "check": "no_tie_explains_the_result",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "recorded_ties_show_a_single_winner_each_side",
+        "passed": true,
+        "detail": ""
+      },
+      {
+        "check": "closure_converged",
+        "passed": true,
+        "detail": ""
+      }
+    ],
+    "all_grounded": true
+  },
+  "mechanism": {
+    "causal_chain": [
+      "additive answers unlock further additional-symptom questions",
+      "those answers contribute additional scoring tokens",
+      "condition scores change (malaria 25 -> 52; lassa_fever unchanged at 26)",
+      "a different condition ranks first (lassa_fever -> malaria)",
+      "urgency is taken from the top condition's urgency_default",
+      "urgency de-escalates (emergency -> urgent) with no red-flag change"
+    ],
+    "red_flag_invariance_is_insufficient": "Red-flag invariance does NOT prove urgency invariance. Across all 63 scenarios the red-flag result never changed, and urgency still changed in 25 of them, once downward. Urgency has a second source \u2014 the top condition's urgency_default \u2014 and re-ranking alone can move it.",
+    "nothing_repaired_here": [
+      "condition weights unchanged",
+      "urgency_default unchanged",
+      "scoring unchanged",
+      "ranking unchanged",
+      "red-flag rules unchanged",
+      "candidate questions unchanged",
+      "path limit unchanged",
+      "Mobile behaviour unchanged"
+    ]
+  },
+  "does_not_authorize": [
+    "IM-003 activation, in whole or in any subset",
+    "merging Mobile PR #76",
+    "approving D004 or any other IM-003 decision",
+    "describing the measured de-escalation as safe, correct, conservative or acceptable",
+    "internal, external-beta or production activation",
+    "any change to scoring, ranking, urgency, red flags or the path limit"
+  ]
+}

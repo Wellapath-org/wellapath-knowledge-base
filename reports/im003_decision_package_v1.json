@@ -149,10 +149,29 @@
         "scoring_affecting_count": 15,
         "conditions_touched": 31,
         "per_condition_weight_delta": "scoring_input_delta.by_condition",
-        "score_urgency_ranking_delta": "NOT COMPUTED \u2014 requires the Mobile ScoringEngine. See the handoff for the harness."
+        "score_urgency_ranking_delta": {
+          "status": "MEASURED with the shipped Mobile engine",
+          "source": "reports/im003_mobile_measurement_v1.json",
+          "mobile_pull_request": 76,
+          "mobile_head": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+          "scenarios_measured": 63,
+          "red_flag_changes": 0,
+          "urgency_changes": 25,
+          "urgency_escalations": 24,
+          "urgency_de_escalations": 1,
+          "top_condition_changes_overlapping": 31,
+          "every_changed_top_condition_became": "malaria",
+          "open_safety_blocker": "IM003-SB-001"
+        },
+        "open_safety_blocker": {
+          "blocker_id": "IM003-SB-001",
+          "status": "open_awaiting_clinical_and_product_adjudication",
+          "summary": "S10_path_limit_pressure de-escalated urgency from emergency to urgent with no red-flag change, because additive tokens re-ranked lassa_fever (26, emergency) below malaria (25 -> 52, urgent).",
+          "registry": "reports/im003_safety_blockers_v1.json"
+        }
       },
       "affected_paths": "56 pairs; 15 newly reachable scoring tokens",
-      "clinical_impact": "CHANGES SCORING INPUT. The exact per-condition weight delta is published; the resulting ranked conditions, top condition and urgency are NOT computed here and must be measured in Mobile before this decision is taken.",
+      "clinical_impact": "CHANGES SCORING INPUT, and the shipped-engine measurement is now in: 15 newly reachable tokens touching 31 of 50 conditions; 63 scenarios measured; 25 urgency changes, of which 24 escalate and ONE DE-ESCALATES emergency to urgent with no red-flag change (IM003-SB-001). Red-flag invariance did not imply urgency invariance. This decision cannot be taken while that blocker is open, and no IM-003 activation is permitted meanwhile.",
       "product_impact": "Users may declare symptoms they would otherwise not have been asked about \u2014 arguably better assessment, arguably a longer flow.",
       "required_reviewers": "product_and_clinical",
       "regression_requirements": [
@@ -1071,6 +1090,13 @@
       "D": "Require a revised question/content model first.",
       "E": "Another evidence-supported decomposition."
     },
+    "status": "NARROWED_PENDING_IM003_SB_001",
+    "narrowing_note": "Recorded at I2/W3 Step 8. The recommendation below was written BEFORE the shipped-engine measurement existed, and its 'then C separately' clause could be read as permitting scoring-affecting re-branching once C was reviewed. That reading is now suspended: IM003-SB-001 is open, and no subset \u2014 inert or otherwise \u2014 may be implemented or activated while it is. The original text is retained verbatim below rather than edited, so the reasoning that led here stays auditable.",
+    "suspended_clause": "then C separately",
+    "suspended_because": "IM003-SB-001 is open_awaiting_clinical_and_product_adjudication",
+    "still_an_engineering_recommendation_only": true,
+    "authorizes_implementation": false,
+    "authorizes_activation": false,
     "engineering_recommendation": "B with conditions, then C separately. The evidence supports a clean split that is STRUCTURALLY enforceable rather than a prose convention: a newly eligible question whose answer tokens carry no scoring weight and no red-flag reference (severity and duration today) is clinically inert against the current artifacts, while a newly eligible additional-symptoms question makes new scoring tokens reachable and is not. The two have different risk and should not share one approval.",
     "this_is_not_approval": true,
     "structural_enforcement": {
