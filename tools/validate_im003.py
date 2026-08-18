@@ -117,8 +117,15 @@ def check_red_flag_completeness(results, impact, _package, index, entries):
                       % rf["checked_pathways"])
 
     # Recompute the reachable set and its pathways from source.
+    #
+    # Two hops: the produced token itself, plus the tokens the newly eligible
+    # question's own options can contribute. This check previously used only the
+    # second hop, which is the same defect it was meant to catch — it agreed
+    # with a report that had dropped `pain`, so both sides were wrong in the
+    # same direction and the disagreement was invisible.
     reachable = set()
     for _source, option in trigger_pairs(entries):
+        reachable.add(option)
         reachable |= option_tokens(entries, option)
     if sorted(reachable) != rf["newly_reachable_tokens"]:
         errors.append("newly reachable token set drifted from source")
@@ -360,6 +367,53 @@ def check_scoring_delta_honesty(results, impact, _package, _index, _entries):
                 errors)
 
 
+def check_newly_reachable_matches_the_pairs(results, impact, _package, index, entries):
+    """I13 — the impact analysis covers every token the 56 pairs produce.
+
+    The derived token list and the pair array are two views of the same fact,
+    and they must agree. They did not: `newly_reachable` accumulated only the
+    SECOND-hop options of each newly eligible question and never the produced
+    token itself, so `pain` — reached from `swelling` and present in no other
+    token's option list — vanished from the impact analysis while remaining in
+    the pairs and the trigger graph. It scores on minor_injury at weight 6, so
+    the omission understated the scoring blast radius.
+
+    This check exists so that gap cannot reopen silently.
+    """
+    errors = []
+    pairs = impact["pair_reconciliation"]["pairs"]
+    declared = set(impact["red_flag_cross_reference"]["newly_reachable_tokens"])
+
+    produced = {pair["produced_token"] for pair in pairs}
+    missing = sorted(produced - declared)
+    if missing:
+        errors.append(
+            "produced by a pair but absent from newly_reachable_tokens: %s" % missing)
+
+    expected = set(produced)
+    for pair in pairs:
+        expected |= option_tokens(entries, pair["produced_token"])
+    if declared != expected:
+        errors.append(
+            "newly_reachable_tokens is not the two-hop closure of the pairs: "
+            "missing=%s unexpected=%s"
+            % (sorted(expected - declared), sorted(declared - expected)))
+
+    if impact["red_flag_cross_reference"]["newly_reachable_token_count"] != len(declared):
+        errors.append("newly_reachable_token_count disagrees with the list it counts")
+
+    # Every scoring-affecting newly reachable token must appear in the delta.
+    touched = {row["condition_id"] for row in impact["scoring_input_delta"]["by_condition"]}
+    for token in sorted(declared):
+        for condition in index.references(token)["scoring_conditions"]:
+            if condition not in touched:
+                errors.append(
+                    "%s scores on %s but that condition is absent from the "
+                    "scoring-input delta" % (token, condition))
+
+    results.add("I13", "impact analysis covers every token the pairs produce", errors)
+
+
 CHECKS = (
     check_pair_count,
     check_no_scoring_token_called_inert,
@@ -373,6 +427,7 @@ CHECKS = (
     check_evidence_binding,
     check_case_bank_claim,
     check_scoring_delta_honesty,
+    check_newly_reachable_matches_the_pairs,
 )
 
 

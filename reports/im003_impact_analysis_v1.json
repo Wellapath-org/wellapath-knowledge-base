@@ -3847,12 +3847,13 @@
       "fever",
       "headache",
       "nausea",
+      "pain",
       "sweating",
       "vomiting",
       "watery_stool",
       "weakness"
     ],
-    "newly_reachable_token_count": 14,
+    "newly_reachable_token_count": 15,
     "checked_pathways": [
       "global_red_flag_rules (rules.ng.v2.2 rules[].token)",
       "condition_specific_red_flags (kb.ng.v2.4 conditions[].red_flags)",
@@ -3864,8 +3865,8 @@
     "condition_specific_red_flag_tokens": [],
     "tokens_that_raise_a_clarifier": [],
     "red_flag_affecting_count": 0,
-    "scoring_affecting_count": 14,
-    "no_red_flag_relevance_count": 14,
+    "scoring_affecting_count": 15,
+    "no_red_flag_relevance_count": 15,
     "safety_critical_decision_required": false,
     "combination_only_red_flags": {
       "checked": true,
@@ -4110,6 +4111,22 @@
         ]
       },
       {
+        "token": "pain",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "minor_injury"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "minor_injury"
+        ]
+      },
+      {
         "token": "sweating",
         "red_flag_pathways": [],
         "is_red_flag_affecting": false,
@@ -4286,8 +4303,8 @@
   },
   "scoring_input_delta": {
     "note": "The exact weight a newly reachable token would contribute to each condition. This is the scoring INPUT delta; the resulting score, ranking and urgency require the Mobile engine.",
-    "conditions_touched": 30,
-    "conditions_touched_of_total": "30 of 50",
+    "conditions_touched": 31,
+    "conditions_touched_of_total": "31 of 50",
     "by_condition": [
       {
         "condition_id": "malaria",
@@ -4645,6 +4662,17 @@
         "tokens": [
           {
             "token": "headache",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 6,
+        "token_count": 1
+      },
+      {
+        "condition_id": "minor_injury",
+        "tokens": [
+          {
+            "token": "pain",
             "weight": 6
           }
         ],

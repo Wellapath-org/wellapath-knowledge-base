@@ -114,7 +114,7 @@ are single tokens too.
 
 ## 4. What IM-003 *does* change: scoring input
 
-All 14 newly reachable tokens carry KB scoring weight. They touch **30 of 50
+All 15 newly reachable tokens carry KB scoring weight. They touch **31 of 50
 conditions**.
 
 The exact per-condition weight delta is published in
@@ -140,7 +140,7 @@ is specified in the handoff.
 |---|---|---|---|---|---|---|
 | severity | mild, moderate, severe, very_severe | 0 | 0 | 0 | 0 | inert today |
 | duration | days_1_3, days_3_7, days_7_plus, weeks_2_plus | 0 | 0 | 0 | 0 | inert today |
-| additional symptoms | 14 newly reachable tokens | **all 14** | 0 | 0 | 0 | **scoring-active** |
+| additional symptoms | 15 newly reachable tokens | **all 15** | 0 | 0 | 0 | **scoring-active** |
 
 > **"Inert today" is not "nonclinical".** These tokens carry no weight and no
 > red-flag reference **in kb 2.4 and rules 2.2**. That is a property of the
@@ -235,7 +235,7 @@ The two carry different risk and should not share one approval.
 
 - **Not A** (defer everything) — the inert subset carries no measured clinical
   risk, and a flow that cannot react to its own answers stays broken.
-- **Not C yet** — the scoring-affecting subset changes scoring input on 30 of 50
+- **Not C yet** — the scoring-affecting subset changes scoring input on 31 of 50
   conditions and its score/urgency/ranking delta has **not been measured**.
   Approving it first would be approving an unquantified change to triage input.
 - **Not D** — nothing shows the question or content model is wrong. The gap is
@@ -273,6 +273,35 @@ regenerating the evidence invalidates the decisions.
 ---
 
 ## 12. Documentation correction
+
+
+### Correction: the newly-reachable set was undercounted by one token
+
+An earlier revision reported **14** newly reachable tokens and **30 of 50**
+affected conditions. Both were wrong by one.
+
+`newly_reachable` accumulated only the **second hop** — the options of each
+newly eligible question — and never the produced token itself. Any token that is
+*only* ever a first-hop target therefore disappeared. `pain` is exactly that
+case: reached from `swelling`, and present in no other token's option list.
+
+`pain` is canonical in token_dictionary 1.1, is picker-reachable, and **scores on
+`minor_injury` at weight 6**, so the omission understated the scoring blast
+radius by one token and one condition. It was visible as an internal
+contradiction the whole time: the trigger graph listed `pain` among its 18 nodes
+and the 56 pairs produced it, while the impact sections did not.
+
+The red-flag conclusion is **unaffected** — `pain` intersects zero of all six
+red-flag pathways, so "zero red-flag references" holds for all 15 tokens.
+
+The check that should have caught this shared the same defect: I3 recomputed the
+set with the same second-hop-only rule, so both sides were wrong in the same
+direction and agreed. I3 is corrected, and a new **I13** asserts that the derived
+token list equals the two-hop closure of the pair array, so the two views can
+never silently diverge again.
+
+Corrected figures: **15** newly reachable tokens, **31 of 50** conditions.
+
 
 `progress.md` narrated "All 22 dimensions agree" for the IM-001 reconciliation
 table, which has **21** entries and always did. Corrected to 21.

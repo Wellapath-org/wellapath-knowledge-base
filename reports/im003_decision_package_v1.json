@@ -10,7 +10,7 @@
     "im_003_enabled": false,
     "evidence_binding": {
       "impact_analysis": "reports/im003_impact_analysis_v1.json",
-      "sha256": "fe65972820a0a9bf0fa547c8f78d327c258baea148e5e74dbe87843d62b28996",
+      "sha256": "3589e1a0fada38a9754f31d4629a9681a7098f4f7c28fb39d716edce25ca1fe9",
       "note": "These decisions are valid only against the impact analysis with this exact hash."
     }
   },
@@ -28,7 +28,7 @@
         "report": "reports/im003_impact_analysis_v1.json"
       },
       "affected_paths": "56 (source, option) pairs can unlock a question",
-      "clinical_impact": "Can change which symptoms a user ends up declaring, and therefore the scoring input. 30 of 50 conditions are touched.",
+      "clinical_impact": "Can change which symptoms a user ends up declaring, and therefore the scoring input. 31 of 50 conditions are touched.",
       "product_impact": "Users answer more questions on some paths; the flow changes shape mid-assessment.",
       "required_reviewers": "product_and_clinical",
       "regression_requirements": [
@@ -127,7 +127,7 @@
     {
       "decision_id": "IM003-D004-SCORING-REACHABILITY",
       "title": "Is re-branching that makes NEW SCORING TOKENS reachable permitted?",
-      "question_for_reviewers": "A newly eligible additional-symptoms question offers options the user could not otherwise declare. 14 such tokens exist, touching 30 of 50 conditions. May they become reachable?",
+      "question_for_reviewers": "A newly eligible additional-symptoms question offers options the user could not otherwise declare. 15 such tokens exist, touching 31 of 50 conditions. May they become reachable?",
       "evidence": {
         "newly_reachable_tokens": [
           "abdominal_cramps",
@@ -140,17 +140,18 @@
           "fever",
           "headache",
           "nausea",
+          "pain",
           "sweating",
           "vomiting",
           "watery_stool",
           "weakness"
         ],
-        "scoring_affecting_count": 14,
-        "conditions_touched": 30,
+        "scoring_affecting_count": 15,
+        "conditions_touched": 31,
         "per_condition_weight_delta": "scoring_input_delta.by_condition",
         "score_urgency_ranking_delta": "NOT COMPUTED \u2014 requires the Mobile ScoringEngine. See the handoff for the harness."
       },
-      "affected_paths": "56 pairs; 14 newly reachable scoring tokens",
+      "affected_paths": "56 pairs; 15 newly reachable scoring tokens",
       "clinical_impact": "CHANGES SCORING INPUT. The exact per-condition weight delta is published; the resulting ranked conditions, top condition and urgency are NOT computed here and must be measured in Mobile before this decision is taken.",
       "product_impact": "Users may declare symptoms they would otherwise not have been asked about \u2014 arguably better assessment, arguably a longer flow.",
       "required_reviewers": "product_and_clinical",
@@ -195,7 +196,7 @@
           "basis": "rules.ng.v2.2 keys every rule on a SINGLE token; no rule requires a combination. Condition red_flags are also single tokens. There is therefore no combination-only red-flag pathway to model in the current artifacts."
         }
       },
-      "affected_paths": "0 of 14 newly reachable tokens touch any red-flag pathway",
+      "affected_paths": "0 of 15 newly reachable tokens touch any red-flag pathway",
       "clinical_impact": "NONE MEASURED. No newly reachable token is a global rule token, a condition-specific red flag, a clarifier trigger or a clarifier red-flag token. Had any been, this would be a safety blocker and immediate evaluation after that answer would be mandatory.",
       "product_impact": "None.",
       "required_reviewers": "product_and_clinical",

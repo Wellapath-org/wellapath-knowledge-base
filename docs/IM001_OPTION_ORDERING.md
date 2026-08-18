@@ -70,7 +70,7 @@ Its hash and byte count were verified directly against Mobile PR #75 head
 Every count above was then **recomputed here** from this repository's own
 captured-Dart oracle and the frozen clinical artifacts.
 `tools/report_im001_option_ordering.py` never reads Mobile's figures as an input;
-it stores them only to reconcile against. **All 22 reconciled dimensions agree**,
+it stores them only to reconcile against. **All 21 reconciled dimensions agree**,
 with zero unpaired reversed cases.
 
 ### One definitional correction worth recording

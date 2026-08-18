@@ -115,9 +115,22 @@ def build_report():
             "reachable_with_additive_rebranching": True,
         })
 
-    # ── every token any newly eligible question could contribute ─────────────
+    # ── every token additive re-branching makes reachable ────────────────────
+    #
+    # Two hops, and BOTH matter:
+    #   1. the produced token itself — answering the source option contributes
+    #      it directly, which is the whole point of the pair;
+    #   2. the tokens the newly eligible question's own options can contribute.
+    #
+    # Omitting hop 1 silently drops any token that is only ever a first-hop
+    # target. `pain` is exactly that case: it is reached from `swelling` and
+    # appears in no other token's option list, so it disappeared from the
+    # impact analysis while remaining present in the 56 pairs and the trigger
+    # graph. It scores on minor_injury at weight 6, so the omission understated
+    # the scoring blast radius by one token and one condition.
     newly_reachable = set()
     for _source, option in pairs:
+        newly_reachable.add(option)
         newly_reachable |= option_tokens(entries, option)
 
     # ── the red-flag cross-reference, all four pathways ──────────────────────

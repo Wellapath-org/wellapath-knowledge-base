@@ -74,7 +74,7 @@ Expected from this analysis, and worth asserting in that harness:
 |---|---|
 | Newly reachable tokens | **14** |
 | Touching any red-flag pathway | **0** |
-| Conditions whose scoring input can change | **30 of 50** |
+| Conditions whose scoring input can change | **31 of 50** |
 | Red-flag questions displaced | **0** |
 | Max questions added after grouping | **1** |
 | Path limit | **5**, unchanged |

@@ -675,14 +675,14 @@ only; removal re-branching is not monotone and is out of scope.
 **The safety question, answered across all four pathways.** The earlier IM-003
 note relied on clarifier-trigger membership alone, which is the weaker test — a
 token can be a danger sign through a global rule or a condition's own
-`red_flags` without ever being a clarifier trigger. All 14 newly reachable
+`red_flags` without ever being a clarifier trigger. All 15 newly reachable
 tokens were checked against global rules, condition-specific red flags,
 clarifier triggers and clarifier red-flag tokens: **0, 0, 0, 0**. Combination-only
 red flags cannot exist in the current artifacts — every rule and every condition
 red flag keys on a single token.
 
-**What IM-003 does change is scoring input.** All 14 newly reachable tokens carry
-KB weight, touching **30 of 50 conditions**. The exact per-condition weight delta
+**What IM-003 does change is scoring input.** All 15 newly reachable tokens carry
+KB weight, touching **31 of 50 conditions**. The exact per-condition weight delta
 is published.
 
 **What is deliberately not published.** Score, ranked conditions, top condition
@@ -730,3 +730,33 @@ same patterns and controls. An earlier `im003_` *prefix* rule also swallowed the
 19 invalid fixtures, which that runner does not scan — 19 files would have gone
 unscanned by anything. Mobile's vendored copy is pinned at `cffbe8a6` and is
 unaffected.
+
+### Step 6A correction — newly-reachable set undercounted by one token
+
+Pre-merge review of PR #31 found the impact analysis reported **14** newly
+reachable tokens and **30 of 50** conditions, while its own 56-pair array and
+18-node trigger graph produced **15**. `newly_reachable` accumulated only the
+second hop (the newly eligible question's own options) and never the produced
+token itself, so `pain` — reached from `swelling` and present in no other
+token's option list — disappeared. `pain` is canonical, picker-reachable and
+**scores on `minor_injury` at weight 6**, so the omission understated the
+scoring blast radius.
+
+The red-flag conclusion is unaffected: `pain` intersects zero of all six
+pathways, so "zero red-flag references" holds for all 15 tokens. Convergence is
+unaffected (15 two-cycles, closure 14, depth 5, 0 monotonicity violations — all
+independently reproduced).
+
+Check **I3** shared the same defect — it recomputed with the same
+second-hop-only rule, so it agreed with the wrong report and the disagreement
+was invisible. I3 is corrected and a new **I13** asserts the derived token list
+equals the two-hop closure of the pair array. A negative test confirms I13
+rejects the original 14/30 shape.
+
+Corrected: **15** newly reachable tokens, **31 of 50** conditions,
+`minor_injury` (weight 6) added to the scoring-input delta. No pair added or
+removed, no decision approved, IM-003 still disabled.
+
+Also corrected: `docs/IM001_OPTION_ORDERING.md` still read "All 22 reconciled
+dimensions agree" — the 21-dimension fix had been applied to `progress.md` only.
+Prose-only; no evidence value, hash, conclusion or decision changed.

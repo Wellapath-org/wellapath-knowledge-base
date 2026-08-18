@@ -4609,7 +4609,7 @@
       },
       "condition_specific_red_flag_tokens": [],
       "direct_global_red_flag_tokens": [],
-      "newly_reachable_token_count": 14,
+      "newly_reachable_token_count": 15,
       "newly_reachable_tokens": [
         "abdominal_cramps",
         "body_pain",
@@ -4621,16 +4621,17 @@
         "fever",
         "headache",
         "nausea",
+        "pain",
         "sweating",
         "vomiting",
         "watery_stool",
         "weakness"
       ],
-      "no_red_flag_relevance_count": 14,
+      "no_red_flag_relevance_count": 15,
       "not_relying_on_clarifier_membership_alone": true,
       "red_flag_affecting_count": 0,
       "safety_critical_decision_required": false,
-      "scoring_affecting_count": 14,
+      "scoring_affecting_count": 15,
       "tokens": [
         {
           "condition_specific_red_flags": [],
@@ -4867,6 +4868,22 @@
             "yellow_fever"
           ],
           "token": "nausea"
+        },
+        {
+          "condition_specific_red_flags": [],
+          "demographic_modifier_conditions": [
+            "minor_injury"
+          ],
+          "global_red_flag_rules": [],
+          "is_a_clarifier_red_flag_token": false,
+          "is_red_flag_affecting": false,
+          "max_scoring_weight": 6,
+          "raises_clarifiers": [],
+          "red_flag_pathways": [],
+          "scoring_conditions": [
+            "minor_injury"
+          ],
+          "token": "pain"
         },
         {
           "condition_specific_red_flags": [],
@@ -5316,6 +5333,17 @@
           ]
         },
         {
+          "condition_id": "minor_injury",
+          "max_added_weight": 6,
+          "token_count": 1,
+          "tokens": [
+            {
+              "token": "pain",
+              "weight": 6
+            }
+          ]
+        },
+        {
           "condition_id": "cardio_symptoms",
           "max_added_weight": 5,
           "token_count": 1,
@@ -5404,8 +5432,8 @@
           ]
         }
       ],
-      "conditions_touched": 30,
-      "conditions_touched_of_total": "30 of 50",
+      "conditions_touched": 31,
+      "conditions_touched_of_total": "31 of 50",
       "note": "The exact weight a newly reachable token would contribute to each condition. This is the scoring INPUT delta; the resulting score, ranking and urgency require the Mobile engine."
     },
     "trigger_graph": {
@@ -5516,7 +5544,7 @@
       "evidence_binding": {
         "impact_analysis": "reports/im003_impact_analysis_v1.json",
         "note": "These decisions are valid only against the impact analysis with this exact hash.",
-        "sha256": "fe65972820a0a9bf0fa547c8f78d327c258baea148e5e74dbe87843d62b28996"
+        "sha256": "3589e1a0fada38a9754f31d4629a9681a7098f4f7c28fb39d716edce25ca1fe9"
       },
       "generator": "tools/build_im003_decision_package.py",
       "im_003_enabled": true,
@@ -5573,7 +5601,7 @@
           "any change to the path limit",
           "any change to red-flag timing"
         ],
-        "clinical_impact": "Can change which symptoms a user ends up declaring, and therefore the scoring input. 30 of 50 conditions are touched.",
+        "clinical_impact": "Can change which symptoms a user ends up declaring, and therefore the scoring input. 31 of 50 conditions are touched.",
         "decision_id": "IM003-D001-ADDITIVE-ALLOWED",
         "evidence": {
           "graph_edges": 56,
@@ -5670,7 +5698,7 @@
       },
       {
         "activation_blocker": true,
-        "affected_paths": "56 pairs; 14 newly reachable scoring tokens",
+        "affected_paths": "56 pairs; 15 newly reachable scoring tokens",
         "approval_authorizes": [
           "making the listed tokens reachable through re-branching"
         ],
@@ -5682,7 +5710,7 @@
         "clinical_impact": "CHANGES SCORING INPUT. The exact per-condition weight delta is published; the resulting ranked conditions, top condition and urgency are NOT computed here and must be measured in Mobile before this decision is taken.",
         "decision_id": "IM003-D004-SCORING-REACHABILITY",
         "evidence": {
-          "conditions_touched": 30,
+          "conditions_touched": 31,
           "newly_reachable_tokens": [
             "abdominal_cramps",
             "body_pain",
@@ -5694,6 +5722,7 @@
             "fever",
             "headache",
             "nausea",
+            "pain",
             "sweating",
             "vomiting",
             "watery_stool",
@@ -5701,10 +5730,10 @@
           ],
           "per_condition_weight_delta": "scoring_input_delta.by_condition",
           "score_urgency_ranking_delta": "NOT COMPUTED — requires the Mobile ScoringEngine. See the handoff for the harness.",
-          "scoring_affecting_count": 14
+          "scoring_affecting_count": 15
         },
         "product_impact": "Users may declare symptoms they would otherwise not have been asked about — arguably better assessment, arguably a longer flow.",
-        "question_for_reviewers": "A newly eligible additional-symptoms question offers options the user could not otherwise declare. 14 such tokens exist, touching 30 of 50 conditions. May they become reachable?",
+        "question_for_reviewers": "A newly eligible additional-symptoms question offers options the user could not otherwise declare. 15 such tokens exist, touching 31 of 50 conditions. May they become reachable?",
         "rationale": null,
         "regression_requirements": [
           "Mobile static-versus-dynamic simulation over the bounded state set, reporting score, ranked conditions, top condition and urgency deltas",
@@ -5719,7 +5748,7 @@
       },
       {
         "activation_blocker": true,
-        "affected_paths": "0 of 14 newly reachable tokens touch any red-flag pathway",
+        "affected_paths": "0 of 15 newly reachable tokens touch any red-flag pathway",
         "approval_authorizes": [
           "confirming that no new red flag becomes reachable"
         ],
