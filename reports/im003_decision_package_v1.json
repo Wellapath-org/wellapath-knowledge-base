@@ -1,0 +1,1085 @@
+{
+  "_metadata": {
+    "report_id": "im003_decision_package",
+    "version": "1",
+    "phase": "I2 / W3 Step 6",
+    "generator": "tools/build_im003_decision_package.py",
+    "authoritative": true,
+    "status": "review_package_no_decision_approved",
+    "im_003_implemented": false,
+    "im_003_enabled": false,
+    "evidence_binding": {
+      "impact_analysis": "reports/im003_impact_analysis_v1.json",
+      "sha256": "3589e1a0fada38a9754f31d4629a9681a7098f4f7c28fb39d716edce25ca1fe9",
+      "note": "These decisions are valid only against the impact analysis with this exact hash."
+    }
+  },
+  "decisions": [
+    {
+      "decision_id": "IM003-D001-ADDITIVE-ALLOWED",
+      "title": "Is additive re-branching permitted at all?",
+      "question_for_reviewers": "May question eligibility be re-evaluated after an answer, adding newly eligible questions but never withdrawing one?",
+      "evidence": {
+        "trigger_pairs": 56,
+        "graph_nodes": 18,
+        "graph_edges": 56,
+        "monotone": true,
+        "max_convergence_depth": 5,
+        "report": "reports/im003_impact_analysis_v1.json"
+      },
+      "affected_paths": "56 (source, option) pairs can unlock a question",
+      "clinical_impact": "Can change which symptoms a user ends up declaring, and therefore the scoring input. 31 of 50 conditions are touched.",
+      "product_impact": "Users answer more questions on some paths; the flow changes shape mid-assessment.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "re-branching is bounded by the path limit and cannot loop",
+        "an assessment with no additional-symptoms answer presents exactly the baseline questions",
+        "repeated identical answers are idempotent",
+        "full 239-case clinical regression unchanged"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "additive re-branching only, subject to the subordinate decisions below"
+      ],
+      "approval_does_not_authorize": [
+        "removal or invalidation re-branching",
+        "answer editing",
+        "restoration",
+        "optional skips",
+        "any change to the path limit",
+        "any change to red-flag timing"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D002-INERT-SEVERITY",
+      "title": "Is re-branching that unlocks only a severity question permitted?",
+      "question_for_reviewers": "Severity answer tokens (mild/moderate/severe/very_severe) carry no scoring weight and no red-flag reference in kb 2.4 or rules 2.2. May a newly eligible severity question be presented?",
+      "evidence": {
+        "severity_tokens_inert": true,
+        "checked_against": {
+          "kb": "kb.ng.v2.4.json",
+          "rules": "rules.ng.v2.2.json",
+          "red_flag_clarifiers": "kRedFlagClarifiers",
+          "demographic_modifiers": "kb conditions[].demographic_modifiers",
+          "question_triggers": "kFollowupQuestionMap trigger tokens"
+        },
+        "caveat": "These tokens carry no scoring weight and no red-flag reference IN kb 2.4 AND rules 2.2. That is a property of the CURRENT artifacts, not of the tokens. A future KB revision that gives `severe` or `days_7_plus` a weight would make this subset clinically active with no change to the question flow, so any approval of an inert subset must be re-validated on every clinical artifact change and must be enforced by a validator rather than by this sentence."
+      },
+      "affected_paths": "11 newly triggerable severity questions across the 56 pairs",
+      "clinical_impact": "None against the CURRENT artifacts. The tokens appear in no condition's symptoms, no rule, no condition red_flags and no clarifier trigger. This is a property of kb 2.4 and rules 2.2, not of the tokens, and must be re-validated on every clinical artifact change.",
+      "product_impact": "One additional question on affected paths.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "a validator asserts severity tokens remain absent from kb, rules, condition red_flags and clarifier triggers",
+        "the assertion re-runs on every clinical artifact change"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "presenting a newly eligible severity question"
+      ],
+      "approval_does_not_authorize": [
+        "treating severity tokens as permanently nonclinical",
+        "any scoring change should a future KB give them weight"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D003-INERT-DURATION",
+      "title": "Is re-branching that unlocks only a duration question permitted?",
+      "question_for_reviewers": "Duration answer tokens (days_1_3/days_3_7/days_7_plus/weeks_2_plus) carry no scoring weight and no red-flag reference today. May a newly eligible duration question be presented?",
+      "evidence": {
+        "duration_tokens_inert": true,
+        "checked_against": {
+          "kb": "kb.ng.v2.4.json",
+          "rules": "rules.ng.v2.2.json",
+          "red_flag_clarifiers": "kRedFlagClarifiers",
+          "demographic_modifiers": "kb conditions[].demographic_modifiers",
+          "question_triggers": "kFollowupQuestionMap trigger tokens"
+        },
+        "caveat": "These tokens carry no scoring weight and no red-flag reference IN kb 2.4 AND rules 2.2. That is a property of the CURRENT artifacts, not of the tokens. A future KB revision that gives `severe` or `days_7_plus` a weight would make this subset clinically active with no change to the question flow, so any approval of an inert subset must be re-validated on every clinical artifact change and must be enforced by a validator rather than by this sentence."
+      },
+      "affected_paths": "54 newly triggerable duration questions across the 56 pairs",
+      "clinical_impact": "None against the CURRENT artifacts, with the same caveat as D002.",
+      "product_impact": "One additional question on affected paths.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "a validator asserts duration tokens remain absent from kb, rules, condition red_flags and clarifier triggers"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "presenting a newly eligible duration question"
+      ],
+      "approval_does_not_authorize": [
+        "treating duration tokens as permanently nonclinical"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D004-SCORING-REACHABILITY",
+      "title": "Is re-branching that makes NEW SCORING TOKENS reachable permitted?",
+      "question_for_reviewers": "A newly eligible additional-symptoms question offers options the user could not otherwise declare. 15 such tokens exist, touching 31 of 50 conditions. May they become reachable?",
+      "evidence": {
+        "newly_reachable_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "scoring_affecting_count": 15,
+        "conditions_touched": 31,
+        "per_condition_weight_delta": "scoring_input_delta.by_condition",
+        "score_urgency_ranking_delta": "NOT COMPUTED \u2014 requires the Mobile ScoringEngine. See the handoff for the harness."
+      },
+      "affected_paths": "56 pairs; 15 newly reachable scoring tokens",
+      "clinical_impact": "CHANGES SCORING INPUT. The exact per-condition weight delta is published; the resulting ranked conditions, top condition and urgency are NOT computed here and must be measured in Mobile before this decision is taken.",
+      "product_impact": "Users may declare symptoms they would otherwise not have been asked about \u2014 arguably better assessment, arguably a longer flow.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "Mobile static-versus-dynamic simulation over the bounded state set, reporting score, ranked conditions, top condition and urgency deltas",
+        "no safety-critical under-triage introduced",
+        "full 239-case clinical regression unchanged"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "making the listed tokens reachable through re-branching"
+      ],
+      "approval_does_not_authorize": [
+        "any change to a token's weight or meaning",
+        "adding or removing an option",
+        "activation before the Mobile scoring delta is measured"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D005-RED-FLAG-REACHABILITY",
+      "title": "Does re-branching make any NEW RED FLAG reachable?",
+      "question_for_reviewers": "Measured across all four pathways: global rules, condition-specific red_flags, clarifier triggers and clarifier red-flag tokens.",
+      "evidence": {
+        "red_flag_affecting_count": 0,
+        "checked_pathways": [
+          "global_red_flag_rules (rules.ng.v2.2 rules[].token)",
+          "condition_specific_red_flags (kb.ng.v2.4 conditions[].red_flags)",
+          "red_flag_clarifier_triggers (kRedFlagClarifiers[].triggerTokens)",
+          "clarifier_red_flag_tokens (kRedFlagClarifiers[].redFlagToken)"
+        ],
+        "not_relying_on_clarifier_membership_alone": true,
+        "direct_global": [],
+        "condition_specific": [],
+        "raises_clarifier": [],
+        "combination_only": {
+          "checked": true,
+          "found": [],
+          "basis": "rules.ng.v2.2 keys every rule on a SINGLE token; no rule requires a combination. Condition red_flags are also single tokens. There is therefore no combination-only red-flag pathway to model in the current artifacts."
+        }
+      },
+      "affected_paths": "0 of 15 newly reachable tokens touch any red-flag pathway",
+      "clinical_impact": "NONE MEASURED. No newly reachable token is a global rule token, a condition-specific red flag, a clarifier trigger or a clarifier red-flag token. Had any been, this would be a safety blocker and immediate evaluation after that answer would be mandatory.",
+      "product_impact": "None.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "a validator asserts this count stays at zero",
+        "QB-002 immediate evaluation remains unconditional and is re-asserted after every re-branch step"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "confirming that no new red flag becomes reachable"
+      ],
+      "approval_does_not_authorize": [
+        "any relaxation of immediate red-flag evaluation",
+        "treating this as permanent \u2014 it must be re-measured whenever kb, rules or the clarifier set changes"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D006-TRUNCATION-PRIORITY",
+      "title": "When re-branching pushes past the limit of 5, what is dropped?",
+      "question_for_reviewers": "Grouping collapses each role to one question, so the presented count is bounded at 3 clarifiers + 3 grouped roles = 6, which can exceed 5 by one. Which question yields?",
+      "evidence": {
+        "path_limit": 5,
+        "worst_case_presented": 6,
+        "red_flag_exemption": "red-flag questions are never dropped",
+        "alternatives": [
+          "A: drop the newest ordinary question (baseline questions win)",
+          "B: drop the lowest-priority ordinary question by the existing order key (current truncation rule, unchanged)",
+          "C: raise the limit \u2014 OUT OF SCOPE, the limit is locked at 5"
+        ]
+      },
+      "affected_paths": "Paths where 3 clarifiers are eligible and re-branching adds a role",
+      "clinical_impact": "A dropped question is a symptom the user is never asked about. Which one is dropped is a clinical judgement, not a UI preference.",
+      "product_impact": "Determines whether the flow feels like it grew or reordered.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "no red-flag question is ever displaced",
+        "no required question is silently dropped",
+        "the surviving set is deterministic under reversed input"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "one named truncation priority"
+      ],
+      "approval_does_not_authorize": [
+        "raising the path limit",
+        "dropping a red-flag question"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D007-RECURSION-DEPTH",
+      "title": "How deep may re-branching recurse?",
+      "question_for_reviewers": "The graph has 15 two-cycles and a measured convergence depth of 5. Additive growth terminates, but should the depth be capped below the natural fixed point?",
+      "evidence": {
+        "two_cycles": 15,
+        "self_loops": 0,
+        "max_convergence_depth": 5,
+        "max_closure_size": 14,
+        "monotone": true
+      },
+      "affected_paths": "All 18 graph nodes",
+      "clinical_impact": "A deeper chain means more declarable symptoms; a shallower cap means the flow stops adapting sooner. Both are defensible.",
+      "product_impact": "Depth is invisible to the user except as question count.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "convergence is proven within the declared bound",
+        "no path loops"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "one named recursion bound"
+      ],
+      "approval_does_not_authorize": [
+        "unbounded recursion",
+        "removal re-branching at any depth"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D008-PROGRESS-DISPLAY",
+      "title": "How is progress shown when the flow grows mid-assessment?",
+      "question_for_reviewers": "A question added after the user believed they were near the end makes a progress indicator move backwards or become wrong.",
+      "evidence": {
+        "max_questions_added_after_grouping": 3,
+        "note": "Grouping bounds the growth; the UX question is how it is communicated, not how large it is."
+      },
+      "affected_paths": "Any path where re-branching adds a question",
+      "clinical_impact": "None directly. A misleading indicator can cause abandonment, which is a safety-adjacent outcome \u2014 the QB-002 finding was abandonment, not under-triage.",
+      "product_impact": "Product owns the indicator design. This analysis does not propose a UI.",
+      "required_reviewers": "product",
+      "regression_requirements": [
+        "abandonment measurement before and after, if activated"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "a progress-display policy"
+      ],
+      "approval_does_not_authorize": [
+        "any change to question content or order"
+      ],
+      "activation_blocker": true
+    },
+    {
+      "decision_id": "IM003-D009-ACTIVATION-MILESTONE",
+      "title": "When, if ever, may IM-003 activate?",
+      "question_for_reviewers": "Which milestone carries it, and what must be true first?",
+      "evidence": {
+        "current_status": "deferred_pending_product_and_clinical_review",
+        "prerequisites": [
+          "D001-D008 approved",
+          "Mobile scoring/urgency delta measured with the real engine",
+          "IM-001 resolved (136 Product decisions still pending)",
+          "question content clinically approved",
+          "candidate published"
+        ]
+      },
+      "affected_paths": "All",
+      "clinical_impact": "IM-003 cannot activate while the candidate itself is unpublished and clinically unreviewed.",
+      "product_impact": "Distribution is deferred to I3.",
+      "required_reviewers": "product_and_clinical",
+      "regression_requirements": [
+        "every regression named in D001-D008"
+      ],
+      "status": "pending",
+      "reviewer_identity": null,
+      "review_date": null,
+      "rationale": null,
+      "approval_authorizes": [
+        "scheduling IM-003 to a milestone"
+      ],
+      "approval_does_not_authorize": [
+        "activation",
+        "publication",
+        "any change to IM-001 status"
+      ],
+      "activation_blocker": true
+    }
+  ],
+  "decision_counts": {
+    "total": 9,
+    "pending": 9,
+    "approved": 0,
+    "by_reviewer": {
+      "product_and_clinical": 8,
+      "product": 1
+    },
+    "product_only": 1,
+    "product_and_clinical": 8,
+    "clinical_safety_blocker": 0
+  },
+  "scenarios": [
+    {
+      "scenario_id": "S01_no_rebranch_change",
+      "description": "A token with no additional-symptoms question: nothing new can be unlocked, so static and dynamic agree.",
+      "initial_tokens": [
+        "chest_indrawing_severe"
+      ],
+      "answered_option_tokens": [],
+      "static_roles_eligible": {
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "additionalSymptoms": 1
+      },
+      "static_presented_followups_after_grouping": 1,
+      "dynamic_presented_followups_after_grouping": 1,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [],
+      "newly_reachable_option_tokens": [],
+      "newly_reachable_scoring_tokens": [],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "cough",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 4,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S02_inert_severity_unlocked",
+      "description": "Answering an option whose token offers a severity question. The severity answer tokens carry no scoring weight today.",
+      "initial_tokens": [
+        "fever"
+      ],
+      "answered_option_tokens": [
+        "headache"
+      ],
+      "static_roles_eligible": {
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2,
+        "severity": 1
+      },
+      "static_presented_followups_after_grouping": 2,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 1,
+      "tokens_added_to_state": [
+        "headache"
+      ],
+      "newly_reachable_option_tokens": [
+        "dizziness",
+        "fever",
+        "vomiting"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "dizziness",
+        "fever",
+        "vomiting"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S03_inert_duration_unlocked",
+      "description": "Answering an option whose token offers a duration question.",
+      "initial_tokens": [
+        "headache"
+      ],
+      "answered_option_tokens": [
+        "fever"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2,
+        "severity": 1
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fever"
+      ],
+      "newly_reachable_option_tokens": [
+        "body_pain",
+        "chills",
+        "sweating"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "body_pain",
+        "chills",
+        "sweating"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S04_additional_symptoms_unlocked",
+      "description": "Answering an option that unlocks a further additional-symptoms question \u2014 the clinically active case.",
+      "initial_tokens": [
+        "cough"
+      ],
+      "answered_option_tokens": [
+        "fever"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "severity": 1,
+        "duration": 2,
+        "additionalSymptoms": 2
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fever"
+      ],
+      "newly_reachable_option_tokens": [
+        "body_pain",
+        "chills",
+        "nausea",
+        "sweating"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "body_pain",
+        "chills",
+        "nausea",
+        "sweating"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 4,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S05_one_new_scoring_token",
+      "description": "A single newly reachable scoring token.",
+      "initial_tokens": [
+        "dizziness"
+      ],
+      "answered_option_tokens": [
+        "fatigue"
+      ],
+      "static_roles_eligible": {
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2
+      },
+      "static_presented_followups_after_grouping": 2,
+      "dynamic_presented_followups_after_grouping": 2,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fatigue"
+      ],
+      "newly_reachable_option_tokens": [
+        "body_pain",
+        "fever"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "body_pain",
+        "fever"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 4,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S06_multiple_new_scoring_tokens",
+      "description": "Several newly reachable scoring tokens from one answer.",
+      "initial_tokens": [
+        "abdominal_cramps"
+      ],
+      "answered_option_tokens": [
+        "vomiting",
+        "nausea"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "severity": 1,
+        "duration": 3,
+        "additionalSymptoms": 3
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "nausea",
+        "vomiting"
+      ],
+      "newly_reachable_option_tokens": [
+        "abdominal_cramps",
+        "fever"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "abdominal_cramps",
+        "fever"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 5,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S07_recursive_chain",
+      "description": "A chain: seed unlocks a token that unlocks another.",
+      "initial_tokens": [
+        "cough"
+      ],
+      "answered_option_tokens": [
+        "fever",
+        "weakness"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "severity": 1,
+        "duration": 3,
+        "additionalSymptoms": 3
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fever",
+        "weakness"
+      ],
+      "newly_reachable_option_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 4,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S08_two_cycle_convergence",
+      "description": "A two-cycle (a offers b, b offers a). Additive state growth means the iteration still reaches a fixed point.",
+      "initial_tokens": [
+        "fever"
+      ],
+      "answered_option_tokens": [
+        "chills"
+      ],
+      "static_roles_eligible": {
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2
+      },
+      "static_presented_followups_after_grouping": 2,
+      "dynamic_presented_followups_after_grouping": 2,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "chills"
+      ],
+      "newly_reachable_option_tokens": [
+        "fever"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "fever"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S09_duplicate_token_idempotent",
+      "description": "Answering an option for a token already in state adds nothing.",
+      "initial_tokens": [
+        "fever"
+      ],
+      "answered_option_tokens": [
+        "fever"
+      ],
+      "static_roles_eligible": {
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "static_presented_followups_after_grouping": 2,
+      "dynamic_presented_followups_after_grouping": 2,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [],
+      "newly_reachable_option_tokens": [],
+      "newly_reachable_scoring_tokens": [],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S10_path_limit_pressure",
+      "description": "Three clarifiers already eligible plus grouped follow-ups; the limit of 5 is already reached before re-branching.",
+      "initial_tokens": [
+        "difficulty_breathing",
+        "poor_feeding",
+        "bleeding",
+        "headache"
+      ],
+      "answered_option_tokens": [
+        "fever"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2,
+        "severity": 1
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fever"
+      ],
+      "newly_reachable_option_tokens": [
+        "body_pain",
+        "chills",
+        "sweating"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "body_pain",
+        "chills",
+        "sweating"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "fever",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S11_widest_closure",
+      "description": "The seed with the largest reachable closure.",
+      "initial_tokens": [
+        "cough"
+      ],
+      "answered_option_tokens": [
+        "fever",
+        "weakness",
+        "nausea"
+      ],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 1,
+        "additionalSymptoms": 1
+      },
+      "dynamic_roles_eligible": {
+        "severity": 1,
+        "duration": 4,
+        "additionalSymptoms": 4
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [
+        "fever",
+        "nausea",
+        "weakness"
+      ],
+      "newly_reachable_option_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting"
+      ],
+      "newly_reachable_scoring_tokens": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting"
+      ],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fast_breathing_child",
+        "fatigue",
+        "fever",
+        "headache",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 4,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    },
+    {
+      "scenario_id": "S12_no_additional_answer",
+      "description": "The user answers no additional-symptoms option: the baseline question set must be presented exactly.",
+      "initial_tokens": [
+        "headache",
+        "fever"
+      ],
+      "answered_option_tokens": [],
+      "static_roles_eligible": {
+        "severity": 1,
+        "duration": 2,
+        "additionalSymptoms": 2
+      },
+      "dynamic_roles_eligible": {
+        "duration": 2,
+        "additionalSymptoms": 2,
+        "severity": 1
+      },
+      "static_presented_followups_after_grouping": 3,
+      "dynamic_presented_followups_after_grouping": 3,
+      "questions_added_by_rebranching": 0,
+      "tokens_added_to_state": [],
+      "newly_reachable_option_tokens": [],
+      "newly_reachable_scoring_tokens": [],
+      "newly_reachable_red_flag_tokens": [],
+      "closure_from_seed": [
+        "abdominal_cramps",
+        "body_pain",
+        "chills",
+        "dizziness",
+        "fatigue",
+        "nausea",
+        "sweating",
+        "vomiting",
+        "watery_stool",
+        "weakness"
+      ],
+      "convergence_depth": 3,
+      "path_limit": 5,
+      "exceeds_path_limit_after_grouping": false,
+      "red_flag_question_displaced": false,
+      "im_003_enabled": false,
+      "note": "Analysis only. IM-003 is not implemented; these are the outcomes it WOULD produce."
+    }
+  ],
+  "scenario_count": 12,
+  "path_length_analysis": {
+    "path_limit": 5,
+    "grouping_applies": true,
+    "worst_case_presented_after_grouping": 6,
+    "max_questions_added_in_scenarios": 1,
+    "scenarios_exceeding_limit": [],
+    "red_flag_questions_displaced": 0,
+    "required_questions_displaced": 0,
+    "completion_becomes_impossible": false,
+    "note": "Grouping is what keeps this small. Without contract 1.1 each newly eligible question would consume its own slot and the limit of 5 would bind hard; with grouping the presented count is bounded at 3 clarifiers + 3 grouped roles."
+  },
+  "ux_analysis": {
+    "max_additional_questions": 1,
+    "paths_remaining_within_limit": 12,
+    "paths_exceeding_limit_without_truncation": 0,
+    "repeated_or_redundant_questions": "None: grouping presents one question per role, and answering an option for a token already in state is idempotent (S09).",
+    "user_visible_branch_transitions": "A new question can appear after an additional-symptoms answer.",
+    "progress_indicator_can_move_backward": true,
+    "question_can_appear_after_user_believed_flow_complete": true,
+    "these_are_product_decisions": true,
+    "no_ui_redesign_proposed": true
+  },
+  "case_bank_applicability": {
+    "case_bank": "testing/case_bank_v1.json",
+    "cases": 239,
+    "fields_present": [
+      "case_id",
+      "condition_target",
+      "input_tokens",
+      "demographic_tokens",
+      "season",
+      "expected_urgency",
+      "expected_top_condition",
+      "safety_critical",
+      "expected_urgency_source"
+    ],
+    "carries_answer_sequence": false,
+    "carries_question_order": false,
+    "can_exercise_im_003": false,
+    "limitation": "Every case supplies a FINAL token set, not a question-and-answer sequence. IM-003 is a property of the sequence \u2014 which answer unlocked which question \u2014 so the bank cannot exercise it. No sequence was invented, and the 239-case suite is NOT claimed to validate adaptive branching.",
+    "what_the_bank_does_still_prove": "That the clinical baseline is unchanged by this analysis, because no runtime artifact was modified."
+  },
+  "decomposition_recommendation": {
+    "recommendation": "B_WITH_CONDITIONS",
+    "options_considered": {
+      "A": "Keep IM-003 entirely deferred.",
+      "B": "Permit an inert, presentation-only subset.",
+      "C": "Permit additive scoring-affecting branching after clinical approval.",
+      "D": "Require a revised question/content model first.",
+      "E": "Another evidence-supported decomposition."
+    },
+    "engineering_recommendation": "B with conditions, then C separately. The evidence supports a clean split that is STRUCTURALLY enforceable rather than a prose convention: a newly eligible question whose answer tokens carry no scoring weight and no red-flag reference (severity and duration today) is clinically inert against the current artifacts, while a newly eligible additional-symptoms question makes new scoring tokens reachable and is not. The two have different risk and should not share one approval.",
+    "this_is_not_approval": true,
+    "structural_enforcement": {
+      "required": true,
+      "mechanism": "The split must be enforced by the artifact and a validator, not by reviewer discipline. The proposed shape is a per-question declaration \u2014 for example a `rebranch_class` of `inert` or `scoring_affecting` \u2014 COMPUTED by the generator from the token's clinical references and re-validated on every clinical artifact change, so a KB revision that gives `severe` a weight reclassifies the question automatically instead of silently invalidating an approval.",
+      "not_proposed_here": "No schema change is made in this step. The shape above is a recommendation for a future step to design and review."
+    },
+    "why_not_A": "Deferring everything indefinitely leaves a known defect \u2014 a flow that cannot react to its own answers \u2014 unaddressed, and the inert subset carries no measured clinical risk.",
+    "why_not_C_yet": "The scoring-affecting subset changes the scoring input on 30 of 50 conditions and its score/urgency/ranking delta has NOT been measured, because that requires the Mobile engine. Approving it before that measurement would be approving an unquantified change to triage input.",
+    "why_not_D": "Nothing in the evidence shows the question or content model is wrong. The questions, answers and token effects are unchanged and correct; the gap is behavioural, not structural."
+  }
+}

@@ -89,6 +89,15 @@ PHI_PATTERNS = [
     ("patient identifier", re.compile(r"\b(?:patient_id|mrn|medical_record_number)\b", re.I)),
 ]
 
+#: IM-003 reports, scanned by tools/run_im003_checks.py instead. Listed by
+#: EXACT path, never by prefix: an `im003_` prefix rule also swallowed the 19
+#: invalid_im003 fixtures, which that runner does not scan, so 19 files would
+#: have gone unscanned by anything.
+IM003_REPORTS_SCANNED_ELSEWHERE = frozenset({
+    "reports/im003_impact_analysis_v1.json",
+    "reports/im003_decision_package_v1.json",
+})
+
 #: Strings that would otherwise trip a pattern, each with the reason. Empty is
 #: the correct state: an entry here is an admission the scan is imprecise, so it
 #: has to be written down rather than folded silently into a regex.
@@ -407,6 +416,16 @@ def content_safety():
                     continue
                 path = os.path.join(dirpath, filename)
                 relative = os.path.relpath(path, repo_path())
+                if relative in IM003_REPORTS_SCANNED_ELSEWHERE:
+                    # These two are scanned by tools/run_im003_checks.py with
+                    # the same patterns and the same positive controls.
+                    #
+                    # Named exactly, never by prefix: an `im003_` prefix rule
+                    # also swallowed the 19 invalid_im003 FIXTURES, which that
+                    # runner does not scan, so 19 files would have gone
+                    # unscanned by anything. The fixtures stay in this scan.
+                    excluded.append(relative)
+                    continue
                 if os.path.abspath(path) == os.path.abspath(REPORT_PATH):
                     # This scan's own output. It necessarily contains every
                     # pattern LABEL ("date of birth", "patient identifier") and
@@ -428,8 +447,10 @@ def content_safety():
         "files_scanned": scanned,
         "files_excluded": excluded,
         "exclusion_reason": (
-            "Only this report itself, which contains the scanner's own pattern labels "
-            "and would therefore always match. No knowledge artifact is excluded."
+            "This report itself, which contains the scanner's own pattern labels and "
+            "would therefore always match; and the IM-003 reports, which are scanned "
+            "by tools/run_im003_checks.py with the same patterns and controls. No "
+            "knowledge artifact goes unscanned."
         ),
         "hits": hits,
         "control_failures": control_failures,
