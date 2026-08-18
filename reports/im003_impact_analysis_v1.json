@@ -1,0 +1,5504 @@
+{
+  "_metadata": {
+    "report_id": "im003_impact_analysis",
+    "version": "1",
+    "phase": "I2 / W3 Step 6",
+    "generator": "tools/report_im003_impact.py",
+    "authoritative": true,
+    "status": "analysis_only_no_decision_approved",
+    "im_003_implemented": false,
+    "im_003_status": "deferred_pending_product_and_clinical_review",
+    "description": "Impact analysis for IM-003 additive re-branching. Analysis only: nothing here implements, enables or approves it, and no candidate, schema or runtime artifact is modified.",
+    "baseline": {
+      "knowledge_base_commit": "0193a03d40f707460e2a8c799221a864776f1b9d",
+      "mobile_develop": "d820d6cfc3b96cbbba9d434ef4684b9a36140991",
+      "mobile_source_repository": "Wellapath-org/wellapath-mobile",
+      "mobile_question_source_commit": "a269168e2ed9b3b1c0453797dce5c9f303366854",
+      "vendored_baseline": [
+        {
+          "file": "baseline/questions_v1/followup_question_map.vendored.dart",
+          "sha256": "074b5374b5729e613ab55490d1e483191fc1cf54823fae3d5cc008ba0710047d"
+        },
+        {
+          "file": "baseline/questions_v1/red_flag_clarifiers.vendored.dart",
+          "sha256": "f8050551af886ea98f6376052a5a53fcdaa0fb8ccbeec19f3ab0440dd17e922c"
+        },
+        {
+          "file": "baseline/questions_v1/symptom_display_map.vendored.dart",
+          "sha256": "95197adc3a9ff6c03c3e64e9c3acd6fe5e93541802acee77e5fce971a84acd8b"
+        },
+        {
+          "file": "baseline/questions_v1/question_engine.vendored.dart",
+          "sha256": "83e954acec978a15c390ae5e92704c6cbcdcc1ff173238c840053cafe834fdd5"
+        },
+        {
+          "file": "baseline/questions_v1/assessment_controller.vendored.dart",
+          "sha256": "19dd1208a6efaf83b43545f7cadf904492c78a3ce30707938ecce35ddc493a0c"
+        },
+        {
+          "file": "baseline/questions_v1/followup_screen.vendored.dart",
+          "sha256": "7805228d29b544ce42638c4ebf18a17b4dc4a7d092dfbe6a19b77625c6ffba4c"
+        },
+        {
+          "file": "baseline/questions_v1/followup_question.vendored.dart",
+          "sha256": "d81f19adf6bbedae4d74175d6f5ba08ca6ef48374ae4646b8d6853c732f63ae0"
+        }
+      ],
+      "candidates": {
+        "question_flow_1_0": "c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998",
+        "question_flow_1_1": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b"
+      },
+      "frozen_clinical_inputs": {
+        "kb_v2_4": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b",
+        "rules_v2_2": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4",
+        "token_dictionary_v1_1": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+      },
+      "path_limit": 5,
+      "static_planning_semantics": "FollowupScreen.initState computes the question list once from the symptom set selected before the screen opened. No answer changes eligibility.",
+      "immediate_red_flag_semantics": "QB-002, merged and unconditional: a red-flag-affecting answer is evaluated immediately, before the next ordinary question. IM-003 does not change this and must not.",
+      "selectable_picker_tokens": 121,
+      "followup_map_tokens": 18
+    },
+    "scope": {
+      "mode_analysed": "additive_only",
+      "modes": {
+        "additive_only": "After an answer, newly satisfied triggers make further questions eligible. Nothing already eligible is withdrawn. The token set only grows, so the iteration is monotone.",
+        "removal_invalidation": "A question that was eligible becomes ineligible and is withdrawn. NOT monotone, NOT analysed, NOT proposed.",
+        "answer_edit_driven": "Changing an earlier answer re-derives state and may withdraw or add questions. Requires the editing model the MVP does not have. NOT analysed.",
+        "restoration_driven": "Re-deriving a flow from persisted answers on resume. Requires the persistence model the MVP does not have. NOT analysed."
+      },
+      "out_of_scope": [
+        "removal_invalidation",
+        "answer_edit_driven",
+        "restoration_driven"
+      ]
+    },
+    "what_is_not_computed_here": {
+      "score_values": "requires Mobile ScoringEngine",
+      "ranked_conditions": "requires Mobile ScoringEngine",
+      "top_condition": "requires Mobile ScoringEngine",
+      "urgency": "requires Mobile ScoringEngine and UrgencyDeterminer",
+      "why": "A Python scoring model was written and validated against the 239-case bank. It reproduced 234/239 top conditions and 217/239 urgencies \u2014 it does not agree with the shipped engine. Publishing IM-003 deltas from it would be worse than publishing none, so the exact scoring-INPUT delta is published instead and the Mobile harness is specified in the handoff.",
+      "model_validation_attempt": {
+        "top_condition_agreement": "234/239",
+        "urgency_agreement": "217/239",
+        "used": false
+      }
+    }
+  },
+  "trigger_graph": {
+    "nodes": [
+      "abdominal_cramps",
+      "body_pain",
+      "chest_indrawing_severe",
+      "chills",
+      "cough",
+      "dark_urine",
+      "dizziness",
+      "fast_breathing_child",
+      "fatigue",
+      "fever",
+      "headache",
+      "nausea",
+      "pain",
+      "sweating",
+      "swelling",
+      "vomiting",
+      "watery_stool",
+      "weakness"
+    ],
+    "node_count": 18,
+    "edge_count": 56,
+    "edges_are_the_declared_pairs": true,
+    "cycles": {
+      "two_cycles": [
+        [
+          "abdominal_cramps",
+          "nausea"
+        ],
+        [
+          "abdominal_cramps",
+          "vomiting"
+        ],
+        [
+          "abdominal_cramps",
+          "watery_stool"
+        ],
+        [
+          "body_pain",
+          "fatigue"
+        ],
+        [
+          "body_pain",
+          "fever"
+        ],
+        [
+          "chills",
+          "fever"
+        ],
+        [
+          "chills",
+          "sweating"
+        ],
+        [
+          "cough",
+          "fast_breathing_child"
+        ],
+        [
+          "dizziness",
+          "headache"
+        ],
+        [
+          "dizziness",
+          "weakness"
+        ],
+        [
+          "fatigue",
+          "weakness"
+        ],
+        [
+          "fever",
+          "nausea"
+        ],
+        [
+          "fever",
+          "sweating"
+        ],
+        [
+          "fever",
+          "weakness"
+        ],
+        [
+          "nausea",
+          "vomiting"
+        ]
+      ],
+      "self_loops": []
+    },
+    "two_cycle_count": 15,
+    "self_loop_count": 0,
+    "monotone_under_additive_rebranching": true,
+    "monotonicity_violations": [],
+    "monotonicity_proof": "Checked over every ordered pair of seed tokens: adding a seed never shrinks the reachable set. Combined with a finite node set this gives termination at a fixed point, so the cycles above do not imply non-termination. Proved for ADDITIVE mode only \u2014 removal re-branching is not monotone and is out of scope.",
+    "max_closure_size": 14,
+    "max_convergence_depth": 5,
+    "branch_explosion": {
+      "unbounded": false,
+      "bound": "The closure is bounded by the 18 map-key tokens, and the presented question count is bounded by the path limit of 5. Grouping (contract 1.1) collapses each role to one presented question, so the presented follow-up count cannot exceed 3 clarifiers + 3 grouped roles."
+    }
+  },
+  "pair_reconciliation": {
+    "declared_in_candidate": 56,
+    "recomputed": 56,
+    "reconciles": true,
+    "note": "Recomputed from kFollowupQuestionMap, not carried over. The 56 pairs are exactly the edges of the trigger graph.",
+    "pairs": [
+      {
+        "source_question": "followup_question_map.abdominal_cramps.additional_symptoms",
+        "source_token": "abdominal_cramps",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.abdominal_cramps.additional_symptoms",
+        "source_token": "abdominal_cramps",
+        "answer_option": "vomiting",
+        "produced_token": "vomiting",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you been vomiting?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "nausea"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "vomiting",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "cholera": 7,
+            "gastroenteritis": 7,
+            "csm": 5,
+            "yellow_fever": 5,
+            "diabetes": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.abdominal_cramps.additional_symptoms",
+        "source_token": "abdominal_cramps",
+        "answer_option": "watery_stool",
+        "produced_token": "watery_stool",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had watery stool?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "nausea",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "watery_stool",
+          "scoring_conditions": [
+            "acute_diarrhoea"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 8,
+          "weight_by_condition": {
+            "acute_diarrhoea": 8
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.body_pain.additional_symptoms",
+        "source_token": "body_pain",
+        "answer_option": "fatigue",
+        "produced_token": "fatigue",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this fatigue?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "fatigue",
+          "scoring_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "fever_unknown": 5,
+            "hepatitis_b": 5,
+            "sth": 5,
+            "mpox": 5,
+            "diabetes": 5,
+            "anaemia": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.body_pain.additional_symptoms",
+        "source_token": "body_pain",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.body_pain.additional_symptoms",
+        "source_token": "body_pain",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+        "source_token": "chest_indrawing_severe",
+        "answer_option": "cough",
+        "produced_token": "cough",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is your cough?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this cough?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "fast_breathing_child",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "cough",
+          "scoring_conditions": [
+            "measles",
+            "pneumonia_children",
+            "sari",
+            "urti"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "urti": 7,
+            "measles": 5,
+            "sari": 7,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "measles",
+            "pneumonia_children",
+            "sari",
+            "urti"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+        "source_token": "chest_indrawing_severe",
+        "answer_option": "fast_breathing_child",
+        "produced_token": "fast_breathing_child",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is the fast breathing?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "cough",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "fast_breathing_child",
+          "scoring_conditions": [
+            "pneumonia_children"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "pneumonia_children": 9
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "pneumonia_children"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+        "source_token": "chest_indrawing_severe",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chills.additional_symptoms",
+        "source_token": "chills",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chills.additional_symptoms",
+        "source_token": "chills",
+        "answer_option": "sweating",
+        "produced_token": "sweating",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had excessive sweating?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "chills",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "sweating",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.chills.additional_symptoms",
+        "source_token": "chills",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.cough.additional_symptoms",
+        "source_token": "cough",
+        "answer_option": "fast_breathing_child",
+        "produced_token": "fast_breathing_child",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is the fast breathing?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "cough",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "fast_breathing_child",
+          "scoring_conditions": [
+            "pneumonia_children"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "pneumonia_children": 9
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "pneumonia_children"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.cough.additional_symptoms",
+        "source_token": "cough",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.cough.additional_symptoms",
+        "source_token": "cough",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dark_urine.additional_symptoms",
+        "source_token": "dark_urine",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dark_urine.additional_symptoms",
+        "source_token": "dark_urine",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dark_urine.additional_symptoms",
+        "source_token": "dark_urine",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dizziness.additional_symptoms",
+        "source_token": "dizziness",
+        "answer_option": "fatigue",
+        "produced_token": "fatigue",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this fatigue?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "fatigue",
+          "scoring_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "fever_unknown": 5,
+            "hepatitis_b": 5,
+            "sth": 5,
+            "mpox": 5,
+            "diabetes": 5,
+            "anaemia": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dizziness.additional_symptoms",
+        "source_token": "dizziness",
+        "answer_option": "headache",
+        "produced_token": "headache",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is your headache?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this headache?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fever",
+          "nausea",
+          "vomiting",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "headache",
+          "scoring_conditions": [
+            "headache",
+            "hypertension",
+            "lassa_fever",
+            "malaria",
+            "typhoid_fever",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 6,
+            "typhoid_fever": 5,
+            "lassa_fever": 5,
+            "yellow_fever": 5,
+            "hypertension": 5,
+            "headache": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "headache",
+            "hypertension",
+            "lassa_fever",
+            "malaria",
+            "typhoid_fever",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.dizziness.additional_symptoms",
+        "source_token": "dizziness",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fast_breathing_child.additional_symptoms",
+        "source_token": "fast_breathing_child",
+        "answer_option": "cough",
+        "produced_token": "cough",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is your cough?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this cough?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "fast_breathing_child",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "cough",
+          "scoring_conditions": [
+            "measles",
+            "pneumonia_children",
+            "sari",
+            "urti"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "urti": 7,
+            "measles": 5,
+            "sari": 7,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "measles",
+            "pneumonia_children",
+            "sari",
+            "urti"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fast_breathing_child.additional_symptoms",
+        "source_token": "fast_breathing_child",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fast_breathing_child.additional_symptoms",
+        "source_token": "fast_breathing_child",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fatigue.additional_symptoms",
+        "source_token": "fatigue",
+        "answer_option": "body_pain",
+        "produced_token": "body_pain",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is your body pain?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this body pain?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "fatigue",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "body_pain",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fatigue.additional_symptoms",
+        "source_token": "fatigue",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fatigue.additional_symptoms",
+        "source_token": "fatigue",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fever.additional_symptoms",
+        "source_token": "fever",
+        "answer_option": "body_pain",
+        "produced_token": "body_pain",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is your body pain?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this body pain?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "fatigue",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "body_pain",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fever.additional_symptoms",
+        "source_token": "fever",
+        "answer_option": "chills",
+        "produced_token": "chills",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had chills?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "fever",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "chills",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "malaria": 7
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fever.additional_symptoms",
+        "source_token": "fever",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fever.additional_symptoms",
+        "source_token": "fever",
+        "answer_option": "sweating",
+        "produced_token": "sweating",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had excessive sweating?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "chills",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "sweating",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.fever.additional_symptoms",
+        "source_token": "fever",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.headache.additional_symptoms",
+        "source_token": "headache",
+        "answer_option": "dizziness",
+        "produced_token": "dizziness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt dizzy?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "fatigue",
+          "headache",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "dizziness",
+          "scoring_conditions": [
+            "anaemia",
+            "cardio_symptoms",
+            "hypertension",
+            "pregnancy_complications"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "hypertension": 5,
+            "anaemia": 5,
+            "cardio_symptoms": 5,
+            "pregnancy_complications": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "cardio_symptoms",
+            "hypertension",
+            "pregnancy_complications"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.headache.additional_symptoms",
+        "source_token": "headache",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.headache.additional_symptoms",
+        "source_token": "headache",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.headache.additional_symptoms",
+        "source_token": "headache",
+        "answer_option": "vomiting",
+        "produced_token": "vomiting",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you been vomiting?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "nausea"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "vomiting",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "cholera": 7,
+            "gastroenteritis": 7,
+            "csm": 5,
+            "yellow_fever": 5,
+            "diabetes": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.headache.additional_symptoms",
+        "source_token": "headache",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.nausea.additional_symptoms",
+        "source_token": "nausea",
+        "answer_option": "abdominal_cramps",
+        "produced_token": "abdominal_cramps",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe are your abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had these abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "nausea",
+          "vomiting",
+          "watery_stool"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "abdominal_cramps",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ],
+          "scoring_condition_count": 3,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "dysentery": 6,
+            "gastroenteritis": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.nausea.additional_symptoms",
+        "source_token": "nausea",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.nausea.additional_symptoms",
+        "source_token": "nausea",
+        "answer_option": "vomiting",
+        "produced_token": "vomiting",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you been vomiting?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "nausea"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "vomiting",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "cholera": 7,
+            "gastroenteritis": 7,
+            "csm": 5,
+            "yellow_fever": 5,
+            "diabetes": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.pain.additional_symptoms",
+        "source_token": "pain",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.pain.additional_symptoms",
+        "source_token": "pain",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.sweating.additional_symptoms",
+        "source_token": "sweating",
+        "answer_option": "chills",
+        "produced_token": "chills",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had chills?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "fever",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "chills",
+          "scoring_conditions": [
+            "malaria"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "malaria": 7
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "malaria"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.sweating.additional_symptoms",
+        "source_token": "sweating",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.sweating.additional_symptoms",
+        "source_token": "sweating",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.swelling.additional_symptoms",
+        "source_token": "swelling",
+        "answer_option": "pain",
+        "produced_token": "pain",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe is this pain?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had this pain?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 2
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 2,
+        "clinical_references": {
+          "token": "pain",
+          "scoring_conditions": [
+            "minor_injury"
+          ],
+          "scoring_condition_count": 1,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "minor_injury": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "minor_injury"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.swelling.additional_symptoms",
+        "source_token": "swelling",
+        "answer_option": "weakness",
+        "produced_token": "weakness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this weakness?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "weakness",
+          "scoring_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 5,
+          "weight_by_condition": {
+            "malaria": 5,
+            "dysentery": 5,
+            "typhoid_fever": 5,
+            "anaemia": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "dysentery",
+            "malaria",
+            "typhoid_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.vomiting.additional_symptoms",
+        "source_token": "vomiting",
+        "answer_option": "abdominal_cramps",
+        "produced_token": "abdominal_cramps",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe are your abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had these abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "nausea",
+          "vomiting",
+          "watery_stool"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "abdominal_cramps",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ],
+          "scoring_condition_count": 3,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "dysentery": 6,
+            "gastroenteritis": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.vomiting.additional_symptoms",
+        "source_token": "vomiting",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.vomiting.additional_symptoms",
+        "source_token": "vomiting",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.watery_stool.additional_symptoms",
+        "source_token": "watery_stool",
+        "answer_option": "abdominal_cramps",
+        "produced_token": "abdominal_cramps",
+        "newly_eligible_questions": [
+          {
+            "role": "severity",
+            "question_text": "How severe are your abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "duration",
+            "question_text": "How long have you had these abdominal cramps?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 3,
+        "newly_reachable_option_tokens": [
+          "nausea",
+          "vomiting",
+          "watery_stool"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "abdominal_cramps",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ],
+          "scoring_condition_count": 3,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "dysentery": 6,
+            "gastroenteritis": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "dysentery",
+            "gastroenteritis"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.watery_stool.additional_symptoms",
+        "source_token": "watery_stool",
+        "answer_option": "nausea",
+        "produced_token": "nausea",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had nausea?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "nausea",
+          "scoring_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 7,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "malaria": 4,
+            "acute_diarrhoea": 4,
+            "intestinal_worms": 4,
+            "gastroenteritis": 6,
+            "hepatitis_b": 4,
+            "yellow_fever": 4,
+            "abdominal_pain": 4
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "abdominal_pain",
+            "acute_diarrhoea",
+            "gastroenteritis",
+            "hepatitis_b",
+            "intestinal_worms",
+            "malaria",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.watery_stool.additional_symptoms",
+        "source_token": "watery_stool",
+        "answer_option": "vomiting",
+        "produced_token": "vomiting",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you been vomiting?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "abdominal_cramps",
+          "fever",
+          "nausea"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "vomiting",
+          "scoring_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 7,
+          "weight_by_condition": {
+            "acute_diarrhoea": 5,
+            "cholera": 7,
+            "gastroenteritis": 7,
+            "csm": 5,
+            "yellow_fever": 5,
+            "diabetes": 5
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "acute_diarrhoea",
+            "cholera",
+            "csm",
+            "diabetes",
+            "gastroenteritis",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.weakness.additional_symptoms",
+        "source_token": "weakness",
+        "answer_option": "dizziness",
+        "produced_token": "dizziness",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt dizzy?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "fatigue",
+          "headache",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "dizziness",
+          "scoring_conditions": [
+            "anaemia",
+            "cardio_symptoms",
+            "hypertension",
+            "pregnancy_complications"
+          ],
+          "scoring_condition_count": 4,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "hypertension": 5,
+            "anaemia": 5,
+            "cardio_symptoms": 5,
+            "pregnancy_complications": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "cardio_symptoms",
+            "hypertension",
+            "pregnancy_complications"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.weakness.additional_symptoms",
+        "source_token": "weakness",
+        "answer_option": "fatigue",
+        "produced_token": "fatigue",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you felt this fatigue?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 3
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "fever",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 3,
+        "clinical_references": {
+          "token": "fatigue",
+          "scoring_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ],
+          "scoring_condition_count": 6,
+          "max_scoring_weight": 6,
+          "weight_by_condition": {
+            "fever_unknown": 5,
+            "hepatitis_b": 5,
+            "sth": 5,
+            "mpox": 5,
+            "diabetes": 5,
+            "anaemia": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "anaemia",
+            "diabetes",
+            "fever_unknown",
+            "hepatitis_b",
+            "mpox",
+            "sth"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      },
+      {
+        "source_question": "followup_question_map.weakness.additional_symptoms",
+        "source_token": "weakness",
+        "answer_option": "fever",
+        "produced_token": "fever",
+        "newly_eligible_questions": [
+          {
+            "role": "duration",
+            "question_text": "How long have you had this fever?",
+            "option_count": 0
+          },
+          {
+            "role": "additionalSymptoms",
+            "question_text": "Do you have any of these symptoms too?",
+            "option_count": 5
+          }
+        ],
+        "newly_eligible_count": 2,
+        "newly_reachable_option_tokens": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "newly_reachable_option_token_count": 5,
+        "clinical_references": {
+          "token": "fever",
+          "scoring_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ],
+          "scoring_condition_count": 15,
+          "max_scoring_weight": 9,
+          "weight_by_condition": {
+            "malaria": 9,
+            "dysentery": 6,
+            "urti": 5,
+            "lower_respiratory_infection": 6,
+            "uti": 5,
+            "ear_infections": 5,
+            "measles": 7,
+            "tuberculosis_suspected": 5,
+            "sari": 6,
+            "vhf_suspected": 6,
+            "lassa_fever": 7,
+            "csm": 7,
+            "yellow_fever": 7,
+            "mpox": 6,
+            "pneumonia_children": 6
+          },
+          "global_red_flag_rules": [],
+          "condition_specific_red_flags": [],
+          "raises_clarifiers": [],
+          "is_a_clarifier_red_flag_token": false,
+          "demographic_modifier_conditions": [
+            "csm",
+            "dysentery",
+            "ear_infections",
+            "lassa_fever",
+            "lower_respiratory_infection",
+            "malaria",
+            "measles",
+            "mpox",
+            "pneumonia_children",
+            "sari",
+            "tuberculosis_suspected",
+            "urti",
+            "uti",
+            "vhf_suspected",
+            "yellow_fever"
+          ]
+        },
+        "red_flag_pathways": [],
+        "impact_class": "scoring_affecting_reachability",
+        "reachable_without_im003": false,
+        "reachable_with_additive_rebranching": true
+      }
+    ]
+  },
+  "red_flag_cross_reference": {
+    "newly_reachable_tokens": [
+      "abdominal_cramps",
+      "body_pain",
+      "chills",
+      "cough",
+      "dizziness",
+      "fast_breathing_child",
+      "fatigue",
+      "fever",
+      "headache",
+      "nausea",
+      "sweating",
+      "vomiting",
+      "watery_stool",
+      "weakness"
+    ],
+    "newly_reachable_token_count": 14,
+    "checked_pathways": [
+      "global_red_flag_rules (rules.ng.v2.2 rules[].token)",
+      "condition_specific_red_flags (kb.ng.v2.4 conditions[].red_flags)",
+      "red_flag_clarifier_triggers (kRedFlagClarifiers[].triggerTokens)",
+      "clarifier_red_flag_tokens (kRedFlagClarifiers[].redFlagToken)"
+    ],
+    "not_relying_on_clarifier_membership_alone": true,
+    "direct_global_red_flag_tokens": [],
+    "condition_specific_red_flag_tokens": [],
+    "tokens_that_raise_a_clarifier": [],
+    "red_flag_affecting_count": 0,
+    "scoring_affecting_count": 14,
+    "no_red_flag_relevance_count": 14,
+    "safety_critical_decision_required": false,
+    "combination_only_red_flags": {
+      "checked": true,
+      "found": [],
+      "basis": "rules.ng.v2.2 keys every rule on a SINGLE token; no rule requires a combination. Condition red_flags are also single tokens. There is therefore no combination-only red-flag pathway to model in the current artifacts."
+    },
+    "tokens": [
+      {
+        "token": "abdominal_cramps",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "acute_diarrhoea",
+          "dysentery",
+          "gastroenteritis"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "acute_diarrhoea",
+          "dysentery",
+          "gastroenteritis"
+        ]
+      },
+      {
+        "token": "body_pain",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "malaria"
+        ],
+        "max_scoring_weight": 5,
+        "demographic_modifier_conditions": [
+          "malaria"
+        ]
+      },
+      {
+        "token": "chills",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "malaria"
+        ],
+        "max_scoring_weight": 7,
+        "demographic_modifier_conditions": [
+          "malaria"
+        ]
+      },
+      {
+        "token": "cough",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "measles",
+          "pneumonia_children",
+          "sari",
+          "urti"
+        ],
+        "max_scoring_weight": 7,
+        "demographic_modifier_conditions": [
+          "measles",
+          "pneumonia_children",
+          "sari",
+          "urti"
+        ]
+      },
+      {
+        "token": "dizziness",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "anaemia",
+          "cardio_symptoms",
+          "hypertension",
+          "pregnancy_complications"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "anaemia",
+          "cardio_symptoms",
+          "hypertension",
+          "pregnancy_complications"
+        ]
+      },
+      {
+        "token": "fast_breathing_child",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "pneumonia_children"
+        ],
+        "max_scoring_weight": 9,
+        "demographic_modifier_conditions": [
+          "pneumonia_children"
+        ]
+      },
+      {
+        "token": "fatigue",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "anaemia",
+          "diabetes",
+          "fever_unknown",
+          "hepatitis_b",
+          "mpox",
+          "sth"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "anaemia",
+          "diabetes",
+          "fever_unknown",
+          "hepatitis_b",
+          "mpox",
+          "sth"
+        ]
+      },
+      {
+        "token": "fever",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "csm",
+          "dysentery",
+          "ear_infections",
+          "lassa_fever",
+          "lower_respiratory_infection",
+          "malaria",
+          "measles",
+          "mpox",
+          "pneumonia_children",
+          "sari",
+          "tuberculosis_suspected",
+          "urti",
+          "uti",
+          "vhf_suspected",
+          "yellow_fever"
+        ],
+        "max_scoring_weight": 9,
+        "demographic_modifier_conditions": [
+          "csm",
+          "dysentery",
+          "ear_infections",
+          "lassa_fever",
+          "lower_respiratory_infection",
+          "malaria",
+          "measles",
+          "mpox",
+          "pneumonia_children",
+          "sari",
+          "tuberculosis_suspected",
+          "urti",
+          "uti",
+          "vhf_suspected",
+          "yellow_fever"
+        ]
+      },
+      {
+        "token": "headache",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "headache",
+          "hypertension",
+          "lassa_fever",
+          "malaria",
+          "typhoid_fever",
+          "yellow_fever"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "headache",
+          "hypertension",
+          "lassa_fever",
+          "malaria",
+          "typhoid_fever",
+          "yellow_fever"
+        ]
+      },
+      {
+        "token": "nausea",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "abdominal_pain",
+          "acute_diarrhoea",
+          "gastroenteritis",
+          "hepatitis_b",
+          "intestinal_worms",
+          "malaria",
+          "yellow_fever"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "abdominal_pain",
+          "acute_diarrhoea",
+          "gastroenteritis",
+          "hepatitis_b",
+          "intestinal_worms",
+          "malaria",
+          "yellow_fever"
+        ]
+      },
+      {
+        "token": "sweating",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "malaria"
+        ],
+        "max_scoring_weight": 6,
+        "demographic_modifier_conditions": [
+          "malaria"
+        ]
+      },
+      {
+        "token": "vomiting",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "acute_diarrhoea",
+          "cholera",
+          "csm",
+          "diabetes",
+          "gastroenteritis",
+          "yellow_fever"
+        ],
+        "max_scoring_weight": 7,
+        "demographic_modifier_conditions": [
+          "acute_diarrhoea",
+          "cholera",
+          "csm",
+          "diabetes",
+          "gastroenteritis",
+          "yellow_fever"
+        ]
+      },
+      {
+        "token": "watery_stool",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "acute_diarrhoea"
+        ],
+        "max_scoring_weight": 8,
+        "demographic_modifier_conditions": [
+          "acute_diarrhoea"
+        ]
+      },
+      {
+        "token": "weakness",
+        "red_flag_pathways": [],
+        "is_red_flag_affecting": false,
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "is_a_clarifier_red_flag_token": false,
+        "scoring_conditions": [
+          "anaemia",
+          "dysentery",
+          "malaria",
+          "typhoid_fever"
+        ],
+        "max_scoring_weight": 5,
+        "demographic_modifier_conditions": [
+          "anaemia",
+          "dysentery",
+          "malaria",
+          "typhoid_fever"
+        ]
+      }
+    ]
+  },
+  "inert_subset_analysis": {
+    "severity_and_duration_answer_tokens": [
+      {
+        "answer_role": "severity",
+        "token": "mild",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "severity",
+        "token": "moderate",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "severity",
+        "token": "severe",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "severity",
+        "token": "very_severe",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "duration",
+        "token": "days_1_3",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "duration",
+        "token": "days_3_7",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "duration",
+        "token": "days_7_plus",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      },
+      {
+        "answer_role": "duration",
+        "token": "weeks_2_plus",
+        "scoring_conditions": [],
+        "global_red_flag_rules": [],
+        "condition_specific_red_flags": [],
+        "raises_clarifiers": [],
+        "demographic_modifier_conditions": [],
+        "inert_against_kb_2_4_and_rules_2_2": true
+      }
+    ],
+    "all_inert_against_current_artifacts": true,
+    "checked_against": {
+      "kb": "kb.ng.v2.4.json",
+      "rules": "rules.ng.v2.2.json",
+      "red_flag_clarifiers": "kRedFlagClarifiers",
+      "demographic_modifiers": "kb conditions[].demographic_modifiers",
+      "question_triggers": "kFollowupQuestionMap trigger tokens"
+    },
+    "inert_today_is_not_inert_forever": "These tokens carry no scoring weight and no red-flag reference IN kb 2.4 AND rules 2.2. That is a property of the CURRENT artifacts, not of the tokens. A future KB revision that gives `severe` or `days_7_plus` a weight would make this subset clinically active with no change to the question flow, so any approval of an inert subset must be re-validated on every clinical artifact change and must be enforced by a validator rather than by this sentence."
+  },
+  "scoring_input_delta": {
+    "note": "The exact weight a newly reachable token would contribute to each condition. This is the scoring INPUT delta; the resulting score, ranking and urgency require the Mobile engine.",
+    "conditions_touched": 30,
+    "conditions_touched_of_total": "30 of 50",
+    "by_condition": [
+      {
+        "condition_id": "malaria",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 9
+          },
+          {
+            "token": "chills",
+            "weight": 7
+          },
+          {
+            "token": "headache",
+            "weight": 6
+          },
+          {
+            "token": "sweating",
+            "weight": 6
+          },
+          {
+            "token": "body_pain",
+            "weight": 5
+          },
+          {
+            "token": "weakness",
+            "weight": 5
+          },
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 42,
+        "token_count": 7
+      },
+      {
+        "condition_id": "acute_diarrhoea",
+        "tokens": [
+          {
+            "token": "watery_stool",
+            "weight": 8
+          },
+          {
+            "token": "abdominal_cramps",
+            "weight": 5
+          },
+          {
+            "token": "vomiting",
+            "weight": 5
+          },
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 22,
+        "token_count": 4
+      },
+      {
+        "condition_id": "pneumonia_children",
+        "tokens": [
+          {
+            "token": "fast_breathing_child",
+            "weight": 9
+          },
+          {
+            "token": "cough",
+            "weight": 6
+          },
+          {
+            "token": "fever",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 21,
+        "token_count": 3
+      },
+      {
+        "condition_id": "yellow_fever",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 7
+          },
+          {
+            "token": "headache",
+            "weight": 5
+          },
+          {
+            "token": "vomiting",
+            "weight": 5
+          },
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 21,
+        "token_count": 4
+      },
+      {
+        "condition_id": "gastroenteritis",
+        "tokens": [
+          {
+            "token": "vomiting",
+            "weight": 7
+          },
+          {
+            "token": "nausea",
+            "weight": 6
+          },
+          {
+            "token": "abdominal_cramps",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 18,
+        "token_count": 3
+      },
+      {
+        "condition_id": "dysentery",
+        "tokens": [
+          {
+            "token": "abdominal_cramps",
+            "weight": 6
+          },
+          {
+            "token": "fever",
+            "weight": 6
+          },
+          {
+            "token": "weakness",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 17,
+        "token_count": 3
+      },
+      {
+        "condition_id": "anaemia",
+        "tokens": [
+          {
+            "token": "fatigue",
+            "weight": 6
+          },
+          {
+            "token": "dizziness",
+            "weight": 5
+          },
+          {
+            "token": "weakness",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 16,
+        "token_count": 3
+      },
+      {
+        "condition_id": "sari",
+        "tokens": [
+          {
+            "token": "cough",
+            "weight": 7
+          },
+          {
+            "token": "fever",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 13,
+        "token_count": 2
+      },
+      {
+        "condition_id": "urti",
+        "tokens": [
+          {
+            "token": "cough",
+            "weight": 7
+          },
+          {
+            "token": "fever",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 12,
+        "token_count": 2
+      },
+      {
+        "condition_id": "measles",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 7
+          },
+          {
+            "token": "cough",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 12,
+        "token_count": 2
+      },
+      {
+        "condition_id": "lassa_fever",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 7
+          },
+          {
+            "token": "headache",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 12,
+        "token_count": 2
+      },
+      {
+        "condition_id": "csm",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 7
+          },
+          {
+            "token": "vomiting",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 12,
+        "token_count": 2
+      },
+      {
+        "condition_id": "mpox",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 6
+          },
+          {
+            "token": "fatigue",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 11,
+        "token_count": 2
+      },
+      {
+        "condition_id": "hypertension",
+        "tokens": [
+          {
+            "token": "dizziness",
+            "weight": 5
+          },
+          {
+            "token": "headache",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 10,
+        "token_count": 2
+      },
+      {
+        "condition_id": "diabetes",
+        "tokens": [
+          {
+            "token": "fatigue",
+            "weight": 5
+          },
+          {
+            "token": "vomiting",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 10,
+        "token_count": 2
+      },
+      {
+        "condition_id": "typhoid_fever",
+        "tokens": [
+          {
+            "token": "headache",
+            "weight": 5
+          },
+          {
+            "token": "weakness",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 10,
+        "token_count": 2
+      },
+      {
+        "condition_id": "hepatitis_b",
+        "tokens": [
+          {
+            "token": "fatigue",
+            "weight": 5
+          },
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 9,
+        "token_count": 2
+      },
+      {
+        "condition_id": "cholera",
+        "tokens": [
+          {
+            "token": "vomiting",
+            "weight": 7
+          }
+        ],
+        "max_added_weight": 7,
+        "token_count": 1
+      },
+      {
+        "condition_id": "pregnancy_complications",
+        "tokens": [
+          {
+            "token": "dizziness",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 6,
+        "token_count": 1
+      },
+      {
+        "condition_id": "lower_respiratory_infection",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 6,
+        "token_count": 1
+      },
+      {
+        "condition_id": "vhf_suspected",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 6,
+        "token_count": 1
+      },
+      {
+        "condition_id": "headache",
+        "tokens": [
+          {
+            "token": "headache",
+            "weight": 6
+          }
+        ],
+        "max_added_weight": 6,
+        "token_count": 1
+      },
+      {
+        "condition_id": "cardio_symptoms",
+        "tokens": [
+          {
+            "token": "dizziness",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "fever_unknown",
+        "tokens": [
+          {
+            "token": "fatigue",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "sth",
+        "tokens": [
+          {
+            "token": "fatigue",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "uti",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "ear_infections",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "tuberculosis_suspected",
+        "tokens": [
+          {
+            "token": "fever",
+            "weight": 5
+          }
+        ],
+        "max_added_weight": 5,
+        "token_count": 1
+      },
+      {
+        "condition_id": "intestinal_worms",
+        "tokens": [
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 4,
+        "token_count": 1
+      },
+      {
+        "condition_id": "abdominal_pain",
+        "tokens": [
+          {
+            "token": "nausea",
+            "weight": 4
+          }
+        ],
+        "max_added_weight": 4,
+        "token_count": 1
+      }
+    ]
+  },
+  "closure_and_path_effects": {
+    "per_seed": [
+      {
+        "seed_token": "abdominal_cramps",
+        "one_step_targets": [
+          "nausea",
+          "vomiting",
+          "watery_stool"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 5,
+        "questions_eligible_from_seed_alone": 3,
+        "questions_eligible_across_closure": 24,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "body_pain",
+        "one_step_targets": [
+          "fatigue",
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 3,
+        "questions_eligible_across_closure": 24,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "chest_indrawing_severe",
+        "one_step_targets": [
+          "cough",
+          "fast_breathing_child",
+          "fever"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 14,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 1,
+        "questions_eligible_across_closure": 32,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "chills",
+        "one_step_targets": [
+          "fever",
+          "sweating",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "cough",
+        "one_step_targets": [
+          "fast_breathing_child",
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 13,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 3,
+        "questions_eligible_across_closure": 29,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "dark_urine",
+        "one_step_targets": [
+          "fever",
+          "nausea",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 12,
+        "convergence_depth": 3,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 27,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "dizziness",
+        "one_step_targets": [
+          "fatigue",
+          "headache",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "fast_breathing_child",
+        "one_step_targets": [
+          "cough",
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 13,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 30,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "fatigue",
+        "one_step_targets": [
+          "body_pain",
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "fever",
+        "one_step_targets": [
+          "body_pain",
+          "chills",
+          "nausea",
+          "sweating",
+          "weakness"
+        ],
+        "one_step_count": 5,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 3,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "headache",
+        "one_step_targets": [
+          "dizziness",
+          "fever",
+          "nausea",
+          "vomiting",
+          "weakness"
+        ],
+        "one_step_count": 5,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 3,
+        "questions_eligible_from_seed_alone": 3,
+        "questions_eligible_across_closure": 24,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "nausea",
+        "one_step_targets": [
+          "abdominal_cramps",
+          "fever",
+          "vomiting"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "pain",
+        "one_step_targets": [
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 2,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 12,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 3,
+        "questions_eligible_across_closure": 27,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "sweating",
+        "one_step_targets": [
+          "chills",
+          "fever",
+          "weakness"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "swelling",
+        "one_step_targets": [
+          "pain",
+          "weakness"
+        ],
+        "one_step_count": 2,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 13,
+        "convergence_depth": 5,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 30,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "vomiting",
+        "one_step_targets": [
+          "abdominal_cramps",
+          "fever",
+          "nausea"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "watery_stool",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "watery_stool",
+        "one_step_targets": [
+          "abdominal_cramps",
+          "nausea",
+          "vomiting"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "weakness"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 5,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      },
+      {
+        "seed_token": "weakness",
+        "one_step_targets": [
+          "dizziness",
+          "fatigue",
+          "fever"
+        ],
+        "one_step_count": 3,
+        "closure_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "dizziness",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "sweating",
+          "vomiting",
+          "watery_stool"
+        ],
+        "closure_size": 11,
+        "convergence_depth": 4,
+        "questions_eligible_from_seed_alone": 2,
+        "questions_eligible_across_closure": 25,
+        "bounded_by_path_limit": 5,
+        "closure_exceeds_path_limit": true
+      }
+    ],
+    "path_effects": [
+      {
+        "seed_token": "abdominal_cramps",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "body_pain",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "chest_indrawing_severe",
+        "raw_newly_eligible_questions": 33,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "chills",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "cough",
+        "raw_newly_eligible_questions": 32,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "dark_urine",
+        "raw_newly_eligible_questions": 29,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "dizziness",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "fast_breathing_child",
+        "raw_newly_eligible_questions": 32,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "fatigue",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "fever",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "headache",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "nausea",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "pain",
+        "raw_newly_eligible_questions": 30,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "sweating",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "swelling",
+        "raw_newly_eligible_questions": 32,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "vomiting",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "watery_stool",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      },
+      {
+        "seed_token": "weakness",
+        "raw_newly_eligible_questions": 27,
+        "roles_touched": [
+          "additionalSymptoms",
+          "duration",
+          "severity"
+        ],
+        "presented_after_grouping": 3,
+        "static_presented_max": 5,
+        "additional_slots_needed": 0,
+        "can_exceed_limit_without_truncation": true
+      }
+    ],
+    "path_limit": 5,
+    "grouping_applies": true,
+    "grouping_note": "Under contract 1.1 each groupable role presents ONE question, so N newly eligible severity questions still present one severity question. Without grouping, IM-003 would push far harder against the limit."
+  }
+}

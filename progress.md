@@ -598,10 +598,14 @@ artifact changed.** Full write-up: `docs/IM001_OPTION_ORDERING.md`.
 - **Independently reproduced, not copied.** Every count recomputed from this
   repository's captured-Dart oracle and the frozen artifacts;
   `tools/report_im001_option_ordering.py` stores Mobile's figures only to
-  reconcile against and never reads them as an input. **All 22 dimensions agree,
+  reconcile against and never reads them as an input. **All 21 dimensions agree,
   zero unpaired reversed cases.** 2,300 comparisons = 413 identical + 1,665
   wording-and-order + 207 order-only + 15 wording-only. Wording differs on 1,680;
   option ID/label/token-mapping **sequence** differs on **1,872**.
+  *(Narrative count corrected from "22" to 21 in I2/W3 Step 6: the
+  `reconciliation.detail` table has 21 entries and always did. A prose count
+  error only — no evidence array, count, hash, conclusion, candidate or
+  decision changed, and every one of the 21 entries still agrees.)*
 
 - **Every clinical dimension is zero** — option ID set, label set,
   option-to-token mapping set, reachable tokens, scoring reachability, red-flag
@@ -647,3 +651,82 @@ artifact changed.** Full write-up: `docs/IM001_OPTION_ORDERING.md`.
 `~/wellapath-knowledge-base` to `~/dev/wellapath-knowledge-base` during this
 step. Nothing was lost — the move was verified against the remote and every
 frozen hash re-checked.
+
+## I2 / W3 Step 6 — IM-003 dynamic re-branching: impact analysis
+
+**Analysis only. IM-003 is not implemented, not enabled and not approved.** All
+9 decisions are `pending`; IM-003 remains
+`deferred_pending_product_and_clinical_review` and an activation blocker. No
+candidate, schema, question, answer, token effect, red-flag rule, scoring input,
+urgency rule or path limit was modified.
+
+**The 56 pairs reconcile exactly, and they are the trigger graph.** Recomputed
+from `kFollowupQuestionMap` rather than carried over: 18 nodes, **56 edges**,
+declared 56 = recomputed 56. Newly triggerable: 11 severity, 54 duration, 56
+additional-symptoms questions.
+
+**Cycles exist and do not mean non-termination — proved, not assumed.** 15
+two-cycles, 0 self-loops, max closure 14 tokens, max convergence depth 5. Under
+additive-only re-branching the token set is monotone non-decreasing and bounded,
+so a fixed point is reached regardless of cycles. Monotonicity is **checked over
+every ordered pair of seed tokens**, not asserted. It holds for additive mode
+only; removal re-branching is not monotone and is out of scope.
+
+**The safety question, answered across all four pathways.** The earlier IM-003
+note relied on clarifier-trigger membership alone, which is the weaker test — a
+token can be a danger sign through a global rule or a condition's own
+`red_flags` without ever being a clarifier trigger. All 14 newly reachable
+tokens were checked against global rules, condition-specific red flags,
+clarifier triggers and clarifier red-flag tokens: **0, 0, 0, 0**. Combination-only
+red flags cannot exist in the current artifacts — every rule and every condition
+red flag keys on a single token.
+
+**What IM-003 does change is scoring input.** All 14 newly reachable tokens carry
+KB weight, touching **30 of 50 conditions**. The exact per-condition weight delta
+is published.
+
+**What is deliberately not published.** Score, ranked conditions, top condition
+and urgency require Mobile's `ScoringEngine`. A Python model was written and
+validated against the 239-case bank: **234/239 top conditions, 217/239
+urgencies** — it disagrees with the shipped engine on 22 urgencies, so it was
+**not used**. Publishing IM-003 deltas from it would have been worse than
+publishing none. The exact scoring *input* delta is published instead and the
+Mobile harness is specified in the handoff.
+
+**The 239-case bank cannot exercise IM-003.** Every case carries `input_tokens`
+— a final token set — and **no answer sequence, no question order**. IM-003 is a
+property of the sequence. No sequence was invented and the suite is **not**
+claimed to validate adaptive branching.
+
+**Severity and duration tokens are inert today, not permanently.** Zero scoring
+weight, zero red-flag references across kb 2.4, rules 2.2, condition red flags,
+clarifier triggers and demographic modifiers — a property of the current
+artifacts, not of the tokens. Any approval of an inert subset must be
+re-validated on every clinical artifact change and enforced by a validator.
+
+**Recommendation: B with conditions, then C separately** — an engineering
+recommendation, not approval. The inert subset (severity, duration) and the
+scoring-active subset (additional symptoms) carry different risk and must not
+share one approval. The split must be **structurally enforceable** — a
+generator-computed `rebranch_class`, re-validated on every clinical artifact
+change — not a prose convention. No schema change is made here.
+
+**Guards:** 12 fail-closed checks, **18 invalid fixtures, 18 rejected by the
+intended check**. The decision package is bound to the impact report's exact
+hash, so regenerating the evidence invalidates the decisions.
+`tools/run_im003_checks.py` — **21 check groups, 0 failed**.
+
+**Documentation correction.** The IM-001 narrative said "All 22 dimensions
+agree"; the `reconciliation.detail` table has **21** entries and always did.
+Corrected to 21 — a prose count error with no measurement impact: no evidence
+array, count, hash, conclusion, candidate or decision changed.
+
+**One derived report changed as a consequence, disclosed rather than hidden.**
+`reports/question_no_clinical_change_v1_1.json` walks `reports/` and
+`testing/questions/fixtures/` wholesale, so adding this step's artifacts changed
+its scanned-file count (94 -> 113). Its scan now excludes the two IM-003 reports
+**by exact path**, because those are scanned by `run_im003_checks.py` with the
+same patterns and controls. An earlier `im003_` *prefix* rule also swallowed the
+19 invalid fixtures, which that runner does not scan — 19 files would have gone
+unscanned by anything. Mobile's vendored copy is pinned at `cffbe8a6` and is
+unaffected.
