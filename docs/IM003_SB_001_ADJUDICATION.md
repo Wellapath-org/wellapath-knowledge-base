@@ -201,5 +201,7 @@ records six Product decisions (including the provisional invariant that, for
 IM-003, adding evidence must not lower established urgency solely because
 condition ranking changes), and converts questions 1–7 above into seven open
 clinical requirements (IM003-CR-001…007) plus ten required regression case
-classes. No named reviewer was supplied with the record, so its authority is
-Product only; nothing in it is clinical approval.
+classes. The Step 9A authoritative reviewer record names **Ayodele John
+Oluwaseyi (Co-Founder & CEO, WellaPath)** as the Product reviewer; the
+Clinical reviewer is **not assigned**, effective authority is `product`, and
+nothing in the disposition is clinical approval.

@@ -6,11 +6,17 @@
     python3 tools/validate_im003_disposition.py --mutations # prove the checks bite
 
 Fails if:
-  * the reviewer-identity block is missing, or its honesty invariant breaks
-    (a null name with clinical authority claimed, or a supplied name with
-    name_supplied still false);
-  * Product decisions are described as clinical decisions, or clinical
-    authority is claimed without a named, qualified Clinical reviewer;
+  * the Product reviewer's name, title or review date is missing or blank;
+  * effective authority is anything but "product" (never "clinical" or
+    "clinical_and_product"), or a Clinical reviewer is inferred from the
+    source record's combined-role wording;
+  * a Clinical reviewer is fabricated, or clinical_reviewer_status is
+    anything except not_assigned while the reviewer is null, or the Product
+    reviewer is described as a qualified Clinical reviewer without a
+    separate explicit record;
+  * the Step 9 identity-deferral note is reinstated;
+  * Product decisions are described as clinical decisions, or any clinical
+    requirement becomes a Product-approved clinical rule;
   * clinical approval becomes true;
   * IM003-SB-001 is recorded closed, or D004 approved;
   * Mobile PR #76 becomes merge-authorized;
@@ -91,30 +97,58 @@ def run(report=None, blockers=None, package=None):
 
     meta = report["_metadata"]
 
-    # --- A. reviewer identity -------------------------------------------------
+    # --- A. reviewer identity (Step 9A) ----------------------------------------
     identity = report.get("reviewer_identity")
     results.add("A.identity", "reviewer_identity_block_present", identity is not None)
     if identity:
-        results.add("A.identity", "roles_recorded_as_supplied",
-                    identity["roles_as_supplied"] == "Clinical Reviewer + Product Lead",
-                    str(identity.get("roles_as_supplied")))
-        results.add("A.identity", "review_date_recorded",
-                    identity["review_date"] == "2026-08-22")
-        named = identity["named_reviewer"]
-        supplied = identity["name_supplied"]
-        results.add("A.identity", "name_honesty_invariant",
-                    (named is None) == (not supplied),
-                    "named=%r supplied=%r" % (named, supplied))
-        results.add("A.identity", "deferred_name_is_explained",
-                    supplied or bool(identity.get("name_deferred_note")))
-        results.add("A.identity", "no_clinical_authority_without_named_qualified_reviewer",
-                    identity["named_qualified_clinical_reviewer"] is False
-                    or (supplied and named),
-                    "qualified=%r" % identity["named_qualified_clinical_reviewer"])
-        results.add("A.identity", "effective_authority_is_product_while_name_deferred",
-                    identity["named_qualified_clinical_reviewer"] is True
-                    or identity["effective_authority"] == "Product",
-                    identity["effective_authority"])
+        product = identity.get("product_reviewer") or {}
+        results.add("A.identity", "product_reviewer_name_present",
+                    bool(str(product.get("name") or "").strip()),
+                    repr(product.get("name")))
+        results.add("A.identity", "product_reviewer_name_is_the_authoritative_one",
+                    product.get("name") == "Ayodele John Oluwaseyi",
+                    repr(product.get("name")))
+        results.add("A.identity", "product_reviewer_title_present",
+                    bool(str(product.get("title") or "").strip()),
+                    repr(product.get("title")))
+        results.add("A.identity", "product_review_date_present",
+                    product.get("review_date") == "2026-08-22",
+                    repr(product.get("review_date")))
+        results.add("A.identity", "effective_authority_is_product_exactly",
+                    identity.get("effective_authority") == "product",
+                    repr(identity.get("effective_authority")))
+        source_role = identity.get("source_role_wording") or {}
+        results.add("A.identity", "source_role_wording_recorded_faithfully",
+                    source_role.get("as_supplied_in_record")
+                    == "Clinical Reviewer + Product Lead")
+        results.add("A.identity", "combined_wording_does_not_imply_a_clinical_reviewer",
+                    source_role.get("implies_clinical_reviewer_participation") is False
+                    and bool(source_role.get("superseded_by")),
+                    str(source_role.get("implies_clinical_reviewer_participation")))
+        results.add("A.identity", "clinical_reviewer_is_null",
+                    identity.get("clinical_reviewer") is None,
+                    repr(identity.get("clinical_reviewer")))
+        results.add("A.identity", "clinical_status_not_assigned_while_reviewer_null",
+                    identity.get("clinical_reviewer") is not None
+                    or identity.get("clinical_reviewer_status") == "not_assigned",
+                    repr(identity.get("clinical_reviewer_status")))
+        results.add("A.identity", "no_named_qualified_clinical_reviewer_claimed",
+                    identity.get("named_qualified_clinical_reviewer") is False
+                    or identity.get("clinical_reviewer") is not None)
+        results.add("A.identity",
+                    "product_reviewer_not_described_as_qualified_clinical_reviewer",
+                    identity.get("product_reviewer_is_qualified_clinical_reviewer")
+                    is False,
+                    str(identity.get("product_reviewer_is_qualified_clinical_reviewer")))
+        results.add("A.identity", "identity_deferral_note_no_longer_active",
+                    "name_deferred_note" not in identity
+                    and "name_supplied" not in identity)
+        attribution = report.get("product_decisions_attribution") or {}
+        results.add("A.identity", "product_decisions_attributed_to_the_named_reviewer",
+                    attribution.get("attributed_to") == "Ayodele John Oluwaseyi"
+                    and sorted(attribution.get("covers", []))
+                    == ["IM003-PD-%03d" % i for i in range(1, 7)],
+                    str(attribution.get("attributed_to")))
 
     # --- B. classification ----------------------------------------------------
     c = report["classification"]
@@ -146,6 +180,12 @@ def run(report=None, blockers=None, package=None):
     results.add("C.separation", "clinical_requirements_are_requirements_not_decisions",
                 report["clinical_requirements_status"]
                 == "OPEN_REQUIREMENTS_NOT_DECISIONS")
+    results.add("C.separation", "no_clinical_requirement_is_product_approved",
+                all(r.get("status") == "open_requirement"
+                    and r.get("product_approved") is False for r in requirements),
+                str([r["id"] for r in requirements
+                     if r.get("status") != "open_requirement"
+                     or r.get("product_approved") is not False]))
     req_blob = json.dumps(requirements).lower()
     for marker, name in [("sufficient clinical support", "urgency_contribution_rule"),
                          ("de-escalate", "de_escalation_conditions"),
@@ -272,14 +312,62 @@ def _m_identity_removed(r, b, p):
     return r, b, p, "A.identity:reviewer_identity_block_present"
 
 
-def _m_clinical_authority_without_name(r, b, p):
-    r["reviewer_identity"]["named_qualified_clinical_reviewer"] = True
-    return r, b, p, "A.identity:no_clinical_authority_without_named_qualified_reviewer"
+def _m_name_removed(r, b, p):
+    r["reviewer_identity"]["product_reviewer"]["name"] = None
+    return r, b, p, "A.identity:product_reviewer_name_present"
 
 
-def _m_name_dishonesty(r, b, p):
-    r["reviewer_identity"]["name_supplied"] = True  # while named_reviewer stays null
-    return r, b, p, "A.identity:name_honesty_invariant"
+def _m_name_blank(r, b, p):
+    r["reviewer_identity"]["product_reviewer"]["name"] = "   "
+    return r, b, p, "A.identity:product_reviewer_name_present"
+
+
+def _m_title_removed(r, b, p):
+    r["reviewer_identity"]["product_reviewer"]["title"] = ""
+    return r, b, p, "A.identity:product_reviewer_title_present"
+
+
+def _m_review_date_absent(r, b, p):
+    del r["reviewer_identity"]["product_reviewer"]["review_date"]
+    return r, b, p, "A.identity:product_review_date_present"
+
+
+def _m_combined_authority_restored(r, b, p):
+    r["reviewer_identity"]["effective_authority"] = "clinical_and_product"
+    return r, b, p, "A.identity:effective_authority_is_product_exactly"
+
+
+def _m_clinical_inferred_from_wording(r, b, p):
+    r["reviewer_identity"]["source_role_wording"][
+        "implies_clinical_reviewer_participation"] = True
+    return r, b, p, "A.identity:combined_wording_does_not_imply_a_clinical_reviewer"
+
+
+def _m_clinical_reviewer_fabricated(r, b, p):
+    r["reviewer_identity"]["clinical_reviewer"] = "Dr. Invented Person"
+    return r, b, p, "A.identity:clinical_reviewer_is_null"
+
+
+def _m_clinical_status_assigned_without_identity(r, b, p):
+    r["reviewer_identity"]["clinical_reviewer_status"] = "assigned"
+    return r, b, p, "A.identity:clinical_status_not_assigned_while_reviewer_null"
+
+
+def _m_product_reviewer_called_clinically_qualified(r, b, p):
+    r["reviewer_identity"]["product_reviewer_is_qualified_clinical_reviewer"] = True
+    return r, b, p, ("A.identity:"
+                     "product_reviewer_not_described_as_qualified_clinical_reviewer")
+
+
+def _m_deferral_note_reinstated(r, b, p):
+    r["reviewer_identity"]["name_deferred_note"] = "we can add it later"
+    return r, b, p, "A.identity:identity_deferral_note_no_longer_active"
+
+
+def _m_requirement_product_approved(r, b, p):
+    r["clinical_requirements"][0]["product_approved"] = True
+    r["clinical_requirements"][0]["status"] = "approved_by_product"
+    return r, b, p, "C.separation:no_clinical_requirement_is_product_approved"
 
 
 def _m_product_called_clinical(r, b, p):
@@ -380,8 +468,17 @@ def _m_displayed_urgency_not_asserted(r, b, p):
 
 MUTATIONS = [
     ("reviewer identity removed", _m_identity_removed),
-    ("clinical authority claimed without a name", _m_clinical_authority_without_name),
-    ("name_supplied set while name is null", _m_name_dishonesty),
+    ("Product reviewer name removed", _m_name_removed),
+    ("Product reviewer name blanked", _m_name_blank),
+    ("Product reviewer title removed", _m_title_removed),
+    ("Product review date absent", _m_review_date_absent),
+    ("combined authority restored", _m_combined_authority_restored),
+    ("clinical reviewer inferred from wording", _m_clinical_inferred_from_wording),
+    ("clinical reviewer fabricated", _m_clinical_reviewer_fabricated),
+    ("clinical status assigned without identity", _m_clinical_status_assigned_without_identity),
+    ("Product reviewer called clinically qualified", _m_product_reviewer_called_clinically_qualified),
+    ("identity-deferral note reinstated", _m_deferral_note_reinstated),
+    ("a clinical requirement Product-approved", _m_requirement_product_approved),
     ("Product decisions described as clinical", _m_product_called_clinical),
     ("clinical approval flipped to true", _m_clinical_approval_true),
     ("IM003-SB-001 classified resolved", _m_blocker_closed),

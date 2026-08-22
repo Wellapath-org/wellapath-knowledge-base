@@ -8,30 +8,40 @@
 |---|---|
 | Vendored decision record | `baseline/im003_decision_record_v1/IM003_SAFETY_REVIEW_DECISION_RECORD_2026-08-22.vendored.md` |
 | Structured disposition | `reports/im003_disposition_v1.json` |
-| Validators | `python3 tools/validate_im003_disposition.py` (64 checks, 19 mutation proofs) |
+| Validators | `python3 tools/validate_im003_disposition.py` (72 checks, 28 mutation proofs) |
 | Blocker registry (unchanged) | `reports/im003_safety_blockers_v1.json` |
 
 ---
 
-## 1. Reviewer identity — exactly as supplied
+## 1. Reviewer identity — the Step 9A authoritative record
 
-The record states **"Reviewer role: Clinical Reviewer + Product Lead"** and a
-review date of 22 August 2026. **No named reviewer was supplied**; the
-engineering lead deferred it: *"for the reviewer name and product list we can
-add it later."*
+| Field | Value |
+|---|---|
+| **Product reviewer** | **Ayodele John Oluwaseyi** |
+| Product reviewer role/title | Co-Founder & CEO, WellaPath |
+| Product review date | 2026-08-22 |
+| **Clinical reviewer** | **null** — `not_assigned` |
+| Clinical approval | **false** |
+| **Effective authority** | **`product`** — never `clinical` or `clinical_and_product` |
 
-Consequences, enforced by validation:
+The source record's combined wording — *"Reviewer role: Clinical Reviewer +
+Product Lead"* — is retained only as a faithful record of the source text and
+is **superseded** by the fields above. It does **not** mean a Clinical
+reviewer participated: none did, and none is assigned.
 
-- `named_qualified_clinical_reviewer: false` — and it **cannot become true
-  without a supplied name**.
-- Effective authority is **Product** for every disposition in this record.
-- **Nothing in this record is clinical approval**, and nothing in it may be
-  represented as a clinical decision. The record itself grants no approvals
-  either way — every clinical-side item resolves to *rule required*.
-- Adding the reviewer name later is a governance edit to
-  `tools/report_im003_disposition.py` + regeneration; the honesty invariant
-  (`name_supplied` ⇔ non-null `named_reviewer`) is validated in both
-  directions.
+All six Product decisions (IM003-PD-001…006) are attributed to
+**Ayodele John Oluwaseyi** in the stated Product role. All seven clinical
+items remain **open requirements, not decisions** — none is a
+Product-approved clinical rule.
+
+Enforced by validation, each with a mutation proof: name/title/date must be
+present and non-blank; effective authority must be exactly `product`; the
+combined wording must not imply clinical participation; the clinical reviewer
+must stay `null`/`not_assigned` together (no fabricated reviewer, no
+`assigned` status without an identity); the Product reviewer must not be
+described as a qualified Clinical reviewer without a separate explicit
+record; the Step 9 identity-deferral note must not return; clinical approval
+must stay false.
 
 ## 2. Required classification
 

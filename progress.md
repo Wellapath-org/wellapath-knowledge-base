@@ -831,12 +831,14 @@ adjudication, no approval, no implementation.** Full package:
 `baseline/im003_decision_record_v1/IM003_SAFETY_REVIEW_DECISION_RECORD_2026-08-22.vendored.md`.
 KB baseline at receipt `83cd5258`; Mobile PR #76 open/unmerged at `13be0d49`.
 
-- **Reviewer identity recorded exactly as supplied**: roles "Clinical Reviewer +
-  Product Lead", date 2026-08-22, **named reviewer not supplied** (deferred by
-  the engineering lead: "we can add it later"). Because no named, qualified
-  Clinical reviewer accepted responsibility, **every disposition carries Product
-  authority only and nothing is clinical approval** — enforced, with mutation
-  proofs, not merely stated.
+- **Reviewer identity (corrected at Step 9A):** Product reviewer **Ayodele
+  John Oluwaseyi, Co-Founder & CEO, WellaPath**, review date 2026-08-22.
+  Clinical reviewer **null / not_assigned**; effective authority exactly
+  `product`. The record's combined wording ("Clinical Reviewer + Product
+  Lead") is retained only as a faithful record of the source text and is
+  superseded — it does not imply a Clinical reviewer participated. All six
+  Product decisions are attributed to the named Product reviewer; **nothing
+  is clinical approval** — enforced, with mutation proofs, not merely stated.
 
 - **Classification recorded:** IM003-SB-001 OPEN · D004 PENDING · IM-003
   DISABLED · Mobile PR #76 merge authorization FALSE · Product disposition
@@ -873,10 +875,14 @@ KB baseline at receipt `83cd5258`; Mobile PR #76 open/unmerged at `13be0d49`.
 
 - **New tooling:** `tools/report_im003_disposition.py` (refuses to write against
   a contradictory live governance state; `--check` staleness) and
-  `tools/validate_im003_disposition.py` — **64 checks, 19/19 mutation proofs**,
-  covering every fail-closed condition in the Step 9 brief including
-  reviewer-identity honesty, invariant weakening, algorithm selection,
-  investigation-as-activation, and binding drift. Wired into
+  `tools/validate_im003_disposition.py` — **72 checks, 28/28 mutation proofs**
+  after Step 9A, covering every fail-closed condition in the Step 9 and 9A
+  briefs: missing/blank reviewer name, title or date; non-`product` effective
+  authority; a Clinical reviewer inferred from the combined wording or
+  fabricated; `assigned` status without identity; the Product reviewer called
+  clinically qualified; the deferral note reinstated; a clinical requirement
+  Product-approved; plus invariant weakening, algorithm selection,
+  investigation-as-activation and binding drift. Wired into
   `tools/run_im003_checks.py` (now 27 groups).
 
 - **Untouched:** all frozen clinical artifacts, weights and urgency defaults;

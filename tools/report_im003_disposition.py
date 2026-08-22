@@ -5,11 +5,13 @@
     python3 tools/report_im003_disposition.py --check    # fail if stale
 
 Source: the vendored human decision record of 22 August 2026
-(baseline/im003_decision_record_v1/). The record was supplied without a named
-reviewer; identity is recorded exactly as supplied (roles + date, name
-deferred), and BECAUSE no named, qualified Clinical reviewer has accepted
-responsibility, every disposition here carries PRODUCT authority only and
-nothing here is clinical approval.
+(baseline/im003_decision_record_v1/). Step 9A supplied the authoritative
+reviewer record: Product reviewer Ayodele John Oluwaseyi (Co-Founder & CEO,
+WellaPath), review date 2026-08-22. The record's combined source wording
+("Clinical Reviewer + Product Lead") is retained only as a faithful record of
+the source text and is superseded: NO Clinical reviewer participated or is
+assigned. Effective authority is PRODUCT, every disposition is a Product
+disposition, and nothing here is clinical approval.
 
 The tool refuses to write at all if the live governance state contradicts the
 required classification: IM003-SB-001 must be open, D004 pending, and the
@@ -114,24 +116,43 @@ def build():
             ],
         },
 
-        # --- reviewer identity, exactly as supplied -------------------------
+        # --- reviewer identity (Step 9A authoritative record) -----------------
         "reviewer_identity": {
-            "roles_as_supplied": "Clinical Reviewer + Product Lead",
-            "review_date": "2026-08-22",
-            "named_reviewer": None,
-            "name_supplied": False,
-            "name_deferred_note": (
-                "Engineering lead, Step 9: 'for the reviewer name and product "
-                "list we can add it later.' The record is held at Product "
-                "authority until a named reviewer is recorded."),
+            "product_reviewer": {
+                "name": "Ayodele John Oluwaseyi",
+                "title": "Co-Founder & CEO, WellaPath",
+                "role": "Product reviewer",
+                "review_date": "2026-08-22",
+            },
+            "product_reviewer_is_qualified_clinical_reviewer": False,
+            "clinical_reviewer": None,
+            "clinical_reviewer_status": "not_assigned",
             "named_qualified_clinical_reviewer": False,
-            "effective_authority": "Product",
+            "source_role_wording": {
+                "as_supplied_in_record": "Clinical Reviewer + Product Lead",
+                "superseded_by": "the Step 9A authoritative reviewer record above",
+                "implies_clinical_reviewer_participation": False,
+                "note": ("The combined wording is retained only as a faithful "
+                         "record of the source text. No Clinical reviewer "
+                         "participated in, signed, or is implied by this "
+                         "record; the clinical role is not assigned."),
+            },
+            "effective_authority": "product",
             "authority_rule": (
-                "Without a named, qualified Clinical reviewer explicitly "
-                "accepting responsibility, no statement in the source record "
-                "may be represented as a clinical decision or clinical "
-                "approval. All dispositions below are Product dispositions; "
-                "every clinical-side item is an OPEN requirement."),
+                "The named Product reviewer holds Product authority only. "
+                "Without a separate explicit record of a named, qualified "
+                "Clinical reviewer accepting responsibility, no statement in "
+                "the source record may be represented as a clinical decision "
+                "or clinical approval. All dispositions below are Product "
+                "dispositions; every clinical-side item is an OPEN "
+                "requirement."),
+        },
+        "product_decisions_attribution": {
+            "attributed_to": "Ayodele John Oluwaseyi",
+            "in_role": "Co-Founder & CEO, WellaPath (Product reviewer)",
+            "on_date": "2026-08-22",
+            "covers": ["IM003-PD-001", "IM003-PD-002", "IM003-PD-003",
+                       "IM003-PD-004", "IM003-PD-005", "IM003-PD-006"],
         },
 
         # --- required classification, verbatim from the Step 9 brief --------
@@ -364,6 +385,9 @@ def build():
                      "must not happen in Product review."),
         },
     }
+    for requirement in report["clinical_requirements"]:
+        requirement["status"] = "open_requirement"
+        requirement["product_approved"] = False
     return report, preconditions
 
 
@@ -391,8 +415,12 @@ def main():
 
     write_bytes(REPORT, data)
     print("wrote %s" % relative)
-    print("  authority: %s (named reviewer deferred)"
-          % report["reviewer_identity"]["effective_authority"])
+    identity = report["reviewer_identity"]
+    print("  authority: %s — Product reviewer %s (%s); clinical reviewer %s"
+          % (identity["effective_authority"],
+             identity["product_reviewer"]["name"],
+             identity["product_reviewer"]["title"],
+             identity["clinical_reviewer_status"]))
     print("  product decisions recorded: %d" % len(report["product_decisions"]))
     print("  open clinical requirements: %d" % len(report["clinical_requirements"]))
     print("  regression case classes: %d" % len(report["required_regression_case_classes"]))
