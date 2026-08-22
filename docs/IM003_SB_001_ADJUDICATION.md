@@ -189,3 +189,17 @@ or production activation. Not any change to scoring, ranking, urgency, red flags
 or the path limit.
 
 Mobile PR #76 remains **open and unmerged**, as does this package.
+
+---
+
+## 8. Step 9 update — Product disposition recorded, blocker still open
+
+A human decision record dated 22 August 2026 was incorporated at I2/W3 Step 9
+(see `docs/IM003_DISPOSITION_RECORD.md` and `reports/im003_disposition_v1.json`).
+It **does not resolve IM003-SB-001** and grants no approval of any kind. It
+records six Product decisions (including the provisional invariant that, for
+IM-003, adding evidence must not lower established urgency solely because
+condition ranking changes), and converts questions 1–7 above into seven open
+clinical requirements (IM003-CR-001…007) plus ten required regression case
+classes. No named reviewer was supplied with the record, so its authority is
+Product only; nothing in it is clinical approval.

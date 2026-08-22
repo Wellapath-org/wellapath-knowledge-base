@@ -1,0 +1,222 @@
+{
+  "_metadata": {
+    "artifact": "im003_disposition_v1",
+    "phase": "I2/W3 Step 9",
+    "generated_by": "tools/report_im003_disposition.py",
+    "tooling_version": "1.0.0",
+    "source_record": {
+      "title": "I2/W3 IM-003 Safety Review \u2014 Decision Record",
+      "review_date": "2026-08-22",
+      "path": "baseline/im003_decision_record_v1/IM003_SAFETY_REVIEW_DECISION_RECORD_2026-08-22.vendored.md",
+      "sha256": "975f80ee983a59e44e116a7fb8055334de1eaca8d80cc1cb11b227479b5f1acc",
+      "provenance": "supplied_as_chat_text_by_engineering_lead_in_step9_brief",
+      "transcription_note": "No file artifact existed; the vendored file is the authoritative transcription. The decision-summary table was re-flowed from garbled paste formatting; no wording was altered."
+    },
+    "kb_baseline_commit": "83cd52583a14ec9fb656fae6be18ec0df3877a70",
+    "mobile_pr_76": {
+      "repository": "Wellapath-org/wellapath-mobile",
+      "pull_request": 76,
+      "head": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+      "state_required": "OPEN_UNMERGED",
+      "merge_authorized": false
+    },
+    "what_this_is_not": [
+      "This is not clinical approval: the record names no qualified Clinical reviewer accepting that responsibility.",
+      "This is not a resolution of IM003-SB-001.",
+      "This is not approval of D004 or any IM-003 decision.",
+      "This is not selection of a replacement urgency algorithm.",
+      "This is not activation of IM-003 in any environment where a user could rely on its urgency result."
+    ]
+  },
+  "reviewer_identity": {
+    "roles_as_supplied": "Clinical Reviewer + Product Lead",
+    "review_date": "2026-08-22",
+    "named_reviewer": null,
+    "name_supplied": false,
+    "name_deferred_note": "Engineering lead, Step 9: 'for the reviewer name and product list we can add it later.' The record is held at Product authority until a named reviewer is recorded.",
+    "named_qualified_clinical_reviewer": false,
+    "effective_authority": "Product",
+    "authority_rule": "Without a named, qualified Clinical reviewer explicitly accepting responsibility, no statement in the source record may be represented as a clinical decision or clinical approval. All dispositions below are Product dispositions; every clinical-side item is an OPEN requirement."
+  },
+  "classification": {
+    "im003_sb_001": "OPEN",
+    "d004": "PENDING",
+    "im003": "DISABLED",
+    "mobile_pr_76_merge_authorization": false,
+    "product_disposition": "RECORDED",
+    "clinical_rule": "REQUIRED_NOT_APPROVED",
+    "clinical_approval": false,
+    "user_facing_internal_evaluation": "BLOCKED",
+    "external_beta": "BLOCKED",
+    "production": "BLOCKED"
+  },
+  "live_state_preconditions": {
+    "blocker_open": true,
+    "d004_pending": true,
+    "pr76_not_merge_authorized": true,
+    "im003_activation_not_authorized": true
+  },
+  "product_decisions": [
+    {
+      "id": "IM003-PD-001",
+      "title": "Dynamic re-branching is supported in principle",
+      "decision": "YES IN PRINCIPLE; NOT AT THE COST OF SAFETY PREDICTABILITY.",
+      "detail": "Later answers making subsequent questioning more relevant is a legitimate product benefit; it does not justify ranking mechanics silently weakening an already-established safety disposition."
+    },
+    {
+      "id": "IM003-PD-002",
+      "title": "Re-ranking alone must not reduce urgency",
+      "decision": "Re-ranking alone must never cause urgency de-escalation.",
+      "detail": "From the user's perspective an assessment must not establish emergency urgency and then silently become merely urgent because another condition overtakes the first in an internal ranking. This does not prevent Clinical from separately defining a legitimate evidence-based de-escalation mechanism."
+    },
+    {
+      "id": "IM003-PD-003",
+      "title": "IM-003 urgency monotonicity is required",
+      "decision": "REQUIRED FOR IM-003 UNLESS CLINICAL APPROVES AN EXPLICIT DE-ESCALATION RULE.",
+      "detail": "Deliberately narrower than requiring all future WellaPath assessment logic to be mathematically monotonic. See the provisional safety invariant."
+    },
+    {
+      "id": "IM003-PD-004",
+      "title": "User explanations communicate care urgency, not ranking",
+      "decision": "EXPLAIN ESCALATION, NOT INTERNAL CONDITION RANKING.",
+      "detail": "The interface must not expose diagnostic-looking ranking logic ('malaria replaced lassa_fever'). Acceptable escalation language: 'Based on the additional information you provided, we recommend getting care more urgently.' No emergency-to-urgent explanatory copy is approved, because the circumstances in which such de-escalation would be acceptable have not been defined."
+    },
+    {
+      "id": "IM003-PD-005",
+      "title": "IM-003 excluded from user-facing internal evaluation",
+      "decision": "KEEP IM-003 EXCLUDED FROM USER-FACING INTERNAL EVALUATION.",
+      "detail": "Investigation may continue in controlled test environments; the adaptive behaviour stays disabled anywhere a user could rely on its urgency result, until the clinical rule is approved and the regression suite passes."
+    },
+    {
+      "id": "IM003-PD-006",
+      "title": "Constrained alternatives: investigation only",
+      "decision": "A CONSTRAINED SUBSET MAY BE EVALUATED SEPARATELY BUT IS NOT PRE-APPROVED AND NOT ACTIVATED BY THIS DECISION.",
+      "detail": "A subset may return for its own review only with evidence that it cannot reduce established urgency, suppress or bypass applicable red flags, remove clinically material evidence, change clinical semantics through ranking alone, or introduce an unreviewed de-escalation path.",
+      "investigation_permitted": true,
+      "pre_approved": false,
+      "activation_authorized": false
+    }
+  ],
+  "product_decisions_are_clinical_decisions": false,
+  "clinical_requirements": [
+    {
+      "id": "IM003-CR-001",
+      "question": "When does a ranked condition have sufficient clinical support for its urgency classification to affect the final assessment urgency?",
+      "context": "The missing policy Step 8A exposed. Until it exists the system must not assume that falling from rank 1 to rank 3 makes an emergency implication irrelevant."
+    },
+    {
+      "id": "IM003-CR-002",
+      "question": "Whether and when may urgency de-escalate after additive evidence?",
+      "context": "The record distinguishes evidence that makes the emergency hypothesis no longer clinically credible from evidence that merely lets another condition out-rank it; S10 demonstrates the latter."
+    },
+    {
+      "id": "IM003-CR-003",
+      "question": "Should final urgency consider one condition, multiple qualifying conditions, or a calibrated threshold?",
+      "context": "None of the three mechanisms is approved. First-ranked-only is demonstrated insufficiently safe for IM-003 as exercised; highest-of-all risks systematic over-triage; a threshold needs clinical calibration Product cannot invent."
+    },
+    {
+      "id": "IM003-CR-004",
+      "question": "Is S10 clinically plausible and in scope?",
+      "context": "Not established by the evidence provided, and not dismissable as an unrealistic edge case on present information. Clinical must inspect the complete S10 evidence vector, demographics, triggering answers and assessment context."
+    },
+    {
+      "id": "IM003-CR-005",
+      "question": "Is the lassa_fever-to-malaria ranking transition clinically appropriate?",
+      "context": "The numerical transition (lassa_fever 26 to rank 3; malaria 25 to 52, rank 1) is demonstrated; score movement alone does not establish clinical appropriateness, and Product must not infer it."
+    },
+    {
+      "id": "IM003-CR-006",
+      "question": "Does lassa_fever at score 26 / rank 3 require emergency urgency?",
+      "context": "The evidence establishes the unchanged score and emergency default, not whether score 26 is sufficient clinical credibility to force emergency urgency."
+    },
+    {
+      "id": "IM003-CR-007",
+      "question": "Which population-specific and ranking-competition regression cases are required?",
+      "context": "Includes paediatric, pregnancy and other population-specific coverage, and the ten required case classes below."
+    }
+  ],
+  "clinical_requirements_status": "OPEN_REQUIREMENTS_NOT_DECISIONS",
+  "provisional_safety_invariant": {
+    "id": "IM003-INV-001",
+    "statement": "For IM-003, adding evidence must not lower the assessment's established urgency solely as a consequence of condition re-ranking.",
+    "status": "provisional_pending_explicit_clinical_rule",
+    "scope": "IM-003 adaptive re-branching only",
+    "generalized_to_all_wellapath_behavior": false,
+    "generalization_requires": "separate clinical approval",
+    "clinically_approved": false,
+    "may_be_superseded_by": "an explicit, clinically defined and validated de-escalation rule"
+  },
+  "required_regression_case_classes": [
+    {
+      "id": "IM003-RC-01",
+      "case_class": "emergency condition rank 1 to rank 2/3 while its score is unchanged"
+    },
+    {
+      "id": "IM003-RC-02",
+      "case_class": "emergency condition rank 1 to lower rank while its score increases"
+    },
+    {
+      "id": "IM003-RC-03",
+      "case_class": "emergency condition entering the ranking after additive evidence"
+    },
+    {
+      "id": "IM003-RC-04",
+      "case_class": "multiple simultaneous emergency-default conditions"
+    },
+    {
+      "id": "IM003-RC-05",
+      "case_class": "emergency + urgent and emergency + non-urgent ranking competition"
+    },
+    {
+      "id": "IM003-RC-06",
+      "case_class": "red-flag and non-red-flag versions of otherwise similar evidence"
+    },
+    {
+      "id": "IM003-RC-07",
+      "case_class": "cases around whatever clinical qualification/score boundary is ultimately approved"
+    },
+    {
+      "id": "IM003-RC-08",
+      "case_class": "repeated re-branching across several answer cycles"
+    },
+    {
+      "id": "IM003-RC-09",
+      "case_class": "paediatric, pregnancy and other population-specific cases where applicable"
+    },
+    {
+      "id": "IM003-RC-10",
+      "case_class": "cases demonstrating any clinically approved de-escalation behaviour, if de-escalation is ultimately permitted"
+    }
+  ],
+  "regression_requirements": {
+    "must_assert_displayed_urgency_directly": true,
+    "ranking_stability_alone_is_insufficient": true,
+    "required_before": "IM-003 is reconsidered"
+  },
+  "authorization_boundaries": {
+    "authorized": [
+      "further analysis",
+      "clinical review",
+      "regression-case design",
+      "safety-rule specification",
+      "development of proposals and evidence for subsequent review"
+    ],
+    "not_authorized": [
+      "implementation of a chosen urgency aggregation rule",
+      "merging Mobile PR #76",
+      "publication",
+      "activation of IM-003",
+      "user-facing internal evaluation of the adaptive behaviour",
+      "external beta",
+      "production deployment"
+    ],
+    "investigation_permission_is_activation_permission": false
+  },
+  "urgency_algorithm": {
+    "selected": false,
+    "first_ranked_only_approved_for_im003": false,
+    "highest_among_ranked_approved": false,
+    "score_confidence_threshold_approved": false,
+    "note": "Selecting among these is a clinical definition task; it must not happen in Product review."
+  }
+}

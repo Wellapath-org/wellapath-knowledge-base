@@ -32,6 +32,11 @@ STEPS = [
     ("IM-003 safety blockers are valid", ["tools/validate_im003_blockers.py"]),
     ("blocker validators bite (mutation proofs)",
      ["tools/validate_im003_blockers.py", "--mutations"]),
+    ("Step 9 disposition record is current",
+     ["tools/report_im003_disposition.py", "--check"]),
+    ("Step 9 disposition is valid", ["tools/validate_im003_disposition.py"]),
+    ("disposition validators bite (mutation proofs)",
+     ["tools/validate_im003_disposition.py", "--mutations"]),
 ]
 
 
