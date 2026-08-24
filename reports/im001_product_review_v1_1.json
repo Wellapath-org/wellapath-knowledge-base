@@ -58,9 +58,13 @@
         ]
       ],
       "decision_id": "IM001-D001",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -88,9 +92,13 @@
         ]
       ],
       "decision_id": "IM001-D002",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -118,9 +126,13 @@
         ]
       ],
       "decision_id": "IM001-D003",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -148,9 +160,13 @@
         ]
       ],
       "decision_id": "IM001-D004",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -178,9 +194,13 @@
         ]
       ],
       "decision_id": "IM001-D005",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -208,9 +228,13 @@
         ]
       ],
       "decision_id": "IM001-D006",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -238,9 +262,13 @@
         ]
       ],
       "decision_id": "IM001-D007",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -268,9 +296,13 @@
         ]
       ],
       "decision_id": "IM001-D008",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -298,9 +330,13 @@
         ]
       ],
       "decision_id": "IM001-D009",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -328,9 +364,13 @@
         ]
       ],
       "decision_id": "IM001-D010",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -358,9 +398,13 @@
         ]
       ],
       "decision_id": "IM001-D011",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -388,9 +432,13 @@
         ]
       ],
       "decision_id": "IM001-D012",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -418,9 +466,13 @@
         ]
       ],
       "decision_id": "IM001-D013",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -448,9 +500,13 @@
         ]
       ],
       "decision_id": "IM001-D014",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -478,9 +534,13 @@
         ]
       ],
       "decision_id": "IM001-D015",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -508,9 +568,13 @@
         ]
       ],
       "decision_id": "IM001-D016",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -538,9 +602,13 @@
         ]
       ],
       "decision_id": "IM001-D017",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -568,9 +636,14 @@
         ]
       ],
       "decision_id": "IM001-D018",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product",
+      "clinical_flag": "IM001-CLIN-FLAG-001"
     },
     {
       "clinical_role": "severity",
@@ -598,9 +671,13 @@
         ]
       ],
       "decision_id": "IM001-D019",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -628,9 +705,13 @@
         ]
       ],
       "decision_id": "IM001-D020",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -658,9 +739,13 @@
         ]
       ],
       "decision_id": "IM001-D021",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -688,9 +773,13 @@
         ]
       ],
       "decision_id": "IM001-D022",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -718,9 +807,13 @@
         ]
       ],
       "decision_id": "IM001-D023",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -748,9 +841,13 @@
         ]
       ],
       "decision_id": "IM001-D024",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -778,9 +875,13 @@
         ]
       ],
       "decision_id": "IM001-D025",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -807,9 +908,13 @@
         ]
       ],
       "decision_id": "IM001-D026",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -837,9 +942,14 @@
         ]
       ],
       "decision_id": "IM001-D027",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product",
+      "clinical_flag": "IM001-CLIN-FLAG-001"
     },
     {
       "clinical_role": "severity",
@@ -867,9 +977,13 @@
         ]
       ],
       "decision_id": "IM001-D028",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -897,9 +1011,13 @@
         ]
       ],
       "decision_id": "IM001-D029",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "severity",
@@ -927,9 +1045,13 @@
         ]
       ],
       "decision_id": "IM001-D030",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Explicitly identifies headache and avoids ambiguity when headache and another pain symptom coexist.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -957,9 +1079,13 @@
         ]
       ],
       "decision_id": "IM001-D031",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -987,9 +1113,13 @@
         ]
       ],
       "decision_id": "IM001-D032",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1017,9 +1147,13 @@
         ]
       ],
       "decision_id": "IM001-D033",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1047,9 +1181,13 @@
         ]
       ],
       "decision_id": "IM001-D034",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1077,9 +1215,13 @@
         ]
       ],
       "decision_id": "IM001-D035",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1107,9 +1249,13 @@
         ]
       ],
       "decision_id": "IM001-D036",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1137,9 +1283,13 @@
         ]
       ],
       "decision_id": "IM001-D037",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1167,9 +1317,13 @@
         ]
       ],
       "decision_id": "IM001-D038",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1197,9 +1351,13 @@
         ]
       ],
       "decision_id": "IM001-D039",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1227,9 +1385,13 @@
         ]
       ],
       "decision_id": "IM001-D040",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1257,9 +1419,13 @@
         ]
       ],
       "decision_id": "IM001-D041",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1287,9 +1453,13 @@
         ]
       ],
       "decision_id": "IM001-D042",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1317,9 +1487,13 @@
         ]
       ],
       "decision_id": "IM001-D043",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1347,9 +1521,13 @@
         ]
       ],
       "decision_id": "IM001-D044",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1377,9 +1555,13 @@
         ]
       ],
       "decision_id": "IM001-D045",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1407,9 +1589,13 @@
         ]
       ],
       "decision_id": "IM001-D046",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1437,9 +1623,13 @@
         ]
       ],
       "decision_id": "IM001-D047",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1467,9 +1657,13 @@
         ]
       ],
       "decision_id": "IM001-D048",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1497,9 +1691,13 @@
         ]
       ],
       "decision_id": "IM001-D049",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1527,9 +1725,13 @@
         ]
       ],
       "decision_id": "IM001-D050",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1557,9 +1759,13 @@
         ]
       ],
       "decision_id": "IM001-D051",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1587,9 +1793,13 @@
         ]
       ],
       "decision_id": "IM001-D052",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1617,9 +1827,13 @@
         ]
       ],
       "decision_id": "IM001-D053",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1647,9 +1861,13 @@
         ]
       ],
       "decision_id": "IM001-D054",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1677,9 +1895,13 @@
         ]
       ],
       "decision_id": "IM001-D055",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1707,9 +1929,13 @@
         ]
       ],
       "decision_id": "IM001-D056",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1737,9 +1963,13 @@
         ]
       ],
       "decision_id": "IM001-D057",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1767,9 +1997,13 @@
         ]
       ],
       "decision_id": "IM001-D058",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1797,9 +2031,13 @@
         ]
       ],
       "decision_id": "IM001-D059",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1827,9 +2065,13 @@
         ]
       ],
       "decision_id": "IM001-D060",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1857,9 +2099,13 @@
         ]
       ],
       "decision_id": "IM001-D061",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1887,9 +2133,13 @@
         ]
       ],
       "decision_id": "IM001-D062",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1917,9 +2167,13 @@
         ]
       ],
       "decision_id": "IM001-D063",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1947,9 +2201,13 @@
         ]
       ],
       "decision_id": "IM001-D064",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -1977,9 +2235,13 @@
         ]
       ],
       "decision_id": "IM001-D065",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2007,9 +2269,13 @@
         ]
       ],
       "decision_id": "IM001-D066",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2037,9 +2303,13 @@
         ]
       ],
       "decision_id": "IM001-D067",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2067,9 +2337,13 @@
         ]
       ],
       "decision_id": "IM001-D068",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2097,9 +2371,13 @@
         ]
       ],
       "decision_id": "IM001-D069",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2127,9 +2405,13 @@
         ]
       ],
       "decision_id": "IM001-D070",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2157,9 +2439,13 @@
         ]
       ],
       "decision_id": "IM001-D071",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2187,9 +2473,13 @@
         ]
       ],
       "decision_id": "IM001-D072",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2217,9 +2507,13 @@
         ]
       ],
       "decision_id": "IM001-D073",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2247,9 +2541,13 @@
         ]
       ],
       "decision_id": "IM001-D074",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2277,9 +2575,13 @@
         ]
       ],
       "decision_id": "IM001-D075",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2307,9 +2609,13 @@
         ]
       ],
       "decision_id": "IM001-D076",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2337,9 +2643,13 @@
         ]
       ],
       "decision_id": "IM001-D077",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2367,9 +2677,13 @@
         ]
       ],
       "decision_id": "IM001-D078",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2397,9 +2711,13 @@
         ]
       ],
       "decision_id": "IM001-D079",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2427,9 +2745,13 @@
         ]
       ],
       "decision_id": "IM001-D080",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2457,9 +2779,13 @@
         ]
       ],
       "decision_id": "IM001-D081",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2487,9 +2813,13 @@
         ]
       ],
       "decision_id": "IM001-D082",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2517,9 +2847,13 @@
         ]
       ],
       "decision_id": "IM001-D083",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2547,9 +2881,13 @@
         ]
       ],
       "decision_id": "IM001-D084",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2577,9 +2915,13 @@
         ]
       ],
       "decision_id": "IM001-D085",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2607,9 +2949,13 @@
         ]
       ],
       "decision_id": "IM001-D086",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2637,9 +2983,13 @@
         ]
       ],
       "decision_id": "IM001-D087",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2667,9 +3017,13 @@
         ]
       ],
       "decision_id": "IM001-D088",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2697,9 +3051,13 @@
         ]
       ],
       "decision_id": "IM001-D089",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2727,9 +3085,13 @@
         ]
       ],
       "decision_id": "IM001-D090",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2757,9 +3119,13 @@
         ]
       ],
       "decision_id": "IM001-D091",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2787,9 +3153,13 @@
         ]
       ],
       "decision_id": "IM001-D092",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2817,9 +3187,13 @@
         ]
       ],
       "decision_id": "IM001-D093",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2847,9 +3221,13 @@
         ]
       ],
       "decision_id": "IM001-D094",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2877,9 +3255,13 @@
         ]
       ],
       "decision_id": "IM001-D095",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2907,9 +3289,13 @@
         ]
       ],
       "decision_id": "IM001-D096",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2937,9 +3323,13 @@
         ]
       ],
       "decision_id": "IM001-D097",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2967,9 +3357,13 @@
         ]
       ],
       "decision_id": "IM001-D098",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -2997,9 +3391,13 @@
         ]
       ],
       "decision_id": "IM001-D099",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3027,9 +3425,13 @@
         ]
       ],
       "decision_id": "IM001-D100",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3057,9 +3459,13 @@
         ]
       ],
       "decision_id": "IM001-D101",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3087,9 +3493,13 @@
         ]
       ],
       "decision_id": "IM001-D102",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3117,9 +3527,13 @@
         ]
       ],
       "decision_id": "IM001-D103",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3147,9 +3561,13 @@
         ]
       ],
       "decision_id": "IM001-D104",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3177,9 +3595,13 @@
         ]
       ],
       "decision_id": "IM001-D105",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3207,9 +3629,13 @@
         ]
       ],
       "decision_id": "IM001-D106",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3237,9 +3663,13 @@
         ]
       ],
       "decision_id": "IM001-D107",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3267,9 +3697,13 @@
         ]
       ],
       "decision_id": "IM001-D108",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3297,9 +3731,13 @@
         ]
       ],
       "decision_id": "IM001-D109",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3327,9 +3765,13 @@
         ]
       ],
       "decision_id": "IM001-D110",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3357,9 +3799,13 @@
         ]
       ],
       "decision_id": "IM001-D111",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3387,9 +3833,13 @@
         ]
       ],
       "decision_id": "IM001-D112",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3417,9 +3867,13 @@
         ]
       ],
       "decision_id": "IM001-D113",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3447,9 +3901,13 @@
         ]
       ],
       "decision_id": "IM001-D114",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3477,9 +3935,13 @@
         ]
       ],
       "decision_id": "IM001-D115",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3507,9 +3969,13 @@
         ]
       ],
       "decision_id": "IM001-D116",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3537,9 +4003,13 @@
         ]
       ],
       "decision_id": "IM001-D117",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3567,9 +4037,13 @@
         ]
       ],
       "decision_id": "IM001-D118",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3597,9 +4071,13 @@
         ]
       ],
       "decision_id": "IM001-D119",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3627,9 +4105,13 @@
         ]
       ],
       "decision_id": "IM001-D120",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3657,9 +4139,13 @@
         ]
       ],
       "decision_id": "IM001-D121",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3687,9 +4173,13 @@
         ]
       ],
       "decision_id": "IM001-D122",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about dizziness.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3717,9 +4207,13 @@
         ]
       ],
       "decision_id": "IM001-D123",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3746,9 +4240,13 @@
         ]
       ],
       "decision_id": "IM001-D124",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3776,9 +4274,13 @@
         ]
       ],
       "decision_id": "IM001-D125",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3806,9 +4308,13 @@
         ]
       ],
       "decision_id": "IM001-D126",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3835,9 +4341,13 @@
         ]
       ],
       "decision_id": "IM001-D127",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3864,9 +4374,13 @@
         ]
       ],
       "decision_id": "IM001-D128",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3893,9 +4407,13 @@
         ]
       ],
       "decision_id": "IM001-D129",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3923,9 +4441,13 @@
         ]
       ],
       "decision_id": "IM001-D130",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3953,9 +4475,13 @@
         ]
       ],
       "decision_id": "IM001-D131",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -3983,9 +4509,13 @@
         ]
       ],
       "decision_id": "IM001-D132",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -4013,9 +4543,13 @@
         ]
       ],
       "decision_id": "IM001-D133",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -4043,9 +4577,13 @@
         ]
       ],
       "decision_id": "IM001-D134",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Directly identifies watery stool; the only alternative asks about weakness and is a clear context mismatch.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     },
     {
       "clinical_role": "duration",
@@ -4073,16 +4611,24 @@
         ]
       ],
       "decision_id": "IM001-D135",
-      "product_verdict": "PENDING",
-      "product_reviewer": null,
-      "review_date": null
+      "product_verdict": "APPROVED",
+      "product_reviewer": "Ayodele John Oluwaseyi",
+      "review_date": "2026-08-24",
+      "product_selection": "keep_candidate_wording",
+      "product_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "product_reviewer_title": "Co-Founder & CEO, WellaPath",
+      "product_authority": "product"
     }
   ],
   "sign_off": {
-    "status": "PENDING",
-    "reviewer": null,
-    "review_date": null,
-    "blocks_activation": true,
-    "note": "Until every decision carries a product_verdict, IM-001 remains an activation blocker. Merging candidate 1.1 into the knowledge base does not change that: the artifact is an engineering contract, not a release."
+    "status": "COMPLETE",
+    "reviewer": "Ayodele John Oluwaseyi",
+    "reviewer_title": "Co-Founder & CEO, WellaPath",
+    "authority": "product",
+    "review_date": "2026-08-24",
+    "blocks_activation": false,
+    "activation_authorized": false,
+    "clinical_approval": false,
+    "note": "All 135 wording decisions carry Product verdicts, recorded 2026-08-24 from the Step 11 reconciliation (reports/im001_product_verdicts_v1.json). The IM-001 wording decision set no longer blocks activation, but NOTHING here authorizes activation: publication and activation authorization remain false, candidate 1.1 remains unpublished and inactive, and clinical flag IM001-CLIN-FLAG-001 (fast_breathing_child.severity, IM001-D018/D027) requires Clinical review before any activation decision involving that question."
   }
 }

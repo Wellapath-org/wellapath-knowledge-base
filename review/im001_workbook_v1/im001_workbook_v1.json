@@ -12,11 +12,11 @@
     "source_evidence": {
       "product_review": {
         "path": "reports/im001_product_review_v1_1.json",
-        "sha256": "4788fee0b6bcf764c22add101d9e4ea806c70a4119c73e6b16b2ebdd2d4324c2"
+        "sha256": "930fd258a7739affd4a9117b26e4b4017b396391ecc5fcfedaef0ad363a3ee65"
       },
       "order_decision": {
         "path": "reports/im001_option_order_decision_v1.json",
-        "sha256": "6adbfcc4e2a6983b4a07ff6e04298444061c9343e8da9a86b433b6e6f505f1b1"
+        "sha256": "5d1448d0c5e934902122187f080b8201081c4ef666e84f20de64dd848897c60d"
       },
       "order_evidence": {
         "path": "reports/im001_option_order_evidence_v1.json",
@@ -34,11 +34,11 @@
     "grouping_hides_nothing": "135 wording decisions are presented as 20 slot batches plus 1 separate global decision; every decision remains individually identifiable and individually overridable."
   },
   "progress": {
-    "reviewed": 0,
-    "pending": 136,
+    "reviewed": 136,
+    "pending": 0,
     "deferred": 0,
-    "wording_pending": 135,
-    "ordering_pending": 1
+    "wording_pending": 0,
+    "ordering_pending": 0
   },
   "clinical_impact_dimensions_all_zero": {
     "option_membership_differences": 0,
@@ -1094,17 +1094,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D001"
@@ -1141,17 +1141,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D002"
@@ -1188,17 +1188,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D003"
@@ -1235,17 +1235,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D004"
@@ -1282,17 +1282,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D005"
@@ -1329,17 +1329,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D006"
@@ -1376,17 +1376,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D007"
@@ -1423,17 +1423,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D008"
@@ -1470,17 +1470,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D009"
@@ -1517,17 +1517,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D010"
@@ -1564,17 +1564,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D011"
@@ -1611,17 +1611,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D012"
@@ -1658,17 +1658,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D013"
@@ -1705,17 +1705,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D014"
@@ -1752,17 +1752,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D015"
@@ -1799,17 +1799,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D016"
@@ -1846,17 +1846,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D017"
@@ -1893,21 +1893,22 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D018"
-      }
+      },
+      "clinical_flag": "IM001-CLIN-FLAG-001"
     },
     {
       "decision_id": "IM001-D019",
@@ -1940,17 +1941,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D019"
@@ -1987,17 +1988,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D020"
@@ -2034,17 +2035,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D021"
@@ -2081,17 +2082,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D022"
@@ -2128,17 +2129,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D023"
@@ -2175,17 +2176,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D024"
@@ -2222,17 +2223,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D025"
@@ -2268,17 +2269,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D026"
@@ -2315,21 +2316,22 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D027"
-      }
+      },
+      "clinical_flag": "IM001-CLIN-FLAG-001"
     },
     {
       "decision_id": "IM001-D028",
@@ -2362,17 +2364,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D028"
@@ -2409,17 +2411,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D029"
@@ -2456,17 +2458,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Explicitly identifies headache and avoids ambiguity when headache and another pain symptom coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D030"
@@ -2503,17 +2505,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D031"
@@ -2550,17 +2552,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D032"
@@ -2597,17 +2599,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D033"
@@ -2644,17 +2646,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D034"
@@ -2691,17 +2693,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D035"
@@ -2738,17 +2740,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D036"
@@ -2785,17 +2787,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D037"
@@ -2832,17 +2834,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D038"
@@ -2879,17 +2881,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D039"
@@ -2926,17 +2928,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D040"
@@ -2973,17 +2975,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D041"
@@ -3020,17 +3022,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D042"
@@ -3067,17 +3069,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D043"
@@ -3114,17 +3116,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D044"
@@ -3161,17 +3163,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D045"
@@ -3208,17 +3210,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D046"
@@ -3255,17 +3257,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D047"
@@ -3302,17 +3304,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D048"
@@ -3349,17 +3351,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D049"
@@ -3396,17 +3398,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D050"
@@ -3443,17 +3445,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D051"
@@ -3490,17 +3492,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D052"
@@ -3537,17 +3539,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D053"
@@ -3584,17 +3586,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D054"
@@ -3631,17 +3633,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D055"
@@ -3678,17 +3680,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D056"
@@ -3725,17 +3727,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D057"
@@ -3772,17 +3774,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D058"
@@ -3819,17 +3821,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D059"
@@ -3866,17 +3868,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D060"
@@ -3913,17 +3915,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D061"
@@ -3960,17 +3962,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D062"
@@ -4007,17 +4009,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D063"
@@ -4054,17 +4056,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D064"
@@ -4101,17 +4103,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D065"
@@ -4148,17 +4150,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D066"
@@ -4195,17 +4197,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D067"
@@ -4242,17 +4244,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D068"
@@ -4289,17 +4291,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D069"
@@ -4336,17 +4338,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D070"
@@ -4383,17 +4385,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D071"
@@ -4430,17 +4432,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D072"
@@ -4477,17 +4479,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D073"
@@ -4524,17 +4526,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D074"
@@ -4571,17 +4573,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D075"
@@ -4618,17 +4620,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D076"
@@ -4665,17 +4667,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D077"
@@ -4712,17 +4714,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D078"
@@ -4759,17 +4761,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D079"
@@ -4806,17 +4808,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D080"
@@ -4853,17 +4855,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D081"
@@ -4900,17 +4902,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D082"
@@ -4947,17 +4949,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D083"
@@ -4994,17 +4996,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D084"
@@ -5041,17 +5043,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D085"
@@ -5088,17 +5090,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D086"
@@ -5135,17 +5137,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D087"
@@ -5182,17 +5184,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D088"
@@ -5229,17 +5231,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D089"
@@ -5276,17 +5278,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D090"
@@ -5323,17 +5325,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D091"
@@ -5370,17 +5372,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D092"
@@ -5417,17 +5419,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D093"
@@ -5464,17 +5466,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D094"
@@ -5511,17 +5513,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D095"
@@ -5558,17 +5560,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D096"
@@ -5605,17 +5607,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D097"
@@ -5652,17 +5654,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D098"
@@ -5699,17 +5701,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D099"
@@ -5746,17 +5748,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D100"
@@ -5793,17 +5795,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D101"
@@ -5840,17 +5842,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D102"
@@ -5887,17 +5889,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D103"
@@ -5934,17 +5936,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D104"
@@ -5981,17 +5983,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D105"
@@ -6028,17 +6030,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D106"
@@ -6075,17 +6077,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D107"
@@ -6122,17 +6124,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D108"
@@ -6169,17 +6171,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D109"
@@ -6216,17 +6218,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D110"
@@ -6263,17 +6265,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D111"
@@ -6310,17 +6312,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D112"
@@ -6357,17 +6359,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D113"
@@ -6404,17 +6406,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D114"
@@ -6451,17 +6453,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D115"
@@ -6498,17 +6500,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D116"
@@ -6545,17 +6547,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D117"
@@ -6592,17 +6594,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D118"
@@ -6639,17 +6641,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D119"
@@ -6686,17 +6688,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D120"
@@ -6733,17 +6735,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D121"
@@ -6780,17 +6782,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D122"
@@ -6827,17 +6829,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D123"
@@ -6873,17 +6875,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D124"
@@ -6920,17 +6922,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D125"
@@ -6967,17 +6969,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D126"
@@ -7013,17 +7015,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D127"
@@ -7059,17 +7061,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D128"
@@ -7105,17 +7107,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D129"
@@ -7152,17 +7154,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D130"
@@ -7199,17 +7201,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D131"
@@ -7246,17 +7248,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D132"
@@ -7293,17 +7295,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D133"
@@ -7340,17 +7342,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Directly identifies watery stool; the only alternative asks about weakness and is a clear context mismatch.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D134"
@@ -7387,17 +7389,17 @@
       ],
       "option_display_order_also_differs_within_this_question": false,
       "option_order_note": "All 903 measured option-order groups are additional_symptoms questions; no duration or severity question has an option-order difference. Option-order instability on the captured paths is governed separately by IM001-ORD-GLOBAL-001.",
-      "status": "PENDING",
-      "reviewer_selection": null,
+      "status": "APPROVED",
+      "reviewer_selection": "keep_candidate_wording",
       "reviewer_selection_options": [
         "keep_candidate_wording",
         "use_alternative_wording",
         "defer"
       ],
-      "reviewer_rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null,
+      "reviewer_rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24",
       "evidence_binding": {
         "artifact": "reports/im001_product_review_v1_1.json",
         "decision_id": "IM001-D135"
@@ -7434,12 +7436,12 @@
         "choice": "Request a different deterministic ordering rule."
       }
     ],
-    "status": "PENDING",
-    "reviewer_selection": null,
-    "reviewer_rationale": null,
-    "reviewer_name": null,
-    "reviewer_title": null,
-    "review_date": null,
+    "status": "APPROVED",
+    "reviewer_selection": "ORD-A",
+    "reviewer_rationale": "A stable option order provides a consistent and predictable user experience regardless of symptom-selection order and improves reproducibility, testing and documentation. Evidence establishes that the change affects display order only.",
+    "reviewer_name": "Ayodele John Oluwaseyi",
+    "reviewer_title": "Co-Founder & CEO, WellaPath",
+    "review_date": "2026-08-24",
     "affected_option_order_groups": 903,
     "affected_paths": 1872,
     "evidence_binding": {

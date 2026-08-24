@@ -60,6 +60,13 @@ STEPS = [
     ("IM-001 option-order evidence is current",
      ["tools/report_im001_option_ordering.py", "--check"]),
     ("IM-001 decision set is valid", ["tools/validate_im001_decisions.py"]),
+    ("IM-001 verdict record is current",
+     ["tools/report_im001_verdicts.py", "--check"]),
+    ("IM-001 verdicts are valid", ["tools/validate_im001_verdicts.py"]),
+    ("IM-001 verdict validators bite (mutation proofs)",
+     ["tools/validate_im001_verdicts.py", "--mutations"]),
+    ("IM-001 workbook is current", ["tools/build_im001_workbook.py", "--check"]),
+    ("IM-001 workbook is valid", ["tools/validate_im001_workbook.py"]),
 ]
 
 

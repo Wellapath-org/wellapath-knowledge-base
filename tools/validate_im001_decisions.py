@@ -17,7 +17,13 @@ Fails if:
   * the global decision becomes approved without reviewer, date, rationale and evidence;
   * the evidence hash binding drifts;
   * the wording decision count changes, or any wording text or alternative changes;
-  * a wording decision leaves PENDING without complete reviewer evidence;
+  * a recorded verdict lacks complete reviewer evidence (name, title, date,
+    selection, rationale, product authority), or any decision is still
+    PENDING after the Step 11 recording;
+  * the fast_breathing_child clinical flag (IM001-CLIN-FLAG-001) is not
+    visible on IM001-D018/D027 and at the gate;
+  * resolution of the decision set is read as activation, publication or
+    clinical approval (all must remain false);
   * candidate 1.1 changes while the evidence still claims to describe it.
 """
 
@@ -186,11 +192,17 @@ def run():
     results.add("E.decision", "exactly_one_global_ordering_decision",
                 record["decision_id"] == "IM001-ORD-GLOBAL-001"
                 and record["decision_type"] == "deterministic_option_ordering_rule")
-    results.add("E.decision", "decision_is_pending", record["status"] == "pending",
-                record["status"])
+    results.add("E.decision", "decision_is_approved_as_ord_a",
+                record["status"] == "approved" and record.get("selection") == "ORD-A",
+                "%s/%s" % (record["status"], record.get("selection")))
     results.add("E.decision", "reviewer_role_is_product", record["reviewer_role"] == "Product")
-    results.add("E.decision", "activation_blocker_is_true",
-                record["activation_blocker"] is True)
+    results.add("E.decision", "approval_lifts_the_blocker_without_authorizing_activation",
+                record["activation_blocker"] is False
+                and record.get("activation_authorized") is False
+                and record.get("clinical_approval") is False,
+                "blocker=%s activation=%s clinical=%s"
+                % (record["activation_blocker"], record.get("activation_authorized"),
+                   record.get("clinical_approval")))
     results.add("E.decision", "approval_scope_is_narrow",
                 record["approval_authorizes"] == [
                     "deterministic ordering of the same existing options within a grouped question"])
@@ -238,9 +250,29 @@ def run():
     results.add("H.wording", "wording_decision_count_is_135",
                 len(decisions) == EXPECTED["wording_decisions"], str(len(decisions)))
     pending = [d for d in decisions if d["product_verdict"] == "PENDING"]
-    results.add("H.wording", "every_wording_decision_remains_pending",
-                len(pending) == len(decisions),
-                "%d of %d pending" % (len(pending), len(decisions)))
+    approved = [d for d in decisions if d["product_verdict"] == "APPROVED"]
+    results.add("H.wording", "every_wording_decision_recorded_approved",
+                len(approved) == len(decisions) and not pending,
+                "%d approved, %d pending of %d" % (len(approved), len(pending),
+                                                   len(decisions)))
+    incomplete_records = [
+        d["decision_id"] for d in approved
+        if not (d.get("product_reviewer") and d.get("product_reviewer_title")
+                and d.get("review_date") and d.get("product_selection")
+                and d.get("product_rationale")
+                and d.get("product_authority") == "product")
+    ]
+    results.add("H.wording", "every_verdict_carries_full_reviewer_evidence",
+                not incomplete_records, str(incomplete_records[:6]))
+    results.add("H.wording", "every_selection_is_keep_candidate_wording",
+                all(d.get("product_selection") == "keep_candidate_wording"
+                    for d in approved))
+    flagged = sorted(d["decision_id"] for d in decisions if d.get("clinical_flag"))
+    results.add("H.wording", "fast_breathing_clinical_flag_visible",
+                flagged == ["IM001-D018", "IM001-D027"]
+                and all(d.get("clinical_flag") == "IM001-CLIN-FLAG-001"
+                        for d in decisions if d.get("clinical_flag")),
+                str(flagged))
     incomplete_verdicts = [
         d["decision_id"] for d in decisions
         if d["product_verdict"] != "PENDING"
@@ -256,20 +288,45 @@ def run():
                 all("ordering" not in str(d.get("selected_source", "")).lower()
                     for d in decisions)
                 and all(d["decision_id"] != "IM001-ORD-GLOBAL-001" for d in decisions))
-    results.add("H.wording", "im001_not_marked_resolved",
-                wording["sign_off"]["status"] == "PENDING"
-                and wording["sign_off"]["blocks_activation"] is True,
-                json.dumps(wording["sign_off"]))
+    sign_off = wording["sign_off"]
+    results.add("H.wording", "sign_off_complete_with_reviewer_and_date",
+                sign_off["status"] == "COMPLETE"
+                and sign_off.get("reviewer") == "Ayodele John Oluwaseyi"
+                and sign_off.get("reviewer_title") == "Co-Founder & CEO, WellaPath"
+                and sign_off.get("review_date") == "2026-08-24",
+                json.dumps(sign_off)[:160])
+    results.add("H.wording", "sign_off_grants_no_activation_or_clinical_approval",
+                sign_off.get("activation_authorized") is False
+                and sign_off.get("clinical_approval") is False
+                and "IM001-CLIN-FLAG-001" in sign_off.get("note", ""),
+                json.dumps(sign_off)[:160])
 
     # --- I. the combined gate ------------------------------------------------
     gate = decision["im_001_gate"]
     results.add("I.gate", "total_product_decisions_is_136",
                 gate["total_product_decisions_required"] == EXPECTED["total_product_decisions"],
                 str(gate["total_product_decisions_required"]))
-    results.add("I.gate", "wording_and_ordering_are_counted_separately",
-                gate["wording_decisions_pending"] == EXPECTED["wording_decisions"]
-                and gate["ordering_rule_decisions_pending"] == 1)
-    results.add("I.gate", "im_001_remains_unresolved", gate["im_001_resolved"] is False)
+    results.add("I.gate", "zero_pending_in_both_gates",
+                gate["wording_decisions_pending"] == 0
+                and gate["ordering_rule_decisions_pending"] == 0,
+                "wording=%s ordering=%s" % (gate["wording_decisions_pending"],
+                                            gate["ordering_rule_decisions_pending"]))
+    results.add("I.gate", "im_001_resolved_only_because_zero_pending",
+                gate["im_001_resolved"] is (gate["wording_decisions_pending"] == 0
+                                            and gate["ordering_rule_decisions_pending"] == 0))
+    results.add("I.gate", "resolution_grants_no_activation",
+                gate.get("activation_authorized") is False
+                and decision["decision"].get("activation_authorized") is False
+                and decision["decision"].get("clinical_approval") is False)
+    results.add("I.gate", "ordering_approval_complete_and_is_ord_a",
+                decision["decision"]["status"] == "approved"
+                and decision["decision"].get("selection") == "ORD-A"
+                and decision["decision"].get("reviewer_identity")
+                == "Ayodele John Oluwaseyi"
+                and decision["decision"].get("review_date") == "2026-08-24"
+                and bool(decision["decision"].get("rationale")))
+    results.add("I.gate", "clinical_flag_held_open_at_the_gate",
+                gate.get("clinical_flags_open") == ["IM001-CLIN-FLAG-001"])
 
     return results
 

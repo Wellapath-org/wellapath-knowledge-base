@@ -456,6 +456,7 @@ def build_decision(evidence, wording_decision_count):
             "reviewer_identity": None,
             "review_date": None,
             "rationale": None,
+            "selection": None,
             "candidate_rule_under_review": (
                 "Within a grouped question, answer options are emitted in a declared "
                 "deterministic order derived from the candidate's option ordering, rather than "
@@ -508,6 +509,53 @@ def build_decision(evidence, wording_decision_count):
     }
 
 
+def apply_recorded_verdict(decision_report, wording_review):
+    """I2/W3 Step 11: apply the recorded ORD-A verdict, if the authoritative
+    verdict record exists. Approval of the ordering rule never approves
+    wording, activation or publication — those stay false and validated."""
+    verdicts_path = repo_path("reports", "im001_product_verdicts_v1.json")
+    if not os.path.exists(verdicts_path):
+        return decision_report
+    record = load_json(verdicts_path)
+    verdict = record["ordering_verdict"]
+    if verdict["decision_id"] != "IM001-ORD-GLOBAL-001":
+        raise SystemExit("FAIL verdict record names an unknown ordering decision")
+
+    decision = decision_report["decision"]
+    decision["status"] = "approved"
+    decision["selection"] = verdict["selection"]
+    decision["reviewer_identity"] = verdict["reviewer_name"]
+    decision["reviewer_title"] = verdict["reviewer_title"]
+    decision["reviewer_authority"] = verdict["authority"]
+    decision["review_date"] = verdict["review_date"]
+    decision["rationale"] = verdict["rationale"]
+    decision["activation_blocker"] = False
+    decision["activation_blocker_reason"] = (
+        "The ordering decision is approved and no longer blocks. Activation "
+        "remains UNAUTHORIZED regardless: approval authorizes deterministic "
+        "ordering of the same options only, and activation, publication and "
+        "Mobile implementation authorization are all false.")
+    decision["activation_authorized"] = False
+    decision["clinical_approval"] = False
+
+    wording_pending = sum(1 for d in wording_review["decisions"]
+                          if d["product_verdict"] == "PENDING")
+    gate = decision_report["im_001_gate"]
+    gate["wording_decisions_pending"] = wording_pending
+    gate["ordering_rule_decisions_pending"] = 0
+    gate["im_001_resolved"] = wording_pending == 0
+    gate["activation_authorized"] = False
+    gate["clinical_flags_open"] = [f["flag_id"] for f in record["clinical_flags"]]
+    gate["note"] = (
+        "All 136 Product decisions are recorded (135 wording + 1 ordering; "
+        "reports/im001_product_verdicts_v1.json, 2026-08-24). im_001_resolved "
+        "refers to the DECISION SET only: activation, publication and Mobile "
+        "implementation remain unauthorized, and clinical flag "
+        "IM001-CLIN-FLAG-001 must be reviewed by Clinical before any "
+        "activation decision involving fast_breathing_child.severity.")
+    return decision_report
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true")
@@ -530,6 +578,7 @@ def main():
         return 1
 
     decision = build_decision(evidence, wording_count)
+    decision = apply_recorded_verdict(decision, load_json(WORDING_REVIEW))
     outputs = [(EVIDENCE_PATH, evidence), (DECISION_PATH, decision)]
 
     for path, payload in outputs:

@@ -110,14 +110,23 @@ def build():
     # --- refuse to build against a drifted baseline ---------------------------
     preconditions = {
         "wording_decisions_are_135": len(decisions) == 135,
-        "all_wording_pending": all(d["product_verdict"] == "PENDING"
-                                   and d["product_reviewer"] is None
-                                   for d in decisions),
-        "global_decision_pending": (global_d["decision_id"] == "IM001-ORD-GLOBAL-001"
-                                    and global_d["status"] == "pending"),
-        "im001_unresolved": (order_decision["im_001_gate"]["im_001_resolved"] is False
-                             and review["sign_off"]["status"] == "PENDING"
-                             and review["sign_off"]["blocks_activation"] is True),
+        "every_wording_decision_pending_or_fully_recorded": all(
+            d["product_verdict"] == "PENDING"
+            or (d["product_verdict"] == "APPROVED" and d.get("product_reviewer")
+                and d.get("review_date") and d.get("product_selection")
+                and d.get("product_rationale"))
+            for d in decisions),
+        "global_decision_pending_or_fully_recorded": (
+            global_d["decision_id"] == "IM001-ORD-GLOBAL-001"
+            and (global_d["status"] == "pending"
+                 or (global_d["status"] == "approved"
+                     and global_d.get("reviewer_identity")
+                     and global_d.get("review_date") and global_d.get("rationale")
+                     and global_d.get("selection")))),
+        "resolution_state_consistent": (
+            order_decision["im_001_gate"]["im_001_resolved"]
+            is (not any(d["product_verdict"] == "PENDING" for d in decisions)
+                and global_d["status"] == "approved")),
         "clinical_impact_all_zero": impact["all_clinical_dimensions_zero"] is True,
         "reconciliation_21_dimensions_agree": (
             len(recon["detail"]) == 21 and recon["all_counts_agree"] is True
@@ -152,19 +161,22 @@ def build():
                 "questions; no duration or severity question has an option-"
                 "order difference. Option-order instability on the captured "
                 "paths is governed separately by IM001-ORD-GLOBAL-001."),
-            "status": "PENDING",
-            "reviewer_selection": None,
+            "status": ("APPROVED" if d["product_verdict"] == "APPROVED"
+                       else "PENDING"),
+            "reviewer_selection": d.get("product_selection"),
             "reviewer_selection_options": [
                 "keep_candidate_wording", "use_alternative_wording", "defer"],
-            "reviewer_rationale": None,
-            "reviewer_name": None,
-            "reviewer_title": None,
-            "review_date": None,
+            "reviewer_rationale": d.get("product_rationale"),
+            "reviewer_name": d.get("product_reviewer"),
+            "reviewer_title": d.get("product_reviewer_title"),
+            "review_date": d.get("review_date"),
             "evidence_binding": {
                 "artifact": "reports/im001_product_review_v1_1.json",
                 "decision_id": d["decision_id"],
             },
         })
+        if d.get("clinical_flag"):
+            items[-1]["clinical_flag"] = d["clinical_flag"]
 
     # --- slot batches ------------------------------------------------------------
     batches = []
@@ -238,12 +250,12 @@ def build():
             {"choice_id": "ORD-C",
              "choice": "Request a different deterministic ordering rule."},
         ],
-        "status": "PENDING",
-        "reviewer_selection": None,
-        "reviewer_rationale": None,
-        "reviewer_name": None,
-        "reviewer_title": None,
-        "review_date": None,
+        "status": ("APPROVED" if global_d["status"] == "approved" else "PENDING"),
+        "reviewer_selection": global_d.get("selection"),
+        "reviewer_rationale": global_d.get("rationale"),
+        "reviewer_name": global_d.get("reviewer_identity"),
+        "reviewer_title": global_d.get("reviewer_title"),
+        "review_date": global_d.get("review_date"),
         "affected_option_order_groups": global_d["affected_option_order_groups"],
         "affected_paths": global_d["affected_paths"],
         "evidence_binding": {
@@ -287,10 +299,11 @@ def build():
                 "individually identifiable and individually overridable."
                 % len(batches)),
         },
-        "progress": {
-            "reviewed": 0, "pending": 136, "deferred": 0,
-            "wording_pending": 135, "ordering_pending": 1,
-        },
+        "progress": (lambda wp, op: {
+            "reviewed": 136 - wp - op, "pending": wp + op, "deferred": 0,
+            "wording_pending": wp, "ordering_pending": op,
+        })(sum(1 for i in items if i["status"] == "PENDING"),
+           0 if global_d["status"] == "approved" else 1),
         "clinical_impact_dimensions_all_zero": {
             k: impact[k] for k in (
                 "option_membership_differences",
@@ -347,15 +360,24 @@ def build():
             "workbook_binding": {"path": "review/im001_workbook_v1/im001_workbook_v1.json"},
         },
         "wording_verdicts": [
-            {"decision_id": d["decision_id"], "verdict": None,
-             "chosen_wording": None, "rationale": None,
-             "reviewer_name": None, "reviewer_title": None, "review_date": None}
+            {"decision_id": d["decision_id"],
+             "verdict": d.get("product_selection"),
+             "chosen_wording": (d["selected_wording"]
+                                if d.get("product_selection")
+                                == "keep_candidate_wording" else None),
+             "rationale": d.get("product_rationale"),
+             "reviewer_name": d.get("product_reviewer"),
+             "reviewer_title": d.get("product_reviewer_title"),
+             "review_date": d.get("review_date")}
             for d in decisions
         ],
         "ordering_verdict": {
-            "decision_id": "IM001-ORD-GLOBAL-001", "choice": None,
-            "rationale": None, "reviewer_name": None, "reviewer_title": None,
-            "review_date": None,
+            "decision_id": "IM001-ORD-GLOBAL-001",
+            "choice": global_d.get("selection"),
+            "rationale": global_d.get("rationale"),
+            "reviewer_name": global_d.get("reviewer_identity"),
+            "reviewer_title": global_d.get("reviewer_title"),
+            "review_date": global_d.get("review_date"),
         },
     }
     return workbook, template, batches, preconditions
@@ -385,29 +407,46 @@ def render_markdown(workbook):
     a("**Phase:** I2/W3 Step 10 · **Reviewer:** %s, %s · **Authority:** Product only"
       % (INTENDED_REVIEWER["name"], INTENDED_REVIEWER["title"]))
     a("")
+    progress = workbook["progress"]
     a("## Executive summary")
     a("")
-    a("**136 Product decisions are pending: 135 wording choices + 1 global "
-      "option-ordering rule.** Nothing else. Every measured clinical-impact "
-      "dimension is **zero** — option membership, labels, token mappings, "
-      "reachable tokens, scoring reachability and red-flag reachability are "
-      "all identical between the live behaviour and candidate 1.1 — so these "
-      "are display-wording and display-order choices, reviewable by Product "
-      "alone *while those dimensions stay zero*.")
+    if progress["pending"] == 0:
+        a("**All 136 Product decisions are recorded: 135 wording choices + 1 "
+          "global option-ordering rule — 0 pending, 0 deferred, 0 "
+          "overrides.** Recorded 2026-08-24 by %s per the Step 11 "
+          "reconciliation (`reports/im001_product_verdicts_v1.json`). All "
+          "135 wording decisions keep the candidate wording; the ordering "
+          "decision is **ORD-A**. One open clinical flag survives recording: "
+          "`IM001-CLIN-FLAG-001` on `fast_breathing_child.severity` "
+          "(IM001-D018/D027) — Clinical must review it before any activation "
+          "decision involving that question. Recording approves wording and "
+          "ordering ONLY: no clinical approval, no activation, no "
+          "publication, no Mobile implementation." % INTENDED_REVIEWER["name"])
+    else:
+        a("**%d of 136 Product decisions are pending: %d wording choices + "
+          "%d global option-ordering rule.**"
+          % (progress["pending"], progress["wording_pending"],
+             progress["ordering_pending"]))
+    a("")
+    a("Every measured clinical-impact dimension is **zero** — option "
+      "membership, labels, token mappings, reachable tokens, scoring "
+      "reachability and red-flag reachability are all identical between the "
+      "live behaviour and candidate 1.1 — so these are display-wording and "
+      "display-order choices, within Product authority *while those "
+      "dimensions stay zero*.")
     a("")
     a("The 135 wording decisions collapse naturally into **%d question-slot "
       "batches**: each slot has exactly one candidate wording contested "
       "against several alternatives, so approving a batch approves one "
       "wording, once, for one question. Every one of the 135 remains "
       "individually listed and individually overridable below — grouping "
-      "hides nothing. This workbook records **no verdicts**; all reviewer "
-      "fields are blank." % counts["grouped_presentation_batches"])
+      "hides nothing." % counts["grouped_presentation_batches"])
     a("")
     a("| Progress | Count |")
     a("|---|---:|")
-    a("| Reviewed | 0 |")
-    a("| Pending | 136 |")
-    a("| Deferred | 0 |")
+    a("| Reviewed | %d |" % progress["reviewed"])
+    a("| Pending | %d |" % progress["pending"])
+    a("| Deferred | %d |" % progress["deferred"])
     a("")
     a("## Authorization boundaries")
     a("")
@@ -472,10 +511,11 @@ def render_markdown(workbook):
     a("## Detailed decisions")
     a("")
     a("Every one of the 135 wording decisions, grouped by batch. Status of "
-      "all: **PENDING**. No duration or severity question has an option-order "
+      "all: **%s**. No duration or severity question has an option-order "
       "difference (all 903 measured order groups are additional-symptoms "
       "questions); option order is decided once, globally, in the next "
-      "section.")
+      "section." % ("APPROVED — keep_candidate_wording"
+                    if progress["wording_pending"] == 0 else "PENDING"))
     a("")
     items_by_id = {i["decision_id"]: i for i in workbook["decisions"]}
     for b in workbook["batches"]:
@@ -509,12 +549,22 @@ def render_markdown(workbook):
                               g["affected_paths"],
                               g["plain_language"]["what_approval_does_not_do"]))
     a("")
-    a("Choose exactly one (none is pre-selected):")
+    if g["status"] == "PENDING":
+        a("Choose exactly one (none is pre-selected):")
+    else:
+        a("The three mutually exclusive choices were:")
     a("")
     for choice in g["choices_mutually_exclusive"]:
-        a("- **%s** — %s" % (choice["choice_id"], choice["choice"]))
+        marker = (" ← **selected**"
+                  if g["reviewer_selection"] == choice["choice_id"] else "")
+        a("- **%s** — %s%s" % (choice["choice_id"], choice["choice"], marker))
     a("")
-    a("Status: **PENDING**.")
+    if g["status"] == "PENDING":
+        a("Status: **PENDING**.")
+    else:
+        a("Status: **APPROVED — %s**, recorded by %s (%s) on %s. Rationale: %s"
+          % (g["reviewer_selection"], g["reviewer_name"], g["reviewer_title"],
+             g["review_date"], g["reviewer_rationale"]))
     a("")
     a("## Evidence bindings")
     a("")
@@ -557,7 +607,10 @@ def main():
     if args.check:
         print("OK   IM-001 workbook is current")
     else:
-        print("  decisions: 135 wording + 1 ordering = 136, all PENDING")
+        pending = workbook["progress"]["pending"]
+        print("  decisions: 135 wording + 1 ordering = 136, %s"
+              % ("all recorded (0 pending)" if pending == 0
+                 else "%d pending" % pending))
         print("  batches: %d (grouping hides nothing)" % len(batches))
     return 0
 

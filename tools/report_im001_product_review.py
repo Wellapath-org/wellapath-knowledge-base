@@ -120,6 +120,36 @@ def build_report():
         decision["product_reviewer"] = None
         decision["review_date"] = None
 
+    # I2/W3 Step 11: apply the recorded Product verdicts, if the authoritative
+    # verdict record exists. Only stable fields identify decisions; a verdict
+    # that names an unknown decision, or leaves any decision unrecorded, is a
+    # hard failure rather than a partial write.
+    verdicts_path = repo_path("reports", "im001_product_verdicts_v1.json")
+    sign_off_recorded = False
+    if os.path.exists(verdicts_path):
+        verdict_record = load_json(verdicts_path)
+        by_id = {v["decision_id"]: v for v in verdict_record["wording_verdicts"]}
+        unknown = sorted(set(by_id) - {d["decision_id"] for d in ordered})
+        missing = sorted({d["decision_id"] for d in ordered} - set(by_id))
+        if unknown or missing:
+            raise SystemExit("FAIL verdict record does not match decisions: "
+                             "unknown=%s missing=%s" % (unknown[:3], missing[:3]))
+        for decision in ordered:
+            verdict = by_id[decision["decision_id"]]
+            if verdict["approved_wording"] != decision["selected_wording"]:
+                raise SystemExit("FAIL %s: approved wording disagrees with the "
+                                 "artifact" % decision["decision_id"])
+            decision["product_verdict"] = "APPROVED"
+            decision["product_selection"] = verdict["selection"]
+            decision["product_rationale"] = verdict["rationale"]
+            decision["product_reviewer"] = verdict["reviewer_name"]
+            decision["product_reviewer_title"] = verdict["reviewer_title"]
+            decision["product_authority"] = verdict["authority"]
+            decision["review_date"] = verdict["review_date"]
+            if "clinical_flag" in verdict:
+                decision["clinical_flag"] = verdict["clinical_flag"]
+        sign_off_recorded = True
+
     return {
         "_metadata": {
             "report_id": "im001_product_review",
@@ -172,18 +202,41 @@ def build_report():
             "basis": "reports/question_grouping_parity_v1_1.json, 2,325 captured paths.",
         },
         "decisions": ordered,
-        "sign_off": {
-            "status": "PENDING",
-            "reviewer": None,
-            "review_date": None,
-            "blocks_activation": True,
-            "note": (
-                "Until every decision carries a product_verdict, IM-001 remains an "
-                "activation blocker. Merging candidate 1.1 into the knowledge base does "
-                "not change that: the artifact is an engineering contract, not a "
-                "release."
-            ),
-        },
+        "sign_off": (
+            {
+                "status": "COMPLETE",
+                "reviewer": "Ayodele John Oluwaseyi",
+                "reviewer_title": "Co-Founder & CEO, WellaPath",
+                "authority": "product",
+                "review_date": "2026-08-24",
+                "blocks_activation": False,
+                "activation_authorized": False,
+                "clinical_approval": False,
+                "note": (
+                    "All 135 wording decisions carry Product verdicts, recorded "
+                    "2026-08-24 from the Step 11 reconciliation "
+                    "(reports/im001_product_verdicts_v1.json). The IM-001 wording "
+                    "decision set no longer blocks activation, but NOTHING here "
+                    "authorizes activation: publication and activation "
+                    "authorization remain false, candidate 1.1 remains unpublished "
+                    "and inactive, and clinical flag IM001-CLIN-FLAG-001 "
+                    "(fast_breathing_child.severity, IM001-D018/D027) requires "
+                    "Clinical review before any activation decision involving "
+                    "that question."
+                ),
+            } if sign_off_recorded else {
+                "status": "PENDING",
+                "reviewer": None,
+                "review_date": None,
+                "blocks_activation": True,
+                "note": (
+                    "Until every decision carries a product_verdict, IM-001 remains an "
+                    "activation blocker. Merging candidate 1.1 into the knowledge base does "
+                    "not change that: the artifact is an engineering contract, not a "
+                    "release."
+                ),
+            }
+        ),
     }
 
 

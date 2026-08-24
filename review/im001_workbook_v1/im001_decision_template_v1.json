@@ -14,1226 +14,1226 @@
   "wording_verdicts": [
     {
       "decision_id": "IM001-D001",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D002",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe are your abdominal cramps?",
+      "rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D003",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D004",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D005",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe are your abdominal cramps?",
+      "rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D006",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your body pain?",
+      "rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D007",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D008",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D009",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D010",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe are your abdominal cramps?",
+      "rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D011",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your body pain?",
+      "rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D012",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your cough?",
+      "rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D013",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D014",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D015",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D016",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D017",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe are your abdominal cramps?",
+      "rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D018",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is the fast breathing?",
+      "rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D019",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your body pain?",
+      "rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D020",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your cough?",
+      "rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D021",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D022",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D023",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D024",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D025",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D026",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe are your abdominal cramps?",
+      "rationale": "Clearly identifies the symptom being rated. Approval covers wording only, not clinical validity or the scale.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D027",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is the fast breathing?",
+      "rationale": "Among the existing choices, this is the only wording that identifies the symptom actually being clarified. Clinical validity remains explicitly unapproved and flagged for Clinical review before activation.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D028",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your body pain?",
+      "rationale": "Specifically identifies body pain; generic \"this pain\" can be ambiguous when multiple pain symptoms coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D029",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your cough?",
+      "rationale": "Directly identifies cough; alternatives ask about unrelated symptoms. Approval covers display wording only.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D030",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How severe is your headache?",
+      "rationale": "Explicitly identifies headache and avoids ambiguity when headache and another pain symptom coexist.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D031",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D032",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D033",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D034",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D035",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D036",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D037",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D038",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D039",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D040",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D041",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D042",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D043",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D044",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D045",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D046",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D047",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D048",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D049",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D050",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D051",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D052",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D053",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D054",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D055",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D056",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D057",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D058",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D059",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D060",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D061",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D062",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D063",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D064",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D065",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D066",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D067",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D068",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D069",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D070",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D071",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D072",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D073",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D074",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D075",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D076",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D077",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D078",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D079",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D080",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this pain?",
+      "rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D081",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D082",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D083",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D084",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D085",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had excessive sweating?",
+      "rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D086",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D087",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D088",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D089",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D090",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D091",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D092",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this pain?",
+      "rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D093",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D094",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D095",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D096",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D097",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had excessive sweating?",
+      "rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D098",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D099",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D100",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D101",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D102",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D103",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D104",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this pain?",
+      "rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D105",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this swelling?",
+      "rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D106",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D107",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you been vomiting?",
+      "rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D108",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D109",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D110",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D111",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had excessive sweating?",
+      "rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D112",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D113",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D114",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D115",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D116",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D117",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D118",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this pain?",
+      "rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D119",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this swelling?",
+      "rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D120",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D121",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you been vomiting?",
+      "rationale": "Directly identifies vomiting; alternatives ask about weakness or watery stool.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D122",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt dizzy?",
+      "rationale": "Concise, natural and directly asks about dizziness.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D123",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you felt this fatigue?",
+      "rationale": "Directly identifies fatigue and avoids a path-dependent mismatch with other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D124",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had chills?",
+      "rationale": "Concise, natural and directly asks about chills rather than another selected symptom.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D125",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had excessive sweating?",
+      "rationale": "Clearly identifies excessive sweating and removes mismatched symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D126",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had nausea?",
+      "rationale": "Directly identifies nausea and prevents other symptom wording from appearing in its place.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D127",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had these abdominal cramps?",
+      "rationale": "Directly asks about the intended symptom; alternatives refer to other symptoms and create context mismatch. Candidate follows the established plural duration pattern.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D128",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this body pain?",
+      "rationale": "Clearly identifies body pain; inherited wording for other symptoms would be inconsistent and ambiguous.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D129",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this cough?",
+      "rationale": "Directly identifies cough and removes path-dependent wording inherited from unrelated symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D130",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this fever?",
+      "rationale": "Clearly identifies fever and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D131",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this headache?",
+      "rationale": "Directly identifies headache and removes misleading inherited wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D132",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this pain?",
+      "rationale": "Directly identifies the intended pain symptom and provides consistent wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D133",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had this swelling?",
+      "rationale": "Directly identifies swelling and avoids unrelated symptom wording.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D134",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you had watery stool?",
+      "rationale": "Directly identifies watery stool; the only alternative asks about weakness and is a clear context mismatch.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     },
     {
       "decision_id": "IM001-D135",
-      "verdict": null,
-      "chosen_wording": null,
-      "rationale": null,
-      "reviewer_name": null,
-      "reviewer_title": null,
-      "review_date": null
+      "verdict": "keep_candidate_wording",
+      "chosen_wording": "How long have you noticed dark urine?",
+      "rationale": "Naturally asks when the intended symptom was observed and avoids wording referring to other symptoms.",
+      "reviewer_name": "Ayodele John Oluwaseyi",
+      "reviewer_title": "Co-Founder & CEO, WellaPath",
+      "review_date": "2026-08-24"
     }
   ],
   "ordering_verdict": {
     "decision_id": "IM001-ORD-GLOBAL-001",
-    "choice": null,
-    "rationale": null,
-    "reviewer_name": null,
-    "reviewer_title": null,
-    "review_date": null
+    "choice": "ORD-A",
+    "rationale": "A stable option order provides a consistent and predictable user experience regardless of symptom-selection order and improves reproducibility, testing and documentation. Evidence establishes that the change affects display order only.",
+    "reviewer_name": "Ayodele John Oluwaseyi",
+    "reviewer_title": "Co-Founder & CEO, WellaPath",
+    "review_date": "2026-08-24"
   }
 }

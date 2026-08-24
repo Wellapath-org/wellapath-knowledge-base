@@ -18,11 +18,12 @@
   "decision": {
     "decision_id": "IM001-ORD-GLOBAL-001",
     "decision_type": "deterministic_option_ordering_rule",
-    "status": "pending",
+    "status": "approved",
     "reviewer_role": "Product",
-    "reviewer_identity": null,
-    "review_date": null,
-    "rationale": null,
+    "reviewer_identity": "Ayodele John Oluwaseyi",
+    "review_date": "2026-08-24",
+    "rationale": "A stable option order provides a consistent and predictable user experience regardless of symptom-selection order and improves reproducibility, testing and documentation. Evidence establishes that the change affects display order only.",
+    "selection": "ORD-A",
     "candidate_rule_under_review": "Within a grouped question, answer options are emitted in a declared deterministic order derived from the candidate's option ordering, rather than in the order the engine happened to visit the selected tokens.",
     "baseline_behaviour": "Option order follows selected-token visitation order, so the same symptom set tapped in a different order yields a different option sequence.",
     "candidate_behaviour": "Deterministic ordering defined by Question Flow 1.1.",
@@ -35,8 +36,8 @@
     "clinical_review_required": false,
     "clinical_review_required_is_conditional": true,
     "clinical_review_condition": "Product review alone is sufficient ONLY while option membership, option-to-token mapping, reachable tokens, scoring reachability and red-flag reachability all remain zero. If any becomes non-zero this classification is invalid, clinical review becomes mandatory, and validation fails.",
-    "activation_blocker": true,
-    "activation_blocker_reason": "IM-001 stays blocked until this decision is approved.",
+    "activation_blocker": false,
+    "activation_blocker_reason": "The ordering decision is approved and no longer blocks. Activation remains UNAUTHORIZED regardless: approval authorizes deterministic ordering of the same options only, and activation, publication and Mobile implementation authorization are all false.",
     "approval_authorizes": [
       "deterministic ordering of the same existing options within a grouped question"
     ],
@@ -50,13 +51,21 @@
       "IM-003 adaptive re-branching",
       "publication of any candidate",
       "production or beta activation"
-    ]
+    ],
+    "reviewer_title": "Co-Founder & CEO, WellaPath",
+    "reviewer_authority": "product",
+    "activation_authorized": false,
+    "clinical_approval": false
   },
   "im_001_gate": {
-    "wording_decisions_pending": 135,
-    "ordering_rule_decisions_pending": 1,
+    "wording_decisions_pending": 0,
+    "ordering_rule_decisions_pending": 0,
     "total_product_decisions_required": 136,
-    "im_001_resolved": false,
-    "note": "IM-001 requires 136 Product decisions: 135 wording selections plus one global ordering rule. The two are separate and neither is combined into the other."
+    "im_001_resolved": true,
+    "note": "All 136 Product decisions are recorded (135 wording + 1 ordering; reports/im001_product_verdicts_v1.json, 2026-08-24). im_001_resolved refers to the DECISION SET only: activation, publication and Mobile implementation remain unauthorized, and clinical flag IM001-CLIN-FLAG-001 must be reviewed by Clinical before any activation decision involving fast_breathing_child.severity.",
+    "activation_authorized": false,
+    "clinical_flags_open": [
+      "IM001-CLIN-FLAG-001"
+    ]
   }
 }
