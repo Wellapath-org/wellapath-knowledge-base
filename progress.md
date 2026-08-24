@@ -942,3 +942,55 @@ dimensions agree · every clinical-impact dimension zero.
   records, case bank, known findings, manifest and publication state,
   Mobile and Backend. **IM-003 remains blocked; Mobile PR #76 remains
   unmerged; this PR is left unmerged for review.**
+
+## I2 / W3 Step 11 — IM-001 Product verdicts recorded (136/136)
+
+**Source:** the Product reviewer's Final Product Decision Reconciliation of
+2026-08-24, confirmed for recording ("Yes — record the reconciled decisions
+now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
+
+- **All 136 Product decisions recorded**: 135 wording decisions →
+  `keep_candidate_wording`, IM001-ORD-GLOBAL-001 → **ORD-A**. Reviewer on
+  every verdict: Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath,
+  authority `product`, date 2026-08-24. **0 pending, 0 deferred, 0
+  overrides, 0 conflicts.** Each of the 20 batch approvals is expanded to
+  its explicit member IDs; each member carries its batch rationale
+  verbatim.
+
+- **New authoritative record** `reports/im001_product_verdicts_v1.json`
+  (`tools/report_im001_verdicts.py`, deterministic, fail-closed, `--check`),
+  bound to the vendored reconciliation by sha256 and to the three
+  reviewed-over evidence hashes. The wording artifact and the ordering
+  decision are regenerated through their existing generators, which now
+  apply the recorded verdicts as an overlay — decisions APPROVED with full
+  reviewer evidence; sign-off COMPLETE; ordering approved as ORD-A.
+
+- **Resolution without authorization:** `im_001_resolved: true` refers to
+  the decision set only. `activation_authorized`, `clinical_approval`,
+  publication and Mobile implementation are all **false** in the verdict
+  record, the wording sign-off, the ordering decision and the gate — each
+  enforced with mutation proofs.
+
+- **Clinical flag preserved:** IM001-CLIN-FLAG-001 on
+  `fast_breathing_child.severity` (IM001-D018/D027) — Product approved the
+  wording only; severity-rating validity, question validity, scale
+  appropriateness and clinical interpretation remain explicitly unapproved
+  and the flag must be reviewed by Clinical before any activation decision
+  involving that question. Visible in the verdict record, the wording
+  artifact, the gate and the workbook.
+
+- **Workbook now reflects recorded state** (regenerated): progress 136
+  reviewed / 0 pending, all items APPROVED with reviewer fields, ORD-A
+  marked selected; the two state-dependent mutations were rebased.
+
+- **Validators:** verdicts 28 checks + **15/15 mutations** ·
+  IM-001 decisions updated for the recorded state (58 checks) · workbook
+  30 checks + 14/14 mutations · W3 grouping suite grown to **30 checks**
+  (verdict staleness, verdict validity, verdict mutations, workbook
+  staleness, workbook validity). Evidence table byte-identical
+  (`fd4391a2…`); oracle untouched.
+
+- **Untouched:** question candidates, schemas, clinical artifacts, runtime
+  behaviour, publication state, R2/config, IM-003 records (blocker open,
+  D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
+  and unmerged; this PR is left unmerged for review.**

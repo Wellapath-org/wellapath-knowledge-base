@@ -286,9 +286,13 @@ def _m_path_count_drift(w, t, r, od, oe):
 
 
 def _m_approved_without_reviewer(w, t, r, od, oe):
+    # An approved item stripped of its reviewer identity must fail closed —
+    # whether the strip happens before or after recording.
     w["decisions"][0]["status"] = "APPROVED"
     w["decisions"][0]["reviewer_selection"] = "keep_candidate_wording"
-    # rationale/name/title/date left null
+    w["decisions"][0]["reviewer_name"] = None
+    w["decisions"][0]["review_date"] = None
+    w["decisions"][0]["reviewer_rationale"] = None
     return (w, t, r, od, oe), "C.integrity:no_approval_without_full_reviewer_evidence"
 
 
@@ -324,6 +328,11 @@ def _m_authority_claimed(w, t, r, od, oe):
 
 
 def _m_resolved_while_pending(w, t, r, od, oe):
+    # Reopen one decision while the gate still claims resolution.
+    w["decisions"][0]["status"] = "PENDING"
+    w["progress"]["pending"] += 1
+    w["progress"]["reviewed"] -= 1
+    w["progress"]["wording_pending"] += 1
     od["im_001_gate"]["im_001_resolved"] = True
     return (w, t, r, od, oe), "C.integrity:im001_not_resolved_while_pending"
 

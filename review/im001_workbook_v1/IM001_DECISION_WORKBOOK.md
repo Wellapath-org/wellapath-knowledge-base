@@ -4,14 +4,16 @@
 
 ## Executive summary
 
-**136 Product decisions are pending: 135 wording choices + 1 global option-ordering rule.** Nothing else. Every measured clinical-impact dimension is **zero** — option membership, labels, token mappings, reachable tokens, scoring reachability and red-flag reachability are all identical between the live behaviour and candidate 1.1 — so these are display-wording and display-order choices, reviewable by Product alone *while those dimensions stay zero*.
+**All 136 Product decisions are recorded: 135 wording choices + 1 global option-ordering rule — 0 pending, 0 deferred, 0 overrides.** Recorded 2026-08-24 by Ayodele John Oluwaseyi per the Step 11 reconciliation (`reports/im001_product_verdicts_v1.json`). All 135 wording decisions keep the candidate wording; the ordering decision is **ORD-A**. One open clinical flag survives recording: `IM001-CLIN-FLAG-001` on `fast_breathing_child.severity` (IM001-D018/D027) — Clinical must review it before any activation decision involving that question. Recording approves wording and ordering ONLY: no clinical approval, no activation, no publication, no Mobile implementation.
 
-The 135 wording decisions collapse naturally into **20 question-slot batches**: each slot has exactly one candidate wording contested against several alternatives, so approving a batch approves one wording, once, for one question. Every one of the 135 remains individually listed and individually overridable below — grouping hides nothing. This workbook records **no verdicts**; all reviewer fields are blank.
+Every measured clinical-impact dimension is **zero** — option membership, labels, token mappings, reachable tokens, scoring reachability and red-flag reachability are all identical between the live behaviour and candidate 1.1 — so these are display-wording and display-order choices, within Product authority *while those dimensions stay zero*.
+
+The 135 wording decisions collapse naturally into **20 question-slot batches**: each slot has exactly one candidate wording contested against several alternatives, so approving a batch approves one wording, once, for one question. Every one of the 135 remains individually listed and individually overridable below — grouping hides nothing.
 
 | Progress | Count |
 |---|---:|
-| Reviewed | 0 |
-| Pending | 136 |
+| Reviewed | 136 |
+| Pending | 0 |
 | Deferred | 0 |
 
 ## Authorization boundaries
@@ -103,7 +105,7 @@ Batches ordered by how often their wording is seen on captured paths (attributio
 
 ## Detailed decisions
 
-Every one of the 135 wording decisions, grouped by batch. Status of all: **PENDING**. No duration or severity question has an option-order difference (all 903 measured order groups are additional-symptoms questions); option order is decided once, globally, in the next section.
+Every one of the 135 wording decisions, grouped by batch. Status of all: **APPROVED — keep_candidate_wording**. No duration or severity question has an option-order difference (all 903 measured order groups are additional-symptoms questions); option order is decided once, globally, in the next section.
 
 ### `IM001-BATCH-DURATION-abdominal_cramps`
 
@@ -394,20 +396,20 @@ What is unchanged either way:
 
 **This decision affects display order only** — 903 option groups on 1872 captured paths. Approving the ordering rule does not approve any of the 135 wording choices and does not activate or publish candidate 1.1.
 
-Choose exactly one (none is pre-selected):
+The three mutually exclusive choices were:
 
-- **ORD-A** — Approve candidate 1.1 deterministic option ordering.
+- **ORD-A** — Approve candidate 1.1 deterministic option ordering. ← **selected**
 - **ORD-B** — Retain current selection-order-dependent option ordering.
 - **ORD-C** — Request a different deterministic ordering rule.
 
-Status: **PENDING**.
+Status: **APPROVED — ORD-A**, recorded by Ayodele John Oluwaseyi (Co-Founder & CEO, WellaPath) on 2026-08-24. Rationale: A stable option order provides a consistent and predictable user experience regardless of symptom-selection order and improves reproducibility, testing and documentation. Evidence establishes that the change affects display order only.
 
 ## Evidence bindings
 
 | Artifact | SHA256 |
 |---|---|
-| `reports/im001_product_review_v1_1.json` | `4788fee0b6bcf764c22add101d9e4ea806c70a4119c73e6b16b2ebdd2d4324c2` |
-| `reports/im001_option_order_decision_v1.json` | `6adbfcc4e2a6983b4a07ff6e04298444061c9343e8da9a86b433b6e6f505f1b1` |
+| `reports/im001_product_review_v1_1.json` | `930fd258a7739affd4a9117b26e4b4017b396391ecc5fcfedaef0ad363a3ee65` |
+| `reports/im001_option_order_decision_v1.json` | `594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1` |
 | `reports/im001_option_order_evidence_v1.json` | `fd4391a21c5db85c4881c2b5d238f968def58b999d6caa28580d28830e181939` |
 
 The workbook is regenerated deterministically from these artifacts by `tools/build_im001_workbook.py`; drift fails `--check` and validation.
