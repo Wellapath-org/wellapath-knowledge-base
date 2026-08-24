@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-22
+Last updated: 2026-08-24
 
 ## Merged
 
@@ -890,3 +890,55 @@ KB baseline at receipt `83cd5258`; Mobile PR #76 open/unmerged at `13be0d49`.
   publication state; the blocker registry and decision package (byte-identical,
   still open/pending); Mobile and Backend. **Mobile PR #76 remains unmerged;
   this KB PR is left unmerged for review.**
+
+## I2 / W3 Step 10 — IM-001 Product decision workbook prepared
+
+**Baseline verified at develop `7035e03c`:** 135 wording decisions pending ·
+IM001-ORD-GLOBAL-001 pending · 136 total · IM-001 unresolved and
+activation-blocking · evidence binding intact · all 21 reconciliation
+dimensions agree · every clinical-impact dimension zero.
+
+- **Workbook built** (`review/im001_workbook_v1/`): machine-readable workbook,
+  fill-in decision template, and a human review document. Each of the 135
+  wording decisions carries ID, role, trigger token/slot, candidate wording,
+  the alternative it beat, affected-path count, representative paths, an
+  explicit option-order field (no duration/severity question has an order
+  difference — all 903 order groups are additional-symptoms questions),
+  PENDING status, null reviewer fields and its evidence binding. No raw
+  oracle inspection required.
+
+- **Grouping hides nothing:** 135 decisions → **20 question-slot batches**
+  (15 duration, 5 severity; each slot = one candidate wording vs N
+  alternatives, so batches cannot contain conflicting alternatives — proven
+  by mutation). Batch approval expands to the explicit member-ID list;
+  every item is individually overridable. Original count (135) and grouped
+  presentation count (20 + 1 global) reported separately. A wording-pattern
+  index (9 families + irregulars) is display-only, never an approval unit.
+
+- **IM001-ORD-GLOBAL-001 presented separately** in plain Product language
+  (selection-order-dependent today; deterministic under candidate 1.1;
+  membership/labels/mappings/reachability unchanged; display order only)
+  with three mutually exclusive choices — approve candidate ordering /
+  retain current / request a different rule — **none pre-selected**.
+
+- **No decision made:** all 136 remain PENDING with null reviewer fields;
+  the intended reviewer (Ayodele John Oluwaseyi, Co-Founder & CEO) is named
+  in metadata only. Boundaries stated: Product-only, conditional on
+  clinical-impact dimensions staying zero (any nonzero reopens Clinical
+  review); approval does not publish/activate candidate 1.1, does not
+  authorize Mobile implementation; IM-003/IM003-SB-001 out of scope; Mobile
+  PR #76 unauthorized to merge.
+
+- **Tooling:** `tools/build_im001_workbook.py` (deterministic, fail-closed
+  against baseline drift, `--check`) and `tools/validate_im001_workbook.py`
+  — **30 checks, 14/14 mutation proofs** (count drift, omission,
+  duplication, lost alternative, path drift, approval without reviewer
+  evidence, conflicting batch, nonzero impact dimension in workbook and
+  source, claimed activation authority, resolved-while-pending, hash
+  drift).
+
+- **Untouched:** candidates, wording, ordering, KB/rules/tokens/facilities,
+  oracle and fixtures, IM-001 evidence and decision artifacts, IM-003
+  records, case bank, known findings, manifest and publication state,
+  Mobile and Backend. **IM-003 remains blocked; Mobile PR #76 remains
+  unmerged; this PR is left unmerged for review.**
