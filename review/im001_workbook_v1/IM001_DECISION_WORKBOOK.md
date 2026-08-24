@@ -409,7 +409,7 @@ Status: **APPROVED — ORD-A**, recorded by Ayodele John Oluwaseyi (Co-Founder &
 | Artifact | SHA256 |
 |---|---|
 | `reports/im001_product_review_v1_1.json` | `930fd258a7739affd4a9117b26e4b4017b396391ecc5fcfedaef0ad363a3ee65` |
-| `reports/im001_option_order_decision_v1.json` | `5d1448d0c5e934902122187f080b8201081c4ef666e84f20de64dd848897c60d` |
+| `reports/im001_option_order_decision_v1.json` | `594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1` |
 | `reports/im001_option_order_evidence_v1.json` | `fd4391a21c5db85c4881c2b5d238f968def58b999d6caa28580d28830e181939` |
 
 The workbook is regenerated deterministically from these artifacts by `tools/build_im001_workbook.py`; drift fails `--check` and validation.

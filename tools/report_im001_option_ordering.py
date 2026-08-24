@@ -544,6 +544,22 @@ def apply_recorded_verdict(decision_report, wording_review):
     gate["wording_decisions_pending"] = wording_pending
     gate["ordering_rule_decisions_pending"] = 0
     gate["im_001_resolved"] = wording_pending == 0
+    gate["im_001_resolved_scope"] = {
+        "means_only": ("All Product display decisions in the IM-001 decision "
+                       "set have been recorded."),
+        "does_not_mean": [
+            "candidate activation-ready",
+            "clinical review complete",
+            "question content clinically approved",
+            "publication approved",
+            "Mobile implementation authorized",
+            "external beta or production approved",
+        ],
+        "machine_note": ("Consumers MUST read this scope with the boolean. "
+                         "im_001_resolved carries no authorization of any "
+                         "kind; every authorization gate is a separate "
+                         "explicit field and all are false."),
+    }
     gate["activation_authorized"] = False
     gate["clinical_flags_open"] = [f["flag_id"] for f in record["clinical_flags"]]
     gate["note"] = (

@@ -63,6 +63,18 @@
     "total_product_decisions_required": 136,
     "im_001_resolved": true,
     "note": "All 136 Product decisions are recorded (135 wording + 1 ordering; reports/im001_product_verdicts_v1.json, 2026-08-24). im_001_resolved refers to the DECISION SET only: activation, publication and Mobile implementation remain unauthorized, and clinical flag IM001-CLIN-FLAG-001 must be reviewed by Clinical before any activation decision involving fast_breathing_child.severity.",
+    "im_001_resolved_scope": {
+      "means_only": "All Product display decisions in the IM-001 decision set have been recorded.",
+      "does_not_mean": [
+        "candidate activation-ready",
+        "clinical review complete",
+        "question content clinically approved",
+        "publication approved",
+        "Mobile implementation authorized",
+        "external beta or production approved"
+      ],
+      "machine_note": "Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
     "activation_authorized": false,
     "clinical_flags_open": [
       "IM001-CLIN-FLAG-001"

@@ -204,6 +204,24 @@ def run(verdicts=None, wording=None, order_decision=None, blockers=None,
                 gate["wording_decisions_pending"] == 0
                 and gate["ordering_rule_decisions_pending"] == 0
                 and gate["im_001_resolved"] is True)
+    scope = gate.get("im_001_resolved_scope") or {}
+    results.add("F.agreement", "resolved_scope_is_machine_readable_and_complete",
+                "recorded" in scope.get("means_only", "").lower()
+                and set(scope.get("does_not_mean", [])) >= {
+                    "candidate activation-ready",
+                    "clinical review complete",
+                    "question content clinically approved",
+                    "publication approved",
+                    "Mobile implementation authorized",
+                    "external beta or production approved"},
+                str(scope.get("does_not_mean"))[:120])
+    results.add("F.agreement", "resolved_grants_no_authorization",
+                not (gate["im_001_resolved"] is True
+                     and (gate.get("activation_authorized") is not False
+                          or order_decision["decision"].get(
+                              "activation_authorized") is not False
+                          or order_decision["decision"].get(
+                              "clinical_approval") is not False)))
 
     # --- G. IM-003 undisturbed ---------------------------------------------------
     blocker = next((b for b in blockers["blockers"]
@@ -335,6 +353,28 @@ def _m_im003_blocker_closed(v, w, od, b, p):
     return (v, w, od, b, p), "G.im003:blocker_still_open"
 
 
+def _m_resolved_scope_dropped(v, w, od, b, p):
+    od["im_001_gate"].pop("im_001_resolved_scope", None)
+    return (v, w, od, b, p), "F.agreement:resolved_scope_is_machine_readable_and_complete"
+
+
+def _m_resolved_scope_weakened(v, w, od, b, p):
+    od["im_001_gate"]["im_001_resolved_scope"]["does_not_mean"] = [
+        "publication approved"]
+    return (v, w, od, b, p), "F.agreement:resolved_scope_is_machine_readable_and_complete"
+
+
+def _m_resolved_reads_as_activation(v, w, od, b, p):
+    # im_001_resolved stays true while an authorization flips with it.
+    od["im_001_gate"]["activation_authorized"] = True
+    return (v, w, od, b, p), "F.agreement:resolved_grants_no_authorization"
+
+
+def _m_rationale_removed(v, w, od, b, p):
+    v["wording_verdicts"][0]["rationale"] = None
+    return (v, w, od, b, p), "B.reviewer:every_verdict_fully_attributed"
+
+
 def _m_vendored_hash_drift(v, w, od, b, p):
     v["_metadata"]["source_record"]["sha256"] = "0" * 64
     return (v, w, od, b, p), "H.binding:vendored_reconciliation_hash_matches"
@@ -355,6 +395,10 @@ MUTATIONS = [
     ("gate activation enabled in the artifact", _m_artifact_activation_enabled),
     ("the artifact disagrees with the record", _m_artifact_disagrees),
     ("the IM-003 blocker closed", _m_im003_blocker_closed),
+    ("the resolved-scope block dropped", _m_resolved_scope_dropped),
+    ("the resolved-scope denial list weakened", _m_resolved_scope_weakened),
+    ("resolution read as activation authorization", _m_resolved_reads_as_activation),
+    ("a rationale removed from an approval", _m_rationale_removed),
     ("the vendored reconciliation hash drifted", _m_vendored_hash_drift),
 ]
 
