@@ -225,6 +225,35 @@ Backend will accept. None of these needs Backend support.
 
 ---
 
+## Backend deployment observation (read-only, I3 Step 2C)
+
+Recorded because the re-pin consumed a Backend merge, and it is worth knowing whether that
+merge reached a running environment. **Nothing was restarted, triggered or modified.**
+
+**Finding: no deployment event observed from available evidence.**
+
+That is a statement about the evidence, not a claim that no deployment happened. What was
+checked, all read-only through the GitHub API at `bbaeadd6`:
+
+| Source | Result |
+|---|---|
+| Repository deployments API | no records returned |
+| Deployments filtered to `bbaeadd6` | none |
+| Commit statuses on `bbaeadd6` | none (`total_count: 0`) |
+| Repository environments | none (`total_count: 0`) |
+| In-repo deploy configuration | none — no `render.yaml`; the only workflows are `ci.yml` and `docker.yml`, neither mentioning deploy or Render |
+| GitHub check runs on `bbaeadd6` | `Docker Build: success`, `Lint & Build Check: success` |
+
+A Render auto-deploy hook is configured in Render's own dashboard rather than in the
+repository, and depending on its settings it may deploy without writing a GitHub Deployment
+object or a commit status. Render's dashboard and API were not accessible here, so the absence
+of a GitHub record is not evidence that no deploy occurred. It is only the absence of a record.
+
+**What is verifiable either way:** the contract remains runtime-inactive at `bbaeadd6`. No file
+under `src/routes/`, nor `src/app.ts` or `src/server.ts`, contains a single reference to
+`manifest`. So whether or not a deployment ran, no route serves or consumes the manifest
+contract, and `GET /config` is unchanged.
+
 ## Trigger to go further
 
 An explicit engineering-lead and founder authorization naming publication of a specific artifact
