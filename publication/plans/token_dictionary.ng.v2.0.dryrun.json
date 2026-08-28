@@ -252,7 +252,45 @@
     ],
     "blockers": [],
     "clinical_reviewer_assigned": false,
-    "clinical_reviewer_note": "No Clinical reviewer is assigned. This tooling does not assign one and does not infer clinical approval from any Product decision."
+    "clinical_reviewer_note": "No Clinical reviewer is assigned. This tooling does not assign one and does not infer clinical approval from any Product decision.",
+    "product_approval_scope": {
+      "product_display_decision": {
+        "status": "not_applicable",
+        "scope": "display_wording_and_ordering_only",
+        "decision_ref": null,
+        "contract_representation": null,
+        "grants_artifact_publication_product_approval": false,
+        "grants_clinical_approval": false,
+        "grants_publication_authorization": false,
+        "grants_activation_authorization": false,
+        "substitution_impossible_because": "the contract computes `approved` exclusively from `approvals`; the blockers list is read by a loop that can only deny. No evaluator following contract 1.0.0 can turn a resolved blocker into an approval.",
+        "means_only": null,
+        "does_not_mean": []
+      },
+      "artifact_publication_product_approval": {
+        "status": "pending",
+        "decision_ref": null,
+        "contract_representation": "approvals.product.status",
+        "is_the_only_input_to": "the product half of the contract's `approved` state"
+      },
+      "clinical_approval": {
+        "status": "pending",
+        "decision_ref": null,
+        "contract_representation": "approvals.clinical.status",
+        "reviewer_assigned": false
+      },
+      "publication_authorization": {
+        "granted": false,
+        "decision_ref": null,
+        "contract_representation": "publication_decision_ref"
+      },
+      "activation_authorization": {
+        "granted": false,
+        "decision_ref": null,
+        "contract_representation": "activation_authorized + activation_decision_ref"
+      },
+      "ruling": "IM-001 Product display decisions are complete. Artifact-publication Product approval is pending. Clinical approval is pending. Publication and activation authorization are false. These are four distinct facts and the contract carries each in a different field."
+    }
   },
   "rollback": {
     "predecessor": {

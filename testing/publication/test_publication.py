@@ -37,6 +37,9 @@ from pubkit.reasons import ALL_REASON_CODES, BACKEND_REASON_CODES, KB_REASON_COD
 from pubkit.safety import SideEffectAttempted, imported_cloud_sdks, no_side_effects  # noqa: E402
 from pubkit.staging import DEFAULT_STAGING_ROOT, StagingArea, StagingEscape  # noqa: E402
 from vocab.artifact_io import load_json  # noqa: E402
+from vocab.schema_check import ANNOTATION_ONLY_KEYWORDS, UnsupportedKeyword  # noqa: E402
+from vocab.schema_check import _SUPPORTED as _SUPPORTED_KEYWORDS  # noqa: E402
+from vocab.schema_check import validate as schema_validate  # noqa: E402
 
 
 def repo(*parts):
@@ -78,6 +81,86 @@ def build_plans_in_memory(staging_root=None):
 
 
 # ---------------------------------------------------------------------------------------------
+
+
+class SchemaValidatorHardeningTests(unittest.TestCase):
+    """`schema_check.validate(extra_keywords=...)` exists for this step, so it is proved here.
+
+    The property that matters is narrow and absolute: the parameter may widen which keywords
+    are *tolerated*, and may never widen which instances are *accepted*. An unrestricted
+    version would let a caller name `multipleOf` or `contains` — real assertions this validator
+    does not implement — and silently drop the constraint while reporting success.
+    """
+
+    def test_the_allowlist_is_closed_and_minimal(self):
+        self.assertEqual(ANNOTATION_ONLY_KEYWORDS, frozenset(["definitions", "contract_version"]))
+
+    def test_an_unlisted_keyword_is_refused_even_when_asked_for(self):
+        for keyword in ("multipleOf", "contains", "dependentRequired", "if", "unevaluatedProperties"):
+            with self.assertRaises(UnsupportedKeyword, msg=keyword):
+                schema_validate(1, {"type": "integer"}, extra_keywords=frozenset([keyword]))
+
+    def test_a_supported_assertion_cannot_be_switched_off_through_the_parameter(self):
+        # Naming a supported keyword is refused outright; and even the assertions themselves are
+        # driven by `if "<keyword>" in schema`, never by the allowlist, so there is no path.
+        for keyword in ("required", "enum", "pattern", "minimum", "type"):
+            with self.assertRaises(UnsupportedKeyword, msg=keyword):
+                schema_validate({}, {"type": "object", "required": ["a"]},
+                                extra_keywords=frozenset([keyword]))
+        self.assertEqual(
+            len(schema_validate({}, {"type": "object", "required": ["a"]},
+                                extra_keywords=ANNOTATION_ONLY_KEYWORDS)),
+            1,
+        )
+
+    def test_an_unimplemented_assertion_still_raises_under_the_allowed_set(self):
+        with self.assertRaises(UnsupportedKeyword):
+            schema_validate(
+                7, {"type": "integer", "multipleOf": 5}, extra_keywords=ANNOTATION_ONLY_KEYWORDS
+            )
+
+    def test_the_allowed_keywords_change_no_validation_outcome(self):
+        """Adversarial content under each allowed keyword must not move a single error."""
+        schema = {
+            "type": "object",
+            "required": ["a"],
+            "additionalProperties": False,
+            "properties": {"a": {"type": "integer", "minimum": 3}},
+        }
+        instances = [{}, {"a": 1}, {"a": 5}, {"a": 5, "b": 1}, {"a": "x"}]
+        baseline = [schema_validate(i, schema) for i in instances]
+
+        for keyword in sorted(ANNOTATION_ONLY_KEYWORDS):
+            noisy = dict(schema)
+            # Content deliberately shaped like a constraint, to prove it is not read as one.
+            noisy[keyword] = {"a": {"type": "string", "minimum": 999}, "required": ["zzz"]}
+            widened = [
+                schema_validate(i, noisy, extra_keywords=ANNOTATION_ONLY_KEYWORDS)
+                for i in instances
+            ]
+            self.assertEqual(widened, baseline, keyword)
+
+    def test_refs_into_definitions_are_still_applied_in_full(self):
+        # Tolerating `definitions` must not turn it into a place constraints go to die.
+        schema = {
+            "definitions": {"positive": {"type": "integer", "minimum": 1}},
+            "type": "object",
+            "properties": {"n": {"$ref": "#/definitions/positive"}},
+        }
+        self.assertEqual(
+            schema_validate({"n": 5}, schema, extra_keywords=ANNOTATION_ONLY_KEYWORDS), []
+        )
+        self.assertEqual(
+            len(schema_validate({"n": 0}, schema, extra_keywords=ANNOTATION_ONLY_KEYWORDS)), 1
+        )
+        self.assertEqual(
+            len(schema_validate({"n": "x"}, schema, extra_keywords=ANNOTATION_ONLY_KEYWORDS)), 1
+        )
+
+    def test_the_vendored_contract_needs_exactly_the_allowed_set(self):
+        _pin_record, schema = pin.load_pinned_contract()
+        unknown = set(schema) - _SUPPORTED_KEYWORDS
+        self.assertEqual(unknown, set(ANNOTATION_ONLY_KEYWORDS))
 
 
 class ContractPinTests(unittest.TestCase):
@@ -749,7 +832,14 @@ class NoAuthorizationTests(unittest.TestCase):
         plan = load_plans()[1]
         self.assertEqual(plan["target"]["artifact_id"], "question_flow")
         statuses = {item["id"]: item["status"] for item in plan["descriptor"]["blockers"]}
-        self.assertEqual(statuses, {"IM001-CLIN-FLAG-001": "open", "IM003-SB-001": "open"})
+        # The OPEN set is exactly the two safety blockers. The list also carries completed
+        # gates as resolved entries, which is how a passed gate is recorded without any risk of
+        # it reading as an approval — but nothing resolved may creep into the open set.
+        self.assertEqual(
+            {k for k, v in statuses.items() if v == "open"},
+            {"IM001-CLIN-FLAG-001", "IM003-SB-001"},
+        )
+        self.assertEqual(statuses["IM001-PRODUCT-DISPLAY-DECISIONS"], "resolved")
 
     def test_vocabulary_2_0_invents_no_missing_decision(self):
         plan = load_plans()[0]
@@ -922,11 +1012,184 @@ class DocumentationTests(unittest.TestCase):
         counts = self.counts()
         for relative, text in self.documents():
             for name in self.DOCUMENTED_COUNTS.get(relative, ()):
-                self.assertIn(
-                    str(counts[name]),
-                    text,
+                # `assertIn` on a whole document would print the document on failure, which
+                # buries the one fact the reader needs. Assert on a boolean instead.
+                self.assertTrue(
+                    str(counts[name]) in text,
                     "%s should state %s = %d" % (relative, name, counts[name]),
                 )
+
+
+class ApprovalScopeTests(unittest.TestCase):
+    """The I3 Step 2A ruling: four distinct concepts, never substitutable for one another.
+
+        product_display_decision                 complete, display wording and ordering only
+        artifact_publication_product_approval    pending
+        clinical_approval                        pending
+        publication / activation authorization   false
+    """
+
+    RECONCILIATION = ("publication", "fixtures", "compat", "approval_scope_reconciliation_v1.json")
+
+    def record(self):
+        return load_json(repo(*self.RECONCILIATION))
+
+    def question_flow_plan(self):
+        return load_plans()[1]
+
+    def test_the_four_concepts_are_represented_separately(self):
+        scope = self.question_flow_plan()["governance"]["product_approval_scope"]
+        self.assertEqual(scope["product_display_decision"]["status"], "complete")
+        self.assertEqual(
+            scope["product_display_decision"]["scope"], "display_wording_and_ordering_only"
+        )
+        self.assertEqual(scope["artifact_publication_product_approval"]["status"], "pending")
+        self.assertEqual(scope["clinical_approval"]["status"], "pending")
+        self.assertIs(scope["publication_authorization"]["granted"], False)
+        self.assertIs(scope["activation_authorization"]["granted"], False)
+
+    def test_the_display_decision_grants_nothing(self):
+        display = self.question_flow_plan()["governance"]["product_approval_scope"][
+            "product_display_decision"
+        ]
+        for field in (
+            "grants_artifact_publication_product_approval",
+            "grants_clinical_approval",
+            "grants_publication_authorization",
+            "grants_activation_authorization",
+        ):
+            self.assertIs(display[field], False, field)
+
+    def test_each_concept_names_the_contract_field_that_carries_it(self):
+        scope = self.question_flow_plan()["governance"]["product_approval_scope"]
+        self.assertEqual(
+            scope["artifact_publication_product_approval"]["contract_representation"],
+            "approvals.product.status",
+        )
+        self.assertEqual(
+            scope["clinical_approval"]["contract_representation"], "approvals.clinical.status"
+        )
+        self.assertIn("resolved", scope["product_display_decision"]["contract_representation"])
+
+    def test_the_completed_gate_is_a_resolved_blocker_not_an_approval(self):
+        descriptor = self.question_flow_plan()["descriptor"]
+        gates = [b for b in descriptor["blockers"] if b["id"] == "IM001-PRODUCT-DISPLAY-DECISIONS"]
+        self.assertEqual(len(gates), 1)
+        self.assertEqual(gates[0]["status"], "resolved")
+        self.assertIn("NOT AN APPROVAL", gates[0]["reference"])
+        # And the approval field it must not be confused with is untouched.
+        self.assertEqual(descriptor["approvals"]["product"]["status"], "pending")
+        self.assertIsNone(descriptor["approvals"]["product"]["decision_ref"])
+
+    def test_a_resolved_blocker_cannot_make_a_descriptor_approved(self):
+        """The structural proof, run against the contract's own semantics.
+
+        Adding resolved blockers — any number, saying anything — must not move `approved`.
+        """
+        descriptor = json.loads(json.dumps(self.question_flow_plan()["descriptor"]))
+        descriptor["approvals"]["clinical"] = {
+            "required": True, "status": "granted", "decision_ref": "X", "approved_at": None,
+        }
+        before, _ = eligibility.evaluate_descriptor(
+            descriptor, "staging", now=PLAN_EVALUATION_INSTANT
+        )
+        descriptor["blockers"] = [
+            {"id": "ANY-GATE-%d" % i, "status": "resolved", "reference": "product approved"}
+            for i in range(5)
+        ]
+        after, _ = eligibility.evaluate_descriptor(
+            descriptor, "staging", now=PLAN_EVALUATION_INSTANT
+        )
+        self.assertIs(before["approved"], False)
+        self.assertIs(after["approved"], False)
+        self.assertIs(after["eligible_for_environment"], False)
+
+    def test_the_reconciliation_record_claims_all_hold(self):
+        claims = self.record()["claims"]
+        for name in (
+            "im_001_display_decision_completion_remains_true",
+            "artifact_publication_product_approval_remains_pending",
+            "clinical_approval_remains_pending",
+            "both_representations_are_ineligible_in_every_environment",
+            "no_evaluator_can_substitute_completion_for_approval",
+        ):
+            self.assertIs(claims[name], True, name)
+
+    def test_the_backend_encoding_is_recorded_as_a_defect(self):
+        record = self.record()
+        self.assertEqual(record["verdict"]["backend_granted_product_is"], "fixture_defect")
+        self.assertIs(record["claims"]["backend_encoding_substitutes_completion_for_approval"], True)
+        self.assertIs(record["verdict"]["blocking_this_merge"], False)
+
+    def test_both_encodings_are_ineligible_as_shipped(self):
+        compared = self.record()["encodings_compared"]
+        for name, side in compared.items():
+            for environment in ("development", "staging", "production"):
+                self.assertIs(
+                    side["as_shipped"][environment]["eligible_for_environment"], False,
+                    "%s/%s" % (name, environment),
+                )
+
+    def test_the_kb_encoding_alone_survives_the_controlled_probe(self):
+        compared = self.record()["encodings_compared"]
+        kb = compared["knowledge_base"]["with_unrelated_conditions_lifted"]
+        backend = compared["backend_fixture"]["with_unrelated_conditions_lifted"]
+        for environment in ("development", "staging", "production"):
+            self.assertIs(kb[environment]["approved"], False, environment)
+            self.assertIs(kb[environment]["eligible_for_environment"], False, environment)
+        self.assertIs(backend["staging"]["approved"], True)
+
+    def test_the_kb_descriptor_still_validates_against_contract_1_0_0(self):
+        _pin_record, schema = pin.load_pinned_contract()
+        for plan in load_plans():
+            wrapper = {
+                "manifest_version": "1.0.0",
+                "generated_at": PLAN_EVALUATION_INSTANT,
+                "artifacts": [plan["descriptor"]],
+            }
+            valid, reasons = validate_manifest(wrapper)
+            self.assertTrue(valid, reasons)
+            self.assertEqual(validate_against_vendored_schema(wrapper, schema), [])
+
+
+class RollbackPolicyGapTests(unittest.TestCase):
+    """The cross-schema rollback refusals are correct fail-closed behaviour, and stay that way."""
+
+    def test_both_plans_carry_a_null_rollback_target(self):
+        for plan in load_plans():
+            self.assertIsNone(plan["descriptor"]["rollback_target"])
+            self.assertIsNone(plan["rollback"]["descriptor_rollback_target"])
+            self.assertIs(plan["rollback"]["usable_as_rollback_target"], False)
+
+    def test_no_version_only_or_inferred_rollback_is_emitted(self):
+        for plan in load_plans():
+            proposed = plan["rollback"]["proposed_target"]
+            # A proposal exists (lineage is known) but it is never promoted into the descriptor,
+            # and it is hash-bound even as a proposal — there is no version-only form anywhere.
+            self.assertIsNotNone(proposed)
+            self.assertIn("sha256", proposed)
+            self.assertTrue(proposed["sha256"].startswith("sha256:"))
+            self.assertIsNone(plan["descriptor"]["rollback_target"])
+
+    def test_the_refusal_names_the_schema_boundary_gap(self):
+        for plan in load_plans():
+            codes = [r["code"] for r in plan["rollback"]["rejection_reasons"]]
+            self.assertIn("KB_ROLLBACK_SCHEMA_INCOMPATIBLE", codes, plan["target"]["artifact_id"])
+            detail = " ".join(r["detail"] for r in plan["rollback"]["rejection_reasons"])
+            self.assertIn("content schema", detail)
+
+    def test_neither_candidate_can_publish_or_activate(self):
+        for plan in load_plans():
+            self.assertIs(plan["conclusion"]["publishable"], False)
+            self.assertIs(plan["conclusion"]["activatable"], False)
+            self.assertIs(plan["eligible_in_any_environment"], False)
+
+    def test_no_rollback_policy_is_invented(self):
+        # The refusal must state that no policy exists, not supply one.
+        for plan in load_plans():
+            note = json.dumps(plan["rollback"])
+            self.assertNotIn("policy_granted", note)
+            self.assertIn("does not perform a rollback", note)
 
 
 class ContractCompatibilityTests(unittest.TestCase):

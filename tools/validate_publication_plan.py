@@ -68,6 +68,106 @@ class _Result(list):
         return passed
 
 
+RECONCILIATION = repo_path(
+    "publication", "fixtures", "compat", "approval_scope_reconciliation_v1.json"
+)
+
+#: The I3 Step 2A approval-scope ruling, restated as the claims the record must compute true.
+#: Kept here rather than only in the record so the check cannot be satisfied by a record that
+#: quietly stopped making one of them.
+REQUIRED_RECONCILIATION_CLAIMS = (
+    "im_001_display_decision_completion_remains_true",
+    "artifact_publication_product_approval_remains_pending",
+    "clinical_approval_remains_pending",
+    "both_representations_are_ineligible_in_every_environment",
+    "no_evaluator_can_substitute_completion_for_approval",
+)
+
+
+def validate_approval_scope_reconciliation():
+    """Check the approval-scope reconciliation record and re-derive its central claim.
+
+    The record is generated, so it is checked here rather than trusted: the substitution probe
+    is re-run from the committed descriptors so that "no evaluator can substitute completion for
+    approval" is a measurement taken at check time, not a value someone wrote down.
+    """
+    from pubkit import eligibility
+
+    results = _Result()
+
+    if not os.path.exists(RECONCILIATION):
+        results.add("approval-scope reconciliation record exists", False, "record is absent")
+        return results
+
+    record = load_json(RECONCILIATION)
+    relative = os.path.relpath(RECONCILIATION, repo_path())
+
+    claims = record.get("claims", {})
+    missing = [name for name in REQUIRED_RECONCILIATION_CLAIMS if name not in claims]
+    results.add(
+        "%s: states every required claim" % relative, not missing, ", ".join(missing)
+    )
+    failed = [name for name in REQUIRED_RECONCILIATION_CLAIMS if claims.get(name) is not True]
+    results.add("%s: every required claim holds" % relative, not failed, ", ".join(failed))
+
+    results.add(
+        "%s: contract can express the approval distinction" % relative,
+        record.get("contract_can_express_the_distinction") is True,
+    )
+    results.add(
+        "%s: the Backend encoding is recorded with a verdict" % relative,
+        record.get("verdict", {}).get("backend_granted_product_is")
+        in ("fixture_defect", "scoped_correctly"),
+        str(record.get("verdict", {}).get("backend_granted_product_is")),
+    )
+
+    # Re-derive the substitution-impossibility claim rather than reading it.
+    plan = load_json(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"))
+    descriptor = json.loads(json.dumps(plan["descriptor"]))
+    descriptor["approvals"]["clinical"] = {
+        "required": True, "status": "granted", "decision_ref": "PROBE", "approved_at": None,
+    }
+    descriptor["blockers"] = [
+        {"id": blocker["id"], "status": "resolved", "reference": blocker.get("reference", "")}
+        for blocker in descriptor["blockers"]
+    ]
+    descriptor["release_status"] = "published"
+    descriptor["published_at"] = "2026-09-01T00:00:00Z"
+    descriptor["activation_status"] = "active"
+    descriptor["activation_authorized"] = True
+    descriptor["activation_decision_ref"] = "PROBE"
+    states, _reasons = eligibility.evaluate_descriptor(
+        descriptor, "staging", now=plan["_metadata"]["evaluated_at"]
+    )
+    results.add(
+        "%s: completion cannot substitute for approval (re-derived at check time)" % relative,
+        states["approved"] is False and states["eligible_for_environment"] is False,
+        "approved=%s eligible=%s" % (states["approved"], states["eligible_for_environment"]),
+    )
+
+    # The completed gate must be present, resolved, and must not be in the open set.
+    for plan_name in ("question_flow.ng.v1.1.dryrun.json",):
+        target = load_json(repo_path("publication", "plans", plan_name))
+        blockers = {b["id"]: b["status"] for b in target["descriptor"]["blockers"]}
+        results.add(
+            "%s: the completed display-decision gate is recorded resolved" % plan_name,
+            blockers.get("IM001-PRODUCT-DISPLAY-DECISIONS") == "resolved",
+            str(blockers.get("IM001-PRODUCT-DISPLAY-DECISIONS")),
+        )
+        results.add(
+            "%s: the open blocker set is unchanged by the gate" % plan_name,
+            {k for k, v in blockers.items() if v == "open"}
+            == {"IM001-CLIN-FLAG-001", "IM003-SB-001"},
+        )
+        results.add(
+            "%s: artifact-publication Product approval is still pending" % plan_name,
+            target["descriptor"]["approvals"]["product"]["status"] == "pending"
+            and target["descriptor"]["approvals"]["product"]["decision_ref"] is None,
+        )
+
+    return results
+
+
 #: Trees this step introduced, scanned with the same PHI patterns the W3 content-safety scan
 #: uses. `.md` is included: documentation quotes decision rationale out of clinical records.
 CONTENT_SAFETY_TREES = (("publication", (".json", ".md")), ("contracts", (".json", ".md")))
@@ -306,6 +406,7 @@ def main(argv):
     results = []
     for name in plans:
         results.extend(validate_plan(os.path.join(PLAN_DIR, name), entries, schema, contract_schema))
+    results.extend(validate_approval_scope_reconciliation())
     results.extend(scan_content_safety())
 
     failed = [item for item in results if not item["passed"]]

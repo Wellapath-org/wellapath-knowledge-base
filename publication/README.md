@@ -20,6 +20,7 @@ python3 tools/run_publication_checks.py     # everything; this is what CI runs
 | `fixtures/compat/kb_baseline.manifest.json` | A valid manifest for the negative cases to break. `artifact_id` is `fixture_artifact` — unmistakably synthetic — with real repository digests so integrity cases run against bytes that exist. |
 | `fixtures/compat/kb_blocked_candidates.manifest.json` | The real candidates, real hashes, true governance. Descriptors extracted verbatim from the plans so the two cannot disagree. |
 | `fixtures/compat/negative_fixtures.compat.json` | 41 contract-level cases **in the Backend's own fixture format**, executable unchanged by `tests/unit/manifest-fixtures.test.ts`. |
+| `fixtures/compat/approval_scope_reconciliation_v1.json` | The I3 Step 2A approval-scope ruling, with every claim **computed** by running the contract's own eligibility semantics over both encodings — not asserted in prose. Records the Backend fixture's `granted` product as a defect, with the controlled probe that demonstrates it. |
 | `fixtures/negative/kb_stage_fixtures_v1.json` | 60 cases for the stages the Backend has no opinion on: pinning, generation, keys, governance, lifecycle, rollback, write safety. |
 | `receipts/*.example.json` | Shape definitions for four future operations. Every one is `operative: false`, every `*_performed` is false, every decision is `refused`. |
 

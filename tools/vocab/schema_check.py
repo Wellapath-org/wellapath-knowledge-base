@@ -25,9 +25,21 @@ validator at all.
 as annotations, for schemas authored elsewhere that carry vocabulary this
 validator has no assertion for (the vendored Backend contract, for instance, is
 draft-07 and keeps its subschemas under `definitions` alongside a
-`contract_version` annotation). It never turns an assertion off: a caller cannot
-use it to make a constraint stop being checked, only to admit a keyword that
-carries no constraint. Anything still unrecognised raises as before.
+`contract_version` annotation).
+
+The parameter is **closed, not open**: a caller may only name keywords listed in
+`ANNOTATION_ONLY_KEYWORDS`, and asking to tolerate anything else raises. That
+restriction is the whole safety property. An unrestricted version would let a
+caller pass `multipleOf`, `contains` or `dependentRequired` — real assertions
+this validator does not implement — and the constraint they express would be
+silently dropped while validation reported success, which is strictly worse than
+not validating at all. Tolerating a keyword must never be a way to stop checking
+one.
+
+Note what the parameter does *not* touch: every assertion in this module is
+driven by an explicit `if "<keyword>" in schema` test, never by the allowlist, so
+naming an already-supported keyword changes nothing either. Anything
+unrecognised and unlisted raises as before.
 """
 
 import re
@@ -46,6 +58,19 @@ _SUPPORTED = frozenset(
     ]
 )
 
+#: The only keywords `validate(extra_keywords=...)` will tolerate. Closed set, one line of
+#: justification each, and every entry must be verifiably assertion-free:
+#:
+#:  * `definitions` — draft-07's subschema container. It asserts nothing where it appears; it
+#:    holds subschemas that `$ref` resolves into, and `_resolve_ref` walks the raw schema dict,
+#:    so refs into it are still applied in full.
+#:  * `contract_version` — a custom annotation on the Backend contract's root object. Not a
+#:    JSON Schema keyword at all, so it cannot express a constraint in any dialect.
+#:
+#: Adding an entry here means asserting that the keyword carries no constraint in any dialect
+#: a schema in this repository might use. That claim needs checking, not assuming.
+ANNOTATION_ONLY_KEYWORDS = frozenset(["definitions", "contract_version"])
+
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _DATE_TIME_RE = re.compile(
     r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$"
@@ -54,6 +79,16 @@ _DATE_TIME_RE = re.compile(
 
 class UnsupportedKeyword(Exception):
     pass
+
+
+# The allowlist may not overlap the keywords this validator already handles: an entry that did
+# would be pointless at best, and at worst would suggest the allowlist can influence how a
+# supported keyword is treated. It cannot — but the invariant is cheap to assert and expensive
+# to rediscover.
+assert ANNOTATION_ONLY_KEYWORDS.isdisjoint(_SUPPORTED), (
+    "ANNOTATION_ONLY_KEYWORDS must not name keywords this validator already implements: %s"
+    % ", ".join(sorted(ANNOTATION_ONLY_KEYWORDS & _SUPPORTED))
+)
 
 
 def _type_ok(value, expected):
@@ -94,7 +129,20 @@ def validate(instance, schema, root=None, path="$", extra_keywords=frozenset()):
     if schema is False:
         return ["%s: schema is `false` — no value is valid here" % path]
 
-    unknown = set(schema) - _SUPPORTED - frozenset(extra_keywords)
+    extra = frozenset(extra_keywords)
+    forbidden = extra - ANNOTATION_ONLY_KEYWORDS
+    if forbidden:
+        raise UnsupportedKeyword(
+            "extra_keywords may only name keywords known to carry no assertion (%s); refusing "
+            "to tolerate %s. Tolerating an assertion keyword would silently drop the constraint "
+            "it expresses while reporting success."
+            % (
+                ", ".join(sorted(ANNOTATION_ONLY_KEYWORDS)),
+                ", ".join(sorted(forbidden)),
+            )
+        )
+
+    unknown = set(schema) - _SUPPORTED - extra
     if unknown:
         raise UnsupportedKeyword(
             "%s: schema uses keyword(s) this validator does not implement: %s"

@@ -42,23 +42,43 @@
         "note"
       ],
       "properties": {
-        "plan_id": { "type": "string", "minLength": 1 },
-        "plan_schema_version": { "const": "1.0.0" },
-        "phase": { "type": "string" },
-        "generator": { "type": "string", "minLength": 1 },
-        "generator_version": { "type": "string" },
-        "pubkit_version": { "type": "string" },
+        "plan_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "plan_schema_version": {
+          "const": "1.0.0"
+        },
+        "phase": {
+          "type": "string"
+        },
+        "generator": {
+          "type": "string",
+          "minLength": 1
+        },
+        "generator_version": {
+          "type": "string"
+        },
+        "pubkit_version": {
+          "type": "string"
+        },
         "evaluated_at": {
           "type": "string",
           "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$",
           "description": "A declared constant, not a clock read. Two runs produce the same value."
         },
-        "determinism": { "type": "string", "minLength": 1 },
+        "determinism": {
+          "type": "string",
+          "minLength": 1
+        },
         "is_operative": {
           "const": false,
           "description": "A plan is never operative. There is no true value for this field."
         },
-        "note": { "type": "string", "minLength": 1 }
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "operations_performed": {
@@ -75,21 +95,40 @@
         "evidence"
       ],
       "properties": {
-        "upload_performed": { "const": false },
-        "publication_performed": { "const": false },
-        "activation_performed": { "const": false },
-        "deployment_performed": { "const": false },
-        "storage_write_performed": { "const": false },
-        "network_access_performed": { "const": false },
-        "canonical_bytes_modified": { "const": false },
-        "evidence": { "type": "string", "minLength": 1 }
+        "upload_performed": {
+          "const": false
+        },
+        "publication_performed": {
+          "const": false
+        },
+        "activation_performed": {
+          "const": false
+        },
+        "deployment_performed": {
+          "const": false
+        },
+        "storage_write_performed": {
+          "const": false
+        },
+        "network_access_performed": {
+          "const": false
+        },
+        "canonical_bytes_modified": {
+          "const": false
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "eligible_for_environment": {
       "const": false,
       "description": "Pinned false. This tooling cannot establish eligibility: it is the Backend's computation over a published, approved, unblocked, activated descriptor."
     },
-    "eligible_in_any_environment": { "const": false },
+    "eligible_in_any_environment": {
+      "const": false
+    },
     "contract_pin": {
       "type": "object",
       "required": [
@@ -106,17 +145,43 @@
         "compatibility_policy"
       ],
       "properties": {
-        "backend_repository": { "type": "string" },
-        "backend_merge_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
-        "contract_version": { "const": "1.0.0" },
-        "supported_major": { "const": 1 },
-        "schema_source_path": { "type": "string" },
-        "schema_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "schema_byte_count": { "type": "integer", "minimum": 1 },
-        "vendored_path": { "type": "string" },
-        "handoff_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "retrieved_at": { "type": "string" },
-        "compatibility_policy": { "type": "string" }
+        "backend_repository": {
+          "type": "string"
+        },
+        "backend_merge_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "supported_major": {
+          "const": 1
+        },
+        "schema_source_path": {
+          "type": "string"
+        },
+        "schema_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "schema_byte_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "vendored_path": {
+          "type": "string"
+        },
+        "handoff_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "retrieved_at": {
+          "type": "string"
+        },
+        "compatibility_policy": {
+          "type": "string"
+        }
       }
     },
     "target": {
@@ -131,18 +196,42 @@
         "repository_role_note"
       ],
       "properties": {
-        "artifact_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{1,63}$" },
-        "artifact_version": { "type": "string", "pattern": "^\\d+(\\.\\d+){0,3}$" },
-        "country": { "type": "string", "pattern": "^[a-z]{2}$" },
-        "repository_path": { "type": "string", "minLength": 1 },
-        "repository_role": { "enum": ["published_lineage", "candidate"] },
-        "repository_role_note": { "type": "string", "minLength": 1 }
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]{1,63}$"
+        },
+        "artifact_version": {
+          "type": "string",
+          "pattern": "^\\d+(\\.\\d+){0,3}$"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[a-z]{2}$"
+        },
+        "repository_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository_role": {
+          "enum": [
+            "published_lineage",
+            "candidate"
+          ]
+        },
+        "repository_role_note": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "lifecycle": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["states", "unobservable_states", "note"],
+      "required": [
+        "states",
+        "unobservable_states",
+        "note"
+      ],
       "properties": {
         "states": {
           "type": "object",
@@ -159,61 +248,151 @@
             "eligible_for_environment"
           ],
           "properties": {
-            "generated": { "type": "boolean" },
-            "validated": { "type": "boolean" },
-            "packaged": { "type": "boolean" },
-            "present": { "type": "boolean" },
-            "uploaded": { "const": false },
-            "published": { "const": false },
-            "approved": { "const": false },
-            "active": { "const": false },
-            "eligible_for_environment": { "const": false }
+            "generated": {
+              "type": "boolean"
+            },
+            "validated": {
+              "type": "boolean"
+            },
+            "packaged": {
+              "type": "boolean"
+            },
+            "present": {
+              "type": "boolean"
+            },
+            "uploaded": {
+              "const": false
+            },
+            "published": {
+              "const": false
+            },
+            "approved": {
+              "const": false
+            },
+            "active": {
+              "const": false
+            },
+            "eligible_for_environment": {
+              "const": false
+            }
           },
           "description": "The five externally-established states are pinned false. The Knowledge Base cannot observe any of them from inside a repository, so there is no true value it could legitimately write."
         },
-        "unobservable_states": { "type": "object" },
-        "note": { "type": "string" }
+        "unobservable_states": {
+          "type": "object"
+        },
+        "note": {
+          "type": "string"
+        }
       }
     },
-    "generation": { "type": "object" },
-    "validation": { "type": "object" },
+    "generation": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object"
+    },
     "integrity": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["sha256", "sha256_bare", "byte_count", "content_type", "computed_from"],
+      "required": [
+        "sha256",
+        "sha256_bare",
+        "byte_count",
+        "content_type",
+        "computed_from"
+      ],
       "properties": {
-        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
-        "sha256_bare": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "byte_count": { "type": "integer", "minimum": 1 },
-        "content_type": { "enum": ["application/json"] },
-        "computed_from": { "type": "string" }
+        "sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "sha256_bare": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "byte_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "content_type": {
+          "enum": [
+            "application/json"
+          ]
+        },
+        "computed_from": {
+          "type": "string"
+        }
       }
     },
     "packaging": {
       "type": "object",
-      "required": ["packaged", "staged_sha256", "staged_byte_count", "matches_source", "staging_removed"],
+      "required": [
+        "packaged",
+        "staged_sha256",
+        "staged_byte_count",
+        "matches_source",
+        "staging_removed"
+      ],
       "properties": {
-        "packaged": { "type": "boolean" },
-        "staged_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
-        "staged_byte_count": { "type": "integer", "minimum": 1 },
-        "matches_source": { "const": true },
-        "staging_path_recorded": { "const": false },
-        "staging_removed": { "const": true }
+        "packaged": {
+          "type": "boolean"
+        },
+        "staged_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "staged_byte_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "matches_source": {
+          "const": true
+        },
+        "staging_path_recorded": {
+          "const": false
+        },
+        "staging_removed": {
+          "const": true
+        }
       }
     },
     "object_key": {
       "type": "object",
-      "required": ["proposed", "convention", "binds", "immutable", "immutability_rule", "reasons", "url"],
+      "required": [
+        "proposed",
+        "convention",
+        "binds",
+        "immutable",
+        "immutability_rule",
+        "reasons",
+        "url"
+      ],
       "properties": {
         "proposed": {
           "type": "string",
           "pattern": "^[a-z0-9_]+\\.[a-z]{2}\\.v\\d+(\\.\\d+)*\\.json$"
         },
-        "convention": { "type": "string" },
-        "binds": { "type": "array", "items": { "type": "string" }, "minItems": 4 },
-        "immutable": { "const": true },
-        "immutability_rule": { "type": "string" },
-        "reasons": { "type": "array", "maxItems": 0 },
+        "convention": {
+          "type": "string"
+        },
+        "binds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 4
+        },
+        "immutable": {
+          "const": true
+        },
+        "immutability_rule": {
+          "type": "string"
+        },
+        "reasons": {
+          "type": "array",
+          "maxItems": 0
+        },
         "url": {
           "type": "null",
           "description": "Always null. An artifact that has never been uploaded has no URL, and writing the address it would have had turns a proposal into an apparent fact."
@@ -223,13 +402,31 @@
     "descriptor": {
       "type": "object",
       "description": "A contract 1.0.0 artifact descriptor. Its full shape is validated against the vendored Backend schema, not restated here; what this schema pins is that a plan's descriptor is never published, never active and never activation-authorized.",
-      "required": ["release_status", "activation_status", "activation_authorized", "published_at"],
+      "required": [
+        "release_status",
+        "activation_status",
+        "activation_authorized",
+        "published_at"
+      ],
       "properties": {
-        "release_status": { "enum": ["draft", "candidate"] },
-        "activation_status": { "const": "inactive" },
-        "activation_authorized": { "const": false },
-        "activation_decision_ref": { "type": "null" },
-        "published_at": { "type": "null" }
+        "release_status": {
+          "enum": [
+            "draft",
+            "candidate"
+          ]
+        },
+        "activation_status": {
+          "const": "inactive"
+        },
+        "activation_authorized": {
+          "const": false
+        },
+        "activation_decision_ref": {
+          "type": "null"
+        },
+        "published_at": {
+          "type": "null"
+        }
       }
     },
     "contract_validation": {
@@ -242,25 +439,55 @@
         "reasons"
       ],
       "properties": {
-        "contract_version": { "const": "1.0.0" },
-        "ported_validator_accepts": { "const": true },
-        "vendored_schema_accepts": { "const": true },
-        "validators_agree": { "const": true },
-        "reasons": { "type": "array", "maxItems": 0 }
+        "contract_version": {
+          "const": "1.0.0"
+        },
+        "ported_validator_accepts": {
+          "const": true
+        },
+        "vendored_schema_accepts": {
+          "const": true
+        },
+        "validators_agree": {
+          "const": true
+        },
+        "reasons": {
+          "type": "array",
+          "maxItems": 0
+        }
       }
     },
     "governance": {
       "type": "object",
-      "required": ["register", "evaluated_as_of", "claims", "blockers", "clinical_reviewer_assigned"],
+      "required": [
+        "register",
+        "evaluated_as_of",
+        "claims",
+        "blockers",
+        "clinical_reviewer_assigned",
+        "product_approval_scope"
+      ],
       "properties": {
-        "register": { "type": "string" },
-        "evaluated_as_of": { "type": "string", "format": "date" },
+        "register": {
+          "type": "string"
+        },
+        "evaluated_as_of": {
+          "type": "string",
+          "format": "date"
+        },
         "claims": {
           "type": "array",
           "minItems": 1,
           "items": {
             "type": "object",
-            "required": ["kind", "artifact", "artifact_sha256", "granted", "decision_ref", "reasons"],
+            "required": [
+              "kind",
+              "artifact",
+              "artifact_sha256",
+              "granted",
+              "decision_ref",
+              "reasons"
+            ],
             "properties": {
               "kind": {
                 "enum": [
@@ -271,41 +498,236 @@
                   "mobile_implementation_authorization"
                 ]
               },
-              "artifact": { "type": "string" },
-              "artifact_sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+              "artifact": {
+                "type": "string"
+              },
+              "artifact_sha256": {
+                "type": "string",
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
               "granted": {
                 "const": false,
                 "description": "No governance claim is granted for any artifact in this repository. A plan asserting otherwise fails this schema."
               },
-              "decision_ref": { "type": "null" },
-              "reasons": { "type": "array", "minItems": 1 }
+              "decision_ref": {
+                "type": "null"
+              },
+              "reasons": {
+                "type": "array",
+                "minItems": 1
+              }
             }
           }
         },
-        "blockers": { "type": "array" },
+        "blockers": {
+          "type": "array"
+        },
         "clinical_reviewer_assigned": {
           "const": false,
           "description": "No Clinical reviewer is assigned. This tooling never assigns one."
         },
-        "clinical_reviewer_note": { "type": "string" }
+        "clinical_reviewer_note": {
+          "type": "string"
+        },
+        "product_approval_scope": {
+          "type": "object",
+          "description": "The four Product/Clinical concepts, stated separately because they are different things and conflating them is the specific failure this schema guards against. A completed decision set is not an artifact approval; an artifact approval is not a publication authorization. Each concept names the contract field that carries it.",
+          "required": [
+            "product_display_decision",
+            "artifact_publication_product_approval",
+            "clinical_approval",
+            "publication_authorization",
+            "activation_authorization",
+            "ruling"
+          ],
+          "properties": {
+            "product_display_decision": {
+              "type": "object",
+              "required": [
+                "status",
+                "scope",
+                "decision_ref",
+                "contract_representation",
+                "grants_artifact_publication_product_approval",
+                "grants_clinical_approval",
+                "grants_publication_authorization",
+                "grants_activation_authorization",
+                "substitution_impossible_because",
+                "means_only",
+                "does_not_mean"
+              ],
+              "properties": {
+                "status": {
+                  "enum": [
+                    "complete",
+                    "not_applicable"
+                  ]
+                },
+                "scope": {
+                  "const": "display_wording_and_ordering_only"
+                },
+                "decision_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "contract_representation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "grants_artifact_publication_product_approval": {
+                  "const": false
+                },
+                "grants_clinical_approval": {
+                  "const": false
+                },
+                "grants_publication_authorization": {
+                  "const": false
+                },
+                "grants_activation_authorization": {
+                  "const": false
+                },
+                "substitution_impossible_because": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "means_only": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "does_not_mean": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "description": "Completion of the IM-001 Product display decision set. Every `grants_*` field is pinned false: this concept grants nothing, and a plan saying otherwise fails this schema rather than merely contradicting its own prose."
+            },
+            "artifact_publication_product_approval": {
+              "type": "object",
+              "required": [
+                "status",
+                "decision_ref",
+                "contract_representation"
+              ],
+              "properties": {
+                "status": {
+                  "const": "pending",
+                  "description": "Pinned. Granting artifact-publication Product approval is a governance act; it must not be possible to record one by regenerating a plan. Changing this pin is a deliberate, reviewable schema change."
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "contract_representation": {
+                  "const": "approvals.product.status"
+                }
+              }
+            },
+            "clinical_approval": {
+              "type": "object",
+              "required": [
+                "status",
+                "decision_ref",
+                "contract_representation",
+                "reviewer_assigned"
+              ],
+              "properties": {
+                "status": {
+                  "const": "pending"
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "contract_representation": {
+                  "const": "approvals.clinical.status"
+                },
+                "reviewer_assigned": {
+                  "const": false
+                }
+              }
+            },
+            "publication_authorization": {
+              "type": "object",
+              "required": [
+                "granted",
+                "decision_ref",
+                "contract_representation"
+              ],
+              "properties": {
+                "granted": {
+                  "const": false
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "contract_representation": {
+                  "type": "string"
+                }
+              }
+            },
+            "activation_authorization": {
+              "type": "object",
+              "required": [
+                "granted",
+                "decision_ref",
+                "contract_representation"
+              ],
+              "properties": {
+                "granted": {
+                  "const": false
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "contract_representation": {
+                  "type": "string"
+                }
+              }
+            },
+            "ruling": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
       }
     },
-    "rollback": { "type": "object" },
+    "rollback": {
+      "type": "object"
+    },
     "eligibility_by_environment": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["development", "staging", "production"],
+      "required": [
+        "development",
+        "staging",
+        "production"
+      ],
       "properties": {
-        "development": { "$ref": "#/$defs/environment_evaluation" },
-        "staging": { "$ref": "#/$defs/environment_evaluation" },
-        "production": { "$ref": "#/$defs/environment_evaluation" }
+        "development": {
+          "$ref": "#/$defs/environment_evaluation"
+        },
+        "staging": {
+          "$ref": "#/$defs/environment_evaluation"
+        },
+        "production": {
+          "$ref": "#/$defs/environment_evaluation"
+        }
       },
       "description": "Every environment is evaluated, not only the one the descriptor targets, so a plan cannot be read as ineligible merely because of an environment mismatch."
     },
     "blocking_reasons": {
       "type": "array",
       "minItems": 1,
-      "items": { "$ref": "#/$defs/reason" },
+      "items": {
+        "$ref": "#/$defs/reason"
+      },
       "description": "At least one. A plan with nothing blocking it would be a plan for something publishable, and nothing in this repository is."
     },
     "conclusion": {
@@ -320,17 +742,32 @@
         "statement"
       ],
       "properties": {
-        "publishable": { "const": false },
-        "activatable": { "const": false },
-        "eligible_in_any_environment": { "const": false },
+        "publishable": {
+          "const": false
+        },
+        "activatable": {
+          "const": false
+        },
+        "eligible_in_any_environment": {
+          "const": false
+        },
         "distinct_blocking_codes": {
           "type": "array",
           "minItems": 1,
-          "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$"
+          },
           "uniqueItems": true
         },
-        "blocking_reason_count": { "type": "integer", "minimum": 1 },
-        "statement": { "type": "string", "minLength": 1 }
+        "blocking_reason_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     }
   },
@@ -338,32 +775,73 @@
     "reason": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["code", "path", "detail"],
+      "required": [
+        "code",
+        "path",
+        "detail"
+      ],
       "properties": {
-        "code": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
-        "path": { "type": "string", "minLength": 1 },
-        "detail": { "type": "string", "minLength": 1 }
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        }
       }
     },
     "environment_evaluation": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["states", "eligible_for_environment", "reasons"],
+      "required": [
+        "states",
+        "eligible_for_environment",
+        "reasons"
+      ],
       "properties": {
         "states": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["present", "published", "approved", "active", "eligible_for_environment"],
+          "required": [
+            "present",
+            "published",
+            "approved",
+            "active",
+            "eligible_for_environment"
+          ],
           "properties": {
-            "present": { "type": "boolean" },
-            "published": { "const": false },
-            "approved": { "const": false },
-            "active": { "const": false },
-            "eligible_for_environment": { "const": false }
+            "present": {
+              "type": "boolean"
+            },
+            "published": {
+              "const": false
+            },
+            "approved": {
+              "const": false
+            },
+            "active": {
+              "const": false
+            },
+            "eligible_for_environment": {
+              "const": false
+            }
           }
         },
-        "eligible_for_environment": { "const": false },
-        "reasons": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/reason" } }
+        "eligible_for_environment": {
+          "const": false
+        },
+        "reasons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/reason"
+          }
+        }
       }
     }
   }

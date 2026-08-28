@@ -36,7 +36,7 @@ fails if a socket, a subprocess or a write outside the staging directory is even
 | `python3 tools/validate_publication_plan.py` | Validates every committed plan, recomputes its digests from real bytes, and PHI/secret-scans `publication/` and `contracts/`. |
 | `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 101 negative fixtures and the 7 mutation proofs. |
 | `python3 tools/report_publication_freeze.py [--check]` | Records and re-verifies the 44 frozen artifacts. |
-| `python3 testing/publication/test_publication.py` | 89 unit tests. |
+| `python3 testing/publication/test_publication.py` | 111 unit tests. |
 
 ---
 
@@ -129,6 +129,33 @@ Every descriptor is checked by **both** the port of the Backend's hand-written v
 (`tools/pubkit/manifest.py`) **and** the Backend's published schema. They are meant to agree.
 A disagreement is a hard failure (`KB_CONTRACT_KB_PASSES_BACKEND_FAILS`), not a preference for
 whichever passed — a descriptor only one of them accepts must never be handed over.
+
+### Making a draft-07 schema executable, without weakening the validator
+
+The vendored contract is draft-07 and keeps its subschemas under `definitions`, alongside a
+custom `contract_version` annotation. `tools/vocab/schema_check.py` implements a draft-2020-12
+subset and raises on any keyword it does not implement, so it needs to be told those two are
+tolerable.
+
+That is `validate(..., extra_keywords=...)`, and it is **closed, not open**: a caller may only
+name keywords listed in `ANNOTATION_ONLY_KEYWORDS`, which contains exactly `definitions` and
+`contract_version`, and asking to tolerate anything else raises. The restriction is the entire
+safety property. An unrestricted version would let a caller name `multipleOf`, `contains` or
+`dependentRequired` — real assertions this validator does not implement — and the constraint
+they express would be silently dropped while validation reported success, which is worse than
+not validating at all.
+
+Two further properties make it safe rather than merely restricted:
+
+- **It cannot switch off a supported constraint.** Every assertion in the module is driven by an
+  explicit `if "<keyword>" in schema` test, never by the allowlist, so naming an
+  already-supported keyword changes nothing — and is refused anyway, since the allowlist is
+  asserted disjoint from the supported set at import.
+- **`definitions` does not become a place constraints go to die.** `$ref` resolution walks the
+  raw schema dict, so refs into `definitions` are still applied in full.
+
+`SchemaValidatorHardeningTests` proves all of it, including that adversarial content placed
+under either allowed keyword moves not a single validation error.
 
 ### Where the KB is deliberately stricter
 
@@ -243,6 +270,35 @@ Two absences are recorded as absences rather than filled in:
   `KB_DECISION_RECORD_MISSING`, which is the truthful answer. This tooling does not assign a
   reviewer and does not infer clinical approval from any Product decision.
 - **No publication or activation authorization record exists** for any artifact.
+
+### The approval-scope ruling (I3 Step 2A)
+
+Four distinct facts, carried in four different contract fields. Conflating any two is the
+specific failure this section exists to prevent.
+
+| Concept | Status | Contract field that carries it |
+|---|---|---|
+| `product_display_decision` (scope: display wording and ordering only) | **complete** | a `blocker_record` with `status: "resolved"` — `IM001-PRODUCT-DISPLAY-DECISIONS` |
+| `artifact_publication_product_approval` | **pending** | `approvals.product.status` |
+| `clinical_approval` | **pending** | `approvals.clinical.status` |
+| `publication_authorization` | **false** | `publication_decision_ref` |
+| `activation_authorization` | **false** | `activation_authorized` + `activation_decision_ref` |
+
+Every plan carries this as `governance.product_approval_scope`, and
+`schema/publication_plan.v1.schema.json` pins each `grants_*` field and each status, so a plan
+that claimed the display decision granted approval would fail its schema rather than merely
+contradict its own prose.
+
+**Why a resolved blocker is the right home for a completed gate.** The Backend's
+`evaluateDescriptor` computes `approved` **exclusively** from `approvals`, and reads `blockers`
+in a loop whose only possible effect is to set `blockersResolved = false`. There is no code path
+by which any blocker — resolved or otherwise — makes a descriptor approved. Recording the
+completed decision set there is therefore *structurally* incapable of being read as approval:
+the safety is in the shape of the contract, not in a convention someone has to remember.
+
+`publication/fixtures/compat/approval_scope_reconciliation_v1.json` proves it by computation
+rather than assertion, and `tools/validate_publication_plan.py` re-derives the central claim at
+check time.
 
 ### `im_001_resolved` is not an authorization
 
@@ -489,4 +545,5 @@ When publication is eventually authorized, the operator — **not this tooling**
 | Storage observability | This repository cannot see R2. `uploaded` is therefore never observable here, and is recorded false with that reason rather than left unset. |
 | Cross-schema rollback policy | Contract 1.0.0 defines none. Both candidates' proposed rollbacks cross a content-schema boundary and are refused pending an explicit decision. |
 | Artifact identity for Vocabulary 2.0 | The Backend's fixture calls it `vocabulary`; this repository's artifact is `token_dictionary` (the published lineage is `token_dictionary.ng.v1.1.json`). The KB uses its own true identity. Worth reconciling before either side builds on the other's fixture. |
-| Product approval status for Question Flow 1.1 | The Backend's fixture sets `approvals.product: granted`. No KB decision record supports Product approval *of the artifact for publication* — IM-001 approves an option-ordering rule and explicitly excludes publication. The KB therefore emits `pending`. Both are ineligible either way, but the two fixtures differ and the difference is deliberate. |
+| Product approval status for Question Flow 1.1 | **Resolved as a Backend fixture defect (I3 Step 2A).** The Backend fixture sets `approvals.product: granted` with a `decision_ref` whose text describes decision-set completion — but that field is artifact-level Product approval and feeds `approved`. As shipped it is ineligible only because clinical is pending and two blockers are open; lift those unrelated conditions and it becomes `approved: true` and `eligible: true` on the strength of a display-wording decision. The KB keeps `approvals.product` pending and carries the completed display decision as a resolved gate. **Backend follow-up required; not done here.** |
+| Cross-schema rollback policy — restated | Confirmed correct fail-closed behaviour. Both plans carry `rollback_target: null`; the proposal that was refused is itself hash-bound, so there is no version-only or inferred form anywhere; the refusal names `KB_ROLLBACK_SCHEMA_INCOMPATIBLE`; and neither candidate can publish or activate without either a separately approved rollback policy or a schema-compatible exact target. No policy is invented here. |

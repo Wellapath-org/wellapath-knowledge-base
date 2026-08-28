@@ -922,11 +922,213 @@ def build_kb_negatives(entries):
     }
 
 
+#: The Backend's blocked-candidates fixture, transcribed for the reconciliation probe.
+#:
+#: Only the two fields under examination are reproduced, not the whole descriptor: the point is
+#: to evaluate *the KB's own descriptor* with the Backend's approval encoding substituted in, so
+#: that the two differ in exactly one respect and the result is attributable to that respect.
+#: Copying the Backend's entire descriptor would also import its synthetic hashes and its
+#: `vocabulary` artifact id, and the comparison would no longer be controlled.
+BACKEND_PRODUCT_ENCODING = {
+    "source": "wellapath-backend tests/fixtures/manifest/blocked-candidates.manifest.json "
+    "@ fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "approvals_product": {
+        "required": True,
+        "status": "granted",
+        "decision_ref": "IM-001 — Product decisions complete; activation remains unauthorized",
+        "approved_at": None,
+    },
+}
+
+
+def _evaluate_everywhere(descriptor, now):
+    from pubkit import eligibility
+
+    result = {}
+    for environment in ("development", "staging", "production"):
+        states, reasons = eligibility.evaluate_descriptor(descriptor, environment, now=now)
+        result[environment] = {
+            "approved": states["approved"],
+            "active": states["active"],
+            "eligible_for_environment": states["eligible_for_environment"],
+            "reason_codes": sorted({item["code"] for item in reasons}),
+        }
+    return result
+
+
+def _lift_unrelated_conditions(descriptor):
+    """Grant everything EXCEPT product approval, so `approved` depends only on the product half.
+
+    This is the controlled experiment. As shipped, both encodings are ineligible — but for the
+    Backend's, that is because clinical is pending and two blockers are open, not because its
+    product field is right. Lifting those unrelated conditions is what separates "refused for
+    the correct reason" from "refused by something else that happens to be in the way".
+    """
+    import copy
+
+    lifted = copy.deepcopy(descriptor)
+    lifted["approvals"]["clinical"] = {
+        "required": True,
+        "status": "granted",
+        "decision_ref": "HYPOTHETICAL — used only to isolate the product half of the probe",
+        "approved_at": "2026-09-01T00:00:00Z",
+    }
+    lifted["blockers"] = [
+        {"id": blocker["id"], "status": "resolved", "reference": blocker.get("reference", "")}
+        for blocker in lifted["blockers"]
+    ]
+    lifted["release_status"] = "published"
+    lifted["published_at"] = "2026-09-01T00:00:00Z"
+    lifted["activation_status"] = "active"
+    lifted["activation_authorized"] = True
+    lifted["activation_decision_ref"] = "HYPOTHETICAL — probe only"
+    return lifted
+
+
+def build_approval_scope_reconciliation(entries):
+    """A machine-readable reconciliation of the two Product concepts. Every claim is computed."""
+    import copy
+    import json
+
+    plan = None
+    with open(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"), "rb") as handle:
+        plan = json.loads(handle.read().decode("utf-8"))
+
+    kb_descriptor = plan["descriptor"]
+    backend_descriptor = copy.deepcopy(kb_descriptor)
+    backend_descriptor["approvals"]["product"] = copy.deepcopy(
+        BACKEND_PRODUCT_ENCODING["approvals_product"]
+    )
+
+    now = PLAN_EVALUATION_INSTANT
+    kb_shipped = _evaluate_everywhere(kb_descriptor, now)
+    backend_shipped = _evaluate_everywhere(backend_descriptor, now)
+    kb_probe = _evaluate_everywhere(_lift_unrelated_conditions(kb_descriptor), now)
+    backend_probe = _evaluate_everywhere(_lift_unrelated_conditions(backend_descriptor), now)
+
+    scope = plan["governance"]["product_approval_scope"]
+    gate = [b for b in kb_descriptor["blockers"] if b["id"] == "IM001-PRODUCT-DISPLAY-DECISIONS"]
+
+    claims = {
+        "im_001_display_decision_completion_remains_true": scope["product_display_decision"][
+            "status"
+        ]
+        == "complete"
+        and len(gate) == 1
+        and gate[0]["status"] == "resolved",
+        "artifact_publication_product_approval_remains_pending": (
+            scope["artifact_publication_product_approval"]["status"] == "pending"
+            and kb_descriptor["approvals"]["product"]["status"] == "pending"
+            and kb_descriptor["approvals"]["product"]["decision_ref"] is None
+        ),
+        "clinical_approval_remains_pending": kb_descriptor["approvals"]["clinical"]["status"]
+        == "pending",
+        "both_representations_are_ineligible_in_every_environment": all(
+            result[environment]["eligible_for_environment"] is False
+            for result in (kb_shipped, backend_shipped)
+            for environment in result
+        ),
+        "no_evaluator_can_substitute_completion_for_approval": (
+            # The KB encoding keeps `approved` false even with every unrelated condition
+            # granted, because completion lives in a field that can only ever deny.
+            all(kb_probe[e]["approved"] is False for e in kb_probe)
+            and all(kb_probe[e]["eligible_for_environment"] is False for e in kb_probe)
+        ),
+        "backend_encoding_substitutes_completion_for_approval": (
+            # ... whereas the Backend encoding does become approved, on the strength of a
+            # display-wording decision. That is the defect.
+            any(backend_probe[e]["approved"] is True for e in backend_probe)
+        ),
+    }
+
+    return {
+        "_metadata": {
+            "record_id": "approval_scope_reconciliation",
+            "version": "1",
+            "phase": "I3 / Step 2A",
+            "generator": "tools/build_publication_fixtures.py",
+            "generator_version": "1.0.0",
+            "evaluated_at": now,
+            "evaluator": "tools/pubkit/eligibility.py — a port of the Backend's "
+            "src/manifest/eligibility.ts at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+            "note": "Every claim below is COMPUTED by running the contract's own eligibility "
+            "semantics over both encodings, not asserted in prose.",
+        },
+        "ruling": {
+            "product_display_decision": {
+                "status": "complete",
+                "scope": "display_wording_and_ordering_only",
+            },
+            "artifact_publication_product_approval": {"status": "pending"},
+            "clinical_approval": {"status": "pending"},
+            "publication_authorization": False,
+            "activation_authorization": False,
+            "source": "The recorded IM-001 decision explicitly excludes publication and "
+            "activation. Decision-set completion is not artifact approval.",
+        },
+        "contract_can_express_the_distinction": True,
+        "contract_representation": {
+            "artifact_publication_product_approval": "approvals.product.status — the only input "
+            "to the product half of `approved`",
+            "clinical_approval": "approvals.clinical.status",
+            "product_display_decision": "a blocker_record with status 'resolved' "
+            "(IM001-PRODUCT-DISPLAY-DECISIONS)",
+            "why_a_resolved_blocker": "evaluateDescriptor computes `approved` exclusively from "
+            "`approvals`, and reads `blockers` in a loop whose only effect is to set "
+            "blockersResolved = false. A resolved blocker is therefore structurally incapable "
+            "of granting approval — the safety is in the contract's shape, not in a convention "
+            "anyone has to remember.",
+            "publication_authorization": "publication_decision_ref",
+            "activation_authorization": "activation_authorized + activation_decision_ref",
+        },
+        "encodings_compared": {
+            "knowledge_base": {
+                "approvals_product": kb_descriptor["approvals"]["product"],
+                "display_decision_gate": gate[0] if gate else None,
+                "as_shipped": kb_shipped,
+                "with_unrelated_conditions_lifted": kb_probe,
+            },
+            "backend_fixture": {
+                "source": BACKEND_PRODUCT_ENCODING["source"],
+                "approvals_product": BACKEND_PRODUCT_ENCODING["approvals_product"],
+                "display_decision_gate": None,
+                "as_shipped": backend_shipped,
+                "with_unrelated_conditions_lifted": backend_probe,
+            },
+        },
+        "claims": claims,
+        "verdict": {
+            "backend_granted_product_is": "fixture_defect",
+            "reasoning": "The decision_ref text describes decision-set completion — the scoped "
+            "IM-001 display decision — but it is placed in approvals.product, which contract "
+            "1.0.0 defines as artifact-level Product approval and which evaluateDescriptor "
+            "reads to compute `approved`. As shipped the descriptor is ineligible, but only "
+            "because clinical approval is pending and two blockers are open. Lift those "
+            "unrelated conditions and it becomes approved and eligible on the strength of a "
+            "display-wording decision. A field that is safe only while something else happens "
+            "to be blocking is not scoped correctly; it is a latent defect.",
+            "knowledge_base_action": "None. The KB does not weaken to match. It keeps "
+            "approvals.product pending and carries the completed display decision as a "
+            "resolved gate.",
+            "backend_follow_up_required": "The Backend fixture should set "
+            "approvals.product.status to 'pending' and, if it wishes to record the IM-001 "
+            "display-decision completion, carry it as a resolved blocker_record. This task does "
+            "not modify the Backend repository.",
+            "blocking_this_merge": False,
+            "why_not_blocking": "The defect is in a Backend test fixture, not in the contract "
+            "and not in the KB tooling. The contract can express the distinction, the KB "
+            "descriptor validates against contract 1.0.0, and both encodings are ineligible as "
+            "shipped.",
+        },
+    }
+
+
 OUTPUTS = (
     (COMPAT_DIR, "kb_baseline.manifest.json", "baseline"),
     (COMPAT_DIR, "kb_blocked_candidates.manifest.json", "blocked"),
     (COMPAT_DIR, "negative_fixtures.compat.json", "compat_negatives"),
     (NEGATIVE_DIR, "kb_stage_fixtures_v1.json", "kb_negatives"),
+    (COMPAT_DIR, "approval_scope_reconciliation_v1.json", "approval_scope"),
 )
 
 
@@ -939,6 +1141,7 @@ def main(argv):
         "blocked": build_blocked_candidates(entries),
         "compat_negatives": build_compat_negatives(),
         "kb_negatives": build_kb_negatives(entries),
+        "approval_scope": build_approval_scope_reconciliation(entries),
     }
 
     failures = 0

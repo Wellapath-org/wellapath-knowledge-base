@@ -246,6 +246,9 @@ def build_plan(
             "clinical_reviewer_assigned": False,
             "clinical_reviewer_note": "No Clinical reviewer is assigned. This tooling does not "
             "assign one and does not infer clinical approval from any Product decision.",
+            "product_approval_scope": _product_approval_scope(
+                artifact_id, artifact_version, governance
+            ),
         },
         "rollback": rollback["report"],
         "eligibility_by_environment": eligibility,
@@ -400,36 +403,155 @@ def _resolve_governance(register, artifact_id, artifact_version, digest):
     return {"claims": claims, "resolved": resolved, "reasons": reasons}
 
 
-def _blockers_for(artifact_id, artifact_version):
-    """Contract-shaped blocker records for one artifact, read from the register file.
-
-    Read from the file rather than from the loaded `DecisionRegister`: that object holds
-    decisions, and blockers are not decisions — they are open questions nobody has decided.
-    Keeping them apart is the point.
-    """
+def _read_register_document():
     import json
     import os as _os
 
     path = _os.path.join(REPO_ROOT, "publication", "governance", "decision_register_v1.json")
     with open(path, "rb") as handle:
-        document = json.loads(handle.read().decode("utf-8"))
+        return json.loads(handle.read().decode("utf-8"))
 
-    blockers = []
-    for blocker in document.get("blockers", []):
-        applies = blocker.get("applies_to", [])
-        if any(
-            item.get("artifact_id") == artifact_id and item.get("artifact_version") == artifact_version
-            for item in applies
-        ):
-            blockers.append(
-                {
-                    "id": blocker["id"],
-                    "status": blocker["status"],
-                    "reference": blocker["reference"],
-                }
-            )
+
+def _blockers_for(artifact_id, artifact_version):
+    """Contract-shaped blocker records for one artifact: open blockers AND completed gates.
+
+    Read from the register file rather than from the loaded `DecisionRegister`: that object
+    holds decisions, and a blocker is not a decision — it is a question nobody has decided.
+
+    Completed governance gates are carried here too, as blocker records with
+    `status: "resolved"`. That is the contract-supported way to state "this gate has been
+    passed" without any risk of it being read as an approval, and the safety of it is
+    structural rather than conventional: the Backend's `evaluateDescriptor` reads `blockers`
+    in a loop that can only ever set `blockersResolved = false`, and computes `approved`
+    exclusively from `approvals`. **There is no code path by which any blocker, resolved or
+    otherwise, makes a descriptor approved.** A completed decision set recorded here therefore
+    cannot become artifact approval by any evaluator that follows the contract.
+    """
+    document = _read_register_document()
+
+    def applies(entry):
+        return any(
+            item.get("artifact_id") == artifact_id
+            and item.get("artifact_version") == artifact_version
+            for item in entry.get("applies_to", [])
+        )
+
+    blockers = [
+        {"id": entry["id"], "status": entry["status"], "reference": entry["reference"]}
+        for entry in document.get("blockers", [])
+        if applies(entry)
+    ]
+    blockers.extend(_completed_gates(document, artifact_id, artifact_version))
     blockers.sort(key=lambda item: item["id"])
     return blockers
+
+
+def _completed_gates(document, artifact_id, artifact_version):
+    """Decision sets recorded complete, expressed as resolved gates.
+
+    Derived from the register's decision-set-completion records — never authored here — so a
+    gate can only appear because a decision record already says the set is complete.
+    """
+    gates = []
+    for record in document.get("decisions", []):
+        if record.get("is_decision_set_completion") is not True:
+            continue
+        subject = record["subject"]
+        if subject["artifact_id"] != artifact_id or subject["artifact_version"] != artifact_version:
+            continue
+        decision_set = record.get("decision_set", {})
+        gates.append(
+            {
+                "id": "IM001-PRODUCT-DISPLAY-DECISIONS",
+                "status": "resolved",
+                "reference": (
+                    "COMPLETED GATE, NOT AN APPROVAL. Product display decisions are complete "
+                    "(%d of %d recorded; %s). Scope: display wording and ordering only. This "
+                    "does NOT grant artifact-publication Product approval, which remains "
+                    "pending in approvals.product, and it does not grant clinical approval, "
+                    "publication authorization or activation authorization. It is recorded as "
+                    "a resolved blocker precisely because a resolved blocker contributes "
+                    "nothing to `approved` — the contract computes approval only from "
+                    "`approvals`."
+                    % (
+                        decision_set.get("total_product_decisions_required", 0)
+                        - decision_set.get("wording_decisions_pending", 0)
+                        - decision_set.get("ordering_rule_decisions_pending", 0),
+                        decision_set.get("total_product_decisions_required", 0),
+                        record["decision_id"],
+                    )
+                ),
+            }
+        )
+    return gates
+
+
+def _product_approval_scope(artifact_id, artifact_version, governance):
+    """The three Product/Clinical concepts, stated separately and machine-readably.
+
+    The whole point of this block is that these are *different things* that a reader — or a
+    fixture author — can conflate. Each names the contract field that carries it, so the
+    mapping from concept to representation is explicit rather than implied.
+    """
+    document = _read_register_document()
+    resolved = governance["resolved"]
+
+    completion = None
+    for record in document.get("decisions", []):
+        if record.get("is_decision_set_completion") is not True:
+            continue
+        subject = record["subject"]
+        if subject["artifact_id"] == artifact_id and subject["artifact_version"] == artifact_version:
+            completion = record
+            break
+
+    scope = {
+        "product_display_decision": {
+            "status": "complete" if completion else "not_applicable",
+            "scope": "display_wording_and_ordering_only",
+            "decision_ref": completion["decision_id"] if completion else None,
+            "contract_representation": "blockers[] entry IM001-PRODUCT-DISPLAY-DECISIONS with "
+            "status 'resolved'"
+            if completion
+            else None,
+            "grants_artifact_publication_product_approval": False,
+            "grants_clinical_approval": False,
+            "grants_publication_authorization": False,
+            "grants_activation_authorization": False,
+            "substitution_impossible_because": "the contract computes `approved` exclusively "
+            "from `approvals`; the blockers list is read by a loop that can only deny. No "
+            "evaluator following contract 1.0.0 can turn a resolved blocker into an approval.",
+            "means_only": completion["scope"]["means_only"] if completion else None,
+            "does_not_mean": completion["scope"]["does_not_mean"] if completion else [],
+        },
+        "artifact_publication_product_approval": {
+            "status": "granted" if resolved["product_approval"]["granted"] else "pending",
+            "decision_ref": resolved["product_approval"]["decision_ref"],
+            "contract_representation": "approvals.product.status",
+            "is_the_only_input_to": "the product half of the contract's `approved` state",
+        },
+        "clinical_approval": {
+            "status": "granted" if resolved["clinical_approval"]["granted"] else "pending",
+            "decision_ref": resolved["clinical_approval"]["decision_ref"],
+            "contract_representation": "approvals.clinical.status",
+            "reviewer_assigned": False,
+        },
+        "publication_authorization": {
+            "granted": resolved["publication_authorization"]["granted"],
+            "decision_ref": resolved["publication_authorization"]["decision_ref"],
+            "contract_representation": "publication_decision_ref",
+        },
+        "activation_authorization": {
+            "granted": resolved["activation_authorization"]["granted"],
+            "decision_ref": resolved["activation_authorization"]["decision_ref"],
+            "contract_representation": "activation_authorized + activation_decision_ref",
+        },
+        "ruling": "IM-001 Product display decisions are complete. Artifact-publication Product "
+        "approval is pending. Clinical approval is pending. Publication and activation "
+        "authorization are false. These are four distinct facts and the contract carries each "
+        "in a different field.",
+    }
+    return scope
 
 
 def _describe_rollback(entry, artifact_id, artifact_version, predecessor, entries):

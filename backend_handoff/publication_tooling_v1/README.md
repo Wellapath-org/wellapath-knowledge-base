@@ -98,22 +98,56 @@ its generator is `tools/build_vocabulary_v2.py`, and the published lineage it su
 predecessor relationship and the `/config` continuity. **Recommendation: the Backend fixture
 adopts `token_dictionary`.**
 
-**(b) Product approval status for Question Flow 1.1.** The Backend fixture sets
-`approvals.product.status: "granted"` with `decision_ref: "IM-001 — Product decisions complete;
-activation remains unauthorized"`. The KB emits `"pending"`.
+**(b) Product approval status for Question Flow 1.1 — a fixture defect.** Reviewed under I3
+Step 2A and settled by computation rather than opinion. Full record:
+`publication/fixtures/compat/approval_scope_reconciliation_v1.json`.
 
-The KB has the underlying records and they do not support a granted Product approval *of the
-artifact*. `reports/im001_option_order_decision_v1.json` records `IM001-ORD-GLOBAL-001`, which
-approves a deterministic option-ordering rule and whose own `approval_does_not_authorize` list
-includes "publication of any candidate" and "production or beta activation". Separately,
-`im_001_resolved: true` records that the Product *decision set* is complete, with a
-machine-readable scope stating it means only that.
+The Backend fixture sets `approvals.product.status: "granted"` with `decision_ref: "IM-001 —
+Product decisions complete; activation remains unauthorized"`. The KB emits `"pending"`.
 
-Treating either as Product approval of the artifact for publication is precisely the
-decision-set-completion-substituted-for-authorization error the contract's fail-closed design
-is meant to prevent, so the KB refuses it (`KB_DECISION_SET_IS_NOT_AUTHORIZATION`) and emits
-`pending`. **Recommendation: the Backend fixture adopts `pending`, or a genuine Product
-publication-approval record is created — but that is a governance act, not a fixture edit.**
+*What the fixture appears to mean.* The `decision_ref` text describes **decision-set
+completion** — the scoped IM-001 display decision. That reading is supported by the KB's
+records: `IM001-ORD-GLOBAL-001` approves a deterministic option-ordering rule and its own
+`approval_does_not_authorize` list includes "publication of any candidate" and "production or
+beta activation"; `im_001_resolved: true` records that the Product *decision set* is complete,
+with a machine-readable scope saying it means only that.
+
+*Why the encoding is nevertheless a defect.* `approvals.product` is not a scoped field. Contract
+1.0.0 defines it as artifact-level Product approval, and `evaluateDescriptor` reads it — and
+only it, for the product role — to compute `approved`. A scoped display decision placed there
+is a category error, not a narrower claim.
+
+*The proof, run against the Backend's own eligibility semantics.* As shipped, both encodings are
+ineligible. But that is not the same as being correct:
+
+| Encoding | as shipped | with clinical granted, blockers resolved, published, activated |
+|---|---|---|
+| KB (`product: pending` + resolved gate) | `approved: false`, `eligible: false` | **`approved: false`, `eligible: false`** |
+| Backend fixture (`product: granted`) | `approved: false`, `eligible: false` | **`approved: true`, `eligible: true`** |
+
+The Backend fixture's descriptor is protected today only by clinical approval being pending and
+two blockers being open — conditions unrelated to the product field. Lift them and a
+display-wording decision carries the artifact all the way to eligible. A field that is safe only
+while something else happens to be in the way is a latent defect.
+
+*What the KB did instead — and it needs no Backend support.* The contract **can** express the
+distinction, so nothing was weakened to match the fixture:
+
+- `approvals.product.status: "pending"` — artifact-publication Product approval, ungranted.
+- `approvals.clinical.status: "pending"` — clinical approval, ungranted.
+- a `blocker_record` `IM001-PRODUCT-DISPLAY-DECISIONS` with `status: "resolved"` — the completed
+  display decision, scope stated in its `reference`.
+
+A resolved blocker is the right home because it is *structurally* inert: `evaluateDescriptor`
+computes `approved` exclusively from `approvals` and reads `blockers` in a loop that can only
+deny. No evaluator following contract 1.0.0 can turn it into an approval. The safety is in the
+shape of the contract rather than in a convention anyone has to remember.
+
+**Backend follow-up required (not performed here — this task does not modify the Backend
+repository):** set `approvals.product.status` to `"pending"` in
+`tests/fixtures/manifest/blocked-candidates.manifest.json`, and, if the IM-001 display-decision
+completion is worth recording there, carry it as a resolved `blocker_record` as above. The
+contract itself needs no change.
 
 ---
 
@@ -133,6 +167,8 @@ Backend will accept. None of these needs Backend support.
 - **Governance evidence** must bind to a hash-bound decision record. Prose is not evidence.
 - **Reason-code namespaces are disjoint.** `KB_*` codes are Knowledge Base findings about
   *preparing* an artifact and are never written into a descriptor; a test asserts this.
+- **Completed governance gates are recorded as resolved blockers**, never as approvals. See
+  discrepancy (b) above.
 
 ---
 
