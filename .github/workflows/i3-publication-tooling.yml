@@ -1,0 +1,172 @@
+name: I3 publication tooling
+
+# Scoped to the I3 Step 2 publication tooling. It proves the pinned Backend contract is
+# unchanged, the frozen clinical artifacts are byte identical, every generated file is
+# reproducible from its generator, and that nothing is published, activated or eligible.
+#
+# This workflow is OFFLINE and INCAPABLE OF UPLOADING. There is no cloud credential, no
+# secret, no `permissions: write`, no deploy step and no network access beyond checking out
+# the repository — and the tooling it runs contains no upload code path in the first place.
+# `testing/publication/test_publication.py` runs plan generation inside an instrumented guard
+# that fails the job if a socket, a subprocess or a write outside the staging directory is
+# even attempted.
+#
+# No dependencies are installed: every tool is standard-library Python 3, which is the
+# convention every generator in this repository already follows.
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publication:
+    name: Publication tooling, contract pin and frozen artifacts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Pinned Backend contract is byte identical
+        # Runs before the Python tooling and independently of it. If the vendored contract
+        # changed, every later result was computed against the wrong rules and none of them
+        # is worth reading.
+        run: |
+          shasum -a 256 -c - <<'EOF'
+          66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9  contracts/backend/manifest.v1.schema.json
+          EOF
+
+      - name: Frozen clinical artifacts are byte identical
+        # The same list the W2 workflow asserts, restated here so this job is self-contained:
+        # a publication-tooling run that changed a clinical artifact must fail on its own
+        # terms, not only because another workflow happened to notice.
+        run: |
+          shasum -a 256 -c - <<'EOF'
+          6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b  kb.ng.v2.4.json
+          1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4  rules.ng.v2.2.json
+          0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019  token_dictionary.ng.v1.1.json
+          25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398  facilities.ng.v1.1.json
+          c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834  testing/case_bank_v1.json
+          07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d  candidate/token_dictionary.ng.v2.0.json
+          3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b  candidate/question_flow.ng.v1.1.json
+          EOF
+
+      - name: Run all publication checks
+        run: python3 tools/run_publication_checks.py
+
+      - name: Nothing is published, active or eligible
+        # A belt-and-braces guard on the outcome this whole step exists to preserve, written
+        # independently of the tooling so a bug in the tooling cannot also silence its own
+        # check. If any of these ever needs to change, that is a governance decision arriving
+        # through a decision record — not a CI edit.
+        run: |
+          python3 - <<'EOF'
+          import json, os, sys
+
+          errors = []
+
+          for name in sorted(os.listdir("publication/plans")):
+              if not name.endswith(".dryrun.json"):
+                  continue
+              with open("publication/plans/%s" % name) as handle:
+                  plan = json.load(handle)
+              where = "publication/plans/%s" % name
+
+              for flag in ("upload_performed", "publication_performed", "activation_performed",
+                           "deployment_performed", "storage_write_performed",
+                           "network_access_performed", "canonical_bytes_modified"):
+                  if plan["operations_performed"][flag] is not False:
+                      errors.append("%s: %s is not false" % (where, flag))
+
+              if plan["eligible_for_environment"] is not False:
+                  errors.append("%s: eligible_for_environment is not false" % where)
+              for environment in ("development", "staging", "production"):
+                  if plan["eligibility_by_environment"][environment]["eligible_for_environment"] is not False:
+                      errors.append("%s: eligible in %s" % (where, environment))
+
+              descriptor = plan["descriptor"]
+              if descriptor["release_status"] not in ("draft", "candidate"):
+                  errors.append("%s: release_status is %s" % (where, descriptor["release_status"]))
+              if descriptor["activation_status"] != "inactive":
+                  errors.append("%s: activation_status is %s" % (where, descriptor["activation_status"]))
+              if descriptor["activation_authorized"] is not False:
+                  errors.append("%s: activation_authorized is not false" % where)
+              if descriptor["published_at"] is not None:
+                  errors.append("%s: published_at is set" % where)
+              for role in ("product", "clinical"):
+                  if descriptor["approvals"][role]["status"] == "granted":
+                      errors.append("%s: %s approval is granted" % (where, role))
+
+              for claim in plan["governance"]["claims"]:
+                  if claim["granted"] is not False:
+                      errors.append("%s: %s is granted" % (where, claim["kind"]))
+              if plan["governance"]["clinical_reviewer_assigned"] is not False:
+                  errors.append("%s: a clinical reviewer is assigned" % where)
+
+          # The two open blockers, and IM-003 still disabled.
+          with open("publication/governance/decision_register_v1.json") as handle:
+              register = json.load(handle)
+          statuses = {blocker["id"]: blocker["status"] for blocker in register["blockers"]}
+          for blocker_id in ("IM001-CLIN-FLAG-001", "IM003-SB-001"):
+              if statuses.get(blocker_id) != "open":
+                  errors.append("%s is no longer open" % blocker_id)
+          for record in register["decisions"]:
+              state = record.get("recorded_state") or {}
+              if "im003" in state and state["im003"] != "DISABLED":
+                  errors.append("IM-003 is no longer DISABLED")
+              if "mobile_pr_76_merge_authorization" in state and state["mobile_pr_76_merge_authorization"] is not False:
+                  errors.append("Mobile PR #76 merge authorization changed")
+
+          # No candidate has been moved to the repository root, which is where published
+          # artifacts are uploaded from.
+          for name in ("token_dictionary.ng.v2.0.json", "question_flow.ng.v1.1.json"):
+              if os.path.exists(name):
+                  errors.append("%s is at the repository root" % name)
+
+          # No receipt claims an operation.
+          for name in sorted(os.listdir("publication/receipts")):
+              if not name.endswith(".json"):
+                  continue
+              with open("publication/receipts/%s" % name) as handle:
+                  receipt = json.load(handle)
+              if receipt["operative"] is not False:
+                  errors.append("publication/receipts/%s is marked operative" % name)
+              for key, value in receipt.items():
+                  if key.endswith("_performed") and value is not False:
+                      errors.append("publication/receipts/%s: %s is not false" % (name, key))
+
+          for error in errors:
+              print("::error::%s" % error)
+          sys.exit(1 if errors else 0)
+          EOF
+
+      - name: No upload capability exists in the tooling
+        # Asserted against the source, not against behaviour, because the strongest form of
+        # "this cannot upload" is that the code to do it was never written.
+        #
+        # Matches real IMPORT STATEMENTS and real invocation strings, not mentions. The
+        # distinction matters: tools/pubkit/safety.py contains the literal names boto3,
+        # botocore and google.cloud in CLOUD_SDK_MODULES — a list of modules it asserts are
+        # NOT imported. A grep for the bare words flags the guard as if it were the breach.
+        run: |
+          set -o pipefail
+          TARGETS="tools/pubkit tools/build_publication_plans.py tools/build_publication_fixtures.py tools/build_receipt_examples.py tools/build_governance_register.py tools/validate_publication_plan.py tools/validate_publication_fixtures.py tools/verify_contract_pin.py tools/report_publication_freeze.py"
+
+          if grep -rnE '^[[:space:]]*(import|from)[[:space:]]+(boto3|botocore|s3transfer|aiobotocore|google|azure|requests|httpx|aiohttp|urllib\.request|http\.client|ftplib|paramiko)\b' $TARGETS; then
+            echo "::error::the publication tooling imports a cloud SDK or an HTTP client"
+            exit 1
+          fi
+
+          if grep -rniE 'urlopen|requests\.(get|post|put)|httpx\.|\brclone\b|aws[[:space:]]+s3|\bwrangler\b|put_object|upload_file|upload_fileobj|generate_presigned' $TARGETS; then
+            echo "::error::the publication tooling invokes an upload or a remote request"
+            exit 1
+          fi
+
+          echo "no cloud SDK import, HTTP client import or upload invocation in the publication tooling"

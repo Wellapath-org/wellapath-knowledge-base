@@ -1,0 +1,721 @@
+{
+  "_metadata": {
+    "plan_id": "question_flow_v1_1_dryrun",
+    "plan_schema_version": "1.0.0",
+    "phase": "I3 / Step 2",
+    "generator": "tools/build_publication_plans.py",
+    "generator_version": "1.0.0",
+    "pubkit_version": "1.0.0",
+    "evaluated_at": "2026-08-28T00:00:00Z",
+    "determinism": "Every value in this plan is derived from repository bytes and from the fixed evaluation instant above. No wall clock, no environment variable, no filesystem path outside the repository and no random value participates, so two runs over the same tree produce byte-identical output.",
+    "is_operative": false,
+    "note": "A DRY-RUN PLAN. It describes what would be published if publication were authorized. Nothing in this repository is authorized to publish, and generating this plan performed no upload, publication, activation or deployment."
+  },
+  "operations_performed": {
+    "upload_performed": false,
+    "publication_performed": false,
+    "activation_performed": false,
+    "deployment_performed": false,
+    "storage_write_performed": false,
+    "network_access_performed": false,
+    "canonical_bytes_modified": false,
+    "evidence": "The tooling that produced this plan contains no upload, storage or network code path. `testing/publication/test_publication.py` executes plan generation inside an instrumented guard that fails the suite if a socket, a subprocess or a write outside the staging directory is even attempted."
+  },
+  "eligible_for_environment": false,
+  "eligible_in_any_environment": false,
+  "contract_pin": {
+    "backend_repository": "Wellapath-org/wellapath-backend",
+    "backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "contract_version": "1.0.0",
+    "supported_major": 1,
+    "schema_source_path": "docs/contracts/manifest.v1.schema.json",
+    "schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+    "schema_byte_count": 6375,
+    "vendored_path": "contracts/backend/manifest.v1.schema.json",
+    "handoff_sha256": "90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8",
+    "retrieved_at": "2026-08-28T00:00:00Z",
+    "compatibility_policy": "fail_closed on pin drift, schema hash drift, unsupported major, unrepresentable rule, or KB-accepts/Backend-rejects disagreement"
+  },
+  "target": {
+    "artifact_id": "question_flow",
+    "artifact_version": "1.1",
+    "country": "ng",
+    "repository_path": "candidate/question_flow.ng.v1.1.json",
+    "repository_role": "candidate",
+    "repository_role_note": "Sits in candidate/, the directory for unapproved release candidates. Not published, not approved, not uploaded, not referenced by any manifest."
+  },
+  "lifecycle": {
+    "states": {
+      "generated": true,
+      "validated": true,
+      "packaged": true,
+      "present": true,
+      "uploaded": false,
+      "published": false,
+      "approved": false,
+      "active": false,
+      "eligible_for_environment": false
+    },
+    "unobservable_states": {
+      "uploaded": "no upload has occurred and this tooling has no code path that could perform one",
+      "published": "publication is a governance act recorded outside this repository",
+      "approved": "approval requires an authoritative decision record; see governance.py",
+      "active": "activation requires an explicit activation authorization, which does not exist",
+      "eligible_for_environment": "eligibility is the Backend's computation over a published, approved, unblocked, activated descriptor; none of those hold"
+    },
+    "note": "The nine states are independent. No state in this plan was derived from another; see tools/pubkit/lifecycle.py for the implications that do not hold."
+  },
+  "generation": {
+    "generator": "tools/build_question_candidate_v11.py",
+    "generator_version": "1.1.0",
+    "artifact_generated_at": "2026-08-17T00:00:00Z",
+    "declared_release_status": "candidate_unapproved",
+    "declared_schema_version": "1.1",
+    "reproducible": true,
+    "reproducibility_evidence": "The generator's own --check mode is run by tools/run_publication_checks.py before any plan is built; a generator that no longer reproduces its committed artifact fails the run before this plan exists.",
+    "note": "generated means bytes exist and are reproducible. It does not mean validated."
+  },
+  "validation": {
+    "validator": "tools/validate_question_flow.py",
+    "validated_against_own_schema": true,
+    "reasons": [],
+    "note": "This records that a validator exists and is run by tools/run_publication_checks.py. validated does not mean packaged."
+  },
+  "integrity": {
+    "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "sha256_bare": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "byte_count": 155532,
+    "content_type": "application/json",
+    "computed_from": "the exact bytes of candidate/question_flow.ng.v1.1.json, read in binary"
+  },
+  "packaging": {
+    "packaged": true,
+    "staged_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "staged_byte_count": 155532,
+    "matches_source": true,
+    "staging_root": ".publication-staging/ (git-ignored, disposable)",
+    "staging_path_recorded": false,
+    "staging_path_note": "The absolute staged path is deliberately not recorded: it is temporary, machine-specific, and would make this plan non-deterministic.",
+    "staging_removed": true,
+    "note": "packaged means a verified copy was made locally. It does not mean uploaded."
+  },
+  "object_key": {
+    "proposed": "question_flow.ng.v1.1.json",
+    "convention": "<artifact>.<country>.v<version>.json",
+    "binds": [
+      "artifact_id",
+      "artifact_version",
+      "country",
+      "content type (via the .json suffix)",
+      "content identity (by registration against sha256; see tools/pubkit/keys.py)"
+    ],
+    "immutable": true,
+    "immutability_rule": "A key is never reused for changed content. The key string carries identity and version; the hash binding is held in the register, so proposing this key for different bytes is a collision rather than an overwrite.",
+    "reasons": [],
+    "url": null,
+    "url_note": "Omitted deliberately. This artifact has never been uploaded, so it has no URL. Recording the address it would have had is how a proposal becomes mistaken for a fact."
+  },
+  "descriptor": {
+    "artifact_id": "question_flow",
+    "artifact_version": "1.1",
+    "schema_version": "wellapath.artifact/1",
+    "content_type": "application/json",
+    "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "byte_count": 155532,
+    "object_key": "question_flow.ng.v1.1.json",
+    "release_status": "candidate",
+    "activation_status": "inactive",
+    "activation_authorized": false,
+    "activation_decision_ref": null,
+    "target_environments": [
+      "staging"
+    ],
+    "publication_decision_ref": null,
+    "approvals": {
+      "product": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null
+      },
+      "clinical": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null
+      }
+    },
+    "blockers": [
+      {
+        "id": "IM001-CLIN-FLAG-001",
+        "status": "open",
+        "reference": "Open Clinical flag raised during IM-001 Product review (fast_breathing_child.severity, IM001-D018/D027). Requires Clinical review before any activation decision involving that question. No Clinical reviewer is assigned."
+      },
+      {
+        "id": "IM003-SB-001",
+        "status": "open",
+        "reference": "Additive re-branching de-escalated urgency from emergency to urgent with no red-flag change"
+      }
+    ],
+    "predecessor": {
+      "artifact_version": "1.0",
+      "sha256": "sha256:c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998"
+    },
+    "rollback_target": null,
+    "created_at": "2026-08-17T00:00:00Z",
+    "published_at": null,
+    "deprecated": false,
+    "expires_at": null,
+    "country": "ng",
+    "references": [
+      "DRY-RUN DESCRIPTOR \u2014 generated by the Knowledge Base publication tooling (I3 Step 2). Not uploaded, not published, not activated, not served by any route, and not to be added to any live manifest.",
+      "repository path: candidate/question_flow.ng.v1.1.json",
+      "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
+      "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+      "governance register: publication/governance/decision_register_v1.json",
+      "target_environments is a structural placeholder required by the contract's minItems constraint; it records no deployment decision and the descriptor is ineligible in every environment including the one named"
+    ]
+  },
+  "contract_validation": {
+    "contract_version": "1.0.0",
+    "ported_validator_reasons": [],
+    "vendored_schema_reasons": [],
+    "ported_validator_accepts": true,
+    "vendored_schema_accepts": true,
+    "validators_agree": true,
+    "reasons": [],
+    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. They are meant to agree, and a disagreement is a hard failure rather than a preference for whichever passed."
+  },
+  "governance": {
+    "register": "publication/governance/decision_register_v1.json",
+    "evaluated_as_of": "2026-08-28",
+    "claims": [
+      {
+        "kind": "product_approval",
+        "artifact": "question_flow@1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+            "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize product_approval"
+          },
+          {
+            "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+            "path": "publication/governance/decision_register_v1.json[1].scope",
+            "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of product_approval. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+            "detail": "IM003-DISPOSITION-001 explicitly does not authorize product_approval"
+          }
+        ]
+      },
+      {
+        "kind": "clinical_approval",
+        "artifact": "question_flow@1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[0].authority_type",
+            "detail": "IM001-ORD-GLOBAL-001 carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+            "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize clinical_approval"
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[1].authority_type",
+            "detail": "IM001-DECISION-SET-COMPLETE carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+            "path": "publication/governance/decision_register_v1.json[1].scope",
+            "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of clinical_approval. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[2].authority_type",
+            "detail": "IM003-DISPOSITION-001 carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+            "detail": "IM003-DISPOSITION-001 explicitly does not authorize clinical_approval"
+          }
+        ]
+      },
+      {
+        "kind": "publication_authorization",
+        "artifact": "question_flow@1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[0].authority_type",
+            "detail": "IM001-ORD-GLOBAL-001 carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+            "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize publication_authorization"
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[1].authority_type",
+            "detail": "IM001-DECISION-SET-COMPLETE carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+            "path": "publication/governance/decision_register_v1.json[1].scope",
+            "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of publication_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[2].authority_type",
+            "detail": "IM003-DISPOSITION-001 carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+            "detail": "IM003-DISPOSITION-001 explicitly does not authorize publication_authorization"
+          }
+        ]
+      },
+      {
+        "kind": "activation_authorization",
+        "artifact": "question_flow@1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[0].authority_type",
+            "detail": "IM001-ORD-GLOBAL-001 carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+            "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize activation_authorization"
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[1].authority_type",
+            "detail": "IM001-DECISION-SET-COMPLETE carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+            "path": "publication/governance/decision_register_v1.json[1].scope",
+            "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of activation_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[2].authority_type",
+            "detail": "IM003-DISPOSITION-001 carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+            "detail": "IM003-DISPOSITION-001 explicitly does not authorize activation_authorization"
+          }
+        ]
+      },
+      {
+        "kind": "mobile_implementation_authorization",
+        "artifact": "question_flow@1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[0].authority_type",
+            "detail": "IM001-ORD-GLOBAL-001 carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+            "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize mobile_implementation_authorization"
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[1].authority_type",
+            "detail": "IM001-DECISION-SET-COMPLETE carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+            "path": "publication/governance/decision_register_v1.json[1].scope",
+            "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of mobile_implementation_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+          },
+          {
+            "code": "KB_DECISION_AUTHORITY_WRONG",
+            "path": "publication/governance/decision_register_v1.json[2].authority_type",
+            "detail": "IM003-DISPOSITION-001 carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+          },
+          {
+            "code": "KB_DECISION_SCOPE_EXCEEDED",
+            "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+            "detail": "IM003-DISPOSITION-001 explicitly does not authorize mobile_implementation_authorization"
+          }
+        ]
+      }
+    ],
+    "blockers": [
+      {
+        "id": "IM001-CLIN-FLAG-001",
+        "status": "open",
+        "reference": "Open Clinical flag raised during IM-001 Product review (fast_breathing_child.severity, IM001-D018/D027). Requires Clinical review before any activation decision involving that question. No Clinical reviewer is assigned."
+      },
+      {
+        "id": "IM003-SB-001",
+        "status": "open",
+        "reference": "Additive re-branching de-escalated urgency from emergency to urgent with no red-flag change"
+      }
+    ],
+    "clinical_reviewer_assigned": false,
+    "clinical_reviewer_note": "No Clinical reviewer is assigned. This tooling does not assign one and does not infer clinical approval from any Product decision."
+  },
+  "rollback": {
+    "predecessor": {
+      "artifact_version": "1.0",
+      "sha256": "sha256:c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998"
+    },
+    "predecessor_note": "Lineage only. Naming a predecessor authorizes nothing.",
+    "proposed_target": {
+      "artifact_version": "1.0",
+      "sha256": "sha256:c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998"
+    },
+    "usable_as_rollback_target": false,
+    "rejection_reasons": [
+      {
+        "code": "KB_ROLLBACK_SCHEMA_INCOMPATIBLE",
+        "path": "rollback.proposed_target",
+        "detail": "rollback target declares content schema '1.0' while the descriptor declares '1.1'; a consumer that upgraded its parser cannot read the older shape"
+      }
+    ],
+    "descriptor_rollback_target": null,
+    "binding_rule": "A rollback target must name an exact version AND the exact sha256 of that version's bytes, and must resolve in the governed inventory. A version-only target is refused: it points at whatever that version happens to be.",
+    "note": "This plan does not perform a rollback and does not change any active version. When the proposed target is refused, the descriptor carries rollback_target: null rather than an unusable pointer."
+  },
+  "eligibility_by_environment": {
+    "development": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact question_flow v1.1",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM001-CLIN-FLAG-001 is open"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM003-SB-001 is open"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact question_flow v1.1",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        },
+        {
+          "code": "ENVIRONMENT_NOT_AUTHORIZED",
+          "path": "artifact question_flow v1.1",
+          "detail": "descriptor does not target environment development"
+        }
+      ]
+    },
+    "staging": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact question_flow v1.1",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM001-CLIN-FLAG-001 is open"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM003-SB-001 is open"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact question_flow v1.1",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        }
+      ]
+    },
+    "production": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact question_flow v1.1",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact question_flow v1.1.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM001-CLIN-FLAG-001 is open"
+        },
+        {
+          "code": "BLOCKER_UNRESOLVED",
+          "path": "artifact question_flow v1.1.blockers",
+          "detail": "blocker IM003-SB-001 is open"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact question_flow v1.1",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        },
+        {
+          "code": "ENVIRONMENT_NOT_AUTHORIZED",
+          "path": "artifact question_flow v1.1",
+          "detail": "descriptor does not target environment production"
+        }
+      ]
+    }
+  },
+  "blocking_reasons": [
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+      "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize product_approval"
+    },
+    {
+      "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "path": "publication/governance/decision_register_v1.json[1].scope",
+      "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of product_approval. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+      "detail": "IM003-DISPOSITION-001 explicitly does not authorize product_approval"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[0].authority_type",
+      "detail": "IM001-ORD-GLOBAL-001 carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+      "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize clinical_approval"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[1].authority_type",
+      "detail": "IM001-DECISION-SET-COMPLETE carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "path": "publication/governance/decision_register_v1.json[1].scope",
+      "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of clinical_approval. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[2].authority_type",
+      "detail": "IM003-DISPOSITION-001 carries product authority; clinical_approval requires clinical. Authority does not transfer: a product decision is not a clinical approval decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+      "detail": "IM003-DISPOSITION-001 explicitly does not authorize clinical_approval"
+    },
+    {
+      "code": "KB_PUBLICATION_AUTHORIZATION_MISSING",
+      "path": "governance.publication_authorization",
+      "detail": "publication_authorization is not granted for question_flow@1.1; the descriptor cannot be published or activated"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[0].authority_type",
+      "detail": "IM001-ORD-GLOBAL-001 carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+      "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize publication_authorization"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[1].authority_type",
+      "detail": "IM001-DECISION-SET-COMPLETE carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "path": "publication/governance/decision_register_v1.json[1].scope",
+      "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of publication_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[2].authority_type",
+      "detail": "IM003-DISPOSITION-001 carries product authority; publication_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a publication authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+      "detail": "IM003-DISPOSITION-001 explicitly does not authorize publication_authorization"
+    },
+    {
+      "code": "KB_ACTIVATION_AUTHORIZATION_MISSING",
+      "path": "governance.activation_authorization",
+      "detail": "activation_authorization is not granted for question_flow@1.1; the descriptor cannot be published or activated"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[0].authority_type",
+      "detail": "IM001-ORD-GLOBAL-001 carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+      "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize activation_authorization"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[1].authority_type",
+      "detail": "IM001-DECISION-SET-COMPLETE carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "path": "publication/governance/decision_register_v1.json[1].scope",
+      "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of activation_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[2].authority_type",
+      "detail": "IM003-DISPOSITION-001 carries product authority; activation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a activation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+      "detail": "IM003-DISPOSITION-001 explicitly does not authorize activation_authorization"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[0].authority_type",
+      "detail": "IM001-ORD-GLOBAL-001 carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[0].scope.does_not_authorize",
+      "detail": "IM001-ORD-GLOBAL-001 explicitly does not authorize mobile_implementation_authorization"
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[1].authority_type",
+      "detail": "IM001-DECISION-SET-COMPLETE carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "path": "publication/governance/decision_register_v1.json[1].scope",
+      "detail": "IM001-DECISION-SET-COMPLETE records the completion of a decision set, not a grant of mobile_implementation_authorization. Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+    },
+    {
+      "code": "KB_DECISION_AUTHORITY_WRONG",
+      "path": "publication/governance/decision_register_v1.json[2].authority_type",
+      "detail": "IM003-DISPOSITION-001 carries product authority; mobile_implementation_authorization requires engineering_lead or founder. Authority does not transfer: a product decision is not a mobile implementation authorization decision however senior the reviewer"
+    },
+    {
+      "code": "KB_DECISION_SCOPE_EXCEEDED",
+      "path": "publication/governance/decision_register_v1.json[2].scope.does_not_authorize",
+      "detail": "IM003-DISPOSITION-001 explicitly does not authorize mobile_implementation_authorization"
+    },
+    {
+      "code": "KB_SAFETY_BLOCKER_OPEN",
+      "path": "governance.blockers",
+      "detail": "IM001-CLIN-FLAG-001 is open (Open Clinical flag raised during IM-001 Product review (fast_breathing_child.severity, IM001-D018/D027). Requires Clinical review before any activation decision involving that question. No Clinical reviewer is assigned.); an open safety blocker refuses publication and activation regardless of any approval"
+    },
+    {
+      "code": "KB_SAFETY_BLOCKER_OPEN",
+      "path": "governance.blockers",
+      "detail": "IM003-SB-001 is open (Additive re-branching de-escalated urgency from emergency to urgent with no red-flag change); an open safety blocker refuses publication and activation regardless of any approval"
+    }
+  ],
+  "conclusion": {
+    "publishable": false,
+    "activatable": false,
+    "eligible_in_any_environment": false,
+    "distinct_blocking_codes": [
+      "KB_ACTIVATION_AUTHORIZATION_MISSING",
+      "KB_DECISION_AUTHORITY_WRONG",
+      "KB_DECISION_SCOPE_EXCEEDED",
+      "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "KB_PUBLICATION_AUTHORIZATION_MISSING",
+      "KB_SAFETY_BLOCKER_OPEN"
+    ],
+    "blocking_reason_count": 31,
+    "statement": "question_flow@1.1 is not publishable, not activatable and ineligible in every environment. This plan records what publication would involve and what refuses it. It authorizes nothing and performs nothing."
+  }
+}

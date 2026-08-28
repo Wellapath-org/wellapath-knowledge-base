@@ -1,0 +1,248 @@
+{
+  "_metadata": {
+    "report_id": "publication_freeze",
+    "version": "1",
+    "phase": "I3 / Step 2",
+    "generator": "tools/report_publication_freeze.py",
+    "generator_version": "1.0.0",
+    "note": "The exact bytes I3 Step 2 must not have touched. Regenerated and compared in --check mode, so a single changed byte in any listed file fails the run. The report cannot be fixed by editing it: an edited report no longer matches what the generator produces, which is the same failure."
+  },
+  "rule": "The publication tooling reads these files, hashes them and copies them into a disposable staging directory. It has no code path that opens any of them for writing, and every packaging operation re-hashes the source afterwards to prove it did not.",
+  "frozen_artifact_count": 44,
+  "groups": {
+    "candidates": [
+      {
+        "path": "candidate/token_dictionary.ng.v2.0.json",
+        "sha256": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "byte_count": 339948
+      },
+      {
+        "path": "candidate/question_flow.ng.v1.0.json",
+        "sha256": "c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998",
+        "byte_count": 177357
+      },
+      {
+        "path": "candidate/question_flow.ng.v1.1.json",
+        "sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "byte_count": 155532
+      },
+      {
+        "path": "candidate/manifest.candidate.json",
+        "sha256": "fa7045a07f726d73242698562c9af42e258bbcfa291a35d7381b61d31c7c545b",
+        "byte_count": 3065
+      },
+      {
+        "path": "candidate/CANDIDATE_STATUS.md",
+        "sha256": "b51205df607b0ac58732e5507dbe7947aa11fbf595df86e2364f6c6deb26c043",
+        "byte_count": 3733
+      }
+    ],
+    "case_bank_and_findings": [
+      {
+        "path": "testing/case_bank_v1.json",
+        "sha256": "c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834",
+        "byte_count": 138988
+      },
+      {
+        "path": "testing/case_bank_results_v1.json",
+        "sha256": "f5a82024f1c145a162f2ca062139dc45810c7faca60270c04b569b7931e2bc61",
+        "byte_count": 251318
+      },
+      {
+        "path": "testing/known_findings.json",
+        "sha256": "fadaea063303ecd27a90c233dba7782f8840c85aef4e3a7cca61b1e4793537ed",
+        "byte_count": 9730
+      },
+      {
+        "path": "reports/case_bank_status_v1.json",
+        "sha256": "e093333a6147589a4734b394db7d48bcc2cdac852b28f40f6bc69de5e0eb6e90",
+        "byte_count": 8027
+      },
+      {
+        "path": "reports/case_findings_v1.json",
+        "sha256": "7fd4057232a29085d21ece54c9b84087c1aa1bacfb730a1b1eb0555d329e22e4",
+        "byte_count": 24221
+      }
+    ],
+    "clinical_artifacts": [
+      {
+        "path": "kb.ng.v2.4.json",
+        "sha256": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b",
+        "byte_count": 102118
+      },
+      {
+        "path": "rules.ng.v2.2.json",
+        "sha256": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4",
+        "byte_count": 29082
+      },
+      {
+        "path": "token_dictionary.ng.v1.0.json",
+        "sha256": "773006dee306a3b03312315134fe62d7abf1aa29baa1903a388854f34f24b76d",
+        "byte_count": 8557
+      },
+      {
+        "path": "token_dictionary.ng.v1.1.json",
+        "sha256": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+        "byte_count": 8820
+      },
+      {
+        "path": "facilities.ng.v1.0.json",
+        "sha256": "1c7b939199ab4465156f4cb336910eea120fcaa70f8b1c0743fc9f7a7c03009e",
+        "byte_count": 1695059
+      },
+      {
+        "path": "facilities.ng.v1.1.json",
+        "sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
+        "byte_count": 1695844
+      }
+    ],
+    "im001_records": [
+      {
+        "path": "reports/im001_option_order_decision_v1.json",
+        "sha256": "594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1",
+        "byte_count": 4837
+      },
+      {
+        "path": "reports/im001_option_order_evidence_v1.json",
+        "sha256": "fd4391a21c5db85c4881c2b5d238f968def58b999d6caa28580d28830e181939",
+        "byte_count": 1826170
+      },
+      {
+        "path": "reports/im001_product_review_v1_1.json",
+        "sha256": "930fd258a7739affd4a9117b26e4b4017b396391ecc5fcfedaef0ad363a3ee65",
+        "byte_count": 145684
+      },
+      {
+        "path": "reports/im001_product_verdicts_v1.json",
+        "sha256": "14df39e8aacc624ae913f05b5b4b00086bf3d050523f8e795edf582f5f03fed3",
+        "byte_count": 84716
+      },
+      {
+        "path": "review/im001_workbook_v1/im001_workbook_v1.json",
+        "sha256": "549e47cfee6786480a152f63d85169bae70dbe40e43e1aa461b4df8ae3c1d75c",
+        "byte_count": 284193
+      },
+      {
+        "path": "review/im001_workbook_v1/im001_decision_template_v1.json",
+        "sha256": "d6f64b3eb4db8d5fa9b247d44de552f63395c8e9c08153082c11a5c5390d3320",
+        "byte_count": 56478
+      },
+      {
+        "path": "review/im001_workbook_v1/IM001_DECISION_WORKBOOK.md",
+        "sha256": "5e7cdb11211c74cf231830720974fcda8dc4b427fb20c96f2a07ff33de5d9a3f",
+        "byte_count": 25701
+      },
+      {
+        "path": "baseline/im001_reconciliation_v1/IM001_PRODUCT_DECISION_RECONCILIATION_2026-08-24.vendored.md",
+        "sha256": "dba74ab47a6b2c70698c69b1f00c88983e953a45dcaefdf96fd43f544b97d319",
+        "byte_count": 9068
+      },
+      {
+        "path": "docs/IM001_OPTION_ORDERING.md",
+        "sha256": "da055e78dd486f2802323d7d6d7dfdf33a74bdea7d387ab99c9f91bc2d6ee7c7",
+        "byte_count": 7486
+      }
+    ],
+    "im003_records": [
+      {
+        "path": "reports/im003_decision_package_v1.json",
+        "sha256": "8e7bdba0ece0bd32c19972a10ae29e3780f66cdd72cf7f4f4ed35b0464c3f3b2",
+        "byte_count": 42140
+      },
+      {
+        "path": "reports/im003_disposition_v1.json",
+        "sha256": "367fe0873daf26c2263a4d62b62b01d86b958b147263a82416c907e4e3228f39",
+        "byte_count": 12667
+      },
+      {
+        "path": "reports/im003_impact_analysis_v1.json",
+        "sha256": "3589e1a0fada38a9754f31d4629a9681a7098f4f7c28fb39d716edce25ca1fe9",
+        "byte_count": 164499
+      },
+      {
+        "path": "reports/im003_mobile_measurement_v1.json",
+        "sha256": "58b991e35c58fa4e6e14593af0c6db33a9b5cd55451fb1c780f00c8807fb60db",
+        "byte_count": 19510
+      },
+      {
+        "path": "reports/im003_safety_blockers_v1.json",
+        "sha256": "f97ffd72448bcd6d75ba02a63de1ac93ebbd5f8a54599e9c7812deb88d6c9c59",
+        "byte_count": 4078
+      },
+      {
+        "path": "baseline/im003_decision_record_v1/IM003_SAFETY_REVIEW_DECISION_RECORD_2026-08-22.vendored.md",
+        "sha256": "975f80ee983a59e44e116a7fb8055334de1eaca8d80cc1cb11b227479b5f1acc",
+        "byte_count": 12432
+      },
+      {
+        "path": "baseline/im003_mobile_v1/im003_mobile_scoring_measurement_v1.vendored.json",
+        "sha256": "fb5aefab9915957f327b70de73e21f02ce0f574163d3b6c9dafa2e43c1f027c5",
+        "byte_count": 176163
+      },
+      {
+        "path": "docs/IM003_DISPOSITION_RECORD.md",
+        "sha256": "cbefefc3cfd081af2f73b5ea47a2135fb9172316cde090bd66df34b29bd821a4",
+        "byte_count": 7261
+      },
+      {
+        "path": "docs/IM003_IMPACT_ANALYSIS.md",
+        "sha256": "9e6ad05261343963e89d463d73bb29ff611170b05cefef83975e40e74faf9efb",
+        "byte_count": 13415
+      },
+      {
+        "path": "docs/IM003_SB_001_ADJUDICATION.md",
+        "sha256": "8d7b693a9140a253eff38c241a8ea20c5d087ee333466b3ddc8a906079775a00",
+        "byte_count": 9554
+      }
+    ],
+    "oracle": [
+      {
+        "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.json",
+        "sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+        "byte_count": 4231406
+      },
+      {
+        "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.provenance.json",
+        "sha256": "cfcdee7cfd5607bbd92291c5b17b9f36b9c0c4a9075eeddb19a3ed671188f915",
+        "byte_count": 4741
+      },
+      {
+        "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.harness.dart.txt",
+        "sha256": "13a5c322e29b1388348be7b877d0d8a6c07d35fbac595a041b04715069de80d1",
+        "byte_count": 8455
+      }
+    ],
+    "schemas": [
+      {
+        "path": "schema/question_flow.v1.schema.json",
+        "sha256": "4b9f09384842968c2c093e2d4a1b246447eaef896980feff84da36d4fdbd4726",
+        "byte_count": 12178
+      },
+      {
+        "path": "schema/question_flow.v1_1.schema.json",
+        "sha256": "ef0372b572e0553d3b33ec8c10ea6468cb169a15887820a4f33fb53e507e1f43",
+        "byte_count": 24307
+      },
+      {
+        "path": "schema/token_dictionary.v2.schema.json",
+        "sha256": "397227a1ce60a4df82ce73af17aea003c4b4898e947142df24e1f5323f47580f",
+        "byte_count": 15898
+      },
+      {
+        "path": "schema/token_dictionary_schema_v2.0.json",
+        "sha256": "f2b1d73ac93ba23671ab1a95fa99d4f36596fed6a272476160554001cebfaf80",
+        "byte_count": 35409
+      },
+      {
+        "path": "schema/kb_schema_v1.0.json",
+        "sha256": "5808d8cede3ebaf0c0965d53c805451bce79920c70c5563b1a4bf3d5bce2d776",
+        "byte_count": 14219
+      },
+      {
+        "path": "schema/rules_schema_v1.0.json",
+        "sha256": "39fee3b841a12cd9b08c77a54975c9e67f258300f63a9b4faee0690d3703ea65",
+        "byte_count": 5496
+      }
+    ]
+  }
+}

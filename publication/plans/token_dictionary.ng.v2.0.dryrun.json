@@ -1,0 +1,436 @@
+{
+  "_metadata": {
+    "plan_id": "token_dictionary_v2_0_dryrun",
+    "plan_schema_version": "1.0.0",
+    "phase": "I3 / Step 2",
+    "generator": "tools/build_publication_plans.py",
+    "generator_version": "1.0.0",
+    "pubkit_version": "1.0.0",
+    "evaluated_at": "2026-08-28T00:00:00Z",
+    "determinism": "Every value in this plan is derived from repository bytes and from the fixed evaluation instant above. No wall clock, no environment variable, no filesystem path outside the repository and no random value participates, so two runs over the same tree produce byte-identical output.",
+    "is_operative": false,
+    "note": "A DRY-RUN PLAN. It describes what would be published if publication were authorized. Nothing in this repository is authorized to publish, and generating this plan performed no upload, publication, activation or deployment."
+  },
+  "operations_performed": {
+    "upload_performed": false,
+    "publication_performed": false,
+    "activation_performed": false,
+    "deployment_performed": false,
+    "storage_write_performed": false,
+    "network_access_performed": false,
+    "canonical_bytes_modified": false,
+    "evidence": "The tooling that produced this plan contains no upload, storage or network code path. `testing/publication/test_publication.py` executes plan generation inside an instrumented guard that fails the suite if a socket, a subprocess or a write outside the staging directory is even attempted."
+  },
+  "eligible_for_environment": false,
+  "eligible_in_any_environment": false,
+  "contract_pin": {
+    "backend_repository": "Wellapath-org/wellapath-backend",
+    "backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "contract_version": "1.0.0",
+    "supported_major": 1,
+    "schema_source_path": "docs/contracts/manifest.v1.schema.json",
+    "schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+    "schema_byte_count": 6375,
+    "vendored_path": "contracts/backend/manifest.v1.schema.json",
+    "handoff_sha256": "90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8",
+    "retrieved_at": "2026-08-28T00:00:00Z",
+    "compatibility_policy": "fail_closed on pin drift, schema hash drift, unsupported major, unrepresentable rule, or KB-accepts/Backend-rejects disagreement"
+  },
+  "target": {
+    "artifact_id": "token_dictionary",
+    "artifact_version": "2.0",
+    "country": "ng",
+    "repository_path": "candidate/token_dictionary.ng.v2.0.json",
+    "repository_role": "candidate",
+    "repository_role_note": "Sits in candidate/, the directory for unapproved release candidates. Not published, not approved, not uploaded, not referenced by any manifest."
+  },
+  "lifecycle": {
+    "states": {
+      "generated": true,
+      "validated": true,
+      "packaged": true,
+      "present": true,
+      "uploaded": false,
+      "published": false,
+      "approved": false,
+      "active": false,
+      "eligible_for_environment": false
+    },
+    "unobservable_states": {
+      "uploaded": "no upload has occurred and this tooling has no code path that could perform one",
+      "published": "publication is a governance act recorded outside this repository",
+      "approved": "approval requires an authoritative decision record; see governance.py",
+      "active": "activation requires an explicit activation authorization, which does not exist",
+      "eligible_for_environment": "eligibility is the Backend's computation over a published, approved, unblocked, activated descriptor; none of those hold"
+    },
+    "note": "The nine states are independent. No state in this plan was derived from another; see tools/pubkit/lifecycle.py for the implications that do not hold."
+  },
+  "generation": {
+    "generator": "tools/build_vocabulary_v2.py",
+    "generator_version": "1.0.0",
+    "artifact_generated_at": "2026-08-14T00:00:00Z",
+    "declared_release_status": "candidate_unapproved",
+    "declared_schema_version": "2.0",
+    "reproducible": true,
+    "reproducibility_evidence": "The generator's own --check mode is run by tools/run_publication_checks.py before any plan is built; a generator that no longer reproduces its committed artifact fails the run before this plan exists.",
+    "note": "generated means bytes exist and are reproducible. It does not mean validated."
+  },
+  "validation": {
+    "validator": "tools/validate_vocabulary.py",
+    "validated_against_own_schema": true,
+    "reasons": [],
+    "note": "This records that a validator exists and is run by tools/run_publication_checks.py. validated does not mean packaged."
+  },
+  "integrity": {
+    "sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "sha256_bare": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "byte_count": 339948,
+    "content_type": "application/json",
+    "computed_from": "the exact bytes of candidate/token_dictionary.ng.v2.0.json, read in binary"
+  },
+  "packaging": {
+    "packaged": true,
+    "staged_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "staged_byte_count": 339948,
+    "matches_source": true,
+    "staging_root": ".publication-staging/ (git-ignored, disposable)",
+    "staging_path_recorded": false,
+    "staging_path_note": "The absolute staged path is deliberately not recorded: it is temporary, machine-specific, and would make this plan non-deterministic.",
+    "staging_removed": true,
+    "note": "packaged means a verified copy was made locally. It does not mean uploaded."
+  },
+  "object_key": {
+    "proposed": "token_dictionary.ng.v2.0.json",
+    "convention": "<artifact>.<country>.v<version>.json",
+    "binds": [
+      "artifact_id",
+      "artifact_version",
+      "country",
+      "content type (via the .json suffix)",
+      "content identity (by registration against sha256; see tools/pubkit/keys.py)"
+    ],
+    "immutable": true,
+    "immutability_rule": "A key is never reused for changed content. The key string carries identity and version; the hash binding is held in the register, so proposing this key for different bytes is a collision rather than an overwrite.",
+    "reasons": [],
+    "url": null,
+    "url_note": "Omitted deliberately. This artifact has never been uploaded, so it has no URL. Recording the address it would have had is how a proposal becomes mistaken for a fact."
+  },
+  "descriptor": {
+    "artifact_id": "token_dictionary",
+    "artifact_version": "2.0",
+    "schema_version": "wellapath.artifact/1",
+    "content_type": "application/json",
+    "sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "byte_count": 339948,
+    "object_key": "token_dictionary.ng.v2.0.json",
+    "release_status": "candidate",
+    "activation_status": "inactive",
+    "activation_authorized": false,
+    "activation_decision_ref": null,
+    "target_environments": [
+      "staging"
+    ],
+    "publication_decision_ref": null,
+    "approvals": {
+      "product": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null
+      },
+      "clinical": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null
+      }
+    },
+    "blockers": [],
+    "predecessor": {
+      "artifact_version": "1.1",
+      "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    },
+    "rollback_target": null,
+    "created_at": "2026-08-14T00:00:00Z",
+    "published_at": null,
+    "deprecated": false,
+    "expires_at": null,
+    "country": "ng",
+    "references": [
+      "DRY-RUN DESCRIPTOR \u2014 generated by the Knowledge Base publication tooling (I3 Step 2). Not uploaded, not published, not activated, not served by any route, and not to be added to any live manifest.",
+      "repository path: candidate/token_dictionary.ng.v2.0.json",
+      "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
+      "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+      "governance register: publication/governance/decision_register_v1.json",
+      "target_environments is a structural placeholder required by the contract's minItems constraint; it records no deployment decision and the descriptor is ineligible in every environment including the one named"
+    ]
+  },
+  "contract_validation": {
+    "contract_version": "1.0.0",
+    "ported_validator_reasons": [],
+    "vendored_schema_reasons": [],
+    "ported_validator_accepts": true,
+    "vendored_schema_accepts": true,
+    "validators_agree": true,
+    "reasons": [],
+    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. They are meant to agree, and a disagreement is a hard failure rather than a preference for whichever passed."
+  },
+  "governance": {
+    "register": "publication/governance/decision_register_v1.json",
+    "evaluated_as_of": "2026-08-28",
+    "claims": [
+      {
+        "kind": "product_approval",
+        "artifact": "token_dictionary@2.0",
+        "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_RECORD_MISSING",
+            "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+            "detail": "no decision record binds product_approval to token_dictionary@2.0; absence of evidence is refusal, not permission"
+          }
+        ]
+      },
+      {
+        "kind": "clinical_approval",
+        "artifact": "token_dictionary@2.0",
+        "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_RECORD_MISSING",
+            "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+            "detail": "no decision record binds clinical_approval to token_dictionary@2.0; absence of evidence is refusal, not permission"
+          }
+        ]
+      },
+      {
+        "kind": "publication_authorization",
+        "artifact": "token_dictionary@2.0",
+        "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_RECORD_MISSING",
+            "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+            "detail": "no decision record binds publication_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+          }
+        ]
+      },
+      {
+        "kind": "activation_authorization",
+        "artifact": "token_dictionary@2.0",
+        "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_RECORD_MISSING",
+            "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+            "detail": "no decision record binds activation_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+          }
+        ]
+      },
+      {
+        "kind": "mobile_implementation_authorization",
+        "artifact": "token_dictionary@2.0",
+        "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+        "granted": false,
+        "decision_ref": null,
+        "reasons": [
+          {
+            "code": "KB_DECISION_RECORD_MISSING",
+            "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+            "detail": "no decision record binds mobile_implementation_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+          }
+        ]
+      }
+    ],
+    "blockers": [],
+    "clinical_reviewer_assigned": false,
+    "clinical_reviewer_note": "No Clinical reviewer is assigned. This tooling does not assign one and does not infer clinical approval from any Product decision."
+  },
+  "rollback": {
+    "predecessor": {
+      "artifact_version": "1.1",
+      "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    },
+    "predecessor_note": "Lineage only. Naming a predecessor authorizes nothing.",
+    "proposed_target": {
+      "artifact_version": "1.1",
+      "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+    },
+    "usable_as_rollback_target": false,
+    "rejection_reasons": [
+      {
+        "code": "KB_ROLLBACK_SCHEMA_INCOMPATIBLE",
+        "path": "rollback.proposed_target",
+        "detail": "rollback target declares content schema '1.0' while the descriptor declares '2.0'; a consumer that upgraded its parser cannot read the older shape"
+      }
+    ],
+    "descriptor_rollback_target": null,
+    "binding_rule": "A rollback target must name an exact version AND the exact sha256 of that version's bytes, and must resolve in the governed inventory. A version-only target is refused: it points at whatever that version happens to be.",
+    "note": "This plan does not perform a rollback and does not change any active version. When the proposed target is refused, the descriptor carries rollback_target: null rather than an unusable pointer."
+  },
+  "eligibility_by_environment": {
+    "development": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        },
+        {
+          "code": "ENVIRONMENT_NOT_AUTHORIZED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "descriptor does not target environment development"
+        }
+      ]
+    },
+    "staging": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        }
+      ]
+    },
+    "production": {
+      "states": {
+        "present": true,
+        "published": false,
+        "approved": false,
+        "active": false,
+        "eligible_for_environment": false
+      },
+      "eligible_for_environment": false,
+      "reasons": [
+        {
+          "code": "NOT_PUBLISHED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "release status is candidate; only an explicitly published artifact can be distributed"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.product",
+          "detail": "product approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "APPROVAL_NOT_GRANTED",
+          "path": "artifact token_dictionary v2.0.approvals.clinical",
+          "detail": "clinical approval is required but not explicitly granted with a decision reference"
+        },
+        {
+          "code": "ACTIVATION_NOT_AUTHORIZED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "activation is not explicitly authorized with a decision reference"
+        },
+        {
+          "code": "ENVIRONMENT_NOT_AUTHORIZED",
+          "path": "artifact token_dictionary v2.0",
+          "detail": "descriptor does not target environment production"
+        }
+      ]
+    }
+  },
+  "blocking_reasons": [
+    {
+      "code": "KB_DECISION_RECORD_MISSING",
+      "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+      "detail": "no decision record binds product_approval to token_dictionary@2.0; absence of evidence is refusal, not permission"
+    },
+    {
+      "code": "KB_DECISION_RECORD_MISSING",
+      "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+      "detail": "no decision record binds clinical_approval to token_dictionary@2.0; absence of evidence is refusal, not permission"
+    },
+    {
+      "code": "KB_PUBLICATION_AUTHORIZATION_MISSING",
+      "path": "governance.publication_authorization",
+      "detail": "publication_authorization is not granted for token_dictionary@2.0; the descriptor cannot be published or activated"
+    },
+    {
+      "code": "KB_DECISION_RECORD_MISSING",
+      "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+      "detail": "no decision record binds publication_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+    },
+    {
+      "code": "KB_ACTIVATION_AUTHORIZATION_MISSING",
+      "path": "governance.activation_authorization",
+      "detail": "activation_authorization is not granted for token_dictionary@2.0; the descriptor cannot be published or activated"
+    },
+    {
+      "code": "KB_DECISION_RECORD_MISSING",
+      "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+      "detail": "no decision record binds activation_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+    },
+    {
+      "code": "KB_DECISION_RECORD_MISSING",
+      "path": "publication/governance/decision_register_v1.json(token_dictionary@2.0)",
+      "detail": "no decision record binds mobile_implementation_authorization to token_dictionary@2.0; absence of evidence is refusal, not permission"
+    }
+  ],
+  "conclusion": {
+    "publishable": false,
+    "activatable": false,
+    "eligible_in_any_environment": false,
+    "distinct_blocking_codes": [
+      "KB_ACTIVATION_AUTHORIZATION_MISSING",
+      "KB_DECISION_RECORD_MISSING",
+      "KB_PUBLICATION_AUTHORIZATION_MISSING"
+    ],
+    "blocking_reason_count": 7,
+    "statement": "token_dictionary@2.0 is not publishable, not activatable and ineligible in every environment. This plan records what publication would involve and what refuses it. It authorizes nothing and performs nothing."
+  }
+}

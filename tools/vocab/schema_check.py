@@ -20,6 +20,14 @@ Supported keywords:
 Anything outside that list raises `UnsupportedKeyword` rather than being
 silently ignored — a validator that quietly skips a constraint is worse than no
 validator at all.
+
+`validate(..., extra_keywords=...)` widens *only* the set of keywords tolerated
+as annotations, for schemas authored elsewhere that carry vocabulary this
+validator has no assertion for (the vendored Backend contract, for instance, is
+draft-07 and keeps its subschemas under `definitions` alongside a
+`contract_version` annotation). It never turns an assertion off: a caller cannot
+use it to make a constraint stop being checked, only to admit a keyword that
+carries no constraint. Anything still unrecognised raises as before.
 """
 
 import re
@@ -76,7 +84,7 @@ def _resolve_ref(root, ref):
     return node
 
 
-def validate(instance, schema, root=None, path="$"):
+def validate(instance, schema, root=None, path="$", extra_keywords=frozenset()):
     """Return a list of human-readable error strings. Empty means valid."""
     root = schema if root is None else root
     errors = []
@@ -86,7 +94,7 @@ def validate(instance, schema, root=None, path="$"):
     if schema is False:
         return ["%s: schema is `false` — no value is valid here" % path]
 
-    unknown = set(schema) - _SUPPORTED
+    unknown = set(schema) - _SUPPORTED - frozenset(extra_keywords)
     if unknown:
         raise UnsupportedKeyword(
             "%s: schema uses keyword(s) this validator does not implement: %s"
@@ -94,7 +102,9 @@ def validate(instance, schema, root=None, path="$"):
         )
 
     if "$ref" in schema:
-        errors.extend(validate(instance, _resolve_ref(root, schema["$ref"]), root, path))
+        errors.extend(
+            validate(instance, _resolve_ref(root, schema["$ref"]), root, path, extra_keywords)
+        )
 
     if "type" in schema:
         expected = schema["type"]
@@ -119,11 +129,11 @@ def validate(instance, schema, root=None, path="$"):
         if "maximum" in schema and instance > schema["maximum"]:
             errors.append("%s: %r > maximum %r" % (path, instance, schema["maximum"]))
     if isinstance(instance, list):
-        errors.extend(_validate_array(instance, schema, root, path))
+        errors.extend(_validate_array(instance, schema, root, path, extra_keywords))
     if isinstance(instance, dict):
-        errors.extend(_validate_object(instance, schema, root, path))
+        errors.extend(_validate_object(instance, schema, root, path, extra_keywords))
 
-    errors.extend(_validate_combinators(instance, schema, root, path))
+    errors.extend(_validate_combinators(instance, schema, root, path, extra_keywords))
     return errors
 
 
@@ -145,7 +155,7 @@ def _validate_string(instance, schema, path):
     return errors
 
 
-def _validate_array(instance, schema, root, path):
+def _validate_array(instance, schema, root, path, extra_keywords=frozenset()):
     errors = []
     if "minItems" in schema and len(instance) < schema["minItems"]:
         errors.append("%s: %d items < minItems %d" % (path, len(instance), schema["minItems"]))
@@ -161,16 +171,24 @@ def _validate_array(instance, schema, root, path):
     prefix = schema.get("prefixItems", [])
     for index, sub in enumerate(prefix):
         if index < len(instance):
-            errors.extend(validate(instance[index], sub, root, "%s[%d]" % (path, index)))
+            errors.extend(
+                validate(instance[index], sub, root, "%s[%d]" % (path, index), extra_keywords)
+            )
     if "items" in schema:
         for index in range(len(prefix), len(instance)):
             errors.extend(
-                validate(instance[index], schema["items"], root, "%s[%d]" % (path, index))
+                validate(
+                    instance[index],
+                    schema["items"],
+                    root,
+                    "%s[%d]" % (path, index),
+                    extra_keywords,
+                )
             )
     return errors
 
 
-def _validate_object(instance, schema, root, path):
+def _validate_object(instance, schema, root, path, extra_keywords=frozenset()):
     errors = []
     if "minProperties" in schema and len(instance) < schema["minProperties"]:
         errors.append(
@@ -192,35 +210,53 @@ def _validate_object(instance, schema, root, path):
         matched = False
         if name in properties:
             matched = True
-            errors.extend(validate(value, properties[name], root, "%s.%s" % (path, name)))
+            errors.extend(
+                validate(value, properties[name], root, "%s.%s" % (path, name), extra_keywords)
+            )
         for pattern, sub in pattern_properties.items():
             if re.search(pattern, name):
                 matched = True
-                errors.extend(validate(value, sub, root, "%s.%s" % (path, name)))
+                errors.extend(
+                    validate(value, sub, root, "%s.%s" % (path, name), extra_keywords)
+                )
         if not matched:
             extra = schema.get("additionalProperties", True)
             if extra is False:
                 errors.append("%s: unexpected property %r" % (path, name))
             elif isinstance(extra, dict):
-                errors.extend(validate(value, extra, root, "%s.%s" % (path, name)))
+                errors.extend(
+                    validate(value, extra, root, "%s.%s" % (path, name), extra_keywords)
+                )
         if "propertyNames" in schema:
             errors.extend(
-                validate(name, schema["propertyNames"], root, "%s.<key %r>" % (path, name))
+                validate(
+                    name,
+                    schema["propertyNames"],
+                    root,
+                    "%s.<key %r>" % (path, name),
+                    extra_keywords,
+                )
             )
     return errors
 
 
-def _validate_combinators(instance, schema, root, path):
+def _validate_combinators(instance, schema, root, path, extra_keywords=frozenset()):
     errors = []
     for sub in schema.get("allOf", []):
-        errors.extend(validate(instance, sub, root, path))
+        errors.extend(validate(instance, sub, root, path, extra_keywords))
     if "anyOf" in schema:
-        if not any(not validate(instance, sub, root, path) for sub in schema["anyOf"]):
+        if not any(
+            not validate(instance, sub, root, path, extra_keywords) for sub in schema["anyOf"]
+        ):
             errors.append("%s: does not match any subschema in anyOf" % path)
     if "oneOf" in schema:
-        matches = sum(1 for sub in schema["oneOf"] if not validate(instance, sub, root, path))
+        matches = sum(
+            1
+            for sub in schema["oneOf"]
+            if not validate(instance, sub, root, path, extra_keywords)
+        )
         if matches != 1:
             errors.append("%s: matched %d subschemas in oneOf, expected exactly 1" % (path, matches))
-    if "not" in schema and not validate(instance, schema["not"], root, path):
+    if "not" in schema and not validate(instance, schema["not"], root, path, extra_keywords):
         errors.append("%s: matched a subschema forbidden by `not`" % path)
     return errors
