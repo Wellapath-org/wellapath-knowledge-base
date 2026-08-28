@@ -25,14 +25,14 @@
   "eligible_in_any_environment": false,
   "contract_pin": {
     "backend_repository": "Wellapath-org/wellapath-backend",
-    "backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
-    "contract_version": "1.0.0",
+    "backend_merge_commit": "bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+    "contract_version": "1.1.0",
     "supported_major": 1,
     "schema_source_path": "docs/contracts/manifest.v1.schema.json",
-    "schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
-    "schema_byte_count": 6375,
+    "schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+    "schema_byte_count": 7806,
     "vendored_path": "contracts/backend/manifest.v1.schema.json",
-    "handoff_sha256": "90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8",
+    "handoff_sha256": "45fe9d886fb6d13ec3087cd11610eb38074a3b38edf20b1bd180bc024681887c",
     "retrieved_at": "2026-08-28T00:00:00Z",
     "compatibility_policy": "fail_closed on pin drift, schema hash drift, unsupported major, unrepresentable rule, or KB-accepts/Backend-rejects disagreement"
   },
@@ -136,13 +136,15 @@
         "required": true,
         "status": "pending",
         "decision_ref": null,
-        "approved_at": null
+        "approved_at": null,
+        "decision_scope": null
       },
       "clinical": {
         "required": true,
         "status": "pending",
         "decision_ref": null,
-        "approved_at": null
+        "approved_at": null,
+        "decision_scope": null
       }
     },
     "blockers": [],
@@ -162,6 +164,7 @@
       "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
       "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
       "governance register: publication/governance/decision_register_v1.json",
+      "IM-001 Product display decisions are complete (136 of 136) and scoped to display wording and ordering only. That completion is true, it is recorded here as traceability, and it is NOT artifact-publication Product approval \u2014 which remains pending in approvals.product with decision_scope null.",
       "target_environments is a structural placeholder required by the contract's minItems constraint; it records no deployment decision and the descriptor is ineligible in every environment including the one named"
     ]
   },
@@ -172,8 +175,10 @@
     "ported_validator_accepts": true,
     "vendored_schema_accepts": true,
     "validators_agree": true,
+    "kb_stricter_than_schema": false,
+    "kb_looser_than_schema": false,
     "reasons": [],
-    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. They are meant to agree, and a disagreement is a hard failure rather than a preference for whichever passed."
+    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. The comparison is asymmetric. The schema is the looser of the two by design \u2014 contract 1.1.0's granted-approval scope rule is conditional on status, which draft-07 does not express, so the rule lives in the validator. The KB being stricter is therefore expected and is recorded, not failed. The KB being looser is a hard failure: it would mean emitting a descriptor a schema-validating consumer refuses."
   },
   "governance": {
     "register": "publication/governance/decision_register_v1.json",
@@ -185,6 +190,7 @@
         "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
         "granted": false,
         "decision_ref": null,
+        "decision_scope": [],
         "reasons": [
           {
             "code": "KB_DECISION_RECORD_MISSING",
@@ -199,6 +205,7 @@
         "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
         "granted": false,
         "decision_ref": null,
+        "decision_scope": [],
         "reasons": [
           {
             "code": "KB_DECISION_RECORD_MISSING",
@@ -213,6 +220,7 @@
         "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
         "granted": false,
         "decision_ref": null,
+        "decision_scope": [],
         "reasons": [
           {
             "code": "KB_DECISION_RECORD_MISSING",
@@ -227,6 +235,7 @@
         "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
         "granted": false,
         "decision_ref": null,
+        "decision_scope": [],
         "reasons": [
           {
             "code": "KB_DECISION_RECORD_MISSING",
@@ -241,6 +250,7 @@
         "artifact_sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
         "granted": false,
         "decision_ref": null,
+        "decision_scope": [],
         "reasons": [
           {
             "code": "KB_DECISION_RECORD_MISSING",
@@ -259,24 +269,27 @@
         "scope": "display_wording_and_ordering_only",
         "decision_ref": null,
         "contract_representation": null,
+        "contract_decision_scopes": [],
         "grants_artifact_publication_product_approval": false,
         "grants_clinical_approval": false,
         "grants_publication_authorization": false,
         "grants_activation_authorization": false,
-        "substitution_impossible_because": "the contract computes `approved` exclusively from `approvals`; the blockers list is read by a loop that can only deny. No evaluator following contract 1.0.0 can turn a resolved blocker into an approval.",
+        "substitution_impossible_because": "under contract 1.1.0 an approval only counts when it is granted AND declares a decision_scope including artifact_publication. This decision is scoped product_display. Placing it in approvals.product is therefore rejected at validation (APPROVAL_SCOPE_MISMATCH) as well as denied at eligibility \u2014 the substitution is unrepresentable, not merely ineffective. Under 1.0.0 it was only the latter.",
         "means_only": null,
         "does_not_mean": []
       },
       "artifact_publication_product_approval": {
         "status": "pending",
         "decision_ref": null,
-        "contract_representation": "approvals.product.status",
+        "contract_representation": "approvals.product.status + approvals.product.decision_scope",
+        "required_scope": "artifact_publication",
         "is_the_only_input_to": "the product half of the contract's `approved` state"
       },
       "clinical_approval": {
         "status": "pending",
         "decision_ref": null,
-        "contract_representation": "approvals.clinical.status",
+        "contract_representation": "approvals.clinical.status + approvals.clinical.decision_scope",
+        "required_scope": "artifact_publication",
         "reviewer_assigned": false
       },
       "publication_authorization": {

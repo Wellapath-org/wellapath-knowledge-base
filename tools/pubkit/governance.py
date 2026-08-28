@@ -63,6 +63,10 @@ KNOWN_AUTHORITIES = ("product", "clinical", "engineering_lead", "founder", "none
 #: neighbouring value, never defaulted to pending, never assumed benign.
 KNOWN_STATUSES = ("approved", "denied", "pending", "withdrawn", "not_required")
 
+#: Contract 1.1.0 approval scopes, mirrored so a record cannot declare a scope the contract
+#: does not define. Imported rather than restated to keep one definition.
+from .contract import APPROVAL_SCOPES, ARTIFACT_APPROVAL_SLOT_SCOPE  # noqa: E402
+
 REQUIRED_RECORD_FIELDS = (
     "decision_id",
     "authority_type",
@@ -74,6 +78,7 @@ REQUIRED_RECORD_FIELDS = (
     "decision_reference",
     "scope",
     "supersession",
+    "contract_decision_scopes",
 )
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
@@ -271,6 +276,28 @@ def validate_record(record, path):
                 )
             )
 
+    scopes = record["contract_decision_scopes"]
+    if not isinstance(scopes, list):
+        reasons.append(
+            reason(
+                "KB_DECISION_SCOPE_MISSING",
+                "%s.contract_decision_scopes" % path,
+                "a record must state, in the contract's own scope vocabulary, what its decision "
+                "actually authorized — even when the answer is an empty list",
+            )
+        )
+    else:
+        for entry in scopes:
+            if entry not in APPROVAL_SCOPES:
+                reasons.append(
+                    reason(
+                        "KB_DECISION_SCOPE_MISSING",
+                        "%s.contract_decision_scopes" % path,
+                        "%r is not a contract 1.1.0 approval scope; unknown scope is never read "
+                        "as authorisation" % (entry,),
+                    )
+                )
+
     if "expires_at" in record and record["expires_at"] is not None:
         if not isinstance(record["expires_at"], str) or not _DATE_RE.match(record["expires_at"]):
             reasons.append(
@@ -318,7 +345,13 @@ class DecisionRegister:
         return cls(document["decisions"], label)
 
     def resolve(self, claim, as_of):
-        """Resolve one claim. Returns `(granted, decision_ref_or_None, reasons)`.
+        """Resolve one claim. Returns `(granted, decision_ref_or_None, reasons, scopes)`.
+
+        `scopes` is the contract 1.1.0 `decision_scope` the granting record actually carried,
+        or `()` when nothing was granted. It is read from the record rather than assumed from
+        the claim: a claim being granted says which *slot* was filled, and the scope says what
+        the decision behind it authorised. Those are the two things contract 1.1.0 exists to
+        keep apart.
 
         `granted` is True only when a single valid, in-scope, correctly-authorised, unexpired,
         unrevoked, unsuperseded, correctly-bound record with status `approved` matches. Every
@@ -386,7 +419,7 @@ class DecisionRegister:
                     "permission" % (claim.kind, claim.identity),
                 )
             )
-            return False, None, reasons
+            return False, None, reasons, ()
 
         granting = []
         for record, path in matched:
@@ -397,7 +430,7 @@ class DecisionRegister:
                 granting.append(record)
 
         if not granting:
-            return False, None, reasons
+            return False, None, reasons, ()
 
         if len(granting) > 1:
             reasons.append(
@@ -408,10 +441,15 @@ class DecisionRegister:
                     "authorities" % (len(granting), claim.kind, claim.identity),
                 )
             )
-            return False, None, reasons
+            return False, None, reasons, ()
 
         record = granting[0]
-        return True, "%s (%s)" % (record["decision_id"], record["decision_reference"]["path"]), reasons
+        return (
+            True,
+            "%s (%s)" % (record["decision_id"], record["decision_reference"]["path"]),
+            reasons,
+            tuple(record["contract_decision_scopes"]),
+        )
 
     def _evaluate(self, record, path, claim, as_of):
         """Every reason this record does not grant this claim."""

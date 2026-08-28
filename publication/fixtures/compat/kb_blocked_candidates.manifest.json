@@ -1,7 +1,7 @@
 {
   "_fixture_note": "The real Vocabulary 2.0 and Question Flow 1.1 candidates, with real sha256 digests over the real candidate bytes in this repository and their true governance state. Both are unpublished, inactive, unapproved and ineligible in every environment. This is the Knowledge Base counterpart to the Backend's tests/fixtures/manifest/blocked-candidates.manifest.json, which had to use placeholder digests because the Backend cannot see these bytes. Descriptors here name no uploaded object and must never be added to any live manifest.",
   "_descriptor_source": "Extracted verbatim from the committed dry-run plans under publication/plans/, so this fixture and those plans cannot disagree.",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.1.0",
   "generated_at": "2026-08-28T00:00:00Z",
   "artifacts": [
     {
@@ -25,13 +25,15 @@
           "required": true,
           "status": "pending",
           "decision_ref": null,
-          "approved_at": null
+          "approved_at": null,
+          "decision_scope": null
         },
         "clinical": {
           "required": true,
           "status": "pending",
           "decision_ref": null,
-          "approved_at": null
+          "approved_at": null,
+          "decision_scope": null
         }
       },
       "blockers": [],
@@ -51,6 +53,7 @@
         "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
         "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
         "governance register: publication/governance/decision_register_v1.json",
+        "IM-001 Product display decisions are complete (136 of 136) and scoped to display wording and ordering only. That completion is true, it is recorded here as traceability, and it is NOT artifact-publication Product approval \u2014 which remains pending in approvals.product with decision_scope null.",
         "target_environments is a structural placeholder required by the contract's minItems constraint; it records no deployment decision and the descriptor is ineligible in every environment including the one named"
       ]
     },
@@ -75,13 +78,15 @@
           "required": true,
           "status": "pending",
           "decision_ref": null,
-          "approved_at": null
+          "approved_at": null,
+          "decision_scope": null
         },
         "clinical": {
           "required": true,
           "status": "pending",
           "decision_ref": null,
-          "approved_at": null
+          "approved_at": null,
+          "decision_scope": null
         }
       },
       "blockers": [
@@ -89,11 +94,6 @@
           "id": "IM001-CLIN-FLAG-001",
           "status": "open",
           "reference": "Open Clinical flag raised during IM-001 Product review (fast_breathing_child.severity, IM001-D018/D027). Requires Clinical review before any activation decision involving that question. No Clinical reviewer is assigned."
-        },
-        {
-          "id": "IM001-PRODUCT-DISPLAY-DECISIONS",
-          "status": "resolved",
-          "reference": "COMPLETED GATE, NOT AN APPROVAL. Product display decisions are complete (136 of 136 recorded; IM001-DECISION-SET-COMPLETE). Scope: display wording and ordering only. This does NOT grant artifact-publication Product approval, which remains pending in approvals.product, and it does not grant clinical approval, publication authorization or activation authorization. It is recorded as a resolved blocker precisely because a resolved blocker contributes nothing to `approved` \u2014 the contract computes approval only from `approvals`."
         },
         {
           "id": "IM003-SB-001",
@@ -117,6 +117,7 @@
         "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
         "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
         "governance register: publication/governance/decision_register_v1.json",
+        "IM-001 Product display decisions are complete (136 of 136) and scoped to display wording and ordering only. That completion is true, it is recorded here as traceability, and it is NOT artifact-publication Product approval \u2014 which remains pending in approvals.product with decision_scope null.",
         "target_environments is a structural placeholder required by the contract's minItems constraint; it records no deployment decision and the descriptor is ineligible in every environment including the one named"
       ]
     }

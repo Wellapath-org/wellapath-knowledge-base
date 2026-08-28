@@ -110,6 +110,10 @@ def build_records():
             "supersession": {"superseded_by": None, "revoked": False, "revocation_reference": None},
             "expires_at": None,
             "is_decision_set_completion": False,
+            # Contract 1.1.0 vocabulary. This decision is Product authority over display order.
+            # It does not include artifact_publication, and never did — which is precisely why
+            # it cannot occupy an artifact-publication approval slot under 1.1.0.
+            "contract_decision_scopes": ["product_display"],
             "conditionality": {
                 "clinical_review_required": decision["clinical_review_required"],
                 "is_conditional": decision["clinical_review_required_is_conditional"],
@@ -157,6 +161,7 @@ def build_records():
             "supersession": {"superseded_by": None, "revoked": False, "revocation_reference": None},
             "expires_at": None,
             "is_decision_set_completion": True,
+            "contract_decision_scopes": ["product_display"],
             "decision_set": {
                 "total_product_decisions_required": gate["total_product_decisions_required"],
                 "wording_decisions_pending": gate["wording_decisions_pending"],
@@ -207,6 +212,7 @@ def build_records():
             "supersession": {"superseded_by": None, "revoked": False, "revocation_reference": None},
             "expires_at": None,
             "is_decision_set_completion": False,
+            "contract_decision_scopes": ["product_display"],
             "recorded_state": {
                 "im003": classification["im003"],
                 "im003_sb_001": classification["im003_sb_001"],
@@ -335,6 +341,12 @@ def build():
             "repository, each bound to its source by path and sha256. The sources are "
             "authoritative; this file is a machine-readable index of them and adds no "
             "decision of its own.",
+            "contract_scope_note": "Each record declares `contract_decision_scopes` in Backend "
+            "contract 1.1.0's own vocabulary. Every decision this repository holds is scoped "
+            "`product_display`; none carries `artifact_publication`. That is not a gap to be "
+            "filled — it is the accurate record of what was decided, and under 1.1.0 it is what "
+            "makes an artifact-publication approval built from these decisions unrepresentable "
+            "rather than merely ineffective.",
             "sources": {name: _source(name) for name in sorted(SOURCES)},
         },
         "governance_state": build_governance_state(),

@@ -7,6 +7,7 @@
     "generator_version": "1.0.0",
     "authoritative": false,
     "note": "A derived transcription of decision records that already exist in this repository, each bound to its source by path and sha256. The sources are authoritative; this file is a machine-readable index of them and adds no decision of its own.",
+    "contract_scope_note": "Each record declares `contract_decision_scopes` in Backend contract 1.1.0's own vocabulary. Every decision this repository holds is scoped `product_display`; none carries `artifact_publication`. That is not a gap to be filled \u2014 it is the accurate record of what was decided, and under 1.1.0 it is what makes an artifact-publication approval built from these decisions unrepresentable rather than merely ineffective.",
     "sources": {
       "candidate_question_flow_1_1": {
         "path": "candidate/question_flow.ng.v1.1.json",
@@ -120,6 +121,9 @@
       },
       "expires_at": null,
       "is_decision_set_completion": false,
+      "contract_decision_scopes": [
+        "product_display"
+      ],
       "conditionality": {
         "clinical_review_required": false,
         "is_conditional": true,
@@ -173,6 +177,9 @@
       },
       "expires_at": null,
       "is_decision_set_completion": true,
+      "contract_decision_scopes": [
+        "product_display"
+      ],
       "decision_set": {
         "total_product_decisions_required": 136,
         "wording_decisions_pending": 0,
@@ -223,6 +230,9 @@
       },
       "expires_at": null,
       "is_decision_set_completion": false,
+      "contract_decision_scopes": [
+        "product_display"
+      ],
       "recorded_state": {
         "im003": "DISABLED",
         "im003_sb_001": "OPEN",

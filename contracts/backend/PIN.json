@@ -1,10 +1,10 @@
 {
-  "_comment": "Pinned Backend manifest contract. Hand-authored once, never generated: the retrieval timestamp and the merge commit are historical facts, not derived values, and regenerating them would make the pin non-deterministic. `python3 tools/verify_contract_pin.py` proves every field here is still true offline; it is the drift detector, not a rebuild step.",
+  "_comment": "Pinned Backend manifest contract. Hand-authored once per contract version, never generated: the retrieval timestamp and the merge commit are historical facts, not derived values, and regenerating them would make the pin non-deterministic. `python3 tools/verify_contract_pin.py` proves every field here is still true offline; it is the drift detector, not a rebuild step.",
   "pin_id": "backend_manifest_contract_v1",
-  "pin_version": "1.0.0",
+  "pin_version": "2.0.0",
   "backend": {
     "repository": "Wellapath-org/wellapath-backend",
-    "merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "merge_commit": "bbaeadd6075eb37fd51acbe04101f939e52c7d48",
     "ref_at_retrieval": "develop",
     "source_path": "docs/contracts/manifest.v1.schema.json",
     "semantics_source_paths": [
@@ -16,42 +16,68 @@
       "docs/ARTIFACT_MANIFEST_CONTRACT.md"
     ],
     "handoff_path": "docs/handoffs/KB_PUBLICATION_HANDOFF.md",
-    "handoff_sha256": "90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8"
+    "handoff_sha256": "45fe9d886fb6d13ec3087cd11610eb38074a3b38edf20b1bd180bc024681887c",
+    "supersedes_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd"
   },
   "contract": {
-    "contract_version": "1.0.0",
+    "contract_version": "1.1.0",
     "supported_major": 1,
     "schema_dialect": "http://json-schema.org/draft-07/schema#",
-    "schema_id": "https://wellapath.org/contracts/manifest.v1.schema.json"
+    "schema_id": "https://wellapath.org/contracts/manifest.v1.schema.json",
+    "supersedes_contract_version": "1.0.0",
+    "change_from_previous": {
+      "summary": "1.1.0 adds the optional approval field `decision_scope` and tightens one previously unsafe claim: a `granted` approval that declares no `artifact_publication` scope no longer counts.",
+      "why_minor_not_major": "Descriptors making no granted-approval claim stay valid, so existing sound manifests are unaffected going forward. It is not a patch because it changes what the evaluator accepts, and not a major because the supported major is unchanged at 1. Note the asymmetry: a 1.1.0 descriptor carrying `decision_scope` is INVALID against 1.0.0, whose approval record is additionalProperties:false. Additive forwards, breaking backwards — which is exactly what a minor version is for.",
+      "new_reason_codes": [
+        "APPROVAL_SCOPE_MISSING",
+        "APPROVAL_SCOPE_UNKNOWN",
+        "APPROVAL_SCOPE_MISMATCH"
+      ],
+      "origin": "The tightening closes the substitution the Knowledge Base reported in I3 Step 2A: a decision scoped to display wording and ordering could occupy an artifact-publication approval slot and, once unrelated conditions lifted, carry an artifact to approved. Under 1.1.0 that substitution is not merely ineffective, it is unrepresentable — it is rejected at validation as well as at eligibility."
+    }
   },
   "vendored": {
     "path": "contracts/backend/manifest.v1.schema.json",
-    "sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
-    "byte_count": 6375,
+    "sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+    "byte_count": 7806,
     "byte_preservation": "The vendored file is a byte-for-byte copy of the Backend blob at the merge commit above. It is never reformatted, re-serialised or pretty-printed; the hash is over the exact bytes Backend published."
   },
   "retrieval": {
     "retrieved_at": "2026-08-28T00:00:00Z",
-    "retrieved_from": "github.com/Wellapath-org/wellapath-backend at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "retrieved_from": "github.com/Wellapath-org/wellapath-backend at bbaeadd6075eb37fd51acbe04101f939e52c7d48",
     "retrieved_by_role": "knowledge-base engineering",
     "note": "Timestamp is recorded to UTC day precision on purpose. A finer timestamp would encode when a tool happened to run, which is not a property of the contract and would make this record churn."
   },
   "compatibility_policy": {
     "authority": "The Backend repository is the sole authority for this contract. The Knowledge Base vendors it to validate offline and never redesigns, extends or loosens it.",
-    "supported_majors": [1],
+    "supported_majors": [
+      1
+    ],
     "on_major_unsupported": "fail_closed",
     "on_vendored_hash_drift": "fail_closed",
     "on_pin_hash_mismatch": "fail_closed",
     "on_unrepresentable_rule": "fail_closed",
     "on_kb_pass_backend_fail": "fail_closed",
-    "minor_and_patch": "A new minor or patch of contract 1.x is additive by the Backend's own rule. The Knowledge Base still refuses to use it until this pin is deliberately updated and its hash re-verified; silently accepting an unpinned contract would defeat the pin.",
-    "resolution_procedure": "On any drift: stop, do not regenerate plans, re-read the Backend contract at its new commit, confirm the semantics the KB ports still hold, then update this pin and the vendored bytes in one reviewed change."
+    "minor_and_patch": "A new minor or patch of contract 1.x is additive by the Backend's own rule. The Knowledge Base still refuses to use it until this pin is deliberately updated and its hash re-verified; silently accepting an unpinned contract would defeat the pin. Re-pinning from 1.0.0 to 1.1.0 was such a deliberate update.",
+    "resolution_procedure": "On any drift: stop, do not regenerate plans, re-read the Backend contract at its new commit, confirm the semantics the KB ports still hold, then update this pin and the vendored bytes in one reviewed change.",
+    "supported_contract_versions": [
+      "1.1.0"
+    ]
   },
   "representability": {
-    "statement": "Every field and validation rule the KB emits is representable in contract 1.0.0. The KB adds no field the contract does not define and relaxes no rule it does define.",
+    "statement": "Every field and validation rule the KB emits is representable in contract 1.1.0. The KB adds no field the contract does not define and relaxes no rule it does define, including the 1.1.0 approval-scope rules.",
     "kb_side_only_rules": "The Knowledge Base applies additional REJECTIONS the contract permits but does not require (mutable-alias keys, path traversal, absolute paths, unsafe characters, ambiguous normalisation, embedded secrets, version/hash disagreement, identity collisions). Extra rejections are always contract-safe: they can only shrink what the KB is willing to emit, never widen what Backend will accept.",
     "gaps": [
       "Manifest signing does not exist in contract 1.0.0. The KB records the gap and invents no substitute; see docs/PUBLICATION_LIFECYCLE.md."
     ]
+  },
+  "legacy": {
+    "path": "contracts/backend/legacy/manifest.v1.0.0.schema.json",
+    "contract_version": "1.0.0",
+    "sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+    "byte_count": 6375,
+    "backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "status": "LEGACY TEST MATERIAL — NOT THE ACTIVE CONTRACT",
+    "purpose": "Kept solely so backward compatibility can be tested against the contract version it was written for. Never used to validate a real descriptor; nothing on the tooling's read path touches it. See contracts/backend/legacy/README.md."
   }
 }

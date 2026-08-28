@@ -82,21 +82,93 @@ def _remove_path(document, dotted):
     node.pop(parts[-1], None)
 
 
+#: Keys a 1.1.0 `other_descriptor_overrides` selector may carry. Closed: an unrecognised key is
+#: almost always a typo in one of the three that matter, and silently ignoring it would apply
+#: the mutation to the wrong descriptor — or to none — while the case still reported a pass.
+SELECTOR_KEYS = ("artifact_id", "artifact_version", "overrides")
+
+#: Stable, matchable prefixes for every way a selector can be refused. Tests assert on these
+#: rather than on prose, so the refusals can be reworded without silently becoming untestable.
+SELECTOR_LEGACY_SHAPE = "FIXTURE_SELECTOR_LEGACY_SHAPE"
+SELECTOR_UNKNOWN_KEY = "FIXTURE_SELECTOR_UNKNOWN_KEY"
+SELECTOR_NO_MATCH = "FIXTURE_SELECTOR_NO_MATCH"
+SELECTOR_AMBIGUOUS = "FIXTURE_SELECTOR_AMBIGUOUS"
+
+
+class SelectorError(Exception):
+    """Raised when a fixture's `other_descriptor_overrides` selector cannot be trusted."""
+
+
+def _apply_other_descriptor_overrides(artifacts, selector, case_name):
+    """Apply a 1.1.0 selector to exactly one descriptor, or refuse.
+
+    Contract 1.1.0's fixture format selects the other descriptor explicitly:
+    `{artifact_id, artifact_version, overrides}`. The 1.0.0 shape was a bare override map
+    meaning "the descriptor that is not the target", which is only well defined in a
+    two-descriptor manifest — the Backend's baseline now carries seven.
+
+    Everything here refuses rather than guesses, because every guess this function could make
+    is a mutation applied to a descriptor nobody named while the case still reports a pass:
+
+    * the legacy bare-map shape — refused, not interpreted;
+    * an unknown key, which is nearly always a typo in one of the three that matter;
+    * an identity matching no descriptor;
+    * an identity matching more than one. This is the case that makes the whole function worth
+      writing: with a first-match-wins loop, adding an eighth descriptor that happens to share
+      an identity would silently redirect an existing mutation, and the result would depend on
+      array order. Selection is by identity and must resolve to exactly one descriptor.
+    """
+    if not isinstance(selector, dict) or not all(key in selector for key in SELECTOR_KEYS):
+        raise SelectorError(
+            "%s: case %r uses the pre-1.1.0 other_descriptor_overrides shape; it must name "
+            "artifact_id, artifact_version and overrides"
+            % (SELECTOR_LEGACY_SHAPE, case_name)
+        )
+    unknown = sorted(set(selector) - set(SELECTOR_KEYS))
+    if unknown:
+        raise SelectorError(
+            "%s: case %r selector carries unrecognised key(s) %s; a mistyped selector would "
+            "mutate the wrong descriptor" % (SELECTOR_UNKNOWN_KEY, case_name, ", ".join(unknown))
+        )
+
+    matches = [
+        position
+        for position, descriptor in enumerate(artifacts)
+        if descriptor.get("artifact_id") == selector["artifact_id"]
+        and descriptor.get("artifact_version") == selector["artifact_version"]
+    ]
+    identity = "%s@%s" % (selector["artifact_id"], selector["artifact_version"])
+    if not matches:
+        raise SelectorError(
+            "%s: case %r names %s, which is not in the baseline manifest"
+            % (SELECTOR_NO_MATCH, case_name, identity)
+        )
+    if len(matches) > 1:
+        raise SelectorError(
+            "%s: case %r names %s, which matches %d descriptors at indices %s; a selector must "
+            "resolve to exactly one identity, and choosing between them would make the fixture "
+            "depend on array order"
+            % (SELECTOR_AMBIGUOUS, case_name, identity, len(matches), matches)
+        )
+
+    updated = list(artifacts)
+    updated[matches[0]] = _deep_merge(updated[matches[0]], selector["overrides"])
+    return updated
+
+
 def _apply_case(baseline, target, case):
     """Return `(manifest, context)` for one compat case."""
     document = copy.deepcopy(baseline)
     document.pop("_fixture_warning", None)
 
     index = None
-    other_index = None
     for position, descriptor in enumerate(document["artifacts"]):
         if (
             descriptor["artifact_id"] == target["artifact_id"]
             and descriptor["artifact_version"] == target["artifact_version"]
         ):
             index = position
-        else:
-            other_index = position
+            break
     if index is None:
         raise SystemExit("fixture target %r is not in the baseline manifest" % (target,))
 
@@ -106,9 +178,9 @@ def _apply_case(baseline, target, case):
         )
     for dotted in case.get("remove_descriptor_fields", []):
         _remove_path(document["artifacts"][index], dotted)
-    if "other_descriptor_overrides" in case and other_index is not None:
-        document["artifacts"][other_index] = _deep_merge(
-            document["artifacts"][other_index], case["other_descriptor_overrides"]
+    if "other_descriptor_overrides" in case:
+        document["artifacts"] = _apply_other_descriptor_overrides(
+            document["artifacts"], case["other_descriptor_overrides"], case["name"]
         )
     if case.get("append_duplicate_of_target"):
         document["artifacts"].append(copy.deepcopy(document["artifacts"][index]))
@@ -379,7 +451,7 @@ def run_kb_case(case, entries, register_document):
             if problems:
                 return _judge(case, problems)
             register = DecisionRegister([record], "register")
-            _granted, _ref, reasons = register.resolve(
+            _granted, _ref, reasons, _scopes = register.resolve(
                 GovernanceClaim("product_approval", "question_flow", "1.1", digest),
                 PLAN_EVALUATION_DATE,
             )
@@ -388,7 +460,7 @@ def run_kb_case(case, entries, register_document):
             record = _granting_record(records)
             _set_path(record, mutation["path"], mutation["value"])
             register = DecisionRegister([record], "register")
-            _granted, _ref, reasons = register.resolve(
+            _granted, _ref, reasons, _scopes = register.resolve(
                 GovernanceClaim("product_approval", "question_flow", "1.1", digest),
                 PLAN_EVALUATION_DATE,
             )
@@ -396,21 +468,21 @@ def run_kb_case(case, entries, register_document):
         if kind == "product_record_grants":
             record = _granting_record(records, claim=mutation["claim"])
             register = DecisionRegister([record], "register")
-            _granted, _ref, reasons = register.resolve(
+            _granted, _ref, reasons, _scopes = register.resolve(
                 GovernanceClaim(mutation["claim"], "question_flow", "1.1", digest),
                 PLAN_EVALUATION_DATE,
             )
             return _judge(case, reasons)
         if kind == "remove_all_records":
             register = DecisionRegister([], "register")
-            _granted, _ref, reasons = register.resolve(
+            _granted, _ref, reasons, _scopes = register.resolve(
                 GovernanceClaim("product_approval", "question_flow", "1.1", digest),
                 PLAN_EVALUATION_DATE,
             )
             return _judge(case, reasons)
         if kind == "claim":
             register = DecisionRegister(records, "register")
-            _granted, _ref, reasons = register.resolve(
+            _granted, _ref, reasons, _scopes = register.resolve(
                 GovernanceClaim(mutation["claim"], "question_flow", "1.1", digest),
                 PLAN_EVALUATION_DATE,
             )
@@ -533,6 +605,43 @@ def run_kb_case(case, entries, register_document):
 #: passing. A guard nobody can break was never guarding anything, and a fixture that still
 #: passes with its guard removed is testing the absence of a bug rather than the presence of a
 #: check.
+#: Proofs whose fixture lives in the compat suite rather than the KB suite. Contract 1.1.0's
+#: approval-scope rules are contract-level, so the cases that exercise them are compat cases.
+COMPAT_MUTATION_PROOFS = (
+    (
+        "approval-scope required-slot rule (validation)",
+        "a display-scoped decision cannot occupy an artifact-publication slot",
+        # Removes exactly the mismatch clause. Repointing ARTIFACT_APPROVAL_SLOT_SCOPE instead
+        # would be confounded: every value makes some *other* approval in the baseline
+        # mismatch, so the case would keep passing for a reason unrelated to the guard.
+        lambda: _patch_mismatch_clause(),
+    ),
+    (
+        "approval-scope closed vocabulary (validation)",
+        "a granted approval with an unknown decision scope is rejected",
+        lambda: _patch_contract(
+            "APPROVAL_SCOPES",
+            (
+                "artifact_publication",
+                "artifact_activation",
+                "product_display",
+                "clinical_content_review",
+                "everything",
+            ),
+        ),
+    ),
+    (
+        "approval-scope missing-scope rule (validation)",
+        "a granted approval with no decision scope is rejected",
+        lambda: _patch_manifest_scope(),
+    ),
+    (
+        "approval-scope evaluation in eligibility",
+        "a display-scoped approval denies eligibility",
+        lambda: _patch(eligibility, "_evaluate_approval_scope", lambda *a, **k: []),
+    ),
+)
+
 MUTATION_PROOFS = (
     (
         "object-key mutable-alias rejection",
@@ -610,6 +719,51 @@ def _patch_governance(name, value):
     return _patch(governance, name, value)
 
 
+def _patch_contract(name, value):
+    """Patch a mirrored contract constant everywhere it was imported."""
+    from pubkit import contract as contract_module
+
+    class _P:
+        def __enter__(self):
+            self.saved = getattr(contract_module, name)
+            setattr(contract_module, name, value)
+            # `eligibility` and `manifest` read these through the module object, but
+            # `governance` imported two of them by name at import time.
+            from pubkit import governance as governance_module
+
+            self.saved_gov = getattr(governance_module, name, None)
+            if self.saved_gov is not None:
+                setattr(governance_module, name, value)
+            return self
+
+        def __exit__(self, *exception):
+            setattr(contract_module, name, self.saved)
+            if self.saved_gov is not None:
+                from pubkit import governance as governance_module
+
+                setattr(governance_module, name, self.saved_gov)
+            return False
+
+    return _P()
+
+
+def _patch_mismatch_clause():
+    """Strip only the APPROVAL_SCOPE_MISMATCH finding, leaving the rest of scope validation."""
+    original = manifest_module._validate_decision_scope
+
+    def without_mismatch(value, path):
+        return [
+            item for item in original(value, path) if item["code"] != "APPROVAL_SCOPE_MISMATCH"
+        ]
+
+    return _patch(manifest_module, "_validate_decision_scope", without_mismatch)
+
+
+def _patch_manifest_scope():
+    """Remove the structural scope check, leaving only the eligibility one."""
+    return _patch(manifest_module, "_validate_decision_scope", lambda value, path: [])
+
+
 def _patch_pin_policy():
     return _patch(
         pin,
@@ -618,10 +772,18 @@ def _patch_pin_policy():
     )
 
 
-def run_mutation_proofs(kb_cases, entries, register_document):
+def run_mutation_proofs(kb_cases, entries, register_document, compat=None):
     """Break each guard and require its fixture to stop passing."""
     results = []
     by_name = {case["name"]: case for case in kb_cases}
+
+    def record(label, passed):
+        if passed:
+            results.append(
+                (label, False, "the fixture still passed with the guard removed; it proves nothing")
+            )
+        else:
+            results.append((label, True, ""))
 
     for label, case_name, make_patch in MUTATION_PROOFS:
         case = by_name.get(case_name)
@@ -631,15 +793,27 @@ def run_mutation_proofs(kb_cases, entries, register_document):
         with make_patch():
             try:
                 passed, _codes, _detail = run_kb_case(case, entries, register_document)
-            except Exception as error:  # a guard removal that crashes still proves reachability
+            except Exception:  # a guard removal that crashes still proves reachability
                 passed = False
-                _detail = str(error)
-        if passed:
-            results.append(
-                (label, False, "the fixture still passed with the guard removed; it proves nothing")
-            )
-        else:
-            results.append((label, True, ""))
+        record(label, passed)
+
+    if compat is not None:
+        document, baseline = compat
+        compat_by_name = {case["name"]: case for case in document["cases"]}
+        for label, case_name, make_patch in COMPAT_MUTATION_PROOFS:
+            case = compat_by_name.get(case_name)
+            if case is None:
+                results.append((label, False, "fixture %r not found" % case_name))
+                continue
+            with make_patch():
+                try:
+                    passed, _codes, _detail = run_compat_case(
+                        baseline, document["target"], document["context"], case
+                    )
+                except Exception:
+                    passed = False
+            record(label, passed)
+
     return results
 
 
@@ -691,7 +865,9 @@ def main(argv):
 
     mutations = []
     if args.mutations:
-        for label, passed, detail in run_mutation_proofs(kb["cases"], entries, register_document):
+        for label, passed, detail in run_mutation_proofs(
+            kb["cases"], entries, register_document, compat=(compat, baseline)
+        ):
             mutations.append({"guard": label, "passed": passed, "detail": detail})
 
     failed = [item for item in results if not item["passed"]]

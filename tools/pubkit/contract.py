@@ -1,16 +1,20 @@
 """The Backend manifest contract, mirrored at the pinned commit.
 
 Every constant here is copied from `wellapath-backend/src/manifest/contract.ts` at
-`fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd` (contract 1.0.0). This module is a *mirror*, not a
+`bbaeadd6075eb37fd51acbe04101f939e52c7d48` (contract 1.1.0). This module is a *mirror*, not a
 design: the Backend repository is the authority and nothing here may extend, reorder or
 loosen what it declares.
+
+Re-pinned from 1.0.0 in I3 Step 2C. 1.1.0 adds the optional approval field `decision_scope` and
+tightens one previously unsafe claim: a `granted` approval declaring no `artifact_publication`
+scope no longer counts.
 
 `tools/verify_contract_pin.py` cross-checks this mirror against the vendored schema bytes, so
 a constant that drifts from the schema is a CI failure rather than a divergence nobody notices
 until a descriptor is rejected in production.
 """
 
-MANIFEST_CONTRACT_VERSION = "1.0.0"
+MANIFEST_CONTRACT_VERSION = "1.1.0"
 SUPPORTED_MANIFEST_MAJOR = 1
 
 #: Empty on purpose, exactly as the Backend declares it. A manifest requesting any feature is
@@ -27,6 +31,35 @@ APPROVAL_STATUSES = ("granted", "denied", "pending", "not_required")
 BLOCKER_STATUSES = ("open", "resolved")
 
 APPROVAL_ROLES = ("product", "clinical")
+
+#: What a cited decision actually authorized. New in 1.1.0.
+#:
+#: A decision's scope is what its deciding authority actually decided — it is not implied by
+#: who took the decision, nor by the decision being complete. A finished Product decision about
+#: how a question is worded and ordered is scoped `product_display`; that authorizes exactly
+#: that, and never authorized publishing an artifact.
+APPROVAL_SCOPES = (
+    "artifact_publication",
+    "artifact_activation",
+    "product_display",
+    "clinical_content_review",
+)
+
+#: The scope BOTH approval slots on a descriptor demand.
+#:
+#: `approvals.product` and `approvals.clinical` are artifact-publication approval slots. A
+#: decision whose declared scope does not include this cannot occupy either of them, whatever
+#: its status says and whichever authority took it.
+ARTIFACT_APPROVAL_SLOT_SCOPE = "artifact_publication"
+
+REQUIRED_APPROVAL_KEYS = ("required", "status", "decision_ref", "approved_at")
+
+#: `decision_scope` is structurally optional but semantically mandatory for a granted approval:
+#: an approval that is not granted claims nothing and so needs no scope, and demanding one
+#: there would invalidate sound descriptors while protecting nothing.
+OPTIONAL_APPROVAL_KEYS = ("decision_scope",)
+
+ALLOWED_APPROVAL_KEYS = REQUIRED_APPROVAL_KEYS + OPTIONAL_APPROVAL_KEYS
 
 REQUIRED_DESCRIPTOR_KEYS = (
     "artifact_id",
@@ -60,7 +93,6 @@ ALLOWED_DESCRIPTOR_KEYS = REQUIRED_DESCRIPTOR_KEYS + OPTIONAL_DESCRIPTOR_KEYS
 ALLOWED_MANIFEST_KEYS = ("manifest_version", "generated_at", "required_features", "artifacts")
 REQUIRED_MANIFEST_KEYS = ("manifest_version", "generated_at", "artifacts")
 
-APPROVAL_RECORD_KEYS = ("required", "status", "decision_ref", "approved_at")
 BLOCKER_RECORD_KEYS = ("id", "status", "reference")
 VERSION_REF_KEYS = ("artifact_version", "sha256")
 

@@ -1,7 +1,7 @@
 {
   "description": "Cross-repository negative fixtures for manifest contract 1.0.0, written in the Backend's own fixture format so both implementations can execute them unchanged. Each case mutates the valid baseline manifest and declares the stage it must fail at and the exact reason code it must fail for. A case that fails for a different reason is itself a failure: it means one of the two implementations is refusing the right things for the wrong reasons, which will diverge as soon as either side changes.",
-  "contract_version": "1.0.0",
-  "contract_schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+  "contract_version": "1.1.0",
+  "contract_schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
   "authored_by": "wellapath-knowledge-base, I3 Step 2",
   "runner_knowledge_base": "tools/validate_publication_fixtures.py",
   "runner_backend": "the same shape as tests/unit/manifest-fixtures.test.ts consumes",
@@ -199,9 +199,13 @@
       "stage": "validation",
       "expected_code": "RELATIONSHIP_CYCLE",
       "other_descriptor_overrides": {
-        "predecessor": {
-          "artifact_version": "1.1",
-          "sha256": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        "artifact_id": "fixture_artifact",
+        "artifact_version": "1.0",
+        "overrides": {
+          "predecessor": {
+            "artifact_version": "1.1",
+            "sha256": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+          }
         }
       }
     },
@@ -221,6 +225,127 @@
         "approvals": {
           "clinical": {
             "status": "auto_approved"
+          }
+        }
+      }
+    },
+    {
+      "name": "a granted approval with no decision scope is rejected",
+      "stage": "validation",
+      "expected_code": "APPROVAL_SCOPE_MISSING",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": null
+          }
+        }
+      }
+    },
+    {
+      "name": "a granted approval with an unknown decision scope is rejected",
+      "stage": "validation",
+      "expected_code": "APPROVAL_SCOPE_UNKNOWN",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": [
+              "everything"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "a display-scoped decision cannot occupy an artifact-publication slot",
+      "stage": "validation",
+      "expected_code": "APPROVAL_SCOPE_MISMATCH",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": [
+              "product_display"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "a clinical approval scoped only to content review cannot publish",
+      "stage": "validation",
+      "expected_code": "APPROVAL_SCOPE_MISMATCH",
+      "descriptor_overrides": {
+        "approvals": {
+          "clinical": {
+            "decision_scope": [
+              "clinical_content_review"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "an empty decision scope on a granted approval is malformed",
+      "stage": "validation",
+      "expected_code": "MALFORMED_FIELD",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": []
+          }
+        }
+      }
+    },
+    {
+      "name": "duplicate decision scopes are rejected",
+      "stage": "validation",
+      "expected_code": "MALFORMED_FIELD",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": [
+              "artifact_publication",
+              "artifact_publication"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "an unscoped granted approval denies eligibility as well as validation",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_SCOPE_MISSING",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": null
+          }
+        }
+      }
+    },
+    {
+      "name": "a display-scoped approval denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_SCOPE_MISMATCH",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": [
+              "product_display"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "name": "an unknown scope denies eligibility, never read as authorisation",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_SCOPE_UNKNOWN",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "decision_scope": [
+              "auto_approved"
+            ]
           }
         }
       }
@@ -381,12 +506,16 @@
       "stage": "selection",
       "expected_code": "MULTIPLE_ACTIVE",
       "other_descriptor_overrides": {
-        "release_status": "published",
-        "published_at": "2026-08-01T00:00:00Z",
-        "activation_status": "active",
-        "activation_authorized": true,
-        "activation_decision_ref": "FIXTURE-ACTIVATION-0002 (synthetic)",
-        "deprecated": false
+        "artifact_id": "fixture_artifact",
+        "artifact_version": "1.0",
+        "overrides": {
+          "release_status": "published",
+          "published_at": "2026-08-01T00:00:00Z",
+          "activation_status": "active",
+          "activation_authorized": true,
+          "activation_decision_ref": "FIXTURE-ACTIVATION-0002 (synthetic)",
+          "deprecated": false
+        }
       }
     },
     {

@@ -1,0 +1,243 @@
+{
+  "_warning": "LEGACY TEST MATERIAL \u2014 contract 1.0.0 shapes, kept so backward compatibility can be tested against the version they were written for. NOT the active contract, never validated as a real descriptor, and never distributable. The active contract is 1.1.0.",
+  "_metadata": {
+    "fixture_id": "legacy_contract_compatibility",
+    "version": "1",
+    "phase": "I3 / Step 2C",
+    "generator": "tools/build_publication_fixtures.py",
+    "legacy_contract_version": "1.0.0",
+    "legacy_schema": "contracts/backend/legacy/manifest.v1.0.0.schema.json",
+    "legacy_schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+    "active_contract_version": "1.1.0",
+    "active_schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+    "note": "Self-contained. The tests that consume this file read no git history and need no remote, so they run identically in a shallow clone, an exported tree and a path containing spaces."
+  },
+  "cases": {
+    "legacy_granted_without_scope": {
+      "description": "Contract 1.0.0 shape: granted approvals, no decision_scope. Valid under 1.0.0; REJECTED under 1.1.0 with APPROVAL_SCOPE_MISSING. This is the one behaviour change, and it is the point of the tightening.",
+      "expected_under_1_0_0": "valid",
+      "expected_under_1_1_0": "APPROVAL_SCOPE_MISSING",
+      "manifest": {
+        "manifest_version": "1.0.0",
+        "generated_at": "2026-08-28T00:00:00Z",
+        "artifacts": [
+          {
+            "artifact_id": "legacy_fixture",
+            "artifact_version": "1.0",
+            "schema_version": "wellapath.artifact/1",
+            "content_type": "application/json",
+            "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+            "byte_count": 8820,
+            "object_key": "legacy_fixture.ng.v1.0.json",
+            "release_status": "published",
+            "activation_status": "active",
+            "activation_authorized": true,
+            "activation_decision_ref": "LEGACY-FIXTURE-ACTIVATION (synthetic)",
+            "target_environments": [
+              "staging"
+            ],
+            "publication_decision_ref": "LEGACY-FIXTURE-PUBLICATION (synthetic)",
+            "approvals": {
+              "product": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-PRODUCT (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z"
+              },
+              "clinical": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-CLINICAL (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z"
+              }
+            },
+            "blockers": [],
+            "predecessor": null,
+            "rollback_target": null,
+            "created_at": "2026-08-01T00:00:00Z",
+            "published_at": "2026-08-01T00:00:00Z",
+            "deprecated": false,
+            "expires_at": null,
+            "country": "ng",
+            "references": [
+              "LEGACY TEST MATERIAL \u2014 contract 1.0.0 shapes, kept so backward compatibility can be tested against the version they were written for. NOT the active contract, never validated as a real descriptor, and never distributable. The active contract is 1.1.0."
+            ]
+          }
+        ]
+      }
+    },
+    "legacy_not_granted": {
+      "description": "Contract 1.0.0 shape with nothing granted. An approval that claims nothing needs no scope, so this is consumable unchanged under 1.1.0.",
+      "expected_under_1_0_0": "valid",
+      "expected_under_1_1_0": "valid",
+      "manifest": {
+        "manifest_version": "1.0.0",
+        "generated_at": "2026-08-28T00:00:00Z",
+        "artifacts": [
+          {
+            "artifact_id": "legacy_fixture",
+            "artifact_version": "1.1",
+            "schema_version": "wellapath.artifact/1",
+            "content_type": "application/json",
+            "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+            "byte_count": 8820,
+            "object_key": "legacy_fixture.ng.v1.1.json",
+            "release_status": "candidate",
+            "activation_status": "inactive",
+            "activation_authorized": false,
+            "activation_decision_ref": null,
+            "target_environments": [
+              "staging"
+            ],
+            "publication_decision_ref": null,
+            "approvals": {
+              "product": {
+                "required": true,
+                "status": "pending",
+                "decision_ref": null,
+                "approved_at": null
+              },
+              "clinical": {
+                "required": true,
+                "status": "pending",
+                "decision_ref": null,
+                "approved_at": null
+              }
+            },
+            "blockers": [],
+            "predecessor": null,
+            "rollback_target": null,
+            "created_at": "2026-08-01T00:00:00Z",
+            "published_at": null,
+            "deprecated": false,
+            "expires_at": null,
+            "country": "ng",
+            "references": [
+              "LEGACY TEST MATERIAL \u2014 contract 1.0.0 shapes, kept so backward compatibility can be tested against the version they were written for. NOT the active contract, never validated as a real descriptor, and never distributable. The active contract is 1.1.0."
+            ]
+          }
+        ]
+      }
+    },
+    "forward_scoped_descriptor": {
+      "description": "Contract 1.1.0 shape carrying decision_scope. Valid under 1.1.0; REJECTED by a strict 1.0.0 consumer, whose approval_record is additionalProperties:false. Additive forwards, breaking backwards \u2014 which is exactly what the minor version records.",
+      "expected_under_1_0_0": "rejected: unknown field decision_scope",
+      "expected_under_1_1_0": "valid",
+      "manifest": {
+        "manifest_version": "1.1.0",
+        "generated_at": "2026-08-28T00:00:00Z",
+        "artifacts": [
+          {
+            "artifact_id": "legacy_fixture",
+            "artifact_version": "1.2",
+            "schema_version": "wellapath.artifact/1",
+            "content_type": "application/json",
+            "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+            "byte_count": 8820,
+            "object_key": "legacy_fixture.ng.v1.2.json",
+            "release_status": "published",
+            "activation_status": "active",
+            "activation_authorized": true,
+            "activation_decision_ref": "LEGACY-FIXTURE-ACTIVATION (synthetic)",
+            "target_environments": [
+              "staging"
+            ],
+            "publication_decision_ref": "LEGACY-FIXTURE-PUBLICATION (synthetic)",
+            "approvals": {
+              "product": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-PRODUCT (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z",
+                "decision_scope": [
+                  "artifact_publication"
+                ]
+              },
+              "clinical": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-CLINICAL (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z",
+                "decision_scope": [
+                  "artifact_publication",
+                  "clinical_content_review"
+                ]
+              }
+            },
+            "blockers": [],
+            "predecessor": null,
+            "rollback_target": null,
+            "created_at": "2026-08-01T00:00:00Z",
+            "published_at": "2026-08-01T00:00:00Z",
+            "deprecated": false,
+            "expires_at": null,
+            "country": "ng",
+            "references": [
+              "LEGACY TEST MATERIAL \u2014 contract 1.0.0 shapes, kept so backward compatibility can be tested against the version they were written for. NOT the active contract, never validated as a real descriptor, and never distributable. The active contract is 1.1.0."
+            ]
+          }
+        ]
+      }
+    },
+    "unsupported_major": {
+      "description": "Major 2 is still refused under 1.1.0. A minor bump does not widen the supported major.",
+      "expected_under_1_0_0": "MANIFEST_VERSION_UNSUPPORTED",
+      "expected_under_1_1_0": "MANIFEST_VERSION_UNSUPPORTED",
+      "manifest": {
+        "manifest_version": "2.0.0",
+        "generated_at": "2026-08-28T00:00:00Z",
+        "artifacts": [
+          {
+            "artifact_id": "legacy_fixture",
+            "artifact_version": "1.2",
+            "schema_version": "wellapath.artifact/1",
+            "content_type": "application/json",
+            "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+            "byte_count": 8820,
+            "object_key": "legacy_fixture.ng.v1.2.json",
+            "release_status": "published",
+            "activation_status": "active",
+            "activation_authorized": true,
+            "activation_decision_ref": "LEGACY-FIXTURE-ACTIVATION (synthetic)",
+            "target_environments": [
+              "staging"
+            ],
+            "publication_decision_ref": "LEGACY-FIXTURE-PUBLICATION (synthetic)",
+            "approvals": {
+              "product": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-PRODUCT (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z",
+                "decision_scope": [
+                  "artifact_publication"
+                ]
+              },
+              "clinical": {
+                "required": true,
+                "status": "granted",
+                "decision_ref": "LEGACY-FIXTURE-CLINICAL (synthetic)",
+                "approved_at": "2026-08-01T00:00:00Z",
+                "decision_scope": [
+                  "artifact_publication",
+                  "clinical_content_review"
+                ]
+              }
+            },
+            "blockers": [],
+            "predecessor": null,
+            "rollback_target": null,
+            "created_at": "2026-08-01T00:00:00Z",
+            "published_at": "2026-08-01T00:00:00Z",
+            "deprecated": false,
+            "expires_at": null,
+            "country": "ng",
+            "references": [
+              "LEGACY TEST MATERIAL \u2014 contract 1.0.0 shapes, kept so backward compatibility can be tested against the version they were written for. NOT the active contract, never validated as a real descriptor, and never distributable. The active contract is 1.1.0."
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

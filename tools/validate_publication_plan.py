@@ -69,18 +69,28 @@ class _Result(list):
 
 
 RECONCILIATION = repo_path(
+    "publication", "fixtures", "compat", "approval_scope_reconciliation_v2.json"
+)
+
+#: v1 is history, not a current claim. It records a defect that genuinely existed at Backend
+#: fc40ac3e, the Backend cites it by hash, and it is never regenerated.
+RECONCILIATION_V1 = repo_path(
     "publication", "fixtures", "compat", "approval_scope_reconciliation_v1.json"
 )
+RECONCILIATION_V1_SHA256 = "36efa4e908df42b99463c8fe809e11e83e740d20b205f1358c51d17622e194ee"
 
 #: The I3 Step 2A approval-scope ruling, restated as the claims the record must compute true.
 #: Kept here rather than only in the record so the check cannot be satisfied by a record that
 #: quietly stopped making one of them.
 REQUIRED_RECONCILIATION_CLAIMS = (
-    "im_001_display_decision_completion_remains_true",
-    "artifact_publication_product_approval_remains_pending",
-    "clinical_approval_remains_pending",
-    "both_representations_are_ineligible_in_every_environment",
-    "no_evaluator_can_substitute_completion_for_approval",
+    "backend_fixture_product_approval_is_now_pending",
+    "knowledge_base_product_approval_is_pending",
+    "im_001_completion_is_scoped_traceability_only",
+    "im_001_completion_is_not_in_the_safety_blocker_channel",
+    "prior_substitution_defect_no_longer_reproduces",
+    "lifting_clinical_and_blocker_conditions_produces_no_approval",
+    "both_encodings_ineligible_in_every_environment",
+    "both_encodings_are_now_byte_identical_in_the_product_slot",
 )
 
 
@@ -111,15 +121,31 @@ def validate_approval_scope_reconciliation():
     results.add("%s: every required claim holds" % relative, not failed, ", ".join(failed))
 
     results.add(
-        "%s: contract can express the approval distinction" % relative,
-        record.get("contract_can_express_the_distinction") is True,
+        "%s: records how the prior defect was resolved" % relative,
+        record.get("outcome", {}).get("v2_verdict") == "resolved_by_backend",
+        str(record.get("outcome", {}).get("v2_verdict")),
     )
     results.add(
-        "%s: the Backend encoding is recorded with a verdict" % relative,
-        record.get("verdict", {}).get("backend_granted_product_is")
-        in ("fixture_defect", "scoped_correctly"),
-        str(record.get("verdict", {}).get("backend_granted_product_is")),
+        "%s: binds the Backend commit and schema it was evaluated against" % relative,
+        record["backend_binding"]["commit"] == "bbaeadd6075eb37fd51acbe04101f939e52c7d48"
+        and record["backend_binding"]["schema_sha256"]
+        == "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a"
+        and record["backend_binding"]["schema_byte_count"] == 7806,
     )
+
+    # v1 must still be exactly the bytes the Backend cites. History is preserved, not rewritten.
+    if not os.path.exists(RECONCILIATION_V1):
+        results.add("the v1 reconciliation record is preserved", False, "record is absent")
+    else:
+        import hashlib
+
+        with open(RECONCILIATION_V1, "rb") as handle:
+            digest = hashlib.sha256(handle.read()).hexdigest()
+        results.add(
+            "the v1 reconciliation record is preserved byte-for-byte",
+            digest == RECONCILIATION_V1_SHA256,
+            "%s (expected %s)" % (digest, RECONCILIATION_V1_SHA256),
+        )
 
     # Re-derive the substitution-impossibility claim rather than reading it.
     plan = load_json(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"))
@@ -145,14 +171,48 @@ def validate_approval_scope_reconciliation():
         "approved=%s eligible=%s" % (states["approved"], states["eligible_for_environment"]),
     )
 
+    # And the historical defective encoding is now rejected at validation, not merely denied.
+    replayed = json.loads(json.dumps(plan["descriptor"]))
+    replayed["approvals"]["product"] = {
+        "required": True,
+        "status": "granted",
+        "decision_ref": "IM-001 — Product decisions complete; activation remains unauthorized",
+        "approved_at": None,
+    }
+    wrapper = {
+        "manifest_version": "1.1.0",
+        "generated_at": plan["_metadata"]["evaluated_at"],
+        "artifacts": [replayed],
+    }
+    replay_valid, replay_reasons = validate_manifest(wrapper)
+    results.add(
+        "%s: the historical defective encoding is now unrepresentable, not merely ineffective"
+        % relative,
+        replay_valid is False
+        and "APPROVAL_SCOPE_MISSING" in [item["code"] for item in replay_reasons],
+        "valid=%s codes=%s" % (replay_valid, sorted({r["code"] for r in replay_reasons})),
+    )
+
     # The completed gate must be present, resolved, and must not be in the open set.
     for plan_name in ("question_flow.ng.v1.1.dryrun.json",):
         target = load_json(repo_path("publication", "plans", plan_name))
         blockers = {b["id"]: b["status"] for b in target["descriptor"]["blockers"]}
+        # Under 1.1.0 the completed decision is carried in references and in the scope record,
+        # not in the blockers list. The blockers list is the safety channel; a completed
+        # decision sitting in it inverts its meaning for anyone scanning for what is unresolved.
         results.add(
-            "%s: the completed display-decision gate is recorded resolved" % plan_name,
-            blockers.get("IM001-PRODUCT-DISPLAY-DECISIONS") == "resolved",
-            str(blockers.get("IM001-PRODUCT-DISPLAY-DECISIONS")),
+            "%s: no completed decision is recorded in the safety-blocker channel" % plan_name,
+            "IM001-PRODUCT-DISPLAY-DECISIONS" not in blockers
+            and all(status == "open" for status in blockers.values()),
+            ", ".join("%s=%s" % item for item in sorted(blockers.items())),
+        )
+        target_scope = target["governance"]["product_approval_scope"]["product_display_decision"]
+        results.add(
+            "%s: the completed display decision is still recorded, scoped and non-granting"
+            % plan_name,
+            target_scope["status"] == "complete"
+            and target_scope["contract_decision_scopes"] == ["product_display"]
+            and target_scope["grants_artifact_publication_product_approval"] is False,
         )
         results.add(
             "%s: the open blocker set is unchanged by the gate" % plan_name,

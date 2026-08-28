@@ -1,6 +1,6 @@
 {
   "_fixture_warning": "SYNTHETIC FIXTURE \u2014 artifact_id 'fixture_artifact' is not a real artifact and never will be. Its governance fields are fixture values chosen so negative cases have something valid to break; they record no decision anyone made. Its sha256 and byte_count are the real digests of real repository files so integrity cases run against bytes that exist. This descriptor names no object, must never reach a live manifest, and grants nothing.",
-  "manifest_version": "1.0.0",
+  "manifest_version": "1.1.0",
   "generated_at": "2026-08-28T00:00:00Z",
   "artifacts": [
     {
@@ -24,13 +24,20 @@
           "required": true,
           "status": "granted",
           "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)",
-          "approved_at": "2026-08-01T00:00:00Z"
+          "approved_at": "2026-08-01T00:00:00Z",
+          "decision_scope": [
+            "artifact_publication"
+          ]
         },
         "clinical": {
           "required": true,
           "status": "granted",
           "decision_ref": "FIXTURE-CLINICAL-0001 (synthetic)",
-          "approved_at": "2026-08-01T00:00:00Z"
+          "approved_at": "2026-08-01T00:00:00Z",
+          "decision_scope": [
+            "artifact_publication",
+            "clinical_content_review"
+          ]
         }
       },
       "blockers": [],
@@ -67,13 +74,20 @@
           "required": true,
           "status": "granted",
           "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)",
-          "approved_at": "2026-08-01T00:00:00Z"
+          "approved_at": "2026-08-01T00:00:00Z",
+          "decision_scope": [
+            "artifact_publication"
+          ]
         },
         "clinical": {
           "required": true,
           "status": "granted",
           "decision_ref": "FIXTURE-CLINICAL-0001 (synthetic)",
-          "approved_at": "2026-08-01T00:00:00Z"
+          "approved_at": "2026-08-01T00:00:00Z",
+          "decision_scope": [
+            "artifact_publication",
+            "clinical_content_review"
+          ]
         }
       },
       "blockers": [],

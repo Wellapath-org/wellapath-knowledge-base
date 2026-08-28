@@ -92,8 +92,8 @@ mode: a plan targets one named version.
 |---|---|
 | `python3 tools/verify_contract_pin.py` | The pinned Backend contract 1.0.0 is byte identical, the Python mirror still agrees with the vendored schema (keys, enums, patterns), and the fixtures validate identically under both the ported validator and the schema. Fails closed on any drift. |
 | `python3 tools/validate_publication_plan.py` | Every plan satisfies its schema, validates under both contract routes, carries digests recomputed from real bytes, refuses every governance claim, is ineligible in all three environments, and leaks no credential. Also PHI-scans `publication/` and `contracts/`. |
-| `python3 tools/validate_publication_fixtures.py` | All 101 negative fixtures fail **at their declared stage with their declared reason code**. `--mutations` additionally breaks 7 safety-critical guards and requires the fixtures depending on them to stop passing. |
-| `python3 testing/publication/test_publication.py` | 111 unit tests, including plan generation executed inside a guard that fails if a socket, a subprocess or a write outside the staging directory is attempted. |
+| `python3 tools/validate_publication_fixtures.py` | All 110 negative fixtures fail **at their declared stage with their declared reason code**. `--mutations` additionally breaks 11 safety-critical guards and requires the fixtures depending on them to stop passing. |
+| `python3 testing/publication/test_publication.py` | 144 unit tests, including plan generation executed inside a guard that fails if a socket, a subprocess or a write outside the staging directory is attempted. |
 
 ## Library
 

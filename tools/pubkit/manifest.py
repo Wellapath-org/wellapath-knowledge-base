@@ -1,6 +1,7 @@
 """Structural validation of a candidate manifest.
 
-A port of `wellapath-backend/src/manifest/validate.ts` at the pinned commit, plus a check the
+A port of `wellapath-backend/src/manifest/validate.ts` at the pinned commit (contract 1.1.0),
+plus a check the
 Backend cannot perform: the *vendored schema* is run over the manifest too, so a document has
 to satisfy both the published schema and the Backend's hand-written validator. The schema and
 the validator are supposed to agree; running both means a disagreement surfaces here rather
@@ -71,15 +72,75 @@ def _validate_version_ref(value, path):
     return reasons
 
 
+def _validate_decision_scope(value, path):
+    """Validate the scope of the decision an approval cites. New in contract 1.1.0.
+
+    Structurally optional, semantically mandatory once `status` is `granted`: an approval that
+    is not granted claims nothing and so needs no scope, and demanding one there would
+    invalidate sound descriptors while protecting nothing.
+
+    Checked here as well as in eligibility because a scope substitution is a structural
+    governance fault, not a matter of degree. A decision never scoped to artifact publication
+    does not belong in an artifact-publication approval slot at all, so a manifest asserting it
+    is rejected outright rather than merely evaluating to `approved: false`.
+    """
+    scope_path = "%s.decision_scope" % path
+    granted = value.get("status") == "granted"
+
+    if "decision_scope" not in value or value["decision_scope"] is None:
+        if granted:
+            return [
+                reason(
+                    "APPROVAL_SCOPE_MISSING",
+                    scope_path,
+                    "a granted approval must declare the scope of the decision it cites; an "
+                    "unscoped decision is not an artifact-publication approval",
+                )
+            ]
+        return []
+
+    scope = value["decision_scope"]
+    if not isinstance(scope, list) or len(scope) == 0:
+        return [_malformed(scope_path, "must be null or a non-empty array of approval scopes")]
+
+    reasons = []
+    for entry in scope:
+        if not isinstance(entry, str) or entry not in c.APPROVAL_SCOPES:
+            reasons.append(
+                reason(
+                    "APPROVAL_SCOPE_UNKNOWN",
+                    scope_path,
+                    "approval scope %s is not a known scope; unknown scope is never read as "
+                    "authorisation" % (entry,),
+                )
+            )
+    if len(set(map(repr, scope))) != len(scope):
+        reasons.append(_malformed(scope_path, "approval scopes must be unique"))
+    if reasons:
+        return reasons
+
+    if granted and c.ARTIFACT_APPROVAL_SLOT_SCOPE not in scope:
+        reasons.append(
+            reason(
+                "APPROVAL_SCOPE_MISMATCH",
+                scope_path,
+                "the cited decision is scoped to %s, which excludes %s; it cannot occupy an "
+                "artifact-publication approval slot"
+                % (", ".join(scope), c.ARTIFACT_APPROVAL_SLOT_SCOPE),
+            )
+        )
+    return reasons
+
+
 def _validate_approval(value, path):
     if not _is_object(value):
         return [reason("APPROVAL_MISSING", path, "approval record is absent or malformed")]
 
     reasons = []
     for key in value:
-        if key not in c.APPROVAL_RECORD_KEYS:
+        if key not in c.ALLOWED_APPROVAL_KEYS:
             reasons.append(reason("UNKNOWN_FIELD", "%s.%s" % (path, key), "unknown field"))
-    for key in c.APPROVAL_RECORD_KEYS:
+    for key in c.REQUIRED_APPROVAL_KEYS:
         if key not in value:
             reasons.append(_missing(path, key))
 
@@ -104,6 +165,7 @@ def _validate_approval(value, path):
     if "approved_at" in value and value["approved_at"] is not None:
         if not _is_iso_datetime(value["approved_at"]):
             reasons.append(_malformed("%s.approved_at" % path, "must be null or an ISO-8601 UTC datetime"))
+    reasons.extend(_validate_decision_scope(value, path))
     return reasons
 
 

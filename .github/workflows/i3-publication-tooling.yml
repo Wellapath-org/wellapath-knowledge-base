@@ -34,13 +34,14 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Pinned Backend contract is byte identical
+      - name: Pinned Backend contract (1.1.0) and legacy 1.0.0 are byte identical
         # Runs before the Python tooling and independently of it. If the vendored contract
         # changed, every later result was computed against the wrong rules and none of them
         # is worth reading.
         run: |
           shasum -a 256 -c - <<'EOF'
-          66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9  contracts/backend/manifest.v1.schema.json
+          948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a  contracts/backend/manifest.v1.schema.json
+          66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9  contracts/backend/legacy/manifest.v1.0.0.schema.json
           EOF
 
       - name: Frozen clinical artifacts are byte identical
@@ -68,7 +69,7 @@ jobs:
         # through a decision record — not a CI edit.
         run: |
           python3 - <<'EOF'
-          import json, os, sys
+          import hashlib, json, os, sys
 
           errors = []
 
@@ -134,26 +135,43 @@ jobs:
                   if display[field] is not False:
                       errors.append("%s: display decision claims %s" % (where, field))
 
-              # A completed gate may only ever be recorded resolved, and may never enlarge or
-              # shrink the set of genuinely open blockers.
+              # The blockers list is the safety channel and carries only genuine blockers.
+              # Completed decisions belong in references and in the scope record.
               statuses = {b["id"]: b["status"] for b in descriptor["blockers"]}
-              if statuses.get("IM001-PRODUCT-DISPLAY-DECISIONS") not in (None, "resolved"):
-                  errors.append("%s: the display-decision gate is not resolved" % where)
+              if any(status != "open" for status in statuses.values()):
+                  errors.append("%s: a non-open entry is in the safety-blocker channel" % where)
               if where.endswith("question_flow.ng.v1.1.dryrun.json"):
-                  open_ids = {k for k, v in statuses.items() if v == "open"}
-                  if open_ids != {"IM001-CLIN-FLAG-001", "IM003-SB-001"}:
-                      errors.append("%s: open blocker set is %s" % (where, sorted(open_ids)))
+                  if set(statuses) != {"IM001-CLIN-FLAG-001", "IM003-SB-001"}:
+                      errors.append("%s: blocker set is %s" % (where, sorted(statuses)))
+
+              # Contract 1.1.0: both approval slots pending with no scope claimed.
+              for role in ("product", "clinical"):
+                  approval = descriptor["approvals"][role]
+                  if approval["status"] != "pending":
+                      errors.append("%s: %s approval is %s" % (where, role, approval["status"]))
+                  if approval.get("decision_scope") is not None:
+                      errors.append("%s: %s approval claims a decision scope" % (where, role))
 
           # The approval-scope reconciliation must still compute its claims true.
-          with open("publication/fixtures/compat/approval_scope_reconciliation_v1.json") as handle:
+          with open("publication/fixtures/compat/approval_scope_reconciliation_v2.json") as handle:
               reconciliation = json.load(handle)
-          for name in ("im_001_display_decision_completion_remains_true",
-                       "artifact_publication_product_approval_remains_pending",
-                       "clinical_approval_remains_pending",
-                       "both_representations_are_ineligible_in_every_environment",
-                       "no_evaluator_can_substitute_completion_for_approval"):
+          for name in ("backend_fixture_product_approval_is_now_pending",
+                       "knowledge_base_product_approval_is_pending",
+                       "im_001_completion_is_scoped_traceability_only",
+                       "im_001_completion_is_not_in_the_safety_blocker_channel",
+                       "prior_substitution_defect_no_longer_reproduces",
+                       "lifting_clinical_and_blocker_conditions_produces_no_approval",
+                       "both_encodings_ineligible_in_every_environment"):
               if reconciliation["claims"].get(name) is not True:
                   errors.append("approval-scope reconciliation claim %s does not hold" % name)
+
+          # v1 is history. It records a defect that genuinely existed, the backend cites it by
+          # hash, and it is never regenerated. Rewriting it would erase the reason the contract
+          # moved to 1.1.0.
+          with open("publication/fixtures/compat/approval_scope_reconciliation_v1.json", "rb") as handle:
+              v1 = hashlib.sha256(handle.read()).hexdigest()
+          if v1 != "36efa4e908df42b99463c8fe809e11e83e740d20b205f1358c51d17622e194ee":
+              errors.append("the v1 reconciliation record was modified; it must be preserved")
 
           # The two open blockers, and IM-003 still disabled.
           with open("publication/governance/decision_register_v1.json") as handle:

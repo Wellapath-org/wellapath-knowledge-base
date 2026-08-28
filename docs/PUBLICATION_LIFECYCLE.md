@@ -34,9 +34,9 @@ fails if a socket, a subprocess or a write outside the staging directory is even
 | `python3 tools/build_publication_fixtures.py [--check]` | Writes the compatibility and negative fixture sets. |
 | `python3 tools/build_receipt_examples.py [--check]` | Writes the non-operative receipt examples. |
 | `python3 tools/validate_publication_plan.py` | Validates every committed plan, recomputes its digests from real bytes, and PHI/secret-scans `publication/` and `contracts/`. |
-| `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 101 negative fixtures and the 7 mutation proofs. |
+| `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 110 negative fixtures and the 11 mutation proofs. |
 | `python3 tools/report_publication_freeze.py [--check]` | Records and re-verifies the 44 frozen artifacts. |
-| `python3 testing/publication/test_publication.py` | 111 unit tests. |
+| `python3 testing/publication/test_publication.py` | 144 unit tests. |
 
 ---
 
@@ -94,13 +94,33 @@ vendors it so it can validate offline, and never redesigns, extends or loosens i
 | | |
 |---|---|
 | Repository | `Wellapath-org/wellapath-backend` |
-| Merge commit | `fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd` |
-| Contract version | `1.0.0` (supported major: 1) |
+| Merge commit | `bbaeadd6075eb37fd51acbe04101f939e52c7d48` |
+| Contract version | **`1.1.0`** (supported major: 1) |
 | Source path | `docs/contracts/manifest.v1.schema.json` |
 | Vendored at | `contracts/backend/manifest.v1.schema.json` |
-| Schema SHA256 | `66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9` (6,375 bytes) |
-| KB handoff SHA256 | `90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8` |
-| Pin record | `contracts/backend/PIN.json` |
+| Schema SHA256 | `948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a` (7,806 bytes) |
+| KB handoff SHA256 | `45fe9d886fb6d13ec3087cd11610eb38074a3b38edf20b1bd180bc024681887c` |
+| Pin record | `contracts/backend/PIN.json` (pin version 2.0.0) |
+| Superseded | contract `1.0.0` at `fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd`, schema `66fa3a94…082ce9` (6,375 bytes) — retained as **labelled legacy test material** at `contracts/backend/legacy/manifest.v1.0.0.schema.json` |
+
+### What 1.1.0 changed, and why it is a minor
+
+1.1.0 adds the optional approval field `decision_scope` and tightens one previously unsafe
+claim: **a `granted` approval that declares no `artifact_publication` scope no longer counts.**
+Three reason codes are new: `APPROVAL_SCOPE_MISSING`, `APPROVAL_SCOPE_UNKNOWN`,
+`APPROVAL_SCOPE_MISMATCH`.
+
+It is a minor rather than a patch because it changes what the evaluator accepts, and a minor
+rather than a major because the supported major is unchanged and descriptors making no
+granted-approval claim stay valid. Note the asymmetry, which is the honest reason the version
+moved: a 1.1.0 descriptor carrying `decision_scope` is **invalid** against 1.0.0, whose approval
+record is `additionalProperties: false`. Additive forwards, breaking backwards.
+
+The tightening exists because of this repository. In I3 Step 2A the KB reported that a decision
+scoped to display wording and ordering could occupy an artifact-publication approval slot and,
+once unrelated conditions lifted, carry an artifact to `approved`. The Backend fixed both the
+fixture and the contract. Under 1.1.0 that substitution is not merely ineffective — it is
+**unrepresentable**, rejected at validation as well as denied at eligibility.
 
 The vendored file is a **byte-for-byte** copy. It is never reformatted or re-serialised.
 
@@ -278,9 +298,9 @@ specific failure this section exists to prevent.
 
 | Concept | Status | Contract field that carries it |
 |---|---|---|
-| `product_display_decision` (scope: display wording and ordering only) | **complete** | a `blocker_record` with `status: "resolved"` — `IM001-PRODUCT-DISPLAY-DECISIONS` |
-| `artifact_publication_product_approval` | **pending** | `approvals.product.status` |
-| `clinical_approval` | **pending** | `approvals.clinical.status` |
+| `product_display_decision` (scope: display wording and ordering only) | **complete** | descriptor `references[]` + `governance.product_approval_scope`; the decision is scoped `product_display` in the register |
+| `artifact_publication_product_approval` | **pending** | `approvals.product.status` + `approvals.product.decision_scope` |
+| `clinical_approval` | **pending** | `approvals.clinical.status` + `approvals.clinical.decision_scope` |
 | `publication_authorization` | **false** | `publication_decision_ref` |
 | `activation_authorization` | **false** | `activation_authorized` + `activation_decision_ref` |
 
@@ -289,16 +309,36 @@ Every plan carries this as `governance.product_approval_scope`, and
 that claimed the display decision granted approval would fail its schema rather than merely
 contradict its own prose.
 
-**Why a resolved blocker is the right home for a completed gate.** The Backend's
-`evaluateDescriptor` computes `approved` **exclusively** from `approvals`, and reads `blockers`
-in a loop whose only possible effect is to set `blockersResolved = false`. There is no code path
-by which any blocker — resolved or otherwise — makes a descriptor approved. Recording the
-completed decision set there is therefore *structurally* incapable of being read as approval:
-the safety is in the shape of the contract, not in a convention someone has to remember.
+**Where the completion is recorded, and why it moved.** Under contract 1.0.0 the KB carried it
+as a `blocker_record` with `status: "resolved"` — chosen because `evaluateDescriptor` computes
+`approved` exclusively from `approvals` and reads `blockers` in a loop that can only deny, so a
+resolved blocker was *structurally* incapable of being read as approval.
 
-`publication/fixtures/compat/approval_scope_reconciliation_v1.json` proves it by computation
-rather than assertion, and `tools/validate_publication_plan.py` re-derives the central claim at
-check time.
+Contract 1.1.0 removed the need for that workaround, and the Backend objected to it on a
+ground worth taking: the blocker list is the safety channel, and a completed decision sitting in
+it inverts its meaning for a person scanning for what is unresolved, even while the evaluator
+correctly ignores it. Both points are right. The completion is now carried in the descriptor's
+`references` and in `governance.product_approval_scope`, and the safety comes from
+`decision_scope` instead — which is stronger, because it makes the substitution unrepresentable
+rather than merely ineffective. Both repositories now emit the same product approval slot, byte
+for byte.
+
+**How a substitution fails now.** Placing the IM-001 decision in `approvals.product` requires
+declaring its scope. Declaring the true scope (`product_display`) fails validation with
+`APPROVAL_SCOPE_MISMATCH`; declaring none fails with `APPROVAL_SCOPE_MISSING`; declaring
+something invented fails with `APPROVAL_SCOPE_UNKNOWN`. There is no spelling that works.
+
+`publication/fixtures/compat/approval_scope_reconciliation_v2.json` proves this by computation
+rather than assertion — including replaying the historical defective encoding under 1.1.0 and
+showing it now fails validation outright. `tools/validate_publication_plan.py` re-derives the
+central claim at check time.
+
+**Reconciliation history is preserved, not rewritten.**
+`approval_scope_reconciliation_v1.json` remains exactly as committed
+(`36efa4e9…e194ee`, 8,578 bytes), bound to Backend `fc40ac3e`, where the defect genuinely
+existed. The Backend cites that record by hash. Rewriting it to read as though the Backend was
+always correct would erase the evidence that the correction was needed, and with it the reason
+the contract moved to 1.1.0.
 
 ### `im_001_resolved` is not an authorization
 
@@ -435,15 +475,15 @@ Nothing here changes an active version or a clinical artifact byte.
 
 ## 11. Negative fixtures and mutation proofs
 
-**101 negative fixtures**, each declaring the stage it must fail at and the exact reason code it
+**110 negative fixtures**, each declaring the stage it must fail at and the exact reason code it
 must fail for. A case does not pass by failing; it passes only by failing *where and how it says
 it will*. A guard that starts refusing the right thing for the wrong reason is a behaviour
 change, and the runner makes that visible.
 
 | Suite | Stage | Cases |
 |---|---|---|
-| compat | validation | 24 |
-| compat | eligibility | 12 |
+| compat | validation | 30 |
+| compat | eligibility | 15 |
 | compat | selection | 3 |
 | compat | integrity | 2 |
 | kb | contract_pin | 7 |
@@ -456,12 +496,14 @@ change, and the runner makes that visible.
 | kb | rollback | 7 |
 | kb | write_safety | 5 |
 
-**7 mutation proofs.** Each deliberately breaks one safety-critical guard and requires the
+**11 mutation proofs.** Each deliberately breaks one safety-critical guard and requires the
 fixture depending on it to *stop passing*. A guard nobody can break was never guarding anything,
 and a fixture that still passes with its guard removed is testing the absence of a bug rather
 than the presence of a check. The proofs cover the mutable-alias rule, the request-marker rule,
 the credential-word rule, the lifecycle externally-established-state refusal, the governance
-authority mapping, the closed status set, and the pin's fail-closed policy check.
+authority mapping, the closed status set, the pin's fail-closed policy check, and the four
+contract-1.1.0 approval-scope guards (the required-slot clause, the closed scope vocabulary, the
+missing-scope rule at validation, and scope evaluation at eligibility).
 
 ---
 
