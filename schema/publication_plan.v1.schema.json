@@ -153,7 +153,7 @@
           "pattern": "^[0-9a-f]{40}$"
         },
         "contract_version": {
-          "const": "1.0.0"
+          "const": "1.1.0"
         },
         "supported_major": {
           "const": 1
@@ -406,7 +406,8 @@
         "release_status",
         "activation_status",
         "activation_authorized",
-        "published_at"
+        "published_at",
+        "approvals"
       ],
       "properties": {
         "release_status": {
@@ -426,6 +427,70 @@
         },
         "published_at": {
           "type": "null"
+        },
+        "approvals": {
+          "type": "object",
+          "required": [
+            "product",
+            "clinical"
+          ],
+          "description": "Both slots are artifact-publication approval slots. Pinned pending with a null decision_scope: nothing in this repository holds a decision scoped to artifact publication, so a plan emitting one would be emitting a decision nobody took.",
+          "properties": {
+            "product": {
+              "type": "object",
+              "required": [
+                "required",
+                "status",
+                "decision_ref",
+                "approved_at",
+                "decision_scope"
+              ],
+              "properties": {
+                "required": {
+                  "const": true
+                },
+                "status": {
+                  "const": "pending"
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "approved_at": {
+                  "type": "null"
+                },
+                "decision_scope": {
+                  "type": "null"
+                }
+              }
+            },
+            "clinical": {
+              "type": "object",
+              "required": [
+                "required",
+                "status",
+                "decision_ref",
+                "approved_at",
+                "decision_scope"
+              ],
+              "properties": {
+                "required": {
+                  "const": true
+                },
+                "status": {
+                  "const": "pending"
+                },
+                "decision_ref": {
+                  "type": "null"
+                },
+                "approved_at": {
+                  "type": "null"
+                },
+                "decision_scope": {
+                  "type": "null"
+                }
+              }
+            }
+          }
         }
       }
     },
@@ -486,7 +551,8 @@
               "artifact_sha256",
               "granted",
               "decision_ref",
-              "reasons"
+              "reasons",
+              "decision_scope"
             ],
             "properties": {
               "kind": {
@@ -515,6 +581,11 @@
               "reasons": {
                 "type": "array",
                 "minItems": 1
+              },
+              "decision_scope": {
+                "type": "array",
+                "maxItems": 0,
+                "description": "Empty for every claim: nothing is granted, so no scope was resolved."
               }
             }
           }
@@ -554,7 +625,8 @@
                 "grants_activation_authorization",
                 "substitution_impossible_because",
                 "means_only",
-                "does_not_mean"
+                "does_not_mean",
+                "contract_decision_scopes"
               ],
               "properties": {
                 "status": {
@@ -605,6 +677,18 @@
                   "items": {
                     "type": "string"
                   }
+                },
+                "contract_decision_scopes": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "artifact_activation",
+                      "product_display",
+                      "clinical_content_review"
+                    ],
+                    "description": "artifact_publication is deliberately absent from this enum: a display decision carrying it would not be a display decision, and pinning the enum is how that stays true rather than being merely stated."
+                  },
+                  "description": "The contract 1.1.0 scopes the display decision actually carried. It must not include artifact_publication \u2014 a decision that did include it would not be a display decision."
                 }
               },
               "description": "Completion of the IM-001 Product display decision set. Every `grants_*` field is pinned false: this concept grants nothing, and a plan saying otherwise fails this schema rather than merely contradicting its own prose."
@@ -614,7 +698,8 @@
               "required": [
                 "status",
                 "decision_ref",
-                "contract_representation"
+                "contract_representation",
+                "required_scope"
               ],
               "properties": {
                 "status": {
@@ -625,7 +710,10 @@
                   "type": "null"
                 },
                 "contract_representation": {
-                  "const": "approvals.product.status"
+                  "const": "approvals.product.status + approvals.product.decision_scope"
+                },
+                "required_scope": {
+                  "const": "artifact_publication"
                 }
               }
             },
@@ -635,7 +723,8 @@
                 "status",
                 "decision_ref",
                 "contract_representation",
-                "reviewer_assigned"
+                "reviewer_assigned",
+                "required_scope"
               ],
               "properties": {
                 "status": {
@@ -645,10 +734,13 @@
                   "type": "null"
                 },
                 "contract_representation": {
-                  "const": "approvals.clinical.status"
+                  "const": "approvals.clinical.status + approvals.clinical.decision_scope"
                 },
                 "reviewer_assigned": {
                   "const": false
+                },
+                "required_scope": {
+                  "const": "artifact_publication"
                 }
               }
             },

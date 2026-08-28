@@ -33,11 +33,13 @@ REQUIRED_PIN_FIELDS = (
     "retrieval",
     "compatibility_policy",
     "representability",
+    "legacy",
 )
 REQUIRED_BACKEND_FIELDS = ("repository", "merge_commit", "source_path", "handoff_sha256")
 REQUIRED_CONTRACT_FIELDS = ("contract_version", "supported_major", "schema_dialect", "schema_id")
 REQUIRED_VENDORED_FIELDS = ("path", "sha256", "byte_count")
 REQUIRED_RETRIEVAL_FIELDS = ("retrieved_at", "retrieved_from")
+REQUIRED_LEGACY_FIELDS = ("path", "contract_version", "sha256", "byte_count", "status", "purpose")
 REQUIRED_POLICY_FIELDS = (
     "authority",
     "supported_majors",
@@ -108,6 +110,7 @@ def check_pin(pin_path=PIN_PATH, schema_path=VENDORED_SCHEMA_PATH):
     reasons.extend(_check_versions(pin, pin_path))
     reasons.extend(_check_vendored_bytes(pin, pin_path, schema_path))
     reasons.extend(_check_mirror_agrees(pin, schema_path))
+    reasons.extend(_check_legacy(pin, pin_path))
     return reasons
 
 
@@ -137,6 +140,7 @@ def _check_shape(pin, pin_path):
         ("vendored", REQUIRED_VENDORED_FIELDS),
         ("retrieval", REQUIRED_RETRIEVAL_FIELDS),
         ("compatibility_policy", REQUIRED_POLICY_FIELDS),
+        ("legacy", REQUIRED_LEGACY_FIELDS),
     )
     for group, fields in groups:
         value = pin[group]
@@ -285,6 +289,74 @@ def _check_vendored_bytes(pin, pin_path, schema_path):
     return reasons
 
 
+def _check_legacy(pin, pin_path):
+    """The legacy schema must exist, hash as recorded, and be clearly not the active contract."""
+    reasons = []
+    path = _rel(pin_path)
+    legacy = pin["legacy"]
+
+    if legacy["contract_version"] == pin["contract"]["contract_version"]:
+        reasons.append(
+            reason(
+                "KB_CONTRACT_PIN_MALFORMED",
+                "%s.legacy.contract_version" % path,
+                "the legacy schema declares the active contract version %s; legacy material "
+                "must be superseded material" % legacy["contract_version"],
+            )
+        )
+    if "LEGACY" not in str(legacy.get("status", "")).upper():
+        reasons.append(
+            reason(
+                "KB_CONTRACT_PIN_MALFORMED",
+                "%s.legacy.status" % path,
+                "legacy material must be labelled as legacy, so it cannot be mistaken for the "
+                "active contract",
+            )
+        )
+
+    legacy_path = os.path.join(REPO_ROOT, legacy["path"])
+    if not os.path.exists(legacy_path):
+        reasons.append(
+            reason(
+                "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+                legacy["path"],
+                "the legacy schema is absent; the backward-compatibility tests cannot run "
+                "without the contract version they test against",
+            )
+        )
+        return reasons
+
+    actual = _sha256_of_file(legacy_path)
+    if actual != legacy["sha256"]:
+        reasons.append(
+            reason(
+                "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+                legacy["path"],
+                "legacy schema hashes to %s but the pin records %s; a legacy artifact that "
+                "drifts is not a legacy artifact" % (actual, legacy["sha256"]),
+            )
+        )
+    if os.path.getsize(legacy_path) != legacy["byte_count"]:
+        reasons.append(
+            reason(
+                "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+                legacy["path"],
+                "legacy schema is %d bytes but the pin records %d"
+                % (os.path.getsize(legacy_path), legacy["byte_count"]),
+            )
+        )
+    if actual == pin["vendored"]["sha256"]:
+        reasons.append(
+            reason(
+                "KB_CONTRACT_PIN_MALFORMED",
+                legacy["path"],
+                "the legacy schema and the active schema are the same bytes; one of the two "
+                "pins is wrong",
+            )
+        )
+    return reasons
+
+
 def _check_mirror_agrees(pin, schema_path):
     """The Python mirror in `contract.py` must agree with the vendored schema it mirrors.
 
@@ -387,14 +459,66 @@ def _check_mirror_agrees(pin, schema_path):
             contract_mirror.ENVIRONMENTS,
         )
     )
+    approval = schema["definitions"]["approval_record"]
     reasons.extend(
         _compare_sets(
             "%s.definitions.approval_record.properties.status.enum" % path,
             "approval statuses",
-            schema["definitions"]["approval_record"]["properties"]["status"]["enum"],
+            approval["properties"]["status"]["enum"],
             contract_mirror.APPROVAL_STATUSES,
         )
     )
+    # 1.1.0 added `decision_scope`. The mirror must agree about the approval record's shape as
+    # well as the descriptor's, or a scope rule could be dropped while the schema hash stayed
+    # perfectly valid.
+    reasons.extend(
+        _compare_sets(
+            "%s.definitions.approval_record.required" % path,
+            "required approval keys",
+            approval["required"],
+            contract_mirror.REQUIRED_APPROVAL_KEYS,
+        )
+    )
+    reasons.extend(
+        _compare_sets(
+            "%s.definitions.approval_record.properties" % path,
+            "declared approval keys",
+            approval["properties"].keys(),
+            contract_mirror.ALLOWED_APPROVAL_KEYS,
+        )
+    )
+    scope_schema = approval["properties"].get("decision_scope")
+    if scope_schema is None:
+        reasons.append(
+            reason(
+                "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+                "%s.definitions.approval_record.properties.decision_scope" % path,
+                "the schema declares no decision_scope; this tooling mirrors contract 1.1.0, "
+                "which defines it",
+            )
+        )
+    else:
+        declared = None
+        for branch in scope_schema.get("oneOf", []):
+            if branch.get("type") == "array":
+                declared = branch["items"]["enum"]
+        if declared is None:
+            reasons.append(
+                reason(
+                    "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+                    "%s.definitions.approval_record.properties.decision_scope" % path,
+                    "decision_scope declares no array branch with an enum of scopes",
+                )
+            )
+        else:
+            reasons.extend(
+                _compare_sets(
+                    "%s.definitions.approval_record.properties.decision_scope" % path,
+                    "approval scopes",
+                    declared,
+                    contract_mirror.APPROVAL_SCOPES,
+                )
+            )
     reasons.extend(
         _compare_sets(
             "%s.definitions.blocker_record.properties.status.enum" % path,

@@ -1,7 +1,7 @@
 """Eligibility and activation semantics — the fail-closed core.
 
-A port of `wellapath-backend/src/manifest/eligibility.ts` at the pinned commit. Five states,
-never synonyms:
+A port of `wellapath-backend/src/manifest/eligibility.ts` at the pinned commit
+(`bbaeadd6075eb37fd51acbe04101f939e52c7d48`, contract 1.1.0). Five states, never synonyms:
 
     present                  — the descriptor exists and is structurally sound.
     published                — release status is `published`, with a publication date.
@@ -36,6 +36,58 @@ def _descriptor_path(descriptor):
     on every plan is a scan people learn to skim.
     """
     return "artifact %s v%s" % (descriptor.get("artifact_id"), descriptor.get("artifact_version"))
+
+
+def _evaluate_approval_scope(approval, path, role):
+    """Whether the decision an approval cites was actually scoped to artifact publication.
+
+    New in contract 1.1.0. Re-checked here as well as in `manifest.py` on purpose: a descriptor
+    evaluated in isolation must fail closed rather than inherit a guarantee from a validation
+    pass that may never have run. An empty result means the scope is sound.
+    """
+    scope = approval.get("decision_scope")
+    scope_path = "%s.decision_scope" % path
+
+    if scope is None:
+        return [
+            reason(
+                "APPROVAL_SCOPE_MISSING",
+                scope_path,
+                "%s approval cites a decision with no recorded scope; an unscoped decision is "
+                "not an artifact-publication approval" % role,
+            )
+        ]
+    if not isinstance(scope, list) or len(scope) == 0:
+        return [
+            reason(
+                "APPROVAL_SCOPE_MISSING",
+                scope_path,
+                "%s approval declares a malformed scope; treated as no scope at all" % role,
+            )
+        ]
+    unknown = [
+        entry for entry in scope if not isinstance(entry, str) or entry not in c.APPROVAL_SCOPES
+    ]
+    if unknown:
+        return [
+            reason(
+                "APPROVAL_SCOPE_UNKNOWN",
+                scope_path,
+                "%s approval declares unrecognised scope %s; unknown scope is never read as "
+                "authorisation" % (role, ", ".join(str(entry) for entry in unknown)),
+            )
+        ]
+    if c.ARTIFACT_APPROVAL_SLOT_SCOPE not in scope:
+        return [
+            reason(
+                "APPROVAL_SCOPE_MISMATCH",
+                scope_path,
+                "%s approval cites a decision scoped to %s; that scope excludes %s, so it "
+                "cannot stand as an artifact-publication approval"
+                % (role, ", ".join(scope), c.ARTIFACT_APPROVAL_SLOT_SCOPE),
+            )
+        ]
+    return []
 
 
 def _parse_iso(value):
@@ -154,6 +206,16 @@ def evaluate_descriptor(descriptor, environment, app_build=None, now=None):
                         "reference" % role,
                     )
                 )
+                continue
+            # The approval claims to be granted. It only counts if the decision it cites was
+            # actually scoped to artifact publication — a decision taken for some other
+            # purpose, however complete and however senior its author, authorises nothing here.
+            scope_reasons = _evaluate_approval_scope(
+                approval, "%s.approvals.%s" % (path, role), role
+            )
+            if scope_reasons:
+                approved = False
+                reasons.extend(scope_reasons)
 
     blockers_resolved = True
     blockers = descriptor.get("blockers")

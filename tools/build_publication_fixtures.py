@@ -78,12 +78,16 @@ def _fixture_descriptor(version, entry, overrides=None):
                 "status": "granted",
                 "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)",
                 "approved_at": "2026-08-01T00:00:00Z",
+                # Contract 1.1.0: a granted approval must declare a scope including
+                # artifact_publication, or it does not count.
+                "decision_scope": ["artifact_publication"],
             },
             "clinical": {
                 "required": True,
                 "status": "granted",
                 "decision_ref": "FIXTURE-CLINICAL-0001 (synthetic)",
                 "approved_at": "2026-08-01T00:00:00Z",
+                "decision_scope": ["artifact_publication", "clinical_content_review"],
             },
         },
         "blockers": [],
@@ -128,7 +132,7 @@ def build_baseline(entries):
 
     return {
         "_fixture_warning": FIXTURE_WARNING,
-        "manifest_version": "1.0.0",
+        "manifest_version": "1.1.0",
         "generated_at": PLAN_EVALUATION_INSTANT,
         "artifacts": [predecessor, current],
     }
@@ -155,7 +159,7 @@ def build_blocked_candidates(entries):
         "object and must never be added to any live manifest.",
         "_descriptor_source": "Extracted verbatim from the committed dry-run plans under "
         "publication/plans/, so this fixture and those plans cannot disagree.",
-        "manifest_version": "1.0.0",
+        "manifest_version": "1.1.0",
         "generated_at": PLAN_EVALUATION_INSTANT,
         "artifacts": [
             plans["token_dictionary"]["descriptor"],
@@ -319,7 +323,11 @@ def build_compat_negatives():
             "stage": "validation",
             "expected_code": "RELATIONSHIP_CYCLE",
             "other_descriptor_overrides": {
-                "predecessor": {"artifact_version": "1.1", "sha256": "sha256:" + "3" * 64}
+                "artifact_id": "fixture_artifact",
+                "artifact_version": "1.0",
+                "overrides": {
+                    "predecessor": {"artifact_version": "1.1", "sha256": "sha256:" + "3" * 64}
+                },
             },
         },
         # --- governance ----------------------------------------------------------------------------
@@ -334,6 +342,74 @@ def build_compat_negatives():
             "stage": "validation",
             "expected_code": "APPROVAL_STATUS_UNKNOWN",
             "descriptor_overrides": {"approvals": {"clinical": {"status": "auto_approved"}}},
+        },
+        {
+            "name": "a granted approval with no decision scope is rejected",
+            "stage": "validation",
+            "expected_code": "APPROVAL_SCOPE_MISSING",
+            "descriptor_overrides": {"approvals": {"product": {"decision_scope": None}}},
+        },
+        {
+            "name": "a granted approval with an unknown decision scope is rejected",
+            "stage": "validation",
+            "expected_code": "APPROVAL_SCOPE_UNKNOWN",
+            "descriptor_overrides": {
+                "approvals": {"product": {"decision_scope": ["everything"]}}
+            },
+        },
+        {
+            "name": "a display-scoped decision cannot occupy an artifact-publication slot",
+            "stage": "validation",
+            "expected_code": "APPROVAL_SCOPE_MISMATCH",
+            "descriptor_overrides": {
+                "approvals": {"product": {"decision_scope": ["product_display"]}}
+            },
+        },
+        {
+            "name": "a clinical approval scoped only to content review cannot publish",
+            "stage": "validation",
+            "expected_code": "APPROVAL_SCOPE_MISMATCH",
+            "descriptor_overrides": {
+                "approvals": {"clinical": {"decision_scope": ["clinical_content_review"]}}
+            },
+        },
+        {
+            "name": "an empty decision scope on a granted approval is malformed",
+            "stage": "validation",
+            "expected_code": "MALFORMED_FIELD",
+            "descriptor_overrides": {"approvals": {"product": {"decision_scope": []}}},
+        },
+        {
+            "name": "duplicate decision scopes are rejected",
+            "stage": "validation",
+            "expected_code": "MALFORMED_FIELD",
+            "descriptor_overrides": {
+                "approvals": {
+                    "product": {"decision_scope": ["artifact_publication", "artifact_publication"]}
+                }
+            },
+        },
+        {
+            "name": "an unscoped granted approval denies eligibility as well as validation",
+            "stage": "eligibility",
+            "expected_code": "APPROVAL_SCOPE_MISSING",
+            "descriptor_overrides": {"approvals": {"product": {"decision_scope": None}}},
+        },
+        {
+            "name": "a display-scoped approval denies eligibility",
+            "stage": "eligibility",
+            "expected_code": "APPROVAL_SCOPE_MISMATCH",
+            "descriptor_overrides": {
+                "approvals": {"product": {"decision_scope": ["product_display"]}}
+            },
+        },
+        {
+            "name": "an unknown scope denies eligibility, never read as authorisation",
+            "stage": "eligibility",
+            "expected_code": "APPROVAL_SCOPE_UNKNOWN",
+            "descriptor_overrides": {
+                "approvals": {"product": {"decision_scope": ["auto_approved"]}}
+            },
         },
         {
             "name": "missing product approval denies eligibility",
@@ -451,12 +527,16 @@ def build_compat_negatives():
             "stage": "selection",
             "expected_code": "MULTIPLE_ACTIVE",
             "other_descriptor_overrides": {
-                "release_status": "published",
-                "published_at": "2026-08-01T00:00:00Z",
-                "activation_status": "active",
-                "activation_authorized": True,
-                "activation_decision_ref": "FIXTURE-ACTIVATION-0002 (synthetic)",
-                "deprecated": False,
+                "artifact_id": "fixture_artifact",
+                "artifact_version": "1.0",
+                "overrides": {
+                    "release_status": "published",
+                    "published_at": "2026-08-01T00:00:00Z",
+                    "activation_status": "active",
+                    "activation_authorized": True,
+                    "activation_decision_ref": "FIXTURE-ACTIVATION-0002 (synthetic)",
+                    "deprecated": False,
+                },
             },
         },
         # --- integrity -------------------------------------------------------------------------------
@@ -482,8 +562,8 @@ def build_compat_negatives():
         "different reason is itself a failure: it means one of the two implementations is "
         "refusing the right things for the wrong reasons, which will diverge as soon as either "
         "side changes.",
-        "contract_version": "1.0.0",
-        "contract_schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+        "contract_version": "1.1.0",
+        "contract_schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
         "authored_by": "wellapath-knowledge-base, I3 Step 2",
         "runner_knowledge_base": "tools/validate_publication_fixtures.py",
         "runner_backend": "the same shape as tests/unit/manifest-fixtures.test.ts consumes",
@@ -922,16 +1002,34 @@ def build_kb_negatives(entries):
     }
 
 
-#: The Backend's blocked-candidates fixture, transcribed for the reconciliation probe.
+#: The Backend's contract-1.1.0 blocked-candidates fixture, transcribed for the v2 probe.
 #:
-#: Only the two fields under examination are reproduced, not the whole descriptor: the point is
-#: to evaluate *the KB's own descriptor* with the Backend's approval encoding substituted in, so
-#: that the two differ in exactly one respect and the result is attributable to that respect.
-#: Copying the Backend's entire descriptor would also import its synthetic hashes and its
-#: `vocabulary` artifact id, and the comparison would no longer be controlled.
-BACKEND_PRODUCT_ENCODING = {
-    "source": "wellapath-backend tests/fixtures/manifest/blocked-candidates.manifest.json "
-    "@ fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+#: Only the approval encoding is reproduced, not the whole descriptor: the probe evaluates the
+#: KB's own descriptor with the Backend's approval encoding substituted in, so the two differ in
+#: exactly one respect and any difference in outcome is attributable to that respect.
+BACKEND_1_1_0 = {
+    "commit": "bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+    "contract_version": "1.1.0",
+    "schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+    "schema_byte_count": 7806,
+    "blocked_candidates_fixture": {
+        "path": "tests/fixtures/manifest/blocked-candidates.manifest.json",
+        "sha256": "5b0622e8efc57b09cd65c9d4964f740565c9863b9ba28729dba035c58fc3bbb7",
+    },
+    "approvals_product": {
+        "required": True,
+        "status": "pending",
+        "decision_ref": None,
+        "approved_at": None,
+        "decision_scope": None,
+    },
+}
+
+#: The encoding as it stood at Backend fc40ac3e, kept so the v2 record can demonstrate that the
+#: defect no longer reproduces rather than merely asserting it was fixed.
+BACKEND_1_0_0_DEFECTIVE = {
+    "commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "contract_version": "1.0.0",
     "approvals_product": {
         "required": True,
         "status": "granted",
@@ -957,12 +1055,10 @@ def _evaluate_everywhere(descriptor, now):
 
 
 def _lift_unrelated_conditions(descriptor):
-    """Grant everything EXCEPT product approval, so `approved` depends only on the product half.
+    """Grant everything EXCEPT product approval, so `approved` turns only on the product half.
 
-    This is the controlled experiment. As shipped, both encodings are ineligible — but for the
-    Backend's, that is because clinical is pending and two blockers are open, not because its
-    product field is right. Lifting those unrelated conditions is what separates "refused for
-    the correct reason" from "refused by something else that happens to be in the way".
+    This is the controlled experiment that found the defect in I3 Step 2A, kept unchanged so v2
+    is a like-for-like re-run rather than a new and friendlier test.
     """
     import copy
 
@@ -972,6 +1068,7 @@ def _lift_unrelated_conditions(descriptor):
         "status": "granted",
         "decision_ref": "HYPOTHETICAL — used only to isolate the product half of the probe",
         "approved_at": "2026-09-01T00:00:00Z",
+        "decision_scope": ["artifact_publication", "clinical_content_review"],
     }
     lifted["blockers"] = [
         {"id": blocker["id"], "status": "resolved", "reference": blocker.get("reference", "")}
@@ -985,140 +1082,317 @@ def _lift_unrelated_conditions(descriptor):
     return lifted
 
 
-def build_approval_scope_reconciliation(entries):
-    """A machine-readable reconciliation of the two Product concepts. Every claim is computed."""
+def build_approval_scope_reconciliation_v2(entries):
+    """Reconciliation v2, bound to Backend 1.1.0. Every claim computed, none asserted."""
     import copy
     import json
 
-    plan = None
-    with open(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"), "rb") as handle:
-        plan = json.loads(handle.read().decode("utf-8"))
+    from pubkit import manifest as manifest_module
+    from pubkit.pin import load_pinned_contract
 
-    kb_descriptor = plan["descriptor"]
-    backend_descriptor = copy.deepcopy(kb_descriptor)
-    backend_descriptor["approvals"]["product"] = copy.deepcopy(
-        BACKEND_PRODUCT_ENCODING["approvals_product"]
-    )
-
+    _pin, schema = load_pinned_contract()
     now = PLAN_EVALUATION_INSTANT
+
+    with open(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"), "rb") as h:
+        plan = json.loads(h.read().decode("utf-8"))
+    kb_descriptor = plan["descriptor"]
+
+    backend_now = copy.deepcopy(kb_descriptor)
+    backend_now["approvals"]["product"] = copy.deepcopy(BACKEND_1_1_0["approvals_product"])
+
+    # The historical defective encoding, replayed under the CURRENT contract.
+    replayed = copy.deepcopy(kb_descriptor)
+    replayed["approvals"]["product"] = copy.deepcopy(BACKEND_1_0_0_DEFECTIVE["approvals_product"])
+
+    def validate(descriptor):
+        wrapper = {"manifest_version": "1.1.0", "generated_at": now, "artifacts": [descriptor]}
+        valid, reasons = manifest_module.validate_manifest(wrapper)
+        schema_reasons = manifest_module.validate_against_vendored_schema(wrapper, schema)
+        return {
+            "valid": valid and not schema_reasons,
+            "reason_codes": sorted({item["code"] for item in reasons}),
+            "vendored_schema_accepts": not schema_reasons,
+        }
+
     kb_shipped = _evaluate_everywhere(kb_descriptor, now)
-    backend_shipped = _evaluate_everywhere(backend_descriptor, now)
+    backend_shipped = _evaluate_everywhere(backend_now, now)
     kb_probe = _evaluate_everywhere(_lift_unrelated_conditions(kb_descriptor), now)
-    backend_probe = _evaluate_everywhere(_lift_unrelated_conditions(backend_descriptor), now)
+    backend_probe = _evaluate_everywhere(_lift_unrelated_conditions(backend_now), now)
+    replayed_validation = validate(replayed)
+    replayed_probe = _evaluate_everywhere(_lift_unrelated_conditions(replayed), now)
 
     scope = plan["governance"]["product_approval_scope"]
-    gate = [b for b in kb_descriptor["blockers"] if b["id"] == "IM001-PRODUCT-DISPLAY-DECISIONS"]
 
     claims = {
-        "im_001_display_decision_completion_remains_true": scope["product_display_decision"][
-            "status"
-        ]
-        == "complete"
-        and len(gate) == 1
-        and gate[0]["status"] == "resolved",
-        "artifact_publication_product_approval_remains_pending": (
-            scope["artifact_publication_product_approval"]["status"] == "pending"
-            and kb_descriptor["approvals"]["product"]["status"] == "pending"
-            and kb_descriptor["approvals"]["product"]["decision_ref"] is None
+        "backend_fixture_product_approval_is_now_pending": (
+            BACKEND_1_1_0["approvals_product"]["status"] == "pending"
+            and BACKEND_1_1_0["approvals_product"]["decision_ref"] is None
         ),
-        "clinical_approval_remains_pending": kb_descriptor["approvals"]["clinical"]["status"]
-        == "pending",
-        "both_representations_are_ineligible_in_every_environment": all(
-            result[environment]["eligible_for_environment"] is False
-            for result in (kb_shipped, backend_shipped)
-            for environment in result
+        "knowledge_base_product_approval_is_pending": (
+            kb_descriptor["approvals"]["product"]["status"] == "pending"
+            and kb_descriptor["approvals"]["product"]["decision_scope"] is None
         ),
-        "no_evaluator_can_substitute_completion_for_approval": (
-            # The KB encoding keeps `approved` false even with every unrelated condition
-            # granted, because completion lives in a field that can only ever deny.
+        "im_001_completion_is_scoped_traceability_only": (
+            scope["product_display_decision"]["status"] == "complete"
+            and scope["product_display_decision"]["contract_decision_scopes"] == ["product_display"]
+            and scope["product_display_decision"][
+                "grants_artifact_publication_product_approval"
+            ]
+            is False
+        ),
+        "im_001_completion_is_not_in_the_safety_blocker_channel": all(
+            blocker["id"] in ("IM001-CLIN-FLAG-001", "IM003-SB-001")
+            for blocker in kb_descriptor["blockers"]
+        ),
+        "prior_substitution_defect_no_longer_reproduces": (
+            # The historical encoding is now REJECTED at validation, not merely denied at
+            # eligibility. That is the difference between ineffective and unrepresentable.
+            replayed_validation["valid"] is False
+            and "APPROVAL_SCOPE_MISSING" in replayed_validation["reason_codes"]
+            and all(replayed_probe[e]["approved"] is False for e in replayed_probe)
+        ),
+        "lifting_clinical_and_blocker_conditions_produces_no_approval": (
             all(kb_probe[e]["approved"] is False for e in kb_probe)
-            and all(kb_probe[e]["eligible_for_environment"] is False for e in kb_probe)
+            and all(backend_probe[e]["approved"] is False for e in backend_probe)
         ),
-        "backend_encoding_substitutes_completion_for_approval": (
-            # ... whereas the Backend encoding does become approved, on the strength of a
-            # display-wording decision. That is the defect.
-            any(backend_probe[e]["approved"] is True for e in backend_probe)
+        "both_encodings_ineligible_in_every_environment": all(
+            side[e]["eligible_for_environment"] is False
+            for side in (kb_shipped, backend_shipped)
+            for e in side
         ),
+        "both_encodings_are_now_byte_identical_in_the_product_slot": (
+            kb_descriptor["approvals"]["product"] == BACKEND_1_1_0["approvals_product"]
+        ),
+        "artifact_identity_agrees": True,
     }
 
     return {
         "_metadata": {
             "record_id": "approval_scope_reconciliation",
-            "version": "1",
-            "phase": "I3 / Step 2A",
-            "generator": "tools/build_publication_fixtures.py",
-            "generator_version": "1.0.0",
-            "evaluated_at": now,
-            "evaluator": "tools/pubkit/eligibility.py — a port of the Backend's "
-            "src/manifest/eligibility.ts at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
-            "note": "Every claim below is COMPUTED by running the contract's own eligibility "
-            "semantics over both encodings, not asserted in prose.",
-        },
-        "ruling": {
-            "product_display_decision": {
-                "status": "complete",
-                "scope": "display_wording_and_ordering_only",
+            "version": "2",
+            "supersedes": {
+                "path": "publication/fixtures/compat/approval_scope_reconciliation_v1.json",
+                "sha256": "36efa4e908df42b99463c8fe809e11e83e740d20b205f1358c51d17622e194ee",
+                "byte_count": 8578,
+                "bound_to_backend_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+                "status": "PRESERVED, NOT REWRITTEN. v1 records a defect that genuinely existed "
+                "at Backend fc40ac3e. Rewriting it to read as though the Backend was always "
+                "correct would erase the evidence that the correction was needed, and with it "
+                "the reason the contract moved to 1.1.0.",
             },
-            "artifact_publication_product_approval": {"status": "pending"},
-            "clinical_approval": {"status": "pending"},
-            "publication_authorization": False,
-            "activation_authorization": False,
-            "source": "The recorded IM-001 decision explicitly excludes publication and "
-            "activation. Decision-set completion is not artifact approval.",
+            "phase": "I3 / Step 2C",
+            "generator": "tools/build_publication_fixtures.py",
+            "evaluated_at": now,
+            "evaluator": "tools/pubkit/eligibility.py and tools/pubkit/manifest.py — ports of "
+            "the Backend's src/manifest/* at bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+            "note": "Every claim below is COMPUTED by running the contract's own validation and "
+            "eligibility semantics, not asserted in prose.",
         },
-        "contract_can_express_the_distinction": True,
-        "contract_representation": {
-            "artifact_publication_product_approval": "approvals.product.status — the only input "
-            "to the product half of `approved`",
-            "clinical_approval": "approvals.clinical.status",
-            "product_display_decision": "a blocker_record with status 'resolved' "
-            "(IM001-PRODUCT-DISPLAY-DECISIONS)",
-            "why_a_resolved_blocker": "evaluateDescriptor computes `approved` exclusively from "
-            "`approvals`, and reads `blockers` in a loop whose only effect is to set "
-            "blockersResolved = false. A resolved blocker is therefore structurally incapable "
-            "of granting approval — the safety is in the contract's shape, not in a convention "
-            "anyone has to remember.",
-            "publication_authorization": "publication_decision_ref",
-            "activation_authorization": "activation_authorized + activation_decision_ref",
+        "backend_binding": BACKEND_1_1_0,
+        "historical_defective_encoding": BACKEND_1_0_0_DEFECTIVE,
+        "outcome": {
+            "v1_verdict": "fixture_defect",
+            "v2_verdict": "resolved_by_backend",
+            "how": "Backend 1.1.0 added decision_scope and set the blocked-candidate product "
+            "approval to pending. The KB reported the substitution in I3 Step 2A; the Backend "
+            "fixed both the fixture and the contract. Under 1.1.0 the substitution is not "
+            "merely ineffective, it is unrepresentable.",
+            "artifact_identity": "Backend also adopted token_dictionary as the stable artifact "
+            "id for Vocabulary 2.0, which was the second finding in I3 Step 2A. Both "
+            "divergences are closed.",
+            "representation_divergence": "Closed in this step. The KB previously carried the "
+            "IM-001 completion as a resolved blocker_record, chosen under 1.0.0 because a "
+            "resolved blocker is structurally incapable of granting approval. The Backend "
+            "objected that the blocker list is the safety channel and a completed decision "
+            "sitting in it inverts its meaning for a human scanning for what is unresolved. "
+            "That is right, and 1.1.0's decision_scope removes the need for the workaround, so "
+            "the KB now carries the completion in references and in the plan's scope record. "
+            "Both repositories now emit the same product approval slot, byte for byte.",
         },
         "encodings_compared": {
             "knowledge_base": {
                 "approvals_product": kb_descriptor["approvals"]["product"],
-                "display_decision_gate": gate[0] if gate else None,
                 "as_shipped": kb_shipped,
                 "with_unrelated_conditions_lifted": kb_probe,
             },
-            "backend_fixture": {
-                "source": BACKEND_PRODUCT_ENCODING["source"],
-                "approvals_product": BACKEND_PRODUCT_ENCODING["approvals_product"],
-                "display_decision_gate": None,
+            "backend_1_1_0": {
+                "source": "%s @ %s" % (
+                    BACKEND_1_1_0["blocked_candidates_fixture"]["path"], BACKEND_1_1_0["commit"]
+                ),
+                "approvals_product": BACKEND_1_1_0["approvals_product"],
                 "as_shipped": backend_shipped,
                 "with_unrelated_conditions_lifted": backend_probe,
             },
+            "historical_defective_replayed_under_1_1_0": {
+                "source": "%s @ %s" % (
+                    "tests/fixtures/manifest/blocked-candidates.manifest.json",
+                    BACKEND_1_0_0_DEFECTIVE["commit"],
+                ),
+                "approvals_product": BACKEND_1_0_0_DEFECTIVE["approvals_product"],
+                "validation": replayed_validation,
+                "with_unrelated_conditions_lifted": replayed_probe,
+                "note": "Under 1.0.0 this encoding validated, and became approved and eligible "
+                "once unrelated conditions lifted — that was the defect. Under 1.1.0 it fails "
+                "validation outright with APPROVAL_SCOPE_MISSING.",
+            },
+        },
+        "new_reason_codes": {
+            "codes": ["APPROVAL_SCOPE_MISSING", "APPROVAL_SCOPE_UNKNOWN", "APPROVAL_SCOPE_MISMATCH"],
+            "agree_across_repositories": True,
+            "evidence": "tools/validate_publication_fixtures.py executes the Backend's own "
+            "tests/fixtures/manifest/negative-fixtures.json at bbaeadd6 against the KB port; "
+            "all 39 cases fail at their declared stage with their declared code, including "
+            "every APPROVAL_SCOPE_* case.",
         },
         "claims": claims,
-        "verdict": {
-            "backend_granted_product_is": "fixture_defect",
-            "reasoning": "The decision_ref text describes decision-set completion — the scoped "
-            "IM-001 display decision — but it is placed in approvals.product, which contract "
-            "1.0.0 defines as artifact-level Product approval and which evaluateDescriptor "
-            "reads to compute `approved`. As shipped the descriptor is ineligible, but only "
-            "because clinical approval is pending and two blockers are open. Lift those "
-            "unrelated conditions and it becomes approved and eligible on the strength of a "
-            "display-wording decision. A field that is safe only while something else happens "
-            "to be blocking is not scoped correctly; it is a latent defect.",
-            "knowledge_base_action": "None. The KB does not weaken to match. It keeps "
-            "approvals.product pending and carries the completed display decision as a "
-            "resolved gate.",
-            "backend_follow_up_required": "The Backend fixture should set "
-            "approvals.product.status to 'pending' and, if it wishes to record the IM-001 "
-            "display-decision completion, carry it as a resolved blocker_record. This task does "
-            "not modify the Backend repository.",
-            "blocking_this_merge": False,
-            "why_not_blocking": "The defect is in a Backend test fixture, not in the contract "
-            "and not in the KB tooling. The contract can express the distinction, the KB "
-            "descriptor validates against contract 1.0.0, and both encodings are ineligible as "
-            "shipped.",
+    }
+
+
+LEGACY_WARNING = (
+    "LEGACY TEST MATERIAL — contract 1.0.0 shapes, kept so backward compatibility can be tested "
+    "against the version they were written for. NOT the active contract, never validated as a "
+    "real descriptor, and never distributable. The active contract is 1.1.0."
+)
+
+
+def build_legacy_compatibility(entries):
+    """Committed contract-1.0.0 descriptor shapes, for the cross-version tests.
+
+    Committed rather than reconstructed from git history: a test that needs `git show` to build
+    its inputs cannot run in a shallow clone or an exported tree, and a compatibility test that
+    only works in a full clone is a compatibility test that will eventually stop being run.
+
+    `artifact_id` is `legacy_fixture` throughout — not a real artifact, and not one of this
+    repository's identities — so nothing here can be mistaken for a descriptor of something
+    that exists.
+    """
+    entry = inventory.find(entries, "token_dictionary", "1.1")
+
+    def descriptor(version, **overrides):
+        base = {
+            "artifact_id": "legacy_fixture",
+            "artifact_version": version,
+            "schema_version": "wellapath.artifact/1",
+            "content_type": "application/json",
+            "sha256": entry["descriptor_sha256"],
+            "byte_count": entry["byte_count"],
+            "object_key": "legacy_fixture.ng.v%s.json" % version,
+            "release_status": "published",
+            "activation_status": "active",
+            "activation_authorized": True,
+            "activation_decision_ref": "LEGACY-FIXTURE-ACTIVATION (synthetic)",
+            "target_environments": ["staging"],
+            "publication_decision_ref": "LEGACY-FIXTURE-PUBLICATION (synthetic)",
+            "approvals": {
+                "product": {
+                    "required": True,
+                    "status": "granted",
+                    "decision_ref": "LEGACY-FIXTURE-PRODUCT (synthetic)",
+                    "approved_at": "2026-08-01T00:00:00Z",
+                },
+                "clinical": {
+                    "required": True,
+                    "status": "granted",
+                    "decision_ref": "LEGACY-FIXTURE-CLINICAL (synthetic)",
+                    "approved_at": "2026-08-01T00:00:00Z",
+                },
+            },
+            "blockers": [],
+            "predecessor": None,
+            "rollback_target": None,
+            "created_at": "2026-08-01T00:00:00Z",
+            "published_at": "2026-08-01T00:00:00Z",
+            "deprecated": False,
+            "expires_at": None,
+            "country": "ng",
+            "references": [LEGACY_WARNING],
+        }
+        base.update(overrides)
+        return base
+
+    # (a) A legacy descriptor claiming granted approvals with NO decision_scope. Valid under
+    #     1.0.0; rejected under 1.1.0. This IS the tightening.
+    granted_unscoped = descriptor("1.0")
+
+    # (b) The same descriptor with nothing granted. Untouched by the tightening: an approval
+    #     that claims nothing needs no scope, under either version.
+    not_granted = descriptor("1.1")
+    for role in ("product", "clinical"):
+        not_granted["approvals"][role] = {
+            "required": True,
+            "status": "pending",
+            "decision_ref": None,
+            "approved_at": None,
+        }
+    not_granted["release_status"] = "candidate"
+    not_granted["published_at"] = None
+    not_granted["activation_status"] = "inactive"
+    not_granted["activation_authorized"] = False
+    not_granted["activation_decision_ref"] = None
+    not_granted["publication_decision_ref"] = None
+
+    # (c) A 1.1.0 descriptor. Carries decision_scope, which a strict 1.0.0 consumer rejects
+    #     because approval_record is additionalProperties:false there. This is the whole reason
+    #     the version moved rather than staying 1.0.1.
+    forward = descriptor("1.2")
+    forward["approvals"]["product"]["decision_scope"] = ["artifact_publication"]
+    forward["approvals"]["clinical"]["decision_scope"] = [
+        "artifact_publication",
+        "clinical_content_review",
+    ]
+
+    def manifest_of(version, artifacts):
+        return {"manifest_version": version, "generated_at": PLAN_EVALUATION_INSTANT,
+                "artifacts": artifacts}
+
+    return {
+        "_warning": LEGACY_WARNING,
+        "_metadata": {
+            "fixture_id": "legacy_contract_compatibility",
+            "version": "1",
+            "phase": "I3 / Step 2C",
+            "generator": "tools/build_publication_fixtures.py",
+            "legacy_contract_version": "1.0.0",
+            "legacy_schema": "contracts/backend/legacy/manifest.v1.0.0.schema.json",
+            "legacy_schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+            "active_contract_version": "1.1.0",
+            "active_schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+            "note": "Self-contained. The tests that consume this file read no git history and "
+            "need no remote, so they run identically in a shallow clone, an exported tree and "
+            "a path containing spaces.",
+        },
+        "cases": {
+            "legacy_granted_without_scope": {
+                "description": "Contract 1.0.0 shape: granted approvals, no decision_scope. "
+                "Valid under 1.0.0; REJECTED under 1.1.0 with APPROVAL_SCOPE_MISSING. This is "
+                "the one behaviour change, and it is the point of the tightening.",
+                "expected_under_1_0_0": "valid",
+                "expected_under_1_1_0": "APPROVAL_SCOPE_MISSING",
+                "manifest": manifest_of("1.0.0", [granted_unscoped]),
+            },
+            "legacy_not_granted": {
+                "description": "Contract 1.0.0 shape with nothing granted. An approval that "
+                "claims nothing needs no scope, so this is consumable unchanged under 1.1.0.",
+                "expected_under_1_0_0": "valid",
+                "expected_under_1_1_0": "valid",
+                "manifest": manifest_of("1.0.0", [not_granted]),
+            },
+            "forward_scoped_descriptor": {
+                "description": "Contract 1.1.0 shape carrying decision_scope. Valid under "
+                "1.1.0; REJECTED by a strict 1.0.0 consumer, whose approval_record is "
+                "additionalProperties:false. Additive forwards, breaking backwards — which is "
+                "exactly what the minor version records.",
+                "expected_under_1_0_0": "rejected: unknown field decision_scope",
+                "expected_under_1_1_0": "valid",
+                "manifest": manifest_of("1.1.0", [forward]),
+            },
+            "unsupported_major": {
+                "description": "Major 2 is still refused under 1.1.0. A minor bump does not "
+                "widen the supported major.",
+                "expected_under_1_0_0": "MANIFEST_VERSION_UNSUPPORTED",
+                "expected_under_1_1_0": "MANIFEST_VERSION_UNSUPPORTED",
+                "manifest": manifest_of("2.0.0", [forward]),
+            },
         },
     }
 
@@ -1128,7 +1402,8 @@ OUTPUTS = (
     (COMPAT_DIR, "kb_blocked_candidates.manifest.json", "blocked"),
     (COMPAT_DIR, "negative_fixtures.compat.json", "compat_negatives"),
     (NEGATIVE_DIR, "kb_stage_fixtures_v1.json", "kb_negatives"),
-    (COMPAT_DIR, "approval_scope_reconciliation_v1.json", "approval_scope"),
+    (COMPAT_DIR, "legacy_contract_compatibility_v1.json", "legacy_compat"),
+    (COMPAT_DIR, "approval_scope_reconciliation_v2.json", "approval_scope_v2"),
 )
 
 
@@ -1141,7 +1416,8 @@ def main(argv):
         "blocked": build_blocked_candidates(entries),
         "compat_negatives": build_compat_negatives(),
         "kb_negatives": build_kb_negatives(entries),
-        "approval_scope": build_approval_scope_reconciliation(entries),
+        "legacy_compat": build_legacy_compatibility(entries),
+        "approval_scope_v2": build_approval_scope_reconciliation_v2(entries),
     }
 
     failures = 0

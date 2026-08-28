@@ -25,6 +25,7 @@ mistaken for a real one.
 import os
 
 from . import PUBKIT_VERSION
+from .contract import ARTIFACT_APPROVAL_SLOT_SCOPE
 from .eligibility import evaluate_descriptor
 from .governance import DecisionRegister, GovernanceClaim, open_blockers
 from .integrity import content_type_of, measure
@@ -372,8 +373,10 @@ def _resolve_governance(register, artifact_id, artifact_version, digest):
         "mobile_implementation_authorization",
     ):
         claim = GovernanceClaim(kind, artifact_id, artifact_version, digest)
-        granted, decision_ref, claim_reasons = register.resolve(claim, PLAN_EVALUATION_DATE)
-        resolved[kind] = {"granted": granted, "decision_ref": decision_ref}
+        granted, decision_ref, claim_reasons, scopes = register.resolve(
+            claim, PLAN_EVALUATION_DATE
+        )
+        resolved[kind] = {"granted": granted, "decision_ref": decision_ref, "scopes": scopes}
         claims.append(
             {
                 "kind": kind,
@@ -381,6 +384,7 @@ def _resolve_governance(register, artifact_id, artifact_version, digest):
                 "artifact_sha256": digest,
                 "granted": granted,
                 "decision_ref": decision_ref,
+                "decision_scope": list(scopes),
                 "reasons": claim_reasons,
             }
         )
@@ -418,14 +422,18 @@ def _blockers_for(artifact_id, artifact_version):
     Read from the register file rather than from the loaded `DecisionRegister`: that object
     holds decisions, and a blocker is not a decision — it is a question nobody has decided.
 
-    Completed governance gates are carried here too, as blocker records with
-    `status: "resolved"`. That is the contract-supported way to state "this gate has been
-    passed" without any risk of it being read as an approval, and the safety of it is
-    structural rather than conventional: the Backend's `evaluateDescriptor` reads `blockers`
-    in a loop that can only ever set `blockersResolved = false`, and computes `approved`
-    exclusively from `approvals`. **There is no code path by which any blocker, resolved or
-    otherwise, makes a descriptor approved.** A completed decision set recorded here therefore
-    cannot become artifact approval by any evaluator that follows the contract.
+    Only genuine blockers. Completed governance gates are deliberately NOT recorded here.
+
+    Under contract 1.0.0 this list was the safest available home for "this gate has been
+    passed", because a resolved blocker is structurally incapable of contributing to
+    `approved`. Contract 1.1.0 removed the need: `decision_scope` makes a scope substitution
+    unrepresentable rather than merely ineffective, so the positive fact no longer has to be
+    smuggled into the safety channel to be safe.
+
+    And it should not be. The blockers list is what a person scans to find what is unresolved;
+    a completed decision sitting in it inverts that meaning for the reader even while the
+    evaluator ignores it. The completion is carried in `references` and in the plan's
+    `governance.product_approval_scope` instead, which is also the encoding the Backend chose.
     """
     document = _read_register_document()
 
@@ -441,49 +449,8 @@ def _blockers_for(artifact_id, artifact_version):
         for entry in document.get("blockers", [])
         if applies(entry)
     ]
-    blockers.extend(_completed_gates(document, artifact_id, artifact_version))
     blockers.sort(key=lambda item: item["id"])
     return blockers
-
-
-def _completed_gates(document, artifact_id, artifact_version):
-    """Decision sets recorded complete, expressed as resolved gates.
-
-    Derived from the register's decision-set-completion records — never authored here — so a
-    gate can only appear because a decision record already says the set is complete.
-    """
-    gates = []
-    for record in document.get("decisions", []):
-        if record.get("is_decision_set_completion") is not True:
-            continue
-        subject = record["subject"]
-        if subject["artifact_id"] != artifact_id or subject["artifact_version"] != artifact_version:
-            continue
-        decision_set = record.get("decision_set", {})
-        gates.append(
-            {
-                "id": "IM001-PRODUCT-DISPLAY-DECISIONS",
-                "status": "resolved",
-                "reference": (
-                    "COMPLETED GATE, NOT AN APPROVAL. Product display decisions are complete "
-                    "(%d of %d recorded; %s). Scope: display wording and ordering only. This "
-                    "does NOT grant artifact-publication Product approval, which remains "
-                    "pending in approvals.product, and it does not grant clinical approval, "
-                    "publication authorization or activation authorization. It is recorded as "
-                    "a resolved blocker precisely because a resolved blocker contributes "
-                    "nothing to `approved` — the contract computes approval only from "
-                    "`approvals`."
-                    % (
-                        decision_set.get("total_product_decisions_required", 0)
-                        - decision_set.get("wording_decisions_pending", 0)
-                        - decision_set.get("ordering_rule_decisions_pending", 0),
-                        decision_set.get("total_product_decisions_required", 0),
-                        record["decision_id"],
-                    )
-                ),
-            }
-        )
-    return gates
 
 
 def _product_approval_scope(artifact_id, artifact_version, governance):
@@ -510,30 +477,42 @@ def _product_approval_scope(artifact_id, artifact_version, governance):
             "status": "complete" if completion else "not_applicable",
             "scope": "display_wording_and_ordering_only",
             "decision_ref": completion["decision_id"] if completion else None,
-            "contract_representation": "blockers[] entry IM001-PRODUCT-DISPLAY-DECISIONS with "
-            "status 'resolved'"
+            "contract_representation": "descriptor references[] plus this record; the decision "
+            "itself is scoped %s in the register, and contract 1.1.0's decision_scope makes "
+            "occupying an artifact-publication slot with it unrepresentable"
+            % ", ".join(completion["contract_decision_scopes"])
             if completion
             else None,
+            "contract_decision_scopes": list(completion["contract_decision_scopes"])
+            if completion
+            else [],
             "grants_artifact_publication_product_approval": False,
             "grants_clinical_approval": False,
             "grants_publication_authorization": False,
             "grants_activation_authorization": False,
-            "substitution_impossible_because": "the contract computes `approved` exclusively "
-            "from `approvals`; the blockers list is read by a loop that can only deny. No "
-            "evaluator following contract 1.0.0 can turn a resolved blocker into an approval.",
+            "substitution_impossible_because": "under contract 1.1.0 an approval only counts "
+            "when it is granted AND declares a decision_scope including artifact_publication. "
+            "This decision is scoped product_display. Placing it in approvals.product is "
+            "therefore rejected at validation (APPROVAL_SCOPE_MISMATCH) as well as denied at "
+            "eligibility — the substitution is unrepresentable, not merely ineffective. Under "
+            "1.0.0 it was only the latter.",
             "means_only": completion["scope"]["means_only"] if completion else None,
             "does_not_mean": completion["scope"]["does_not_mean"] if completion else [],
         },
         "artifact_publication_product_approval": {
             "status": "granted" if resolved["product_approval"]["granted"] else "pending",
             "decision_ref": resolved["product_approval"]["decision_ref"],
-            "contract_representation": "approvals.product.status",
+            "contract_representation": "approvals.product.status + approvals.product."
+            "decision_scope",
+            "required_scope": ARTIFACT_APPROVAL_SLOT_SCOPE,
             "is_the_only_input_to": "the product half of the contract's `approved` state",
         },
         "clinical_approval": {
             "status": "granted" if resolved["clinical_approval"]["granted"] else "pending",
             "decision_ref": resolved["clinical_approval"]["decision_ref"],
-            "contract_representation": "approvals.clinical.status",
+            "contract_representation": "approvals.clinical.status + approvals.clinical."
+            "decision_scope",
+            "required_scope": ARTIFACT_APPROVAL_SLOT_SCOPE,
             "reviewer_assigned": False,
         },
         "publication_authorization": {
@@ -633,18 +612,8 @@ def _build_descriptor(
         "target_environments": list(STRUCTURAL_TARGET_ENVIRONMENTS),
         "publication_decision_ref": publication["decision_ref"],
         "approvals": {
-            "product": {
-                "required": True,
-                "status": "granted" if product["granted"] else "pending",
-                "decision_ref": product["decision_ref"],
-                "approved_at": None,
-            },
-            "clinical": {
-                "required": True,
-                "status": "granted" if clinical["granted"] else "pending",
-                "decision_ref": clinical["decision_ref"],
-                "approved_at": None,
-            },
+            "product": _approval_record(product),
+            "clinical": _approval_record(clinical),
         },
         "blockers": blockers,
         "predecessor": predecessor,
@@ -659,6 +628,29 @@ def _build_descriptor(
     return descriptor
 
 
+def _approval_record(resolved):
+    """One contract 1.1.0 approval record, built from a resolved governance claim.
+
+    `decision_scope` is emitted explicitly as `null` rather than omitted. The contract makes it
+    structurally optional, so omission would also be legal — but null *records that no scope was
+    captured*, which is the true statement here, whereas an absent key is silent about whether
+    anyone looked. For a pending approval both fail closed identically; stating it is simply
+    more honest, and it matches the Backend's own fixture.
+
+    There is no branch here that can emit a scope this tooling did not resolve: a granted
+    approval would need a decision record whose scope includes artifact_publication, and no
+    such record exists for any artifact in this repository.
+    """
+    granted = resolved["granted"]
+    return {
+        "required": True,
+        "status": "granted" if granted else "pending",
+        "decision_ref": resolved["decision_ref"],
+        "approved_at": None,
+        "decision_scope": list(resolved["scopes"]) if granted else None,
+    }
+
+
 def _references(artifact_id, artifact_version, entry):
     """Traceability references only. Never a credential, a token or a signed URL."""
     return [
@@ -669,6 +661,10 @@ def _references(artifact_id, artifact_version, entry):
         "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
         "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
         "governance register: publication/governance/decision_register_v1.json",
+        "IM-001 Product display decisions are complete (136 of 136) and scoped to display "
+        "wording and ordering only. That completion is true, it is recorded here as "
+        "traceability, and it is NOT artifact-publication Product approval — which remains "
+        "pending in approvals.product with decision_scope null.",
         "target_environments is a structural placeholder required by the contract's minItems "
         "constraint; it records no deployment decision and the descriptor is ineligible in "
         "every environment including the one named",

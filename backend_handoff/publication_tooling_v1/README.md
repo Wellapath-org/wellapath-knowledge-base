@@ -25,19 +25,27 @@ unpublished, inactive and unauthorized.
 
 ## What was consumed from the Backend, and how it is pinned
 
+**Re-pinned to contract 1.1.0 in I3 Step 2C.**
+
 | | |
 |---|---|
-| Merge commit | `fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd` |
-| Contract version | `1.0.0` |
+| Merge commit | `bbaeadd6075eb37fd51acbe04101f939e52c7d48` |
+| Contract version | **`1.1.0`** |
 | Schema | `docs/contracts/manifest.v1.schema.json` |
-| Schema SHA256 | `66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9` (6,375 bytes) |
-| Handoff SHA256 | `90e28e165e512c3765abb40f91e617c14f9027d78d1435dcea5ad6406e7f4ed8` |
+| Schema SHA256 | `948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a` (7,806 bytes) |
+| Handoff SHA256 | `45fe9d886fb6d13ec3087cd11610eb38074a3b38edf20b1bd180bc024681887c` |
 | Vendored at | `contracts/backend/manifest.v1.schema.json` (byte-for-byte) |
-| Pin record | `contracts/backend/PIN.json` |
+| Pin record | `contracts/backend/PIN.json` (pin version 2.0.0) |
+| Superseded | `1.0.0` at `fc40ac3e…`, retained as labelled legacy test material |
 
-All four hashes were verified against the Backend's remote `develop` before any work began, and
-are re-verified on every run by `tools/verify_contract_pin.py`. Any drift fails closed and the
-tooling refuses to generate anything.
+All hashes were recomputed from the Backend bytes before any edit and are re-verified on every
+run by `tools/verify_contract_pin.py`. Any drift fails closed and the tooling refuses to
+generate anything.
+
+The KB port now implements the 1.1.0 approval-scope rules identically, and proves it by
+executing **the Backend's own `tests/fixtures/manifest/negative-fixtures.json` at `bbaeadd6`**:
+all 39 cases fail at their declared stage with their declared reason code, including every
+`APPROVAL_SCOPE_*` case.
 
 `tools/pubkit/contract.py`, `manifest.py`, `eligibility.py`, `integrity.py` and `origin.py` are
 deliberate **ports** of `src/manifest/*.ts` at that commit, not independent designs. The pin
@@ -89,7 +97,12 @@ Neither changes any outcome — both candidates are ineligible under either read
 repositories' fixtures differ, deliberately, and the difference should be settled by a person
 rather than by whichever file someone reads first.
 
-**(a) Artifact identity for Vocabulary 2.0.** The Backend fixture uses
+**(a) Artifact identity for Vocabulary 2.0 — CLOSED.** The Backend adopted `token_dictionary`
+at `bbaeadd6` and recorded the reasoning in its own
+`tests/fixtures/manifest/approval-scope-reconciliation.fixture.json`
+(`artifact_identity_finding: same_artifact_family`). The original finding follows.
+
+**(a, as reported)** The Backend fixture uses
 `artifact_id: "vocabulary"` with `object_key: "vocabulary.ng.v2.0.json"`. In this repository the
 artifact is `token_dictionary`: the candidate file is `candidate/token_dictionary.ng.v2.0.json`,
 its generator is `tools/build_vocabulary_v2.py`, and the published lineage it succeeds is
@@ -98,9 +111,16 @@ its generator is `tools/build_vocabulary_v2.py`, and the published lineage it su
 predecessor relationship and the `/config` continuity. **Recommendation: the Backend fixture
 adopts `token_dictionary`.**
 
-**(b) Product approval status for Question Flow 1.1 — a fixture defect.** Reviewed under I3
-Step 2A and settled by computation rather than opinion. Full record:
-`publication/fixtures/compat/approval_scope_reconciliation_v1.json`.
+**(b) Product approval status for Question Flow 1.1 — a fixture defect, now CLOSED by the
+Backend.** Reported under I3 Step 2A; fixed by the Backend in contract 1.1.0. The account below
+is the original finding, retained because it is why the contract moved. Current status:
+`publication/fixtures/compat/approval_scope_reconciliation_v2.json`.
+
+> **Closed.** At `bbaeadd6` the Backend fixture sets `approvals.product.status: "pending"` with
+> `decision_scope: null`, matching the KB byte for byte, and contract 1.1.0 adds `decision_scope`
+> so the substitution is now **unrepresentable** rather than merely ineffective. Replaying the
+> old encoding under 1.1.0 fails validation with `APPROVAL_SCOPE_MISSING`. No KB action
+> outstanding.
 
 The Backend fixture sets `approvals.product.status: "granted"` with `decision_ref: "IM-001 —
 Product decisions complete; activation remains unauthorized"`. The KB emits `"pending"`.
@@ -143,11 +163,18 @@ computes `approved` exclusively from `approvals` and reads `blockers` in a loop 
 deny. No evaluator following contract 1.0.0 can turn it into an approval. The safety is in the
 shape of the contract rather than in a convention anyone has to remember.
 
-**Backend follow-up required (not performed here — this task does not modify the Backend
-repository):** set `approvals.product.status` to `"pending"` in
-`tests/fixtures/manifest/blocked-candidates.manifest.json`, and, if the IM-001 display-decision
-completion is worth recording there, carry it as a resolved `blocker_record` as above. The
-contract itself needs no change.
+**Backend follow-up — DONE by the Backend, not by this repository.** `approvals.product.status`
+is now `"pending"` in `tests/fixtures/manifest/blocked-candidates.manifest.json`, and the
+contract gained `decision_scope`, which is a stronger fix than the one suggested: it makes the
+substitution unrepresentable rather than merely ineffective.
+
+**Representation divergence — closed in I3 Step 2C, in the Backend's favour.** The KB had
+carried the IM-001 completion as a resolved `blocker_record`. The Backend objected that the
+blocker list is the safety channel, and a completed decision sitting in it inverts its meaning
+for a person scanning for what is unresolved. That is right, and 1.1.0 removes the reason the
+workaround existed, so the KB now carries the completion in the descriptor's `references` and in
+`governance.product_approval_scope`. Both repositories emit the same product approval slot, byte
+for byte. Neither side weakened.
 
 ---
 
@@ -167,8 +194,9 @@ Backend will accept. None of these needs Backend support.
 - **Governance evidence** must bind to a hash-bound decision record. Prose is not evidence.
 - **Reason-code namespaces are disjoint.** `KB_*` codes are Knowledge Base findings about
   *preparing* an artifact and are never written into a descriptor; a test asserts this.
-- **Completed governance gates are recorded as resolved blockers**, never as approvals. See
-  discrepancy (b) above.
+- **Every decision this repository holds is scoped `product_display`.** None carries
+  `artifact_publication`. That is the accurate record of what was decided, and under 1.1.0 it is
+  what makes an artifact-publication approval built from these decisions unrepresentable.
 
 ---
 
@@ -187,6 +215,9 @@ Backend will accept. None of these needs Backend support.
   from the dry-run tooling, require a separate explicit command, require explicit environment
   and authorization inputs, refuse without a publication authorization, and hold no usable
   credentials in tests.
+- **The contract-1.0.0 schema is retained as labelled legacy test material** at
+  `contracts/backend/legacy/`, used only to prove backward compatibility. It is never validated
+  against as a real contract, and the pin refuses to let it masquerade as the active one.
 - **Cross-schema rollback has no policy.** Both candidates' proposed rollbacks cross a content
   schema boundary (`token_dictionary` 2.0→1.1 crosses schema 2.0→1.0; `question_flow` 1.1→1.0
   crosses 1.1→1.0), so both plans carry `rollback_target: null` with the refusal recorded.

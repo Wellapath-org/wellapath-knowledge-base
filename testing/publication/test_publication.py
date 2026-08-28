@@ -29,6 +29,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(ROOT, "tools"))
 
 from pubkit import contract, eligibility, inventory, keys, lifecycle, origin, pin, rollback  # noqa: E402
+from pubkit import manifest as manifest_module  # noqa: E402
 from pubkit.governance import DecisionRegister, GovernanceClaim, validate_record  # noqa: E402
 from pubkit.integrity import measure, sha256_of_bytes, verify_bytes  # noqa: E402
 from pubkit.manifest import validate_against_vendored_schema, validate_manifest  # noqa: E402
@@ -171,11 +172,13 @@ class ContractPinTests(unittest.TestCase):
         pin_record, _schema = pin.load_pinned_contract()
         self.assertEqual(
             pin_record["vendored"]["sha256"],
-            "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+            "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
         )
+        self.assertEqual(pin_record["vendored"]["byte_count"], 7806)
         self.assertEqual(
-            pin_record["backend"]["merge_commit"], "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd"
+            pin_record["backend"]["merge_commit"], "bbaeadd6075eb37fd51acbe04101f939e52c7d48"
         )
+        self.assertEqual(pin_record["contract"]["contract_version"], "1.1.0")
 
     def test_mirror_matches_the_schema(self):
         _pin_record, schema = pin.load_pinned_contract()
@@ -203,8 +206,10 @@ class ReasonCodeTests(unittest.TestCase):
     def test_backend_codes_are_verbatim(self):
         # A code the Backend does not have would be meaningless to it; one it has that we lack
         # would be a rejection we cannot report. Both are drift.
-        self.assertEqual(len(BACKEND_REASON_CODES), 32)
+        self.assertEqual(len(BACKEND_REASON_CODES), 35)
         self.assertIn("DOWNGRADE_NOT_AUTHORIZED", BACKEND_REASON_CODES)
+        for code in ("APPROVAL_SCOPE_MISSING", "APPROVAL_SCOPE_UNKNOWN", "APPROVAL_SCOPE_MISMATCH"):
+            self.assertIn(code, BACKEND_REASON_CODES, code)
 
     def test_unknown_code_raises(self):
         with self.assertRaises(Exception):
@@ -373,8 +378,14 @@ class EligibilityTests(unittest.TestCase):
             "target_environments": ["staging"],
             "publication_decision_ref": "FIXTURE",
             "approvals": {
-                "product": {"required": True, "status": "granted", "decision_ref": "P", "approved_at": None},
-                "clinical": {"required": True, "status": "granted", "decision_ref": "C", "approved_at": None},
+                "product": {
+                    "required": True, "status": "granted", "decision_ref": "P",
+                    "approved_at": None, "decision_scope": ["artifact_publication"],
+                },
+                "clinical": {
+                    "required": True, "status": "granted", "decision_ref": "C",
+                    "approved_at": None, "decision_scope": ["artifact_publication"],
+                },
             },
             "blockers": [],
             "predecessor": None,
@@ -401,7 +412,10 @@ class EligibilityTests(unittest.TestCase):
         states, _ = self.evaluate(
             self.descriptor(
                 approvals={
-                    "product": {"required": True, "status": "granted", "decision_ref": "P", "approved_at": None},
+                    "product": {
+                        "required": True, "status": "granted", "decision_ref": "P",
+                        "approved_at": None, "decision_scope": ["artifact_publication"],
+                    },
                     "clinical": {"required": True, "status": "pending", "decision_ref": None, "approved_at": None},
                 }
             )
@@ -414,7 +428,10 @@ class EligibilityTests(unittest.TestCase):
         states, reasons = self.evaluate(
             self.descriptor(
                 approvals={
-                    "product": {"required": True, "status": "granted", "decision_ref": "P", "approved_at": None},
+                    "product": {
+                        "required": True, "status": "granted", "decision_ref": "P",
+                        "approved_at": None, "decision_scope": ["artifact_publication"],
+                    },
                     "clinical": {"required": True, "status": "pending", "decision_ref": None, "approved_at": None},
                 }
             )
@@ -444,7 +461,10 @@ class EligibilityTests(unittest.TestCase):
             self.descriptor(
                 approvals={
                     "product": {"required": True, "status": "auto", "decision_ref": "P", "approved_at": None},
-                    "clinical": {"required": True, "status": "granted", "decision_ref": "C", "approved_at": None},
+                    "clinical": {
+                        "required": True, "status": "granted", "decision_ref": "C",
+                        "approved_at": None, "decision_scope": ["artifact_publication"],
+                    },
                 }
             )
         )
@@ -513,7 +533,7 @@ class GovernanceTests(unittest.TestCase):
                 "activation_authorization",
                 "mobile_implementation_authorization",
             ):
-                granted, ref, reasons = self.resolve(
+                granted, ref, reasons, _scopes = self.resolve(
                     kind, artifact_id, version, entry["descriptor_sha256"]
                 )
                 self.assertFalse(granted, "%s %s@%s" % (kind, artifact_id, version))
@@ -522,13 +542,13 @@ class GovernanceTests(unittest.TestCase):
 
     def test_im_001_resolved_is_not_an_authorization(self):
         for kind in ("publication_authorization", "activation_authorization"):
-            _granted, _ref, reasons = self.resolve(kind)
+            _granted, _ref, reasons, _scopes = self.resolve(kind)
             self.assertIn(
                 "KB_DECISION_SET_IS_NOT_AUTHORIZATION", [item["code"] for item in reasons], kind
             )
 
     def test_product_authority_cannot_satisfy_a_clinical_claim(self):
-        _granted, _ref, reasons = self.resolve("clinical_approval")
+        _granted, _ref, reasons, _scopes = self.resolve("clinical_approval")
         self.assertIn("KB_DECISION_AUTHORITY_WRONG", [item["code"] for item in reasons])
 
     def test_no_clinical_record_exists_at_all(self):
@@ -556,7 +576,7 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn("KB_DECISION_PROSE_ONLY", codes)
 
     def test_an_approval_for_other_bytes_does_not_carry_across(self):
-        _granted, _ref, reasons = self.resolve("product_approval", digest="sha256:" + "f" * 64)
+        _granted, _ref, reasons, _scopes = self.resolve("product_approval", digest="sha256:" + "f" * 64)
         self.assertIn("KB_DECISION_HASH_MISMATCH", [item["code"] for item in reasons])
 
 
@@ -832,14 +852,8 @@ class NoAuthorizationTests(unittest.TestCase):
         plan = load_plans()[1]
         self.assertEqual(plan["target"]["artifact_id"], "question_flow")
         statuses = {item["id"]: item["status"] for item in plan["descriptor"]["blockers"]}
-        # The OPEN set is exactly the two safety blockers. The list also carries completed
-        # gates as resolved entries, which is how a passed gate is recorded without any risk of
-        # it reading as an approval — but nothing resolved may creep into the open set.
-        self.assertEqual(
-            {k for k, v in statuses.items() if v == "open"},
-            {"IM001-CLIN-FLAG-001", "IM003-SB-001"},
-        )
-        self.assertEqual(statuses["IM001-PRODUCT-DISPLAY-DECISIONS"], "resolved")
+        # Exactly the two safety blockers, both open. Nothing else belongs in this channel.
+        self.assertEqual(statuses, {"IM001-CLIN-FLAG-001": "open", "IM003-SB-001": "open"})
 
     def test_vocabulary_2_0_invents_no_missing_decision(self):
         plan = load_plans()[0]
@@ -954,6 +968,17 @@ class DocumentationTests(unittest.TestCase):
         known |= {item["sha256"] for group in freeze["groups"].values() for item in group}
         known.add(pin_record["vendored"]["sha256"])
         known.add(pin_record["backend"]["handoff_sha256"])
+        # The superseded contract is legacy test material, still pinned and still quotable.
+        known.add(pin_record["legacy"]["sha256"])
+        # Historical bindings: the v1 reconciliation record's own digest, cited by the Backend,
+        # and the digest of the Backend fixture v2 binds to. Both are facts about the past.
+        for path in ("publication/fixtures/compat/approval_scope_reconciliation_v1.json",):
+            with open(repo(*path.split("/")), "rb") as handle:
+                known.add(__import__("hashlib").sha256(handle.read()).hexdigest())
+        v2 = load_json(
+            repo("publication", "fixtures", "compat", "approval_scope_reconciliation_v2.json")
+        )
+        known.add(v2["backend_binding"]["blocked_candidates_fixture"]["sha256"])
 
         for relative, text in self.documents():
             for digest in set(re.findall(r"\b[0-9a-f]{64}\b", text)):
@@ -963,7 +988,13 @@ class DocumentationTests(unittest.TestCase):
         import re
 
         pin_record, _schema = pin.load_pinned_contract()
-        known = {pin_record["backend"]["merge_commit"], "c1b07944ea0b231914943ac17b2265441e53b85c"}
+        known = {
+            pin_record["backend"]["merge_commit"],
+            pin_record["backend"]["supersedes_merge_commit"],
+            pin_record["legacy"]["backend_merge_commit"],
+            "c1b07944ea0b231914943ac17b2265441e53b85c",
+            "2325e3f9e876a40d32e6e3ff0b5b77e19c7e309a",
+        }
         for relative, text in self.documents():
             for commit in set(re.findall(r"\b[0-9a-f]{40}\b", text)):
                 self.assertIn(commit, known, "%s quotes unknown commit %s" % (relative, commit))
@@ -989,24 +1020,24 @@ class DocumentationTests(unittest.TestCase):
         kb = load_json(repo("publication", "fixtures", "negative", "kb_stage_fixtures_v1.json"))
         freeze = load_json(repo("reports", "publication_freeze_v1.json"))
         sys.path.insert(0, os.path.join(ROOT, "tools"))
-        from validate_publication_fixtures import MUTATION_PROOFS
+        from validate_publication_fixtures import COMPAT_MUTATION_PROOFS, MUTATION_PROOFS
 
         return {
             "compat_fixtures": len(compat["cases"]),
             "kb_fixtures": len(kb["cases"]),
             "total_fixtures": len(compat["cases"]) + len(kb["cases"]),
             "frozen_artifacts": freeze["frozen_artifact_count"],
-            "mutation_proofs": len(MUTATION_PROOFS),
+            "mutation_proofs": len(MUTATION_PROOFS) + len(COMPAT_MUTATION_PROOFS),
             "unit_tests": _count_tests(),
         }
 
     def test_the_counts_are_what_this_step_actually_built(self):
         counts = self.counts()
-        self.assertEqual(counts["compat_fixtures"], 41)
+        self.assertEqual(counts["compat_fixtures"], 50)
         self.assertEqual(counts["kb_fixtures"], 60)
-        self.assertEqual(counts["total_fixtures"], 101)
+        self.assertEqual(counts["total_fixtures"], 110)
         self.assertEqual(counts["frozen_artifacts"], 44)
-        self.assertEqual(counts["mutation_proofs"], 7)
+        self.assertEqual(counts["mutation_proofs"], 11)
 
     def test_every_documented_count_matches_reality(self):
         counts = self.counts()
@@ -1018,6 +1049,228 @@ class DocumentationTests(unittest.TestCase):
                     str(counts[name]) in text,
                     "%s should state %s = %d" % (relative, name, counts[name]),
                 )
+
+
+class ApprovalScopeContractTests(unittest.TestCase):
+    """Contract 1.1.0's approval-scope rules, ported and proved behaviourally identical."""
+
+    def approval(self, **overrides):
+        base = {
+            "required": True,
+            "status": "granted",
+            "decision_ref": "REF",
+            "approved_at": None,
+            "decision_scope": ["artifact_publication"],
+        }
+        base.update(overrides)
+        return base
+
+    def validate(self, approval):
+        return [item["code"] for item in manifest_module._validate_approval(approval, "a")]
+
+    def evaluate(self, approval):
+        return [
+            item["code"] for item in eligibility._evaluate_approval_scope(approval, "a", "product")
+        ]
+
+    def test_decision_scope_is_structurally_optional(self):
+        _pin, schema = pin.load_pinned_contract()
+        record = schema["definitions"]["approval_record"]
+        self.assertNotIn("decision_scope", record["required"])
+        self.assertIn("decision_scope", record["properties"])
+        self.assertEqual(set(record["required"]), set(contract.REQUIRED_APPROVAL_KEYS))
+        self.assertEqual(contract.OPTIONAL_APPROVAL_KEYS, ("decision_scope",))
+
+    def test_a_non_granted_approval_needs_no_scope(self):
+        for status in ("pending", "denied", "not_required"):
+            approval = self.approval(status=status, decision_ref=None, decision_scope=None)
+            self.assertEqual(self.validate(approval), [], status)
+            approval.pop("decision_scope")
+            self.assertEqual(self.validate(approval), [], "%s (key absent)" % status)
+
+    def test_a_non_granted_approval_never_contributes_to_approved(self):
+        for status in ("pending", "denied", "not_required"):
+            approval = self.approval(status=status, decision_ref="REF", decision_scope=None)
+            descriptor = {
+                "artifact_id": "x", "artifact_version": "1.0", "sha256": "sha256:" + "a" * 64,
+                "byte_count": 1, "release_status": "published", "published_at": "2026-08-01T00:00:00Z",
+                "approvals": {"product": approval, "clinical": self.approval()},
+                "blockers": [], "activation_status": "active", "activation_authorized": True,
+                "activation_decision_ref": "R", "target_environments": ["staging"],
+                "deprecated": False, "expires_at": None,
+            }
+            states, _ = eligibility.evaluate_descriptor(
+                descriptor, "staging", now=PLAN_EVALUATION_INSTANT
+            )
+            self.assertFalse(states["approved"], status)
+
+    def test_missing_scope_on_granted_fails_with_scope_missing(self):
+        self.assertEqual(self.validate(self.approval(decision_scope=None)), ["APPROVAL_SCOPE_MISSING"])
+        absent = self.approval()
+        absent.pop("decision_scope")
+        self.assertEqual(self.validate(absent), ["APPROVAL_SCOPE_MISSING"])
+        self.assertEqual(self.evaluate(self.approval(decision_scope=None)), ["APPROVAL_SCOPE_MISSING"])
+
+    def test_unknown_scope_fails_with_scope_unknown(self):
+        self.assertEqual(
+            self.validate(self.approval(decision_scope=["auto_approved"])), ["APPROVAL_SCOPE_UNKNOWN"]
+        )
+        self.assertEqual(
+            self.evaluate(self.approval(decision_scope=["auto_approved"])), ["APPROVAL_SCOPE_UNKNOWN"]
+        )
+
+    def test_mismatched_scope_fails_with_scope_mismatch(self):
+        for scope in (["product_display"], ["clinical_content_review"], ["artifact_activation"]):
+            self.assertEqual(
+                self.validate(self.approval(decision_scope=scope)), ["APPROVAL_SCOPE_MISMATCH"], scope
+            )
+            self.assertEqual(
+                self.evaluate(self.approval(decision_scope=scope)), ["APPROVAL_SCOPE_MISMATCH"], scope
+            )
+
+    def test_a_correctly_scoped_granted_approval_passes(self):
+        self.assertEqual(self.validate(self.approval()), [])
+        self.assertEqual(self.evaluate(self.approval()), [])
+        self.assertEqual(
+            self.validate(self.approval(decision_scope=["product_display", "artifact_publication"])),
+            [],
+        )
+
+    def test_validation_failure_prevents_eligibility_treating_it_as_approved(self):
+        """A scope fault is structural: rejected at validation AND denied at eligibility.
+
+        Both, not either. A descriptor evaluated in isolation must fail closed rather than
+        inherit a guarantee from a validation pass that may never have run.
+        """
+        descriptor = json.loads(json.dumps(load_plans()[1]["descriptor"]))
+        descriptor["approvals"]["product"] = self.approval(decision_scope=["product_display"])
+        descriptor["approvals"]["clinical"] = self.approval()
+        wrapper = {
+            "manifest_version": "1.1.0",
+            "generated_at": PLAN_EVALUATION_INSTANT,
+            "artifacts": [descriptor],
+        }
+        valid, reasons = validate_manifest(wrapper)
+        self.assertFalse(valid)
+        self.assertIn("APPROVAL_SCOPE_MISMATCH", [r["code"] for r in reasons])
+
+        states, ereasons = eligibility.evaluate_descriptor(
+            descriptor, "staging", now=PLAN_EVALUATION_INSTANT
+        )
+        self.assertFalse(states["approved"])
+        self.assertIn("APPROVAL_SCOPE_MISMATCH", [r["code"] for r in ereasons])
+
+    def test_the_ported_codes_match_the_backend_vocabulary(self):
+        _pin, schema = pin.load_pinned_contract()
+        declared = None
+        for branch in schema["definitions"]["approval_record"]["properties"]["decision_scope"]["oneOf"]:
+            if branch.get("type") == "array":
+                declared = branch["items"]["enum"]
+        self.assertEqual(set(declared), set(contract.APPROVAL_SCOPES))
+        self.assertEqual(contract.ARTIFACT_APPROVAL_SLOT_SCOPE, "artifact_publication")
+
+
+class CrossVersionCompatibilityTests(unittest.TestCase):
+    """1.0.0 → 1.1.0 compatibility, from committed fixtures only.
+
+    Nothing here reads git history or reaches a remote, so these run identically in a shallow
+    clone, an exported tree and a path containing spaces. A compatibility test that needs a
+    full clone is one that will eventually stop being run.
+    """
+
+    def fixtures(self):
+        return load_json(
+            repo("publication", "fixtures", "compat", "legacy_contract_compatibility_v1.json")
+        )
+
+    def legacy_schema(self):
+        return load_json(repo("contracts", "backend", "legacy", "manifest.v1.0.0.schema.json"))
+
+    def active_schema(self):
+        return pin.load_pinned_contract()[1]
+
+    def under(self, schema, manifest):
+        return schema_validate(
+            manifest, schema, extra_keywords=contract.SCHEMA_ANNOTATION_KEYWORDS
+        )
+
+    def test_the_legacy_schema_is_present_and_pinned(self):
+        pin_record, _ = pin.load_pinned_contract()
+        legacy = pin_record["legacy"]
+        self.assertEqual(legacy["contract_version"], "1.0.0")
+        self.assertIn("LEGACY", legacy["status"].upper())
+        with open(repo(*legacy["path"].split("/")), "rb") as handle:
+            digest = __import__("hashlib").sha256(handle.read()).hexdigest()
+        self.assertEqual(digest, legacy["sha256"])
+        self.assertNotEqual(legacy["sha256"], pin_record["vendored"]["sha256"])
+
+    def test_safe_legacy_descriptors_remain_consumable_under_1_1_0(self):
+        case = self.fixtures()["cases"]["legacy_not_granted"]
+        manifest = case["manifest"]
+        self.assertEqual(self.under(self.legacy_schema(), manifest), [])
+        self.assertEqual(self.under(self.active_schema(), manifest), [])
+        valid, reasons = validate_manifest(manifest)
+        self.assertTrue(valid, reasons)
+
+    def test_a_legacy_granted_descriptor_without_publication_scope_is_rejected(self):
+        case = self.fixtures()["cases"]["legacy_granted_without_scope"]
+        manifest = case["manifest"]
+        # Valid under the contract it was written for ...
+        self.assertEqual(self.under(self.legacy_schema(), manifest), [])
+        # ... and rejected under 1.1.0. This is the tightening, and the only behaviour change.
+        valid, reasons = validate_manifest(manifest)
+        self.assertFalse(valid)
+        self.assertIn("APPROVAL_SCOPE_MISSING", [r["code"] for r in reasons])
+
+    def test_non_granted_legacy_approvals_do_not_require_decision_scope(self):
+        manifest = self.fixtures()["cases"]["legacy_not_granted"]["manifest"]
+        for approval in manifest["artifacts"][0]["approvals"].values():
+            self.assertNotIn("decision_scope", approval)
+            self.assertNotEqual(approval["status"], "granted")
+        valid, _ = validate_manifest(manifest)
+        self.assertTrue(valid)
+
+    def test_the_new_field_is_rejected_by_a_strict_legacy_consumer(self):
+        """Why the version moved rather than staying 1.0.1."""
+        manifest = self.fixtures()["cases"]["forward_scoped_descriptor"]["manifest"]
+        self.assertEqual(self.under(self.active_schema(), manifest), [])
+        legacy_errors = self.under(self.legacy_schema(), manifest)
+        self.assertTrue(legacy_errors)
+        self.assertTrue(
+            any("decision_scope" in message for message in legacy_errors), legacy_errors
+        )
+
+    def test_unknown_contract_major_still_fails(self):
+        manifest = self.fixtures()["cases"]["unsupported_major"]["manifest"]
+        valid, reasons = validate_manifest(manifest)
+        self.assertFalse(valid)
+        self.assertIn("MANIFEST_VERSION_UNSUPPORTED", [r["code"] for r in reasons])
+
+    def test_every_documented_expectation_is_the_measured_one(self):
+        """The fixture states an expectation per case; each is re-derived, not trusted."""
+        for name, case in self.fixtures()["cases"].items():
+            manifest = case["manifest"]
+            valid, reasons = validate_manifest(manifest)
+            codes = [r["code"] for r in reasons]
+            expected = case["expected_under_1_1_0"]
+            if expected == "valid":
+                self.assertTrue(valid, "%s: %s" % (name, codes))
+            else:
+                self.assertFalse(valid, name)
+                self.assertIn(expected, codes, name)
+
+    def test_the_fixtures_are_self_contained(self):
+        # No git, no network: the file carries whole manifests, not references to history.
+        for case in self.fixtures()["cases"].values():
+            self.assertIn("artifacts", case["manifest"])
+            self.assertTrue(case["manifest"]["artifacts"])
+
+    def test_legacy_fixture_identities_are_not_real_artifacts(self):
+        entries = inventory.discover()
+        real = {entry["artifact_id"] for entry in entries}
+        for case in self.fixtures()["cases"].values():
+            for descriptor in case["manifest"]["artifacts"]:
+                self.assertNotIn(descriptor["artifact_id"], real)
 
 
 class ApprovalScopeTests(unittest.TestCase):
@@ -1064,22 +1317,41 @@ class ApprovalScopeTests(unittest.TestCase):
         scope = self.question_flow_plan()["governance"]["product_approval_scope"]
         self.assertEqual(
             scope["artifact_publication_product_approval"]["contract_representation"],
-            "approvals.product.status",
+            "approvals.product.status + approvals.product.decision_scope",
         )
         self.assertEqual(
-            scope["clinical_approval"]["contract_representation"], "approvals.clinical.status"
+            scope["clinical_approval"]["contract_representation"],
+            "approvals.clinical.status + approvals.clinical.decision_scope",
         )
-        self.assertIn("resolved", scope["product_display_decision"]["contract_representation"])
+        for role in ("artifact_publication_product_approval", "clinical_approval"):
+            self.assertEqual(scope[role]["required_scope"], "artifact_publication", role)
+        self.assertIn("references", scope["product_display_decision"]["contract_representation"])
+        self.assertNotIn("artifact_publication",
+                         scope["product_display_decision"]["contract_decision_scopes"])
 
-    def test_the_completed_gate_is_a_resolved_blocker_not_an_approval(self):
+    def test_the_completed_decision_is_not_in_the_safety_blocker_channel(self):
+        """Under 1.1.0 the completion is traceability, not a resolved blocker.
+
+        The blockers list is what a person scans to find what is unresolved. A completed
+        decision sitting in it inverts that meaning for the reader even while the evaluator
+        ignores it, and 1.1.0's `decision_scope` removes the reason it was ever put there.
+        """
         descriptor = self.question_flow_plan()["descriptor"]
-        gates = [b for b in descriptor["blockers"] if b["id"] == "IM001-PRODUCT-DISPLAY-DECISIONS"]
-        self.assertEqual(len(gates), 1)
-        self.assertEqual(gates[0]["status"], "resolved")
-        self.assertIn("NOT AN APPROVAL", gates[0]["reference"])
+        self.assertEqual(
+            {b["id"] for b in descriptor["blockers"]},
+            {"IM001-CLIN-FLAG-001", "IM003-SB-001"},
+        )
+        self.assertTrue(all(b["status"] == "open" for b in descriptor["blockers"]))
+        # The completion is still recorded, and still grants nothing.
+        scope = self.question_flow_plan()["governance"]["product_approval_scope"]
+        self.assertEqual(scope["product_display_decision"]["status"], "complete")
+        self.assertEqual(
+            scope["product_display_decision"]["contract_decision_scopes"], ["product_display"]
+        )
         # And the approval field it must not be confused with is untouched.
         self.assertEqual(descriptor["approvals"]["product"]["status"], "pending")
         self.assertIsNone(descriptor["approvals"]["product"]["decision_ref"])
+        self.assertIsNone(descriptor["approvals"]["product"]["decision_scope"])
 
     def test_a_resolved_blocker_cannot_make_a_descriptor_approved(self):
         """The structural proof, run against the contract's own semantics.

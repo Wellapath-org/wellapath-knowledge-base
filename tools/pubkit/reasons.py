@@ -17,7 +17,9 @@ exists to prevent.
 """
 
 #: Verbatim from wellapath-backend src/manifest/contract.ts REASON_CODES at
-#: fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd. Order preserved so drift is a visible diff.
+#: bbaeadd6075eb37fd51acbe04101f939e52c7d48 (contract 1.1.0). Order preserved so drift is a
+#: visible diff. The three APPROVAL_SCOPE_* codes are new in 1.1.0 and appear in the Backend's
+#: own position, immediately after APPROVAL_STATUS_UNKNOWN.
 BACKEND_REASON_CODES = (
     "MANIFEST_MALFORMED",
     "MANIFEST_VERSION_UNSUPPORTED",
@@ -36,6 +38,9 @@ BACKEND_REASON_CODES = (
     "RELATIONSHIP_CYCLE",
     "INVALID_ROLLBACK_TARGET",
     "APPROVAL_STATUS_UNKNOWN",
+    "APPROVAL_SCOPE_MISSING",
+    "APPROVAL_SCOPE_UNKNOWN",
+    "APPROVAL_SCOPE_MISMATCH",
     "HASH_MISMATCH",
     "BYTE_COUNT_MISMATCH",
     "NOT_PUBLISHED",
