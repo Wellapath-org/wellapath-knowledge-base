@@ -186,8 +186,10 @@
     "ported_validator_accepts": true,
     "vendored_schema_accepts": true,
     "validators_agree": true,
+    "kb_stricter_than_schema": false,
+    "kb_looser_than_schema": false,
     "reasons": [],
-    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. They are meant to agree, and a disagreement is a hard failure rather than a preference for whichever passed."
+    "note": "Validated twice on purpose: once by the port of the Backend's hand-written validator and once by the Backend's published schema. The comparison is asymmetric. The schema is the looser of the two by design \u2014 contract 1.1.0's granted-approval scope rule is conditional on status, which draft-07 does not express, so the rule lives in the validator. The KB being stricter is therefore expected and is recorded, not failed. The KB being looser is a hard failure: it would mean emitting a descriptor a schema-validating consumer refuses."
   },
   "governance": {
     "register": "publication/governance/decision_register_v1.json",

@@ -25,7 +25,7 @@ mistaken for a real one.
 import os
 
 from . import PUBKIT_VERSION
-from .contract import ARTIFACT_APPROVAL_SLOT_SCOPE
+from .contract import ARTIFACT_APPROVAL_SLOT_SCOPE, MANIFEST_CONTRACT_VERSION
 from .eligibility import evaluate_descriptor
 from .governance import DecisionRegister, GovernanceClaim, open_blockers
 from .integrity import content_type_of, measure
@@ -672,11 +672,28 @@ def _references(artifact_id, artifact_version, entry):
 
 
 def _validate_descriptor(descriptor, contract_schema):
-    """Validate a descriptor by both routes, and require them to agree."""
+    """Validate a descriptor by both routes, and compare them **asymmetrically**.
+
+    The two routes are not equivalent, and treating every difference as a fault would be wrong
+    in one direction. Contract 1.1.0's rule "a granted approval must declare a scope including
+    artifact_publication" is conditional on `status`, which the published draft-07 schema does
+    not express — the Backend says so in the schema's own text: *"OPTIONAL in structure,
+    MANDATORY in effect for a granted approval."* The rule lives in `validate.ts`, which
+    `manifest.py` ports. So the schema is deliberately the looser of the two.
+
+    That makes the directions mean different things:
+
+    * **ported rejects, schema accepts** — the KB is stricter than the published schema. Safe,
+      and expected wherever a conditional rule lives only in the validator. Recorded, not
+      failed; failing it would mean refusing to emit descriptors precisely because the tooling
+      applied the contract's semantics properly.
+    * **ported accepts, schema rejects** — the KB would emit a descriptor that any
+      schema-validating consumer (Ajv, Mobile) refuses. That is a real fault and fails closed.
+    """
     ported = validate_descriptor(descriptor, "descriptor")
 
     wrapper = {
-        "manifest_version": "1.0.0",
+        "manifest_version": MANIFEST_CONTRACT_VERSION,
         "generated_at": PLAN_EVALUATION_INSTANT,
         "artifacts": [descriptor],
     }
@@ -685,19 +702,23 @@ def _validate_descriptor(descriptor, contract_schema):
 
     ported_ok = not ported and manifest_valid
     schema_ok = not schema_reasons
-    agree = ported_ok == schema_ok
+    kb_stricter = (not ported_ok) and schema_ok
+    kb_looser = ported_ok and (not schema_ok)
 
-    reasons = list(ported) + list(manifest_reasons) + list(schema_reasons)
-    if not agree:
+    reasons = list(ported) + list(manifest_reasons)
+    if kb_looser:
+        reasons.extend(schema_reasons)
         reasons.append(
             reason(
                 "KB_CONTRACT_KB_PASSES_BACKEND_FAILS",
                 "descriptor",
-                "the ported Backend validator and the vendored Backend schema disagree about "
-                "this descriptor (ported accepts: %s, schema accepts: %s). A descriptor only "
-                "one of them accepts must never be handed over." % (ported_ok, schema_ok),
+                "the ported Backend validator accepts this descriptor but the vendored Backend "
+                "schema rejects it; a schema-validating consumer would refuse it, so it must "
+                "never be handed over",
             )
         )
+    elif not kb_stricter:
+        reasons.extend(schema_reasons)
 
     return {
         "contract_version": "1.0.0",
@@ -705,11 +726,17 @@ def _validate_descriptor(descriptor, contract_schema):
         "vendored_schema_reasons": schema_reasons,
         "ported_validator_accepts": ported_ok,
         "vendored_schema_accepts": schema_ok,
-        "validators_agree": agree,
+        "validators_agree": ported_ok == schema_ok,
+        "kb_stricter_than_schema": kb_stricter,
+        "kb_looser_than_schema": kb_looser,
         "reasons": reasons,
         "note": "Validated twice on purpose: once by the port of the Backend's hand-written "
-        "validator and once by the Backend's published schema. They are meant to agree, and a "
-        "disagreement is a hard failure rather than a preference for whichever passed.",
+        "validator and once by the Backend's published schema. The comparison is asymmetric. "
+        "The schema is the looser of the two by design — contract 1.1.0's granted-approval "
+        "scope rule is conditional on status, which draft-07 does not express, so the rule "
+        "lives in the validator. The KB being stricter is therefore expected and is recorded, "
+        "not failed. The KB being looser is a hard failure: it would mean emitting a descriptor "
+        "a schema-validating consumer refuses.",
     }
 
 

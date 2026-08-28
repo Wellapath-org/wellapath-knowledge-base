@@ -203,6 +203,37 @@ class ReasonCodeTests(unittest.TestCase):
     def test_namespaces_are_disjoint(self):
         self.assertEqual(set(BACKEND_REASON_CODES) & set(KB_REASON_CODES), set())
 
+    #: The Backend's REASON_CODES, verbatim and in order, at
+    #: bbaeadd6075eb37fd51acbe04101f939e52c7d48 (contract 1.1.0).
+    #:
+    #: Order is not behaviour, which is exactly why it needs a test: nothing else in this
+    #: repository would notice it changing, and the module's own promise is that drift shows up
+    #: as a visible diff against the Backend. A silently reordered list makes that diff
+    #: meaningless the next time someone compares the two files.
+    BACKEND_REASON_CODES_AT_PIN = (
+        "MANIFEST_MALFORMED", "MANIFEST_VERSION_UNSUPPORTED", "UNKNOWN_REQUIRED_FEATURE",
+        "UNKNOWN_FIELD", "MISSING_REQUIRED_FIELD", "MALFORMED_FIELD",
+        "UNSUPPORTED_ARTIFACT_SCHEMA", "CONTENT_TYPE_UNSUPPORTED", "OBJECT_KEY_INVALID",
+        "ORIGIN_NOT_APPROVED", "ORIGIN_NOT_HTTPS", "ORIGIN_HAS_CREDENTIALS", "ORIGIN_HAS_QUERY",
+        "DUPLICATE_IDENTITY", "RELATIONSHIP_CYCLE", "INVALID_ROLLBACK_TARGET",
+        "APPROVAL_STATUS_UNKNOWN", "APPROVAL_SCOPE_MISSING", "APPROVAL_SCOPE_UNKNOWN",
+        "APPROVAL_SCOPE_MISMATCH", "HASH_MISMATCH", "BYTE_COUNT_MISMATCH", "NOT_PUBLISHED",
+        "APPROVAL_MISSING", "APPROVAL_NOT_GRANTED", "BLOCKER_UNRESOLVED",
+        "ACTIVATION_NOT_AUTHORIZED", "NOT_ACTIVE", "ENVIRONMENT_NOT_AUTHORIZED",
+        "APP_BUILD_INCOMPATIBLE", "DESCRIPTOR_EXPIRED", "DESCRIPTOR_DEPRECATED",
+        "NO_ACTIVE_ARTIFACT", "MULTIPLE_ACTIVE", "DOWNGRADE_NOT_AUTHORIZED",
+    )
+
+    def test_the_code_list_matches_the_backend_exactly_and_in_order(self):
+        self.assertEqual(tuple(BACKEND_REASON_CODES), self.BACKEND_REASON_CODES_AT_PIN)
+
+    def test_the_scope_codes_sit_where_the_backend_puts_them(self):
+        codes = list(BACKEND_REASON_CODES)
+        self.assertEqual(
+            codes[codes.index("APPROVAL_STATUS_UNKNOWN") + 1 : codes.index("HASH_MISMATCH")],
+            ["APPROVAL_SCOPE_MISSING", "APPROVAL_SCOPE_UNKNOWN", "APPROVAL_SCOPE_MISMATCH"],
+        )
+
     def test_backend_codes_are_verbatim(self):
         # A code the Backend does not have would be meaningless to it; one it has that we lack
         # would be a rejection we cannot report. Both are drift.
@@ -1160,6 +1191,59 @@ class ApprovalScopeContractTests(unittest.TestCase):
         self.assertFalse(states["approved"])
         self.assertIn("APPROVAL_SCOPE_MISMATCH", [r["code"] for r in ereasons])
 
+    def test_the_schema_is_deliberately_looser_than_the_validator(self):
+        """The conditional scope rule lives in the validator; draft-07 cannot express it.
+
+        Asserted rather than assumed, because the whole asymmetric comparison in plan.py rests
+        on it. If the Backend ever adds an if/then and the schema starts catching this, the
+        comparison should be revisited — and this test is what will say so.
+        """
+        _pin, schema = pin.load_pinned_contract()
+        record = schema["definitions"]["approval_record"]
+        self.assertNotIn("if", record)
+        self.assertNotIn("allOf", record)
+        descriptor = json.loads(json.dumps(load_plans()[1]["descriptor"]))
+        descriptor["approvals"]["product"] = {
+            "required": True, "status": "granted", "decision_ref": "D",
+            "approved_at": None, "decision_scope": None,
+        }
+        wrapper = {
+            "manifest_version": "1.1.0",
+            "generated_at": PLAN_EVALUATION_INSTANT,
+            "artifacts": [descriptor],
+        }
+        valid, reasons = validate_manifest(wrapper)
+        self.assertFalse(valid)
+        self.assertIn("APPROVAL_SCOPE_MISSING", [r["code"] for r in reasons])
+        # ... and the schema alone lets it through, which is why the comparison is asymmetric.
+        self.assertEqual(validate_against_vendored_schema(wrapper, schema), [])
+
+    def test_the_comparison_fails_only_in_the_unsafe_direction(self):
+        from pubkit.plan import _validate_descriptor
+
+        _pin, schema = pin.load_pinned_contract()
+
+        # KB stricter: granted with no scope. Rejected by the port, accepted by the schema.
+        stricter = json.loads(json.dumps(load_plans()[1]["descriptor"]))
+        stricter["approvals"]["product"] = {
+            "required": True, "status": "granted", "decision_ref": "D",
+            "approved_at": None, "decision_scope": None,
+        }
+        result = _validate_descriptor(stricter, schema)
+        self.assertTrue(result["kb_stricter_than_schema"])
+        self.assertFalse(result["kb_looser_than_schema"])
+        self.assertNotIn(
+            "KB_CONTRACT_KB_PASSES_BACKEND_FAILS", [r["code"] for r in result["reasons"]]
+        )
+
+        # Sound descriptor: both routes accept, neither direction flagged.
+        sound = load_plans()[1]["descriptor"]
+        result = _validate_descriptor(sound, schema)
+        self.assertTrue(result["validators_agree"])
+        self.assertFalse(result["kb_stricter_than_schema"])
+        self.assertFalse(result["kb_looser_than_schema"])
+        self.assertEqual(result["reasons"], [])
+
     def test_the_ported_codes_match_the_backend_vocabulary(self):
         _pin, schema = pin.load_pinned_contract()
         declared = None
@@ -1168,6 +1252,113 @@ class ApprovalScopeContractTests(unittest.TestCase):
                 declared = branch["items"]["enum"]
         self.assertEqual(set(declared), set(contract.APPROVAL_SCOPES))
         self.assertEqual(contract.ARTIFACT_APPROVAL_SLOT_SCOPE, "artifact_publication")
+
+
+class FixtureSelectorTests(unittest.TestCase):
+    """The 1.1.0 `other_descriptor_overrides` selector must resolve to exactly one identity.
+
+    Every refusal below is a mutation that would otherwise be applied to a descriptor nobody
+    named, while the case still reported a pass — which is worse than a failing fixture,
+    because it looks like coverage.
+    """
+
+    def setUp(self):
+        sys.path.insert(0, os.path.join(ROOT, "tools"))
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location(
+            "vpf_under_test", os.path.join(ROOT, "tools", "validate_publication_fixtures.py")
+        )
+        self.vpf = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.vpf)
+        baseline = load_json(
+            repo("publication", "fixtures", "compat", "kb_baseline.manifest.json")
+        )
+        self.artifacts = baseline["artifacts"]
+        self.selector = {
+            "artifact_id": "fixture_artifact",
+            "artifact_version": "1.0",
+            # A marker that appears nowhere in the baseline, so "which descriptor was
+            # mutated?" has one answer. `deprecated: False` would collide with a descriptor
+            # that already carries it, and the test would pass or fail for the wrong reason.
+            "overrides": {"min_app_build": 4242},
+        }
+
+    def apply(self, artifacts, selector):
+        return self.vpf._apply_other_descriptor_overrides(artifacts, selector, "test")
+
+    def refusal(self, artifacts, selector):
+        with self.assertRaises(self.vpf.SelectorError) as caught:
+            self.apply(artifacts, selector)
+        return str(caught.exception).split(":")[0]
+
+    def test_a_unique_identity_is_selected(self):
+        result = self.apply(self.artifacts, self.selector)
+        marked = [d for d in result if d.get("min_app_build") == 4242]
+        self.assertEqual(len(marked), 1)
+        self.assertEqual(marked[0]["artifact_version"], "1.0")
+
+    def test_the_legacy_bare_map_format_is_refused_with_a_stable_reason(self):
+        self.assertEqual(
+            self.refusal(self.artifacts, {"min_app_build": 4242}), self.vpf.SELECTOR_LEGACY_SHAPE
+        )
+        self.assertEqual(
+            self.refusal(self.artifacts, "fixture_artifact@1.0"), self.vpf.SELECTOR_LEGACY_SHAPE
+        )
+
+    def test_an_incomplete_selector_is_refused(self):
+        for missing in self.vpf.SELECTOR_KEYS:
+            partial = {k: v for k, v in self.selector.items() if k != missing}
+            self.assertEqual(
+                self.refusal(self.artifacts, partial), self.vpf.SELECTOR_LEGACY_SHAPE, missing
+            )
+
+    def test_an_unknown_selector_key_is_refused(self):
+        typo = dict(self.selector, artifact_verison="1.0")
+        self.assertEqual(self.refusal(self.artifacts, typo), self.vpf.SELECTOR_UNKNOWN_KEY)
+
+    def test_an_identity_matching_nothing_is_refused(self):
+        absent = dict(self.selector, artifact_version="7.7")
+        self.assertEqual(self.refusal(self.artifacts, absent), self.vpf.SELECTOR_NO_MATCH)
+
+    def test_an_ambiguous_identity_is_refused_rather_than_resolved(self):
+        duplicated = list(self.artifacts) + [dict(self.artifacts[0], country="zz")]
+        self.assertEqual(self.refusal(duplicated, self.selector), self.vpf.SELECTOR_AMBIGUOUS)
+
+    def test_selection_does_not_depend_on_descriptor_ordering(self):
+        forward = self.apply(self.artifacts, self.selector)
+        reverse = self.apply(list(reversed(self.artifacts)), self.selector)
+        pick = lambda result: [d for d in result if d["artifact_version"] == "1.0"][0]
+        self.assertEqual(
+            json.dumps(pick(forward), sort_keys=True), json.dumps(pick(reverse), sort_keys=True)
+        )
+
+    def test_an_extra_descriptor_cannot_silently_redirect_a_mutation(self):
+        # A new descriptor with a different identity is simply ignored ...
+        extended = list(self.artifacts) + [dict(self.artifacts[0], artifact_version="9.9")]
+        marked = [d for d in self.apply(extended, self.selector) if d.get("min_app_build") == 4242]
+        self.assertEqual([d["artifact_version"] for d in marked], ["1.0"])
+        # ... and one that collides with the selected identity is refused, not chosen between.
+        colliding = list(self.artifacts) + [dict(self.artifacts[0])]
+        self.assertEqual(self.refusal(colliding, self.selector), self.vpf.SELECTOR_AMBIGUOUS)
+
+    def test_the_input_manifest_is_not_mutated_in_place(self):
+        before = json.dumps(self.artifacts, sort_keys=True)
+        self.apply(self.artifacts, self.selector)
+        self.assertEqual(json.dumps(self.artifacts, sort_keys=True), before)
+
+    def test_every_committed_case_uses_the_1_1_0_selector_shape(self):
+        document = load_json(
+            repo("publication", "fixtures", "compat", "negative_fixtures.compat.json")
+        )
+        used = 0
+        for case in document["cases"]:
+            selector = case.get("other_descriptor_overrides")
+            if selector is None:
+                continue
+            used += 1
+            self.assertEqual(set(selector), set(self.vpf.SELECTOR_KEYS), case["name"])
+        self.assertGreater(used, 0, "no committed case exercises the selector")
 
 
 class CrossVersionCompatibilityTests(unittest.TestCase):
@@ -1282,10 +1473,20 @@ class ApprovalScopeTests(unittest.TestCase):
         publication / activation authorization   false
     """
 
+    #: v1 is the historical record, bound to Backend fc40ac3e where the defect existed. It is
+    #: read here — and asserted byte-identical elsewhere — because preserving it is part of the
+    #: guarantee, not because it describes current behaviour.
     RECONCILIATION = ("publication", "fixtures", "compat", "approval_scope_reconciliation_v1.json")
+    #: v2 is the current record, bound to Backend bbaeadd6.
+    RECONCILIATION_V2 = (
+        "publication", "fixtures", "compat", "approval_scope_reconciliation_v2.json",
+    )
 
     def record(self):
         return load_json(repo(*self.RECONCILIATION))
+
+    def record_v2(self):
+        return load_json(repo(*self.RECONCILIATION_V2))
 
     def question_flow_plan(self):
         return load_plans()[1]
@@ -1386,6 +1587,32 @@ class ApprovalScopeTests(unittest.TestCase):
             "no_evaluator_can_substitute_completion_for_approval",
         ):
             self.assertIs(claims[name], True, name)
+
+    def test_the_v2_record_binds_the_exact_backend_fixture(self):
+        """The binding is a hash of Backend bytes. CI cannot re-fetch it, so it is pinned here.
+
+        Without this, the recorded binding could be edited to name any fixture at all and
+        nothing would notice — the record would still 'verify' against itself.
+        """
+        binding = self.record_v2()["backend_binding"]
+        self.assertEqual(binding["commit"], "bbaeadd6075eb37fd51acbe04101f939e52c7d48")
+        self.assertEqual(binding["contract_version"], "1.1.0")
+        self.assertEqual(
+            binding["schema_sha256"],
+            "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+        )
+        self.assertEqual(binding["schema_byte_count"], 7806)
+        self.assertEqual(
+            binding["blocked_candidates_fixture"]["path"],
+            "tests/fixtures/manifest/blocked-candidates.manifest.json",
+        )
+        self.assertEqual(
+            binding["blocked_candidates_fixture"]["sha256"],
+            "5b0622e8efc57b09cd65c9d4964f740565c9863b9ba28729dba035c58fc3bbb7",
+        )
+        # The pinned schema hash must be the one the tooling actually loads.
+        pin_record, _ = pin.load_pinned_contract()
+        self.assertEqual(binding["schema_sha256"], pin_record["vendored"]["sha256"])
 
     def test_the_backend_encoding_is_recorded_as_a_defect(self):
         record = self.record()

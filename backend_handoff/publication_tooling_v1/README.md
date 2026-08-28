@@ -150,18 +150,21 @@ two blockers being open — conditions unrelated to the product field. Lift them
 display-wording decision carries the artifact all the way to eligible. A field that is safe only
 while something else happens to be in the way is a latent defect.
 
-*What the KB did instead — and it needs no Backend support.* The contract **can** express the
-distinction, so nothing was weakened to match the fixture:
+*What the KB did at the time — superseded, see the closing note below.* The contract 1.0.0
+**could** express the distinction, so nothing was weakened to match the fixture:
 
 - `approvals.product.status: "pending"` — artifact-publication Product approval, ungranted.
 - `approvals.clinical.status: "pending"` — clinical approval, ungranted.
 - a `blocker_record` `IM001-PRODUCT-DISPLAY-DECISIONS` with `status: "resolved"` — the completed
   display decision, scope stated in its `reference`.
 
-A resolved blocker is the right home because it is *structurally* inert: `evaluateDescriptor`
-computes `approved` exclusively from `approvals` and reads `blockers` in a loop that can only
-deny. No evaluator following contract 1.0.0 can turn it into an approval. The safety is in the
-shape of the contract rather than in a convention anyone has to remember.
+The resolved blocker was chosen because it was *structurally* inert: `evaluateDescriptor`
+computed `approved` exclusively from `approvals` and read `blockers` in a loop that could only
+deny, so no evaluator following contract 1.0.0 could turn it into an approval.
+
+**That encoding is no longer used.** It was replaced in I3 Step 2C — see "Representation
+divergence" immediately below. It is described here in the past tense because this section is
+the record of the original finding, not a description of current behaviour.
 
 **Backend follow-up — DONE by the Backend, not by this repository.** `approvals.product.status`
 is now `"pending"` in `tests/fixtures/manifest/blocked-candidates.manifest.json`, and the

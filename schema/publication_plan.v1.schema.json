@@ -501,7 +501,9 @@
         "ported_validator_accepts",
         "vendored_schema_accepts",
         "validators_agree",
-        "reasons"
+        "reasons",
+        "kb_stricter_than_schema",
+        "kb_looser_than_schema"
       ],
       "properties": {
         "contract_version": {
@@ -519,6 +521,14 @@
         "reasons": {
           "type": "array",
           "maxItems": 0
+        },
+        "kb_stricter_than_schema": {
+          "type": "boolean",
+          "description": "The KB rejecting what the published schema accepts is safe and expected wherever a conditional rule lives only in the validator; it is recorded, not failed."
+        },
+        "kb_looser_than_schema": {
+          "const": false,
+          "description": "Pinned false. The KB accepting what the schema rejects would mean emitting a descriptor a schema-validating consumer refuses."
         }
       }
     },

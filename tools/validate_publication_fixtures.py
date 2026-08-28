@@ -82,6 +82,80 @@ def _remove_path(document, dotted):
     node.pop(parts[-1], None)
 
 
+#: Keys a 1.1.0 `other_descriptor_overrides` selector may carry. Closed: an unrecognised key is
+#: almost always a typo in one of the three that matter, and silently ignoring it would apply
+#: the mutation to the wrong descriptor — or to none — while the case still reported a pass.
+SELECTOR_KEYS = ("artifact_id", "artifact_version", "overrides")
+
+#: Stable, matchable prefixes for every way a selector can be refused. Tests assert on these
+#: rather than on prose, so the refusals can be reworded without silently becoming untestable.
+SELECTOR_LEGACY_SHAPE = "FIXTURE_SELECTOR_LEGACY_SHAPE"
+SELECTOR_UNKNOWN_KEY = "FIXTURE_SELECTOR_UNKNOWN_KEY"
+SELECTOR_NO_MATCH = "FIXTURE_SELECTOR_NO_MATCH"
+SELECTOR_AMBIGUOUS = "FIXTURE_SELECTOR_AMBIGUOUS"
+
+
+class SelectorError(Exception):
+    """Raised when a fixture's `other_descriptor_overrides` selector cannot be trusted."""
+
+
+def _apply_other_descriptor_overrides(artifacts, selector, case_name):
+    """Apply a 1.1.0 selector to exactly one descriptor, or refuse.
+
+    Contract 1.1.0's fixture format selects the other descriptor explicitly:
+    `{artifact_id, artifact_version, overrides}`. The 1.0.0 shape was a bare override map
+    meaning "the descriptor that is not the target", which is only well defined in a
+    two-descriptor manifest — the Backend's baseline now carries seven.
+
+    Everything here refuses rather than guesses, because every guess this function could make
+    is a mutation applied to a descriptor nobody named while the case still reports a pass:
+
+    * the legacy bare-map shape — refused, not interpreted;
+    * an unknown key, which is nearly always a typo in one of the three that matter;
+    * an identity matching no descriptor;
+    * an identity matching more than one. This is the case that makes the whole function worth
+      writing: with a first-match-wins loop, adding an eighth descriptor that happens to share
+      an identity would silently redirect an existing mutation, and the result would depend on
+      array order. Selection is by identity and must resolve to exactly one descriptor.
+    """
+    if not isinstance(selector, dict) or not all(key in selector for key in SELECTOR_KEYS):
+        raise SelectorError(
+            "%s: case %r uses the pre-1.1.0 other_descriptor_overrides shape; it must name "
+            "artifact_id, artifact_version and overrides"
+            % (SELECTOR_LEGACY_SHAPE, case_name)
+        )
+    unknown = sorted(set(selector) - set(SELECTOR_KEYS))
+    if unknown:
+        raise SelectorError(
+            "%s: case %r selector carries unrecognised key(s) %s; a mistyped selector would "
+            "mutate the wrong descriptor" % (SELECTOR_UNKNOWN_KEY, case_name, ", ".join(unknown))
+        )
+
+    matches = [
+        position
+        for position, descriptor in enumerate(artifacts)
+        if descriptor.get("artifact_id") == selector["artifact_id"]
+        and descriptor.get("artifact_version") == selector["artifact_version"]
+    ]
+    identity = "%s@%s" % (selector["artifact_id"], selector["artifact_version"])
+    if not matches:
+        raise SelectorError(
+            "%s: case %r names %s, which is not in the baseline manifest"
+            % (SELECTOR_NO_MATCH, case_name, identity)
+        )
+    if len(matches) > 1:
+        raise SelectorError(
+            "%s: case %r names %s, which matches %d descriptors at indices %s; a selector must "
+            "resolve to exactly one identity, and choosing between them would make the fixture "
+            "depend on array order"
+            % (SELECTOR_AMBIGUOUS, case_name, identity, len(matches), matches)
+        )
+
+    updated = list(artifacts)
+    updated[matches[0]] = _deep_merge(updated[matches[0]], selector["overrides"])
+    return updated
+
+
 def _apply_case(baseline, target, case):
     """Return `(manifest, context)` for one compat case."""
     document = copy.deepcopy(baseline)
@@ -105,33 +179,8 @@ def _apply_case(baseline, target, case):
     for dotted in case.get("remove_descriptor_fields", []):
         _remove_path(document["artifacts"][index], dotted)
     if "other_descriptor_overrides" in case:
-        # Contract 1.1.0's fixture format selects the other descriptor explicitly:
-        # {artifact_id, artifact_version, overrides}. The 1.0.0 shape was a bare override map
-        # meaning "the descriptor that is not the target", which is only well defined in a
-        # two-descriptor manifest — the Backend's baseline now carries seven. The old shape is
-        # refused rather than guessed at, so a fixture written against the old format fails
-        # loudly instead of silently mutating whichever descriptor happened to be last.
-        selector = case["other_descriptor_overrides"]
-        if not all(key in selector for key in ("artifact_id", "artifact_version", "overrides")):
-            raise SystemExit(
-                "case %r uses the pre-1.1.0 other_descriptor_overrides shape; it must name "
-                "artifact_id, artifact_version and overrides" % case["name"]
-            )
-        other_index = None
-        for position, descriptor in enumerate(document["artifacts"]):
-            if (
-                descriptor.get("artifact_id") == selector["artifact_id"]
-                and descriptor.get("artifact_version") == selector["artifact_version"]
-            ):
-                other_index = position
-                break
-        if other_index is None:
-            raise SystemExit(
-                "case %r names %s@%s, which is not in the baseline manifest"
-                % (case["name"], selector["artifact_id"], selector["artifact_version"])
-            )
-        document["artifacts"][other_index] = _deep_merge(
-            document["artifacts"][other_index], selector["overrides"]
+        document["artifacts"] = _apply_other_descriptor_overrides(
+            document["artifacts"], case["other_descriptor_overrides"], case["name"]
         )
     if case.get("append_duplicate_of_target"):
         document["artifacts"].append(copy.deepcopy(document["artifacts"][index]))
