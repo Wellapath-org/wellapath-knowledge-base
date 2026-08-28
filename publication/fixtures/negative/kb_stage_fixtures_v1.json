@@ -1,0 +1,564 @@
+{
+  "description": "Negative fixtures for the Knowledge-Base-only stages: contract pinning, artifact generation, object-key safety, governance evidence resolution, lifecycle state collapse, rollback binding, and write/network safety. The Backend contract has no opinion on any of these because they all happen before a manifest exists. Each case declares the stage it must fail at and the exact reason code it must fail for; the runner asserts both, so a guard that starts refusing for a different reason is a test failure rather than a silent change of meaning.",
+  "runner": "tools/validate_publication_fixtures.py",
+  "reason_code_namespace": "KB_* codes are Knowledge Base findings and are never written into a descriptor. Where a case expects a bare (non-KB_) code, that is the Backend's own code, used because the finding is genuinely the same one.",
+  "cases": [
+    {
+      "name": "a missing contract pin refuses to validate anything",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_PIN_MISSING",
+      "mutation": {
+        "kind": "remove_pin"
+      }
+    },
+    {
+      "name": "a malformed contract pin is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_PIN_MALFORMED",
+      "mutation": {
+        "kind": "pin_json",
+        "text": "{ not json"
+      }
+    },
+    {
+      "name": "a pin missing a required field is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_PIN_MALFORMED",
+      "mutation": {
+        "kind": "pin_remove_field",
+        "field": "vendored"
+      }
+    },
+    {
+      "name": "backend schema hash drift is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+      "mutation": {
+        "kind": "schema_bytes_append",
+        "text": "\n"
+      }
+    },
+    {
+      "name": "a vendored schema that no longer matches the mirror is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_SCHEMA_HASH_DRIFT",
+      "mutation": {
+        "kind": "schema_add_release_status",
+        "value": "auto_published"
+      }
+    },
+    {
+      "name": "an unsupported contract major is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_MAJOR_UNSUPPORTED",
+      "mutation": {
+        "kind": "pin_set",
+        "path": "contract.supported_major",
+        "value": 2
+      }
+    },
+    {
+      "name": "a pin policy that is not fail-closed is refused",
+      "stage": "contract_pin",
+      "expected_code": "KB_CONTRACT_PIN_MALFORMED",
+      "mutation": {
+        "kind": "pin_set",
+        "path": "compatibility_policy.on_vendored_hash_drift",
+        "value": "warn"
+      }
+    },
+    {
+      "name": "a non-reproducible artifact generation is a failure, not a warning",
+      "stage": "generation",
+      "expected_code": "KB_GENERATION_NONDETERMINISTIC",
+      "mutation": {
+        "kind": "generator_check_fails"
+      }
+    },
+    {
+      "name": "an artifact that fails its own schema is refused",
+      "stage": "artifact_schema",
+      "expected_code": "KB_ARTIFACT_SCHEMA_INVALID",
+      "mutation": {
+        "kind": "unknown_artifact_id",
+        "artifact_id": "unregistered_artifact"
+      }
+    },
+    {
+      "name": "a declared hash that does not match the bytes is refused",
+      "stage": "integrity",
+      "expected_code": "HASH_MISMATCH",
+      "mutation": {
+        "kind": "declare_sha256",
+        "value": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+      }
+    },
+    {
+      "name": "a declared byte count that does not match the bytes is refused",
+      "stage": "integrity",
+      "expected_code": "BYTE_COUNT_MISMATCH",
+      "mutation": {
+        "kind": "declare_byte_count",
+        "value": 1
+      }
+    },
+    {
+      "name": "a file whose bytes are not JSON has no determinable content type",
+      "stage": "integrity",
+      "expected_code": "KB_CONTENT_TYPE_UNDETERMINED",
+      "mutation": {
+        "kind": "non_json_bytes"
+      }
+    },
+    {
+      "name": "a mutable alias key is refused by name",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_MUTABLE_ALIAS",
+      "mutation": {
+        "kind": "object_key",
+        "value": "question_flow.ng.vlatest.json"
+      }
+    },
+    {
+      "name": "a path-traversal key is refused by name",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_PATH_TRAVERSAL",
+      "mutation": {
+        "kind": "object_key",
+        "value": "../question_flow.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "an absolute-path key is refused by name",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_ABSOLUTE_PATH",
+      "mutation": {
+        "kind": "object_key",
+        "value": "/question_flow.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a key that is not already NFC-normalised ASCII is refused",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_AMBIGUOUS_NORMALIZATION",
+      "mutation": {
+        "kind": "object_key",
+        "value": "question_flow\u0301.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "an unsafe character in a key is refused",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_UNSAFE_CHARACTER",
+      "mutation": {
+        "kind": "object_key",
+        "value": "question flow.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a key embedding a query secret is refused",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_EMBEDS_SECRET",
+      "mutation": {
+        "kind": "object_key",
+        "value": "question_flow.ng.v1.1.json?X-Amz-Signature=deadbeef"
+      }
+    },
+    {
+      "name": "a key naming a credential as a path segment is refused",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_EMBEDS_SECRET",
+      "mutation": {
+        "kind": "object_key",
+        "value": "question_flow.secret.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a key naming a different version than the descriptor is refused",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_VERSION_DISAGREEMENT",
+      "mutation": {
+        "kind": "key_identity_mismatch",
+        "value": "question_flow.ng.v1.0.json"
+      }
+    },
+    {
+      "name": "reusing one key for two identities is a collision",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_IDENTITY_COLLISION",
+      "mutation": {
+        "kind": "register_two_identities_one_key"
+      }
+    },
+    {
+      "name": "rebinding a key to different bytes is refused as an overwrite",
+      "stage": "object_key",
+      "expected_code": "KB_KEY_OVERWRITE_DIFFERENT_BYTES",
+      "mutation": {
+        "kind": "register_two_digests_one_key"
+      }
+    },
+    {
+      "name": "a prose-only approval with no hash-bound record resolves to nothing",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_PROSE_ONLY",
+      "mutation": {
+        "kind": "record_drop_reference_hash"
+      }
+    },
+    {
+      "name": "an approval with no named reviewer is not an approval",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_REVIEWER_MISSING",
+      "mutation": {
+        "kind": "record_set",
+        "path": "reviewer.identity",
+        "value": ""
+      }
+    },
+    {
+      "name": "an approval with no reviewer title is not an approval",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_REVIEWER_MISSING",
+      "mutation": {
+        "kind": "record_set",
+        "path": "reviewer.title",
+        "value": ""
+      }
+    },
+    {
+      "name": "an unknown authority type is refused",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_AUTHORITY_MISSING",
+      "mutation": {
+        "kind": "record_set",
+        "path": "authority_type",
+        "value": "senior"
+      }
+    },
+    {
+      "name": "an unknown decision status is never coerced",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_STATUS_UNKNOWN",
+      "mutation": {
+        "kind": "record_set",
+        "path": "status",
+        "value": "probably_fine"
+      }
+    },
+    {
+      "name": "product authority cannot satisfy a clinical claim",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_AUTHORITY_WRONG",
+      "mutation": {
+        "kind": "product_record_grants",
+        "claim": "clinical_approval"
+      }
+    },
+    {
+      "name": "a decision that exists but is not approved grants nothing",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_NOT_APPROVED",
+      "mutation": {
+        "kind": "granting_record_set",
+        "path": "status",
+        "value": "pending"
+      }
+    },
+    {
+      "name": "an approval bound to another artifact does not carry across",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_ARTIFACT_MISMATCH",
+      "mutation": {
+        "kind": "record_set",
+        "path": "subject.artifact_id",
+        "value": "token_dictionary"
+      }
+    },
+    {
+      "name": "an approval bound to another version does not carry across",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_VERSION_MISMATCH",
+      "mutation": {
+        "kind": "record_set",
+        "path": "subject.artifact_version",
+        "value": "1.0"
+      }
+    },
+    {
+      "name": "an approval bound to other bytes does not carry across a content change",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_HASH_MISMATCH",
+      "mutation": {
+        "kind": "record_set",
+        "path": "subject.artifact_sha256",
+        "value": "sha256:5555555555555555555555555555555555555555555555555555555555555555"
+      }
+    },
+    {
+      "name": "a superseded approval grants nothing",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_SUPERSEDED",
+      "mutation": {
+        "kind": "granting_record_set",
+        "path": "supersession.superseded_by",
+        "value": "IM001-ORD-GLOBAL-002"
+      }
+    },
+    {
+      "name": "a revoked approval grants nothing",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_REVOKED",
+      "mutation": {
+        "kind": "granting_record_set",
+        "path": "supersession.revoked",
+        "value": true
+      }
+    },
+    {
+      "name": "an expired approval grants nothing",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_EXPIRED",
+      "mutation": {
+        "kind": "granting_record_set",
+        "path": "expires_at",
+        "value": "2026-01-01"
+      }
+    },
+    {
+      "name": "a removed approval record leaves the claim unsupported",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_RECORD_MISSING",
+      "mutation": {
+        "kind": "remove_all_records"
+      }
+    },
+    {
+      "name": "im_001_resolved is not activation authority",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "mutation": {
+        "kind": "claim",
+        "claim": "activation_authorization"
+      }
+    },
+    {
+      "name": "im_001_resolved is not publication authority",
+      "stage": "governance",
+      "expected_code": "KB_DECISION_SET_IS_NOT_AUTHORIZATION",
+      "mutation": {
+        "kind": "claim",
+        "claim": "publication_authorization"
+      }
+    },
+    {
+      "name": "no publication authorization exists for the real candidates",
+      "stage": "governance",
+      "expected_code": "KB_PUBLICATION_AUTHORIZATION_MISSING",
+      "mutation": {
+        "kind": "plan_claim",
+        "claim": "publication_authorization"
+      }
+    },
+    {
+      "name": "no activation authorization exists for the real candidates",
+      "stage": "governance",
+      "expected_code": "KB_ACTIVATION_AUTHORIZATION_MISSING",
+      "mutation": {
+        "kind": "plan_claim",
+        "claim": "activation_authorization"
+      }
+    },
+    {
+      "name": "an open safety blocker refuses regardless of approvals",
+      "stage": "governance",
+      "expected_code": "KB_SAFETY_BLOCKER_OPEN",
+      "mutation": {
+        "kind": "open_blocker",
+        "id": "IM003-SB-001"
+      }
+    },
+    {
+      "name": "generated is not validated",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "unobserved_state",
+        "state": "validated"
+      }
+    },
+    {
+      "name": "packaged is not uploaded",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "assert_state",
+        "state": "uploaded"
+      }
+    },
+    {
+      "name": "present is not published",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "assert_state",
+        "state": "published"
+      }
+    },
+    {
+      "name": "published is not approved",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "assert_state",
+        "state": "approved"
+      }
+    },
+    {
+      "name": "approved is not active",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "assert_state",
+        "state": "active"
+      }
+    },
+    {
+      "name": "active is not eligible",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "assert_state",
+        "state": "eligible_for_environment"
+      }
+    },
+    {
+      "name": "an unknown lifecycle value fails closed rather than resolving",
+      "stage": "lifecycle",
+      "expected_code": "KB_STATE_COLLAPSE",
+      "mutation": {
+        "kind": "unknown_state_value",
+        "state": "approved",
+        "value": null
+      }
+    },
+    {
+      "name": "a version-only rollback target is unbound and refused",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_UNBOUND_VERSION_ONLY",
+      "mutation": {
+        "kind": "rollback_target",
+        "value": {
+          "artifact_version": "1.0"
+        }
+      }
+    },
+    {
+      "name": "a rollback target absent from the governed inventory is refused",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_TARGET_NOT_IN_INVENTORY",
+      "mutation": {
+        "kind": "rollback_target",
+        "value": {
+          "artifact_version": "0.9",
+          "sha256": "sha256:6666666666666666666666666666666666666666666666666666666666666666"
+        }
+      }
+    },
+    {
+      "name": "a rollback target whose hash does not match is refused",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_HASH_MISMATCH",
+      "mutation": {
+        "kind": "rollback_target",
+        "value": {
+          "artifact_version": "1.0",
+          "sha256": "sha256:7777777777777777777777777777777777777777777777777777777777777777"
+        }
+      }
+    },
+    {
+      "name": "a rollback target naming another artifact is refused",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_CROSS_ARTIFACT",
+      "mutation": {
+        "kind": "rollback_target",
+        "value": {
+          "artifact_id": "token_dictionary",
+          "artifact_version": "1.0",
+          "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b"
+        }
+      }
+    },
+    {
+      "name": "a rollback target that is the descriptor itself is a cycle",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_CYCLE",
+      "mutation": {
+        "kind": "rollback_target",
+        "value": {
+          "artifact_version": "1.1",
+          "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b"
+        }
+      }
+    },
+    {
+      "name": "a rollback across a content-schema boundary is refused",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_SCHEMA_INCOMPATIBLE",
+      "mutation": {
+        "kind": "rollback_default_target"
+      }
+    },
+    {
+      "name": "a rollback to unauthorized content is refused pending an explicit policy",
+      "stage": "rollback",
+      "expected_code": "KB_ROLLBACK_TARGET_UNAUTHORIZED",
+      "mutation": {
+        "kind": "rollback_governance",
+        "status": "revoked"
+      }
+    },
+    {
+      "name": "the dry-run path attempting a network connection fails the run",
+      "stage": "write_safety",
+      "expected_code": "KB_NETWORK_ATTEMPTED",
+      "mutation": {
+        "kind": "attempt_network"
+      }
+    },
+    {
+      "name": "the dry-run path attempting a subprocess fails the run",
+      "stage": "write_safety",
+      "expected_code": "KB_SUBPROCESS_ATTEMPTED",
+      "mutation": {
+        "kind": "attempt_subprocess"
+      }
+    },
+    {
+      "name": "a write outside the staging directory fails the run",
+      "stage": "write_safety",
+      "expected_code": "KB_STAGING_ESCAPE",
+      "mutation": {
+        "kind": "attempt_write_outside_staging"
+      }
+    },
+    {
+      "name": "a staging write escaping via traversal is refused",
+      "stage": "write_safety",
+      "expected_code": "KB_STAGING_ESCAPE",
+      "mutation": {
+        "kind": "staging_traversal",
+        "name": "../escaped.json"
+      }
+    },
+    {
+      "name": "mutating a canonical artifact during a run is detected",
+      "stage": "write_safety",
+      "expected_code": "KB_CANONICAL_ARTIFACT_MUTATED",
+      "mutation": {
+        "kind": "canonical_mutation"
+      }
+    }
+  ]
+}

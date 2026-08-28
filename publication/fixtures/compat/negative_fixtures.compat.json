@@ -1,0 +1,405 @@
+{
+  "description": "Cross-repository negative fixtures for manifest contract 1.0.0, written in the Backend's own fixture format so both implementations can execute them unchanged. Each case mutates the valid baseline manifest and declares the stage it must fail at and the exact reason code it must fail for. A case that fails for a different reason is itself a failure: it means one of the two implementations is refusing the right things for the wrong reasons, which will diverge as soon as either side changes.",
+  "contract_version": "1.0.0",
+  "contract_schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+  "authored_by": "wellapath-knowledge-base, I3 Step 2",
+  "runner_knowledge_base": "tools/validate_publication_fixtures.py",
+  "runner_backend": "the same shape as tests/unit/manifest-fixtures.test.ts consumes",
+  "base": "kb_baseline.manifest.json",
+  "target": {
+    "artifact_id": "fixture_artifact",
+    "artifact_version": "1.1"
+  },
+  "context": {
+    "environment": "staging",
+    "app_build": 100,
+    "now": "2026-08-28T00:00:00Z"
+  },
+  "cases": [
+    {
+      "name": "unknown contract major is rejected",
+      "stage": "validation",
+      "expected_code": "MANIFEST_VERSION_UNSUPPORTED",
+      "manifest_overrides": {
+        "manifest_version": "2.0.0"
+      }
+    },
+    {
+      "name": "a non-semver manifest version is rejected",
+      "stage": "validation",
+      "expected_code": "MANIFEST_VERSION_UNSUPPORTED",
+      "manifest_overrides": {
+        "manifest_version": "1.0"
+      }
+    },
+    {
+      "name": "an unknown required feature is rejected, not ignored",
+      "stage": "validation",
+      "expected_code": "UNKNOWN_REQUIRED_FEATURE",
+      "manifest_overrides": {
+        "required_features": [
+          "signed_manifests"
+        ]
+      }
+    },
+    {
+      "name": "an unknown top-level manifest field is rejected",
+      "stage": "validation",
+      "expected_code": "UNKNOWN_FIELD",
+      "manifest_overrides": {
+        "publication_mode": "automatic"
+      }
+    },
+    {
+      "name": "an unknown descriptor field is rejected",
+      "stage": "validation",
+      "expected_code": "UNKNOWN_FIELD",
+      "descriptor_overrides": {
+        "auto_publish": true
+      }
+    },
+    {
+      "name": "a missing required descriptor field is rejected",
+      "stage": "validation",
+      "expected_code": "MISSING_REQUIRED_FIELD",
+      "remove_descriptor_fields": [
+        "byte_count"
+      ]
+    },
+    {
+      "name": "an unsupported artifact schema is rejected",
+      "stage": "validation",
+      "expected_code": "UNSUPPORTED_ARTIFACT_SCHEMA",
+      "descriptor_overrides": {
+        "schema_version": "wellapath.artifact/2"
+      }
+    },
+    {
+      "name": "an incorrect content type is rejected",
+      "stage": "validation",
+      "expected_code": "CONTENT_TYPE_UNSUPPORTED",
+      "descriptor_overrides": {
+        "content_type": "application/octet-stream"
+      }
+    },
+    {
+      "name": "a malformed sha256 is rejected",
+      "stage": "validation",
+      "expected_code": "MALFORMED_FIELD",
+      "descriptor_overrides": {
+        "sha256": "07f935967acb1d5515cb53ffd1c8e39b"
+      }
+    },
+    {
+      "name": "activation authorization without a decision reference is rejected",
+      "stage": "validation",
+      "expected_code": "MALFORMED_FIELD",
+      "descriptor_overrides": {
+        "activation_authorized": true,
+        "activation_decision_ref": null
+      }
+    },
+    {
+      "name": "a duplicate artifact identity is rejected",
+      "stage": "validation",
+      "expected_code": "DUPLICATE_IDENTITY",
+      "append_duplicate_of_target": true
+    },
+    {
+      "name": "a mutable alias object key is rejected",
+      "stage": "validation",
+      "expected_code": "OBJECT_KEY_INVALID",
+      "descriptor_overrides": {
+        "object_key": "fixture_artifact.ng.latest.json"
+      }
+    },
+    {
+      "name": "a path-traversal object key is rejected",
+      "stage": "validation",
+      "expected_code": "OBJECT_KEY_INVALID",
+      "descriptor_overrides": {
+        "object_key": "../fixture_artifact.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "an absolute-path object key is rejected",
+      "stage": "validation",
+      "expected_code": "OBJECT_KEY_INVALID",
+      "descriptor_overrides": {
+        "object_key": "/fixture_artifact.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "an arbitrary external origin is rejected",
+      "stage": "validation",
+      "expected_code": "ORIGIN_NOT_APPROVED",
+      "descriptor_overrides": {
+        "url": "https://cdn.example.com/fixture_artifact.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a plain http origin is rejected",
+      "stage": "validation",
+      "expected_code": "ORIGIN_NOT_HTTPS",
+      "descriptor_overrides": {
+        "url": "http://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/fixture_artifact.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a url with embedded credentials is rejected",
+      "stage": "validation",
+      "expected_code": "ORIGIN_HAS_CREDENTIALS",
+      "descriptor_overrides": {
+        "url": "https://user:pass@pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/fixture_artifact.ng.v1.1.json"
+      }
+    },
+    {
+      "name": "a url carrying a query-string secret is rejected",
+      "stage": "validation",
+      "expected_code": "ORIGIN_HAS_QUERY",
+      "descriptor_overrides": {
+        "url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/fixture_artifact.ng.v1.1.json?token=REDACTED"
+      }
+    },
+    {
+      "name": "a rollback target that resolves to no descriptor is rejected",
+      "stage": "validation",
+      "expected_code": "INVALID_ROLLBACK_TARGET",
+      "descriptor_overrides": {
+        "rollback_target": {
+          "artifact_version": "0.9",
+          "sha256": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      }
+    },
+    {
+      "name": "a rollback target with a mismatched hash is rejected",
+      "stage": "validation",
+      "expected_code": "INVALID_ROLLBACK_TARGET",
+      "descriptor_overrides": {
+        "rollback_target": {
+          "artifact_version": "1.0",
+          "sha256": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      }
+    },
+    {
+      "name": "a self-referencing rollback target is rejected as a cycle",
+      "stage": "validation",
+      "expected_code": "RELATIONSHIP_CYCLE",
+      "descriptor_overrides": {
+        "rollback_target": {
+          "artifact_version": "1.1",
+          "sha256": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+        }
+      }
+    },
+    {
+      "name": "a predecessor/rollback relationship cycle is rejected",
+      "stage": "validation",
+      "expected_code": "RELATIONSHIP_CYCLE",
+      "other_descriptor_overrides": {
+        "predecessor": {
+          "artifact_version": "1.1",
+          "sha256": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+        }
+      }
+    },
+    {
+      "name": "a missing clinical approval record is rejected",
+      "stage": "validation",
+      "expected_code": "APPROVAL_MISSING",
+      "remove_descriptor_fields": [
+        "approvals.clinical"
+      ]
+    },
+    {
+      "name": "an unknown approval status is rejected, never coerced",
+      "stage": "validation",
+      "expected_code": "APPROVAL_STATUS_UNKNOWN",
+      "descriptor_overrides": {
+        "approvals": {
+          "clinical": {
+            "status": "auto_approved"
+          }
+        }
+      }
+    },
+    {
+      "name": "missing product approval denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_NOT_GRANTED",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "status": "pending",
+            "decision_ref": null
+          }
+        }
+      }
+    },
+    {
+      "name": "a required clinical approval still pending denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_NOT_GRANTED",
+      "descriptor_overrides": {
+        "approvals": {
+          "clinical": {
+            "status": "pending",
+            "decision_ref": null
+          }
+        }
+      }
+    },
+    {
+      "name": "product approval cannot substitute for clinical approval",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_NOT_GRANTED",
+      "descriptor_overrides": {
+        "approvals": {
+          "product": {
+            "status": "granted",
+            "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)"
+          },
+          "clinical": {
+            "status": "pending",
+            "decision_ref": null
+          }
+        }
+      }
+    },
+    {
+      "name": "a withdrawn approval denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "APPROVAL_NOT_GRANTED",
+      "descriptor_overrides": {
+        "approvals": {
+          "clinical": {
+            "status": "denied",
+            "decision_ref": null
+          }
+        }
+      }
+    },
+    {
+      "name": "an open safety blocker denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "BLOCKER_UNRESOLVED",
+      "descriptor_overrides": {
+        "blockers": [
+          {
+            "id": "IM003-SB-001",
+            "status": "open",
+            "reference": "fixture"
+          }
+        ]
+      }
+    },
+    {
+      "name": "missing publication denies eligibility even when activation is authorized",
+      "stage": "eligibility",
+      "expected_code": "NOT_PUBLISHED",
+      "descriptor_overrides": {
+        "release_status": "candidate",
+        "published_at": null
+      }
+    },
+    {
+      "name": "missing activation authorization denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "ACTIVATION_NOT_AUTHORIZED",
+      "descriptor_overrides": {
+        "activation_authorized": false,
+        "activation_decision_ref": null
+      }
+    },
+    {
+      "name": "an environment mismatch denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "ENVIRONMENT_NOT_AUTHORIZED",
+      "context_overrides": {
+        "environment": "production"
+      }
+    },
+    {
+      "name": "an expired descriptor denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "DESCRIPTOR_EXPIRED",
+      "descriptor_overrides": {
+        "expires_at": "2026-01-01T00:00:00Z"
+      }
+    },
+    {
+      "name": "a deprecated descriptor denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "DESCRIPTOR_DEPRECATED",
+      "descriptor_overrides": {
+        "deprecated": true
+      }
+    },
+    {
+      "name": "an incompatible app build denies eligibility",
+      "stage": "eligibility",
+      "expected_code": "APP_BUILD_INCOMPATIBLE",
+      "descriptor_overrides": {
+        "min_app_build": 500
+      }
+    },
+    {
+      "name": "an unknown consumer build fails closed when a minimum is declared",
+      "stage": "eligibility",
+      "expected_code": "APP_BUILD_INCOMPATIBLE",
+      "descriptor_overrides": {
+        "min_app_build": 10
+      },
+      "context_overrides": {
+        "app_build": null
+      }
+    },
+    {
+      "name": "published is not active: publication alone selects nothing",
+      "stage": "selection",
+      "expected_code": "NOT_ACTIVE",
+      "descriptor_overrides": {
+        "activation_status": "inactive"
+      }
+    },
+    {
+      "name": "candidate existence is never treated as eligibility",
+      "stage": "selection",
+      "expected_code": "NO_ACTIVE_ARTIFACT",
+      "descriptor_overrides": {
+        "release_status": "candidate",
+        "published_at": null,
+        "activation_status": "inactive",
+        "activation_authorized": false,
+        "activation_decision_ref": null
+      }
+    },
+    {
+      "name": "two simultaneously active descriptors select nothing",
+      "stage": "selection",
+      "expected_code": "MULTIPLE_ACTIVE",
+      "other_descriptor_overrides": {
+        "release_status": "published",
+        "published_at": "2026-08-01T00:00:00Z",
+        "activation_status": "active",
+        "activation_authorized": true,
+        "activation_decision_ref": "FIXTURE-ACTIVATION-0002 (synthetic)",
+        "deprecated": false
+      }
+    },
+    {
+      "name": "bytes that do not hash to the declared sha256 are rejected",
+      "stage": "integrity",
+      "expected_code": "HASH_MISMATCH",
+      "bytes_utf8": "{\"not\":\"the artifact\"}"
+    },
+    {
+      "name": "bytes with the wrong byte count are rejected",
+      "stage": "integrity",
+      "expected_code": "BYTE_COUNT_MISMATCH",
+      "bytes_utf8": "{\"not\":\"the artifact\"}"
+    }
+  ]
+}

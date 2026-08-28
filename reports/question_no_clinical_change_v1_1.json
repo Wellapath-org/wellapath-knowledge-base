@@ -442,7 +442,7 @@
     }
   },
   "content_safety": {
-    "files_scanned": 120,
+    "files_scanned": 124,
     "files_excluded": [
       "reports/im003_decision_package_v1.json",
       "reports/im003_impact_analysis_v1.json",

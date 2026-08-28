@@ -1,0 +1,280 @@
+{
+  "_metadata": {
+    "register_id": "publication_decision_register",
+    "version": "1",
+    "phase": "I3 / Step 2",
+    "generator": "tools/build_governance_register.py",
+    "generator_version": "1.0.0",
+    "authoritative": false,
+    "note": "A derived transcription of decision records that already exist in this repository, each bound to its source by path and sha256. The sources are authoritative; this file is a machine-readable index of them and adds no decision of its own.",
+    "sources": {
+      "candidate_question_flow_1_1": {
+        "path": "candidate/question_flow.ng.v1.1.json",
+        "sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b"
+      },
+      "candidate_token_dictionary_2_0": {
+        "path": "candidate/token_dictionary.ng.v2.0.json",
+        "sha256": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d"
+      },
+      "im001_order_decision": {
+        "path": "reports/im001_option_order_decision_v1.json",
+        "sha256": "594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1"
+      },
+      "im001_product_review": {
+        "path": "reports/im001_product_review_v1_1.json",
+        "sha256": "930fd258a7739affd4a9117b26e4b4017b396391ecc5fcfedaef0ad363a3ee65"
+      },
+      "im001_verdicts": {
+        "path": "reports/im001_product_verdicts_v1.json",
+        "sha256": "14df39e8aacc624ae913f05b5b4b00086bf3d050523f8e795edf582f5f03fed3"
+      },
+      "im003_blockers": {
+        "path": "reports/im003_safety_blockers_v1.json",
+        "sha256": "f97ffd72448bcd6d75ba02a63de1ac93ebbd5f8a54599e9c7812deb88d6c9c59"
+      },
+      "im003_disposition": {
+        "path": "reports/im003_disposition_v1.json",
+        "sha256": "367fe0873daf26c2263a4d62b62b01d86b958b147263a82416c907e4e3228f39"
+      }
+    }
+  },
+  "governance_state": {
+    "clinical_reviewer": {
+      "assigned": false,
+      "reviewer": null,
+      "status": "not_assigned",
+      "product_reviewer_is_qualified_clinical_reviewer": false,
+      "authority_rule": "The named Product reviewer holds Product authority only. Without a separate explicit record of a named, qualified Clinical reviewer accepting responsibility, no statement in the source record may be represented as a clinical decision or clinical approval. All dispositions below are Product dispositions; every clinical-side item is an OPEN requirement.",
+      "consequence": "No Clinical decision record can exist while no Clinical reviewer is assigned. This tooling therefore holds no clinical record, assigns no reviewer, and resolves every clinical claim to KB_DECISION_RECORD_MISSING.",
+      "source": {
+        "path": "reports/im003_disposition_v1.json",
+        "sha256": "367fe0873daf26c2263a4d62b62b01d86b958b147263a82416c907e4e3228f39"
+      }
+    },
+    "publication_authorization": {
+      "granted": false,
+      "record": null,
+      "note": "No publication authorization record exists for any artifact in this repository. Absence is recorded as absence."
+    },
+    "activation_authorization": {
+      "granted": false,
+      "record": null,
+      "note": "No activation authorization record exists for any artifact in this repository. Absence is recorded as absence."
+    },
+    "mobile_implementation_authorization": {
+      "granted": false,
+      "record": null,
+      "note": "Not authorized. Mobile PR #76 remains unauthorized to merge; this tooling instructs Mobile to implement nothing."
+    }
+  },
+  "decisions": [
+    {
+      "decision_id": "IM001-ORD-GLOBAL-001",
+      "authority_type": "product",
+      "reviewer": {
+        "identity": "Ayodele John Oluwaseyi",
+        "title": "Co-Founder & CEO, WellaPath"
+      },
+      "decision_date": "2026-08-24",
+      "status": "approved",
+      "subject": {
+        "artifact_id": "question_flow",
+        "artifact_version": "1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "hash_binding": "bound"
+      },
+      "rationale": "A stable option order provides a consistent and predictable user experience regardless of symptom-selection order and improves reproducibility, testing and documentation. Evidence establishes that the change affects display order only.",
+      "decision_reference": {
+        "path": "reports/im001_option_order_decision_v1.json",
+        "sha256": "594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1"
+      },
+      "scope": {
+        "authorizes": [],
+        "does_not_authorize": [
+          "product_approval",
+          "clinical_approval",
+          "publication_authorization",
+          "activation_authorization",
+          "mobile_implementation_authorization"
+        ],
+        "authorizes_verbatim": [
+          "deterministic ordering of the same existing options within a grouped question"
+        ],
+        "does_not_authorize_verbatim": [
+          "rewording any question",
+          "adding an option",
+          "removing an option",
+          "changing an option-to-token mapping",
+          "changing scoring, ranking or urgency",
+          "changing any red-flag token, rule or trigger",
+          "IM-003 adaptive re-branching",
+          "publication of any candidate",
+          "production or beta activation"
+        ],
+        "note": "This decision approves a deterministic option-ordering rule. It is Product authority over display order and nothing else; its own record lists 'publication of any candidate' and 'production or beta activation' among what it does not authorize. `authorizes` is empty because no publication-lifecycle claim is within its scope \u2014 not because the decision is weak or provisional."
+      },
+      "supersession": {
+        "superseded_by": null,
+        "revoked": false,
+        "revocation_reference": null
+      },
+      "expires_at": null,
+      "is_decision_set_completion": false,
+      "conditionality": {
+        "clinical_review_required": false,
+        "is_conditional": true,
+        "condition": "Product review alone is sufficient ONLY while option membership, option-to-token mapping, reachable tokens, scoring reachability and red-flag reachability all remain zero. If any becomes non-zero this classification is invalid, clinical review becomes mandatory, and validation fails."
+      }
+    },
+    {
+      "decision_id": "IM001-DECISION-SET-COMPLETE",
+      "authority_type": "product",
+      "reviewer": {
+        "identity": "Ayodele John Oluwaseyi",
+        "title": "Co-Founder & CEO, WellaPath"
+      },
+      "decision_date": "2026-08-24",
+      "status": "approved",
+      "subject": {
+        "artifact_id": "question_flow",
+        "artifact_version": "1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "hash_binding": "bound"
+      },
+      "rationale": "All 136 Product decisions are recorded (135 wording + 1 ordering; reports/im001_product_verdicts_v1.json, 2026-08-24). im_001_resolved refers to the DECISION SET only: activation, publication and Mobile implementation remain unauthorized, and clinical flag IM001-CLIN-FLAG-001 must be reviewed by Clinical before any activation decision involving fast_breathing_child.severity.",
+      "decision_reference": {
+        "path": "reports/im001_option_order_decision_v1.json",
+        "sha256": "594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1"
+      },
+      "scope": {
+        "authorizes": [],
+        "does_not_authorize": [
+          "product_approval",
+          "clinical_approval",
+          "publication_authorization",
+          "activation_authorization",
+          "mobile_implementation_authorization"
+        ],
+        "means_only": "All Product display decisions in the IM-001 decision set have been recorded.",
+        "does_not_mean": [
+          "candidate activation-ready",
+          "clinical review complete",
+          "question content clinically approved",
+          "publication approved",
+          "Mobile implementation authorized",
+          "external beta or production approved"
+        ],
+        "note": "Consumers MUST read this scope with the boolean. im_001_resolved carries no authorization of any kind; every authorization gate is a separate explicit field and all are false."
+      },
+      "supersession": {
+        "superseded_by": null,
+        "revoked": false,
+        "revocation_reference": null
+      },
+      "expires_at": null,
+      "is_decision_set_completion": true,
+      "decision_set": {
+        "total_product_decisions_required": 136,
+        "wording_decisions_pending": 0,
+        "ordering_rule_decisions_pending": 0,
+        "im_001_resolved": true,
+        "verdicts_reference": {
+          "path": "reports/im001_product_verdicts_v1.json",
+          "sha256": "14df39e8aacc624ae913f05b5b4b00086bf3d050523f8e795edf582f5f03fed3"
+        },
+        "reading_rule": "im_001_resolved reports that a backlog of Product display decisions is empty. A count reaching zero is not a permission. Any consumer reading the boolean MUST read this scope with it."
+      }
+    },
+    {
+      "decision_id": "IM003-DISPOSITION-001",
+      "authority_type": "product",
+      "reviewer": {
+        "identity": "Ayodele John Oluwaseyi",
+        "title": "Co-Founder & CEO, WellaPath"
+      },
+      "decision_date": "2026-08-22",
+      "status": "approved",
+      "subject": {
+        "artifact_id": "question_flow",
+        "artifact_version": "1.1",
+        "artifact_sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+        "hash_binding": "bound"
+      },
+      "rationale": "The named Product reviewer holds Product authority only. Without a separate explicit record of a named, qualified Clinical reviewer accepting responsibility, no statement in the source record may be represented as a clinical decision or clinical approval. All dispositions below are Product dispositions; every clinical-side item is an OPEN requirement.",
+      "decision_reference": {
+        "path": "reports/im003_disposition_v1.json",
+        "sha256": "367fe0873daf26c2263a4d62b62b01d86b958b147263a82416c907e4e3228f39"
+      },
+      "scope": {
+        "authorizes": [],
+        "does_not_authorize": [
+          "product_approval",
+          "clinical_approval",
+          "publication_authorization",
+          "activation_authorization",
+          "mobile_implementation_authorization"
+        ],
+        "note": "A recorded Product disposition of the IM-003 safety review. It records what Product decided; it grants no publication-lifecycle permission. The same record states clinical_approval false, IM-003 DISABLED, and Mobile PR #76 not merge-authorized."
+      },
+      "supersession": {
+        "superseded_by": null,
+        "revoked": false,
+        "revocation_reference": null
+      },
+      "expires_at": null,
+      "is_decision_set_completion": false,
+      "recorded_state": {
+        "im003": "DISABLED",
+        "im003_sb_001": "OPEN",
+        "clinical_rule": "REQUIRED_NOT_APPROVED",
+        "clinical_approval": false,
+        "mobile_pr_76_merge_authorization": false,
+        "external_beta": "BLOCKED",
+        "production": "BLOCKED",
+        "product_decisions_are_clinical_decisions": false
+      }
+    }
+  ],
+  "blockers": [
+    {
+      "id": "IM001-CLIN-FLAG-001",
+      "status": "open",
+      "applies_to": [
+        {
+          "artifact_id": "question_flow",
+          "artifact_version": "1.1"
+        }
+      ],
+      "reference": "Open Clinical flag raised during IM-001 Product review (fast_breathing_child.severity, IM001-D018/D027). Requires Clinical review before any activation decision involving that question. No Clinical reviewer is assigned.",
+      "authority_to_resolve": "clinical",
+      "source": {
+        "path": "reports/im001_option_order_decision_v1.json",
+        "sha256": "594d98e5bca9600b39ca1daff3076194ecb2958bd99fc03803f4fe27adae0bd1"
+      }
+    },
+    {
+      "id": "IM003-SB-001",
+      "status": "open",
+      "status_verbatim": "open_awaiting_clinical_and_product_adjudication",
+      "applies_to": [
+        {
+          "artifact_id": "question_flow",
+          "artifact_version": "1.1"
+        }
+      ],
+      "reference": "Additive re-branching de-escalated urgency from emergency to urgent with no red-flag change",
+      "authority_to_resolve": "clinical_and_product",
+      "source": {
+        "path": "reports/im003_safety_blockers_v1.json",
+        "sha256": "f97ffd72448bcd6d75ba02a63de1ac93ebbd5f8a54599e9c7812deb88d6c9c59"
+      },
+      "recorded_state": {
+        "clinical_approval": false,
+        "product_approval": false,
+        "im003_activation_authorized": false,
+        "external_beta_approval": false,
+        "production_approval": false
+      }
+    }
+  ]
+}

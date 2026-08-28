@@ -1,0 +1,99 @@
+{
+  "_fixture_warning": "SYNTHETIC FIXTURE \u2014 artifact_id 'fixture_artifact' is not a real artifact and never will be. Its governance fields are fixture values chosen so negative cases have something valid to break; they record no decision anyone made. Its sha256 and byte_count are the real digests of real repository files so integrity cases run against bytes that exist. This descriptor names no object, must never reach a live manifest, and grants nothing.",
+  "manifest_version": "1.0.0",
+  "generated_at": "2026-08-28T00:00:00Z",
+  "artifacts": [
+    {
+      "artifact_id": "fixture_artifact",
+      "artifact_version": "1.0",
+      "schema_version": "wellapath.artifact/1",
+      "content_type": "application/json",
+      "sha256": "sha256:773006dee306a3b03312315134fe62d7abf1aa29baa1903a388854f34f24b76d",
+      "byte_count": 8557,
+      "object_key": "fixture_artifact.ng.v1.0.json",
+      "release_status": "deprecated",
+      "activation_status": "inactive",
+      "activation_authorized": false,
+      "activation_decision_ref": null,
+      "target_environments": [
+        "staging"
+      ],
+      "publication_decision_ref": "FIXTURE-PUBLICATION-0001 (synthetic)",
+      "approvals": {
+        "product": {
+          "required": true,
+          "status": "granted",
+          "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)",
+          "approved_at": "2026-08-01T00:00:00Z"
+        },
+        "clinical": {
+          "required": true,
+          "status": "granted",
+          "decision_ref": "FIXTURE-CLINICAL-0001 (synthetic)",
+          "approved_at": "2026-08-01T00:00:00Z"
+        }
+      },
+      "blockers": [],
+      "predecessor": null,
+      "rollback_target": null,
+      "created_at": "2026-08-01T00:00:00Z",
+      "published_at": "2026-08-01T00:00:00Z",
+      "deprecated": true,
+      "expires_at": null,
+      "country": "ng",
+      "references": [
+        "SYNTHETIC FIXTURE \u2014 artifact_id 'fixture_artifact' is not a real artifact and never will be. Its governance fields are fixture values chosen so negative cases have something valid to break; they record no decision anyone made. Its sha256 and byte_count are the real digests of real repository files so integrity cases run against bytes that exist. This descriptor names no object, must never reach a live manifest, and grants nothing.",
+        "bytes borrowed from token_dictionary.ng.v1.0.json"
+      ]
+    },
+    {
+      "artifact_id": "fixture_artifact",
+      "artifact_version": "1.1",
+      "schema_version": "wellapath.artifact/1",
+      "content_type": "application/json",
+      "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+      "byte_count": 8820,
+      "object_key": "fixture_artifact.ng.v1.1.json",
+      "release_status": "published",
+      "activation_status": "active",
+      "activation_authorized": true,
+      "activation_decision_ref": "FIXTURE-ACTIVATION-0001 (synthetic)",
+      "target_environments": [
+        "staging"
+      ],
+      "publication_decision_ref": "FIXTURE-PUBLICATION-0001 (synthetic)",
+      "approvals": {
+        "product": {
+          "required": true,
+          "status": "granted",
+          "decision_ref": "FIXTURE-PRODUCT-0001 (synthetic)",
+          "approved_at": "2026-08-01T00:00:00Z"
+        },
+        "clinical": {
+          "required": true,
+          "status": "granted",
+          "decision_ref": "FIXTURE-CLINICAL-0001 (synthetic)",
+          "approved_at": "2026-08-01T00:00:00Z"
+        }
+      },
+      "blockers": [],
+      "predecessor": {
+        "artifact_version": "1.0",
+        "sha256": "sha256:773006dee306a3b03312315134fe62d7abf1aa29baa1903a388854f34f24b76d"
+      },
+      "rollback_target": {
+        "artifact_version": "1.0",
+        "sha256": "sha256:773006dee306a3b03312315134fe62d7abf1aa29baa1903a388854f34f24b76d"
+      },
+      "created_at": "2026-08-01T00:00:00Z",
+      "published_at": "2026-08-01T00:00:00Z",
+      "deprecated": false,
+      "expires_at": null,
+      "country": "ng",
+      "references": [
+        "SYNTHETIC FIXTURE \u2014 artifact_id 'fixture_artifact' is not a real artifact and never will be. Its governance fields are fixture values chosen so negative cases have something valid to break; they record no decision anyone made. Its sha256 and byte_count are the real digests of real repository files so integrity cases run against bytes that exist. This descriptor names no object, must never reach a live manifest, and grants nothing.",
+        "bytes borrowed from token_dictionary.ng.v1.1.json"
+      ]
+    }
+  ]
+}
