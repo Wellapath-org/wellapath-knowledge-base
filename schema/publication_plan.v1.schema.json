@@ -24,7 +24,8 @@
     "rollback",
     "eligibility_by_environment",
     "blocking_reasons",
-    "conclusion"
+    "conclusion",
+    "source_provenance"
   ],
   "properties": {
     "_metadata": {
@@ -562,7 +563,8 @@
         "claims",
         "blockers",
         "clinical_reviewer_assigned",
-        "product_approval_scope"
+        "product_approval_scope",
+        "register_sha256"
       ],
       "properties": {
         "register": {
@@ -819,6 +821,11 @@
               "minLength": 1
             }
           }
+        },
+        "register_sha256": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$",
+          "description": "The register is bound by hash, not by path: a path is a mutable pointer."
         }
       }
     },
@@ -891,6 +898,138 @@
         "statement": {
           "type": "string",
           "minLength": 1
+        }
+      }
+    },
+    "source_provenance": {
+      "type": "object",
+      "description": "What this plan does and does not establish about the artifact's origin. Present so the five kinds of provenance cannot be conflated \u2014 conflating them is how a hash gets read as an approval.",
+      "required": [
+        "artifact_byte_identity",
+        "generator_input_identity",
+        "decision_record_provenance",
+        "publication_plan_provenance",
+        "repository_branch_state",
+        "ingestion_boundary"
+      ],
+      "properties": {
+        "artifact_byte_identity": {
+          "type": "object",
+          "required": [
+            "field",
+            "immutable",
+            "self_verifying",
+            "establishes",
+            "does_not_establish"
+          ],
+          "properties": {
+            "field": {
+              "const": "descriptor.sha256"
+            },
+            "immutable": {
+              "const": true
+            },
+            "self_verifying": {
+              "const": true
+            },
+            "establishes": {
+              "type": "string",
+              "minLength": 1
+            },
+            "does_not_establish": {
+              "type": "array",
+              "minItems": 4,
+              "items": {
+                "type": "string"
+              },
+              "description": "Must state, in words, that the hash is not approval, not source authorization, not review, and not a commit."
+            }
+          }
+        },
+        "decision_record_provenance": {
+          "type": "object",
+          "required": [
+            "register",
+            "register_sha256",
+            "bound_by",
+            "note"
+          ],
+          "properties": {
+            "register": {
+              "type": "string",
+              "minLength": 1
+            },
+            "register_sha256": {
+              "type": "string",
+              "pattern": "^sha256:[0-9a-f]{64}$"
+            },
+            "bound_by": {
+              "const": "hash"
+            },
+            "note": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "repository_branch_state": {
+          "type": "object",
+          "required": [
+            "cited",
+            "reason"
+          ],
+          "properties": {
+            "cited": {
+              "const": false,
+              "description": "A mutable branch tip is never cited as provenance."
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "ingestion_boundary": {
+          "type": "object",
+          "required": [
+            "supplied_by_this_plan",
+            "must_be_supplied_by_the_ingestion_envelope",
+            "must_never_be_inferred",
+            "rule"
+          ],
+          "properties": {
+            "supplied_by_this_plan": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "must_be_supplied_by_the_ingestion_envelope": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            },
+            "must_never_be_inferred": {
+              "type": "array",
+              "minItems": 3,
+              "items": {
+                "type": "string"
+              }
+            },
+            "rule": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "generator_input_identity": {
+          "type": "object"
+        },
+        "publication_plan_provenance": {
+          "type": "object"
         }
       }
     }

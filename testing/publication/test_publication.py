@@ -1254,6 +1254,130 @@ class ApprovalScopeContractTests(unittest.TestCase):
         self.assertEqual(contract.ARTIFACT_APPROVAL_SLOT_SCOPE, "artifact_publication")
 
 
+class SourceProvenanceTests(unittest.TestCase):
+    """The five kinds of provenance stay distinct, and a hash never stands in for governance.
+
+    The rule this enforces is the one that matters at ingestion: a matching sha256 proves the
+    bytes are the bytes. It proves nothing about who approved them or where they came from. An
+    ingester that reads hash agreement as governance evidence has skipped the governance check.
+    """
+
+    def plans(self):
+        return load_plans()
+
+    def test_the_hash_is_documented_as_identity_and_not_authorization(self):
+        for plan in self.plans():
+            identity = plan["source_provenance"]["artifact_byte_identity"]
+            self.assertEqual(identity["field"], "descriptor.sha256")
+            joined = " ".join(identity["does_not_establish"]).lower()
+            for claim in ("approved", "authoris", "review", "commit"):
+                self.assertIn(claim, joined, claim)
+
+    def test_the_governance_register_is_bound_by_hash_not_by_path(self):
+        import hashlib
+
+        with open(repo("publication", "governance", "decision_register_v1.json"), "rb") as handle:
+            digest = "sha256:%s" % hashlib.sha256(handle.read()).hexdigest()
+        for plan in self.plans():
+            self.assertEqual(plan["governance"]["register_sha256"], digest)
+            self.assertEqual(
+                plan["source_provenance"]["decision_record_provenance"]["register_sha256"], digest
+            )
+            self.assertEqual(
+                plan["source_provenance"]["decision_record_provenance"]["bound_by"], "hash"
+            )
+            cited = [r for r in plan["descriptor"]["references"] if "governance register" in r]
+            self.assertEqual(len(cited), 1)
+            self.assertIn(digest.split(":")[1], cited[0])
+
+    def test_no_mutable_branch_tip_is_cited(self):
+        for plan in self.plans():
+            self.assertIs(plan["source_provenance"]["repository_branch_state"]["cited"], False)
+
+    def test_the_ingestion_boundary_is_recorded_explicitly(self):
+        for plan in self.plans():
+            boundary = plan["source_provenance"]["ingestion_boundary"]
+            envelope = " ".join(boundary["must_be_supplied_by_the_ingestion_envelope"]).lower()
+            self.assertIn("commit", envelope)
+            never = " ".join(boundary["must_never_be_inferred"]).lower()
+            self.assertIn("governance approval from a matching artifact hash", never)
+            self.assertIn("source authorization from a matching artifact hash", never)
+
+    def test_governance_cannot_be_inferred_from_a_valid_artifact_hash(self):
+        """The behavioural form of the rule, not just the documented one.
+
+        A descriptor whose hash and byte count are perfectly correct — verified against the
+        real artifact bytes — must still be unapproved and ineligible, because nothing granted
+        anything. If this ever passes, an ingester could treat integrity as authorization.
+        """
+        from pubkit.integrity import measure, verify_bytes
+
+        entries = inventory.discover()
+        for plan in self.plans():
+            descriptor = plan["descriptor"]
+            entry = inventory.find(
+                entries, descriptor["artifact_id"], descriptor["artifact_version"]
+            )
+            data, digest, byte_count = measure(
+                os.path.join(inventory.REPO_ROOT, entry["repository_path"])
+            )
+            # Integrity is genuinely, verifiably sound ...
+            self.assertEqual(digest, descriptor["sha256"])
+            self.assertEqual(byte_count, descriptor["byte_count"])
+            self.assertEqual(
+                verify_bytes(data, descriptor["sha256"], descriptor["byte_count"], "x"), []
+            )
+            # ... and the descriptor is still approved by nobody and eligible nowhere.
+            for environment in ("development", "staging", "production"):
+                states, _ = eligibility.evaluate_descriptor(
+                    descriptor, environment, now=PLAN_EVALUATION_INSTANT
+                )
+                self.assertFalse(states["approved"], environment)
+                self.assertFalse(states["eligible_for_environment"], environment)
+
+    def test_a_register_edited_after_the_fact_breaks_its_binding(self):
+        """The point of hash-binding the register: a path citation would not notice."""
+        import hashlib
+        import json as _json
+
+        register = load_json(repo("publication", "governance", "decision_register_v1.json"))
+        register["_metadata"]["note"] = "edited after the plan cited it"
+        edited = "sha256:%s" % hashlib.sha256(
+            (_json.dumps(register, indent=2, ensure_ascii=True) + "\n").encode("utf-8")
+        ).hexdigest()
+        for plan in self.plans():
+            self.assertNotEqual(plan["governance"]["register_sha256"], edited)
+
+    def test_the_five_provenance_kinds_are_all_present_and_distinct(self):
+        expected = {
+            "artifact_byte_identity",
+            "generator_input_identity",
+            "decision_record_provenance",
+            "publication_plan_provenance",
+            "repository_branch_state",
+            "ingestion_boundary",
+        }
+        for plan in self.plans():
+            self.assertEqual(set(plan["source_provenance"]), expected)
+
+    def test_generator_input_identity_lives_inside_the_artifact_bytes(self):
+        """So it cannot drift from the artifact it describes."""
+        entries = inventory.discover()
+        for plan in self.plans():
+            block = plan["source_provenance"]["generator_input_identity"]
+            self.assertIs(block["covered_by_artifact_sha256"], True)
+            self.assertIs(block["recorded_inside_artifact_metadata"], True)
+            entry = inventory.find(
+                entries, plan["target"]["artifact_id"], plan["target"]["artifact_version"]
+            )
+            artifact = load_json(repo(*entry["repository_path"].split("/")))
+            metadata = artifact["_metadata"]
+            self.assertTrue(
+                "provenance" in metadata or "source" in metadata,
+                "%s records no provenance inside its own bytes" % entry["repository_path"],
+            )
+
+
 class ContractProvenanceTests(unittest.TestCase):
     """A plan must describe the contract it was actually built and checked against.
 

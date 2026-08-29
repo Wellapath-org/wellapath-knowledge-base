@@ -36,7 +36,7 @@ fails if a socket, a subprocess or a write outside the staging directory is even
 | `python3 tools/validate_publication_plan.py` | Validates every committed plan, recomputes its digests from real bytes, and PHI/secret-scans `publication/` and `contracts/`. |
 | `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 120 negative fixtures and the 14 mutation proofs. |
 | `python3 tools/report_publication_freeze.py [--check]` | Records and re-verifies the 44 frozen artifacts. |
-| `python3 testing/publication/test_publication.py` | 153 unit tests. |
+| `python3 testing/publication/test_publication.py` | 161 unit tests. |
 
 ---
 

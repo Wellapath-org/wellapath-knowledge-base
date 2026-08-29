@@ -302,6 +302,26 @@ def scan_contract_narrative(contract_pin):
     offenders = []
     scanned = 0
 
+    # An exemption names one exact file, and that file must exist. Without this the list
+    # accumulates entries for paths that are gone, and a later file created at one of those
+    # paths inherits an exemption nobody granted it — which is how a rename silently converts
+    # active material into exempt material.
+    absent = sorted(path for path in CONTRACT_NARRATIVE_EXEMPT if not os.path.exists(repo_path(path)))
+    results.add(
+        "every narrative exemption names a file that exists",
+        not absent,
+        "stale exemption(s): %s" % ", ".join(absent),
+    )
+    shaped = sorted(
+        path for path in CONTRACT_NARRATIVE_EXEMPT
+        if path.endswith("/") or any(ch in path for ch in "*?[")
+    )
+    results.add(
+        "every narrative exemption is a single exact path, not a pattern",
+        not shaped,
+        ", ".join(shaped),
+    )
+
     for tree in CONTRACT_NARRATIVE_TREES:
         root = repo_path(tree)
         if not os.path.isdir(root):

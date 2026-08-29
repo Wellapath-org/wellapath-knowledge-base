@@ -219,6 +219,7 @@ def build_plan(
             "another; see tools/pubkit/lifecycle.py for the implications that do not hold.",
         },
         "generation": generation,
+        "source_provenance": _source_provenance(entry, generation),
         "validation": validation,
         "integrity": {
             "sha256": digest,
@@ -251,7 +252,11 @@ def build_plan(
         "descriptor": descriptor,
         "contract_validation": contract_validation,
         "governance": {
-            "register": "publication/governance/decision_register_v1.json",
+            "register": REGISTER_RELATIVE_PATH,
+            # Bound by hash, not by path. A path is a mutable pointer: the register could be
+            # edited afterwards and the plan would still "cite" it. The same defect as the
+            # branch tip this step removed, one level further out.
+            "register_sha256": "sha256:%s" % _register_digest(),
             "evaluated_as_of": PLAN_EVALUATION_DATE,
             "claims": governance["claims"],
             "blockers": blockers,
@@ -550,6 +555,19 @@ def _resolve_governance(register, artifact_id, artifact_version, digest):
     return {"claims": claims, "resolved": resolved, "reasons": reasons}
 
 
+REGISTER_RELATIVE_PATH = "publication/governance/decision_register_v1.json"
+
+
+def _register_digest():
+    """The governance register's own sha256, so the plan's citation of it is immutable."""
+    import hashlib
+    import os as _os
+
+    path = _os.path.join(REPO_ROOT, *REGISTER_RELATIVE_PATH.split("/"))
+    with open(path, "rb") as handle:
+        return hashlib.sha256(handle.read()).hexdigest()
+
+
 def _read_register_document():
     import json
     import os as _os
@@ -594,6 +612,92 @@ def _blockers_for(artifact_id, artifact_version):
     ]
     blockers.sort(key=lambda item: item["id"])
     return blockers
+
+
+def _source_provenance(entry, generation):
+    """What this plan does and does not establish about where the artifact came from.
+
+    Written out because the five things below get conflated, and conflating them is how a hash
+    ends up being read as an approval:
+
+    * **artifact-byte identity** — which bytes. `descriptor.sha256`, self-verifying, immutable.
+    * **generator input identity** — what produced them. Recorded inside the artifact's own
+      `_metadata` (and so covered by that sha256), not asserted separately by the plan.
+    * **decision-record provenance** — who decided what. The governance register, bound here by
+      hash, whose own records are each bound to their source file by hash.
+    * **publication-plan provenance** — which contract this plan was built against. The pin
+      block, bound to schema digest and byte count.
+    * **repository branch state** — deliberately absent. A branch tip is mutable, has to be
+      maintained by hand, and went stale three merges running before it was removed.
+
+    The boundary this records: **source-repository provenance is the ingestion envelope's job,
+    not this plan's.** A future ingestion must be handed the source commit by whatever performs
+    the ingestion; it must never infer it, and it must never treat a matching hash as evidence
+    that anything was approved.
+    """
+    return {
+        "artifact_byte_identity": {
+            "field": "descriptor.sha256",
+            "immutable": True,
+            "self_verifying": True,
+            "establishes": "which exact bytes this descriptor is about",
+            "does_not_establish": [
+                "that the bytes were approved",
+                "that their source was authorised",
+                "that their content was reviewed",
+                "which repository or commit they came from",
+            ],
+        },
+        "generator_input_identity": {
+            "generator": generation["generator"],
+            "generator_version": generation["generator_version"],
+            "recorded_inside_artifact_metadata": True,
+            "covered_by_artifact_sha256": True,
+            "note": "The artifact records its own sources under _metadata.provenance / "
+            "_metadata.source, including upstream repository, commit and per-file digests where "
+            "it has them. That record is inside the bytes, so descriptor.sha256 covers it: it "
+            "cannot drift from the artifact it describes.",
+        },
+        "decision_record_provenance": {
+            "register": REGISTER_RELATIVE_PATH,
+            "register_sha256": "sha256:%s" % _register_digest(),
+            "bound_by": "hash",
+            "note": "Each record in the register is itself bound to its source decision file by "
+            "path and sha256. This is the only channel through which anything in this plan may "
+            "be read as governance.",
+        },
+        "publication_plan_provenance": {
+            "bound_to": "contract_pin and contract_validation",
+            "note": "Which contract this plan was built and checked against, bound to the "
+            "schema digest and byte count. Not a claim about the artifact's origin.",
+        },
+        "repository_branch_state": {
+            "cited": False,
+            "reason": "A branch tip is mutable and hand-maintained. The one previously carried "
+            "here named a commit three merges out of date. It is not replaced by a newer commit, "
+            "because a newer one would go stale the same way.",
+        },
+        "ingestion_boundary": {
+            "supplied_by_this_plan": [
+                "artifact-byte identity",
+                "decision-record provenance (hash-bound)",
+                "publication-plan / contract provenance",
+            ],
+            "must_be_supplied_by_the_ingestion_envelope": [
+                "the source repository and commit the bytes were taken from",
+                "the actor performing the ingestion",
+                "the authorization under which the ingestion occurs",
+            ],
+            "must_never_be_inferred": [
+                "governance approval from a matching artifact hash",
+                "source authorization from a matching artifact hash",
+                "a repository commit from any field in this plan",
+            ],
+            "rule": "A matching sha256 proves the bytes are the bytes. It proves nothing about "
+            "who approved them or where they came from. An ingester that treats hash agreement "
+            "as governance evidence has skipped the governance check entirely.",
+        },
+    }
 
 
 def _product_approval_scope(artifact_id, artifact_version, governance):
@@ -812,12 +916,16 @@ def _references(artifact_id, artifact_version, entry, contract_pin):
         "Not uploaded, not published, not activated, not served by any route, and not to be "
         "added to any live manifest.",
         "repository path: %s" % entry["repository_path"],
-        "artifact identity is bound by the sha256 above, over the exact bytes at that path; no "
-        "repository commit is cited because a commit would have to be maintained by hand and a "
-        "hash does not",
+        "the sha256 above identifies WHICH BYTES this descriptor is about, and nothing more. It "
+        "is not evidence that anyone approved them, authorised their source, or reviewed their "
+        "content: governance comes from the decision register bound below, and source-repository "
+        "provenance is supplied by the ingestion envelope at ingestion time, not by this plan",
+        "immutable source provenance for this artifact is recorded inside its own bytes "
+        "(_metadata.provenance / _metadata.source) and is therefore covered by the sha256 above; "
+        "no mutable repository branch tip is cited",
         "backend manifest contract %s at %s"
         % (contract_pin["contract"]["contract_version"], contract_pin["backend"]["merge_commit"]),
-        "governance register: publication/governance/decision_register_v1.json",
+        "governance register: %s (sha256:%s)" % (REGISTER_RELATIVE_PATH, _register_digest()),
         "IM-001 Product display decisions are complete (136 of 136) and scoped to display "
         "wording and ordering only. That completion is true, it is recorded here as "
         "traceability, and it is NOT artifact-publication Product approval — which remains "
