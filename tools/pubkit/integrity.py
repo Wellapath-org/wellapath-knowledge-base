@@ -88,7 +88,7 @@ def content_type_of(path):
         return None, reason(
             "KB_CONTENT_TYPE_UNDETERMINED",
             path,
-            "only .json artifacts have a determinable content type under contract 1.0.0",
+            "only .json artifacts have a determinable content type under contract 1.1.0",
         )
     try:
         json.loads(read_exact_bytes(path).decode("utf-8"))

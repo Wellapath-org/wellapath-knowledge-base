@@ -40,5 +40,5 @@
     "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
   },
   "hash_bound": true,
-  "note": "Refused, and it would be refused even if publication had happened: token_dictionary 2.0 declares content schema 2.0 while 1.1 declares 1.0, so the return crosses a content-schema boundary that contract 1.0.0 has no policy for. Both ends are hash-bound anyway, which is what makes the refusal precise rather than vague."
+  "note": "Refused, and it would be refused even if publication had happened: token_dictionary 2.0 declares content schema 2.0 while 1.1 declares 1.0, so the return crosses a content-schema boundary that contract 1.1.0 has no policy for. Both ends are hash-bound anyway, which is what makes the refusal precise rather than vague."
 }

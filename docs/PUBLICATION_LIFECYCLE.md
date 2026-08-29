@@ -34,9 +34,9 @@ fails if a socket, a subprocess or a write outside the staging directory is even
 | `python3 tools/build_publication_fixtures.py [--check]` | Writes the compatibility and negative fixture sets. |
 | `python3 tools/build_receipt_examples.py [--check]` | Writes the non-operative receipt examples. |
 | `python3 tools/validate_publication_plan.py` | Validates every committed plan, recomputes its digests from real bytes, and PHI/secret-scans `publication/` and `contracts/`. |
-| `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 110 negative fixtures and the 11 mutation proofs. |
+| `python3 tools/validate_publication_fixtures.py [--mutations]` | Runs all 120 negative fixtures and the 14 mutation proofs. |
 | `python3 tools/report_publication_freeze.py [--check]` | Records and re-verifies the 44 frozen artifacts. |
-| `python3 testing/publication/test_publication.py` | 144 unit tests. |
+| `python3 testing/publication/test_publication.py` | 161 unit tests. |
 
 ---
 
@@ -475,7 +475,7 @@ Nothing here changes an active version or a clinical artifact byte.
 
 ## 11. Negative fixtures and mutation proofs
 
-**110 negative fixtures**, each declaring the stage it must fail at and the exact reason code it
+**120 negative fixtures**, each declaring the stage it must fail at and the exact reason code it
 must fail for. A case does not pass by failing; it passes only by failing *where and how it says
 it will*. A guard that starts refusing the right thing for the wrong reason is a behaviour
 change, and the runner makes that visible.
@@ -493,17 +493,20 @@ change, and the runner makes that visible.
 | kb | object_key | 10 |
 | kb | governance | 19 |
 | kb | lifecycle | 7 |
+| kb | provenance | 10 |
 | kb | rollback | 7 |
 | kb | write_safety | 5 |
 
-**11 mutation proofs.** Each deliberately breaks one safety-critical guard and requires the
+**14 mutation proofs.** Each deliberately breaks one safety-critical guard and requires the
 fixture depending on it to *stop passing*. A guard nobody can break was never guarding anything,
 and a fixture that still passes with its guard removed is testing the absence of a bug rather
 than the presence of a check. The proofs cover the mutable-alias rule, the request-marker rule,
 the credential-word rule, the lifecycle externally-established-state refusal, the governance
 authority mapping, the closed status set, the pin's fail-closed policy check, and the four
 contract-1.1.0 approval-scope guards (the required-slot clause, the closed scope vocabulary, the
-missing-scope rule at validation, and scope evaluation at eligibility).
+missing-scope rule at validation, and scope evaluation at eligibility), and the three
+plan-provenance guards (cross-field equality, legacy-marker rejection, staleness against the
+live pin).
 
 ---
 

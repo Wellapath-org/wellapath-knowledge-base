@@ -182,7 +182,7 @@ def build(entries):
         "hash_bound": True,
         "note": "Refused, and it would be refused even if publication had happened: "
         "token_dictionary 2.0 declares content schema 2.0 while 1.1 declares 1.0, so the "
-        "return crosses a content-schema boundary that contract 1.0.0 has no policy for. Both "
+        "return crosses a content-schema boundary that contract 1.1.0 has no policy for. Both "
         "ends are hash-bound anyway, which is what makes the refusal precise rather than vague.",
     }
 

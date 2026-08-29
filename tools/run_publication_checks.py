@@ -12,7 +12,7 @@ Exit code 0 means all of the following hold:
   * every generated file in this step is reproducible from its generator — the governance
     register, both dry-run plans, all four fixture sets, the receipt examples and the freeze
     report;
-  * both dry-run plans satisfy the plan schema, validate against contract 1.0.0 by two
+  * both dry-run plans satisfy the plan schema, validate against contract 1.1.0 by two
     independent routes that agree, carry real digests recomputed from real bytes, and carry no
     credential of any kind;
   * all 99 negative fixtures fail at their declared stage with their declared reason code;

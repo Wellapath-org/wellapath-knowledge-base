@@ -1,5 +1,5 @@
 {
-  "description": "Cross-repository negative fixtures for manifest contract 1.0.0, written in the Backend's own fixture format so both implementations can execute them unchanged. Each case mutates the valid baseline manifest and declares the stage it must fail at and the exact reason code it must fail for. A case that fails for a different reason is itself a failure: it means one of the two implementations is refusing the right things for the wrong reasons, which will diverge as soon as either side changes.",
+  "description": "Cross-repository negative fixtures for manifest contract 1.1.0, written in the Backend's own fixture format so both implementations can execute them unchanged. Each case mutates the valid baseline manifest and declares the stage it must fail at and the exact reason code it must fail for. A case that fails for a different reason is itself a failure: it means one of the two implementations is refusing the right things for the wrong reasons, which will diverge as soon as either side changes.",
   "contract_version": "1.1.0",
   "contract_schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
   "authored_by": "wellapath-knowledge-base, I3 Step 2",

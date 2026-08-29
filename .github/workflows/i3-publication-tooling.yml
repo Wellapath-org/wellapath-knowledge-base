@@ -152,6 +152,36 @@ jobs:
                   if approval.get("decision_scope") is not None:
                       errors.append("%s: %s approval claims a decision scope" % (where, role))
 
+          # Contract provenance: no current plan may name a contract other than the pinned one,
+          # and no current plan may cite legacy material. Checked here independently of the
+          # tooling, because the defect this guards against was a stale literal that every
+          # schema check happily validated.
+          with open("contracts/backend/PIN.json") as handle:
+              active = json.load(handle)
+          for name in sorted(os.listdir("publication/plans")):
+              if not name.endswith(".dryrun.json"):
+                  continue
+              where = "publication/plans/%s" % name
+              with open(where) as handle:
+                  plan = json.load(handle)
+              expected = {
+                  "contract_version": active["contract"]["contract_version"],
+                  "backend_merge_commit": active["backend"]["merge_commit"],
+                  "schema_sha256": active["vendored"]["sha256"],
+                  "schema_byte_count": active["vendored"]["byte_count"],
+              }
+              for block in ("contract_pin", "contract_validation"):
+                  for field, value in expected.items():
+                      if plan[block].get(field) != value:
+                          errors.append("%s: %s.%s is %r, active pin says %r"
+                                        % (where, block, field, plan[block].get(field), value))
+              text = json.dumps(plan)
+              for marker in ("fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+                             "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+                             "contracts/backend/legacy/"):
+                  if marker in text:
+                      errors.append("%s cites legacy contract material %s" % (where, marker))
+
           # The approval-scope reconciliation must still compute its claims true.
           with open("publication/fixtures/compat/approval_scope_reconciliation_v2.json") as handle:
               reconciliation = json.load(handle)

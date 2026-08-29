@@ -1065,10 +1065,10 @@ class DocumentationTests(unittest.TestCase):
     def test_the_counts_are_what_this_step_actually_built(self):
         counts = self.counts()
         self.assertEqual(counts["compat_fixtures"], 50)
-        self.assertEqual(counts["kb_fixtures"], 60)
-        self.assertEqual(counts["total_fixtures"], 110)
+        self.assertEqual(counts["kb_fixtures"], 70)
+        self.assertEqual(counts["total_fixtures"], 120)
         self.assertEqual(counts["frozen_artifacts"], 44)
-        self.assertEqual(counts["mutation_proofs"], 11)
+        self.assertEqual(counts["mutation_proofs"], 14)
 
     def test_every_documented_count_matches_reality(self):
         counts = self.counts()
@@ -1221,7 +1221,7 @@ class ApprovalScopeContractTests(unittest.TestCase):
     def test_the_comparison_fails_only_in_the_unsafe_direction(self):
         from pubkit.plan import _validate_descriptor
 
-        _pin, schema = pin.load_pinned_contract()
+        pin_record, schema = pin.load_pinned_contract()
 
         # KB stricter: granted with no scope. Rejected by the port, accepted by the schema.
         stricter = json.loads(json.dumps(load_plans()[1]["descriptor"]))
@@ -1229,7 +1229,7 @@ class ApprovalScopeContractTests(unittest.TestCase):
             "required": True, "status": "granted", "decision_ref": "D",
             "approved_at": None, "decision_scope": None,
         }
-        result = _validate_descriptor(stricter, schema)
+        result = _validate_descriptor(stricter, schema, pin_record)
         self.assertTrue(result["kb_stricter_than_schema"])
         self.assertFalse(result["kb_looser_than_schema"])
         self.assertNotIn(
@@ -1238,7 +1238,7 @@ class ApprovalScopeContractTests(unittest.TestCase):
 
         # Sound descriptor: both routes accept, neither direction flagged.
         sound = load_plans()[1]["descriptor"]
-        result = _validate_descriptor(sound, schema)
+        result = _validate_descriptor(sound, schema, pin_record)
         self.assertTrue(result["validators_agree"])
         self.assertFalse(result["kb_stricter_than_schema"])
         self.assertFalse(result["kb_looser_than_schema"])
@@ -1252,6 +1252,293 @@ class ApprovalScopeContractTests(unittest.TestCase):
                 declared = branch["items"]["enum"]
         self.assertEqual(set(declared), set(contract.APPROVAL_SCOPES))
         self.assertEqual(contract.ARTIFACT_APPROVAL_SLOT_SCOPE, "artifact_publication")
+
+
+class SourceProvenanceTests(unittest.TestCase):
+    """The five kinds of provenance stay distinct, and a hash never stands in for governance.
+
+    The rule this enforces is the one that matters at ingestion: a matching sha256 proves the
+    bytes are the bytes. It proves nothing about who approved them or where they came from. An
+    ingester that reads hash agreement as governance evidence has skipped the governance check.
+    """
+
+    def plans(self):
+        return load_plans()
+
+    def test_the_hash_is_documented_as_identity_and_not_authorization(self):
+        for plan in self.plans():
+            identity = plan["source_provenance"]["artifact_byte_identity"]
+            self.assertEqual(identity["field"], "descriptor.sha256")
+            joined = " ".join(identity["does_not_establish"]).lower()
+            for claim in ("approved", "authoris", "review", "commit"):
+                self.assertIn(claim, joined, claim)
+
+    def test_the_governance_register_is_bound_by_hash_not_by_path(self):
+        import hashlib
+
+        with open(repo("publication", "governance", "decision_register_v1.json"), "rb") as handle:
+            digest = "sha256:%s" % hashlib.sha256(handle.read()).hexdigest()
+        for plan in self.plans():
+            self.assertEqual(plan["governance"]["register_sha256"], digest)
+            self.assertEqual(
+                plan["source_provenance"]["decision_record_provenance"]["register_sha256"], digest
+            )
+            self.assertEqual(
+                plan["source_provenance"]["decision_record_provenance"]["bound_by"], "hash"
+            )
+            cited = [r for r in plan["descriptor"]["references"] if "governance register" in r]
+            self.assertEqual(len(cited), 1)
+            self.assertIn(digest.split(":")[1], cited[0])
+
+    def test_no_mutable_branch_tip_is_cited(self):
+        for plan in self.plans():
+            self.assertIs(plan["source_provenance"]["repository_branch_state"]["cited"], False)
+
+    def test_the_ingestion_boundary_is_recorded_explicitly(self):
+        for plan in self.plans():
+            boundary = plan["source_provenance"]["ingestion_boundary"]
+            envelope = " ".join(boundary["must_be_supplied_by_the_ingestion_envelope"]).lower()
+            self.assertIn("commit", envelope)
+            never = " ".join(boundary["must_never_be_inferred"]).lower()
+            self.assertIn("governance approval from a matching artifact hash", never)
+            self.assertIn("source authorization from a matching artifact hash", never)
+
+    def test_governance_cannot_be_inferred_from_a_valid_artifact_hash(self):
+        """The behavioural form of the rule, not just the documented one.
+
+        A descriptor whose hash and byte count are perfectly correct — verified against the
+        real artifact bytes — must still be unapproved and ineligible, because nothing granted
+        anything. If this ever passes, an ingester could treat integrity as authorization.
+        """
+        from pubkit.integrity import measure, verify_bytes
+
+        entries = inventory.discover()
+        for plan in self.plans():
+            descriptor = plan["descriptor"]
+            entry = inventory.find(
+                entries, descriptor["artifact_id"], descriptor["artifact_version"]
+            )
+            data, digest, byte_count = measure(
+                os.path.join(inventory.REPO_ROOT, entry["repository_path"])
+            )
+            # Integrity is genuinely, verifiably sound ...
+            self.assertEqual(digest, descriptor["sha256"])
+            self.assertEqual(byte_count, descriptor["byte_count"])
+            self.assertEqual(
+                verify_bytes(data, descriptor["sha256"], descriptor["byte_count"], "x"), []
+            )
+            # ... and the descriptor is still approved by nobody and eligible nowhere.
+            for environment in ("development", "staging", "production"):
+                states, _ = eligibility.evaluate_descriptor(
+                    descriptor, environment, now=PLAN_EVALUATION_INSTANT
+                )
+                self.assertFalse(states["approved"], environment)
+                self.assertFalse(states["eligible_for_environment"], environment)
+
+    def test_a_register_edited_after_the_fact_breaks_its_binding(self):
+        """The point of hash-binding the register: a path citation would not notice."""
+        import hashlib
+        import json as _json
+
+        register = load_json(repo("publication", "governance", "decision_register_v1.json"))
+        register["_metadata"]["note"] = "edited after the plan cited it"
+        edited = "sha256:%s" % hashlib.sha256(
+            (_json.dumps(register, indent=2, ensure_ascii=True) + "\n").encode("utf-8")
+        ).hexdigest()
+        for plan in self.plans():
+            self.assertNotEqual(plan["governance"]["register_sha256"], edited)
+
+    def test_the_five_provenance_kinds_are_all_present_and_distinct(self):
+        expected = {
+            "artifact_byte_identity",
+            "generator_input_identity",
+            "decision_record_provenance",
+            "publication_plan_provenance",
+            "repository_branch_state",
+            "ingestion_boundary",
+        }
+        for plan in self.plans():
+            self.assertEqual(set(plan["source_provenance"]), expected)
+
+    def test_generator_input_identity_lives_inside_the_artifact_bytes(self):
+        """So it cannot drift from the artifact it describes."""
+        entries = inventory.discover()
+        for plan in self.plans():
+            block = plan["source_provenance"]["generator_input_identity"]
+            self.assertIs(block["covered_by_artifact_sha256"], True)
+            self.assertIs(block["recorded_inside_artifact_metadata"], True)
+            entry = inventory.find(
+                entries, plan["target"]["artifact_id"], plan["target"]["artifact_version"]
+            )
+            artifact = load_json(repo(*entry["repository_path"].split("/")))
+            metadata = artifact["_metadata"]
+            self.assertTrue(
+                "provenance" in metadata or "source" in metadata,
+                "%s records no provenance inside its own bytes" % entry["repository_path"],
+            )
+
+
+class ContractProvenanceTests(unittest.TestCase):
+    """A plan must describe the contract it was actually built and checked against.
+
+    The defect this guards: `contract_validation.contract_version` and a descriptor reference
+    were written as literals, the pin moved from 1.0.0 to 1.1.0, and the literals stayed. The
+    plans went on advertising a contract they had never been near, and every schema check
+    passed because the schema pinned the same stale literal.
+    """
+
+    def plans(self):
+        return load_plans()
+
+    def pin(self):
+        return pin.load_pinned_contract()[0]
+
+    def test_both_plans_name_the_active_contract_everywhere(self):
+        pin_record = self.pin()
+        for plan in self.plans():
+            for block in ("contract_pin", "contract_validation"):
+                self.assertEqual(
+                    plan[block]["contract_version"],
+                    pin_record["contract"]["contract_version"],
+                    block,
+                )
+                self.assertEqual(plan[block].get("schema_sha256"), pin_record["vendored"]["sha256"])
+                self.assertEqual(
+                    plan[block].get("schema_byte_count"), pin_record["vendored"]["byte_count"]
+                )
+            self.assertEqual(
+                plan["contract_pin"]["backend_merge_commit"],
+                pin_record["backend"]["merge_commit"],
+            )
+            self.assertEqual(
+                plan["contract_validation"]["backend_merge_commit"],
+                pin_record["backend"]["merge_commit"],
+            )
+
+    def test_the_active_values_are_the_expected_ones(self):
+        for plan in self.plans():
+            self.assertEqual(plan["contract_pin"]["contract_version"], "1.1.0")
+            self.assertEqual(plan["contract_validation"]["contract_version"], "1.1.0")
+            self.assertEqual(
+                plan["contract_validation"]["backend_merge_commit"],
+                "bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+            )
+            self.assertEqual(
+                plan["contract_validation"]["schema_sha256"],
+                "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+            )
+            self.assertEqual(plan["contract_validation"]["schema_byte_count"], 7806)
+
+    def test_no_current_plan_cites_legacy_contract_material(self):
+        for plan in self.plans():
+            text = json.dumps(plan)
+            for marker in plan_module_for_provenance().LEGACY_CONTRACT_MARKERS:
+                self.assertNotIn(marker, text, marker)
+
+    def test_a_clean_plan_passes_its_own_provenance_check(self):
+        pin_record = self.pin()
+        for plan in self.plans():
+            self.assertEqual(
+                plan_module_for_provenance().check_plan_provenance(plan, pin_record), []
+            )
+
+    def test_every_provenance_fault_has_its_own_reason_code(self):
+        from pubkit.plan import check_plan_provenance
+
+        pin_record = self.pin()
+        base = self.plans()[1]
+        cases = {
+            "KB_PROVENANCE_VERSION_MISMATCH":
+                ("contract_validation", "contract_version", "1.0.0"),
+            "KB_PROVENANCE_COMMIT_MISMATCH":
+                ("contract_validation", "backend_merge_commit", "a" * 40),
+            "KB_PROVENANCE_SCHEMA_HASH_MISMATCH":
+                ("contract_validation", "schema_sha256", "b" * 64),
+            "KB_PROVENANCE_SCHEMA_BYTES_MISMATCH":
+                ("contract_validation", "schema_byte_count", 1),
+        }
+        for expected, (block, field, value) in cases.items():
+            broken = json.loads(json.dumps(base))
+            broken[block][field] = value
+            codes = [r["code"] for r in check_plan_provenance(broken, pin_record)]
+            self.assertIn(expected, codes, expected)
+
+    def test_a_stale_plan_is_caught_against_the_live_pin(self):
+        """Internal consistency is not enough: a plan can agree with itself and be stale."""
+        from pubkit.plan import check_plan_provenance
+
+        pin_record = self.pin()
+        stale = json.loads(json.dumps(self.plans()[1]))
+        for block in ("contract_pin", "contract_validation"):
+            stale[block]["contract_version"] = "1.0.0"
+        codes = [r["code"] for r in check_plan_provenance(stale, pin_record)]
+        # Self-consistent, so no VERSION_MISMATCH ...
+        self.assertNotIn("KB_PROVENANCE_VERSION_MISMATCH", codes)
+        # ... but stale against the pin, and claiming a pass it did not earn.
+        self.assertIn("KB_PROVENANCE_STALE_PLAN", codes)
+        self.assertIn("KB_PROVENANCE_VALIDATED_AGAINST_NON_PIN", codes)
+
+    def test_generation_refuses_to_write_an_inconsistent_plan(self):
+        """The guard is at generation too, not only at validation.
+
+        A plan that misdescribes what it was checked against must never reach disk, because it
+        is precisely the plan a reader would trust.
+        """
+        import tempfile
+
+        from pubkit.plan import ProvenanceError, build_plan
+
+        contract_pin, contract_schema = pin.load_pinned_contract()
+        tampered = json.loads(json.dumps(contract_pin))
+        # A pin whose two halves disagree: the descriptor will cite the contract version while
+        # the summary cites the merge commit, and the cross-check must catch the split.
+        tampered["contract"]["contract_version"] = "9.9.9"
+
+        entries = inventory.discover()
+        entry = inventory.find(entries, "question_flow", "1.1")
+        register = DecisionRegister.from_file(
+            repo("publication", "governance", "decision_register_v1.json")
+        )
+        with tempfile.TemporaryDirectory() as staging:
+            with self.assertRaises(ProvenanceError) as caught:
+                build_plan("question_flow", "1.1", entry, register, tampered, contract_schema,
+                           entries, staging_root=staging)
+        self.assertTrue(
+            any(r["code"].startswith("KB_PROVENANCE_") for r in caught.exception.reasons)
+        )
+
+    def test_the_plan_schema_does_not_pin_a_stale_literal(self):
+        """The schema must not carry its own copy of the contract version as a `const`.
+
+        A `const` there is a second hand-maintained place for the version to go stale — and it
+        is what let the defect through: the schema pinned 1.0.0 and validated a plan claiming
+        1.0.0 while the pin said 1.1.0.
+        """
+        schema = load_json(repo("schema", "publication_plan.v1.schema.json"))
+        for block in ("contract_pin", "contract_validation"):
+            node = schema["properties"][block]["properties"]["contract_version"]
+            self.assertNotIn("const", node, block)
+            self.assertIn("pattern", node, block)
+
+    def test_no_repository_commit_is_hand_maintained_in_a_descriptor(self):
+        """The old KB-lineage reference went stale three merges running; it is gone."""
+        import re
+
+        for plan in self.plans():
+            for ref in plan["descriptor"]["references"]:
+                for commit in re.findall(r"\b[0-9a-f]{40}\b", ref):
+                    self.assertEqual(
+                        commit,
+                        self.pin()["backend"]["merge_commit"],
+                        "descriptor cites commit %s, which is not the pinned contract commit"
+                        % commit,
+                    )
+
+
+def plan_module_for_provenance():
+    from pubkit import plan as plan_module
+
+    return plan_module
 
 
 class FixtureSelectorTests(unittest.TestCase):

@@ -49,6 +49,16 @@ PLAN_EVALUATION_DATE = "2026-08-28"
 
 PLAN_SCHEMA_VERSION = "1.0.0"
 
+
+class ProvenanceError(Exception):
+    """Raised when a plan's contract provenance is inconsistent. Never caught to continue."""
+
+    def __init__(self, reasons):
+        self.reasons = reasons
+        super().__init__(
+            "; ".join("%s at %s: %s" % (r["code"], r["path"], r["detail"]) for r in reasons)
+        )
+
 #: Contract 1.0.0 requires `target_environments` to be a non-empty array — there is no way to
 #: say "none". The declared value is therefore structural, and the plan says so in the output
 #: rather than letting a reader take it for a deployment intention. Every environment is
@@ -131,9 +141,10 @@ def build_plan(
         predecessor=predecessor,
         rollback_target=rollback["descriptor_value"],
         generation=generation,
+        contract_pin=contract_pin,
     )
 
-    contract_validation = _validate_descriptor(descriptor, contract_schema)
+    contract_validation = _validate_descriptor(descriptor, contract_schema, contract_pin)
     reasons.extend(contract_validation["reasons"])
 
     # --- eligibility, in every environment --------------------------------------------------------
@@ -208,6 +219,7 @@ def build_plan(
             "another; see tools/pubkit/lifecycle.py for the implications that do not hold.",
         },
         "generation": generation,
+        "source_provenance": _source_provenance(entry, generation),
         "validation": validation,
         "integrity": {
             "sha256": digest,
@@ -240,7 +252,11 @@ def build_plan(
         "descriptor": descriptor,
         "contract_validation": contract_validation,
         "governance": {
-            "register": "publication/governance/decision_register_v1.json",
+            "register": REGISTER_RELATIVE_PATH,
+            # Bound by hash, not by path. A path is a mutable pointer: the register could be
+            # edited afterwards and the plan would still "cite" it. The same defect as the
+            # branch tip this step removed, one level further out.
+            "register_sha256": "sha256:%s" % _register_digest(),
             "evaluated_as_of": PLAN_EVALUATION_DATE,
             "claims": governance["claims"],
             "blockers": blockers,
@@ -257,7 +273,139 @@ def build_plan(
         "conclusion": _conclusion(artifact_id, artifact_version, reasons, eligibility),
     }
 
+    provenance = check_plan_provenance(plan, contract_pin, "plan(%s@%s)" % (artifact_id, artifact_version))
+    if provenance:
+        # Raised rather than reported. A provenance fault means the plan misdescribes what it
+        # was checked against, and a misdescribed plan is worse than no plan: it is the one a
+        # reader would trust.
+        raise ProvenanceError(provenance)
+
     return plan, reasons
+
+
+#: Provenance of a contract version other than the active pin, anywhere in a *current* plan.
+#: Legacy material is legitimate in labelled historical fixtures; it is never legitimate here.
+LEGACY_CONTRACT_MARKERS = (
+    "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+    "contracts/backend/legacy/",
+)
+
+
+def check_plan_provenance(plan, contract_pin, path="plan"):
+    """Every way a plan's contract provenance can contradict itself or the active pin.
+
+    A plan copies the contract it was built against into several places. JSON Schema can pin
+    each field to a literal, but it cannot say "this field must equal that field", and pinning
+    literals is what produced the defect this check exists for: the literals were pinned to
+    1.0.0, the pin moved to 1.1.0, and the schema went on happily validating a plan that
+    claimed to have been checked against a contract it had never seen. Cross-field equality has
+    to be enforced in code, against the live pin, or it is not enforced.
+
+    Returns a list of reasons. Empty means the plan's provenance is internally consistent and
+    agrees with the contract currently pinned.
+    """
+    reasons = []
+    pin_block = plan.get("contract_pin", {})
+    validation = plan.get("contract_validation", {})
+
+    active_version = contract_pin["contract"]["contract_version"]
+    active_commit = contract_pin["backend"]["merge_commit"]
+    active_sha = contract_pin["vendored"]["sha256"]
+    active_bytes = contract_pin["vendored"]["byte_count"]
+
+    # --- the plan's own two records must agree with each other ------------------------------
+    if pin_block.get("contract_version") != validation.get("contract_version"):
+        reasons.append(
+            reason(
+                "KB_PROVENANCE_VERSION_MISMATCH",
+                "%s.contract_validation.contract_version" % path,
+                "the plan records contract %r in contract_pin but %r in contract_validation; a "
+                "plan cannot have been validated against a contract it was not built against"
+                % (pin_block.get("contract_version"), validation.get("contract_version")),
+            )
+        )
+    if pin_block.get("backend_merge_commit") != validation.get("backend_merge_commit"):
+        reasons.append(
+            reason(
+                "KB_PROVENANCE_COMMIT_MISMATCH",
+                "%s.contract_validation.backend_merge_commit" % path,
+                "the plan cites Backend commit %r in contract_pin and %r in "
+                "contract_validation; one plan, one contract commit"
+                % (pin_block.get("backend_merge_commit"), validation.get("backend_merge_commit")),
+            )
+        )
+    if pin_block.get("schema_sha256") != validation.get("schema_sha256"):
+        reasons.append(
+            reason(
+                "KB_PROVENANCE_SCHEMA_HASH_MISMATCH",
+                "%s.contract_validation.schema_sha256" % path,
+                "schema digest disagrees between contract_pin (%r) and contract_validation (%r)"
+                % (pin_block.get("schema_sha256"), validation.get("schema_sha256")),
+            )
+        )
+    if pin_block.get("schema_byte_count") != validation.get("schema_byte_count"):
+        reasons.append(
+            reason(
+                "KB_PROVENANCE_SCHEMA_BYTES_MISMATCH",
+                "%s.contract_validation.schema_byte_count" % path,
+                "schema byte count disagrees between contract_pin (%r) and contract_validation "
+                "(%r)" % (pin_block.get("schema_byte_count"), validation.get("schema_byte_count")),
+            )
+        )
+
+    # --- and both must agree with the contract that is actually pinned right now -------------
+    for field, recorded, active, code in (
+        ("contract_version", pin_block.get("contract_version"), active_version,
+         "KB_PROVENANCE_STALE_PLAN"),
+        ("backend_merge_commit", pin_block.get("backend_merge_commit"), active_commit,
+         "KB_PROVENANCE_STALE_PLAN"),
+        ("schema_sha256", pin_block.get("schema_sha256"), active_sha,
+         "KB_PROVENANCE_STALE_PLAN"),
+        ("schema_byte_count", pin_block.get("schema_byte_count"), active_bytes,
+         "KB_PROVENANCE_STALE_PLAN"),
+    ):
+        if recorded != active:
+            reasons.append(
+                reason(
+                    code,
+                    "%s.contract_pin.%s" % (path, field),
+                    "the plan records %s %r but the active pin says %r; the plan is stale and "
+                    "must be regenerated" % (field, recorded, active),
+                )
+            )
+
+    # --- a *successful* validation may only ever be claimed against the active contract ------
+    if validation.get("ported_validator_accepts") is True or validation.get(
+        "vendored_schema_accepts"
+    ) is True:
+        if validation.get("contract_version") != active_version:
+            reasons.append(
+                reason(
+                    "KB_PROVENANCE_VALIDATED_AGAINST_NON_PIN",
+                    "%s.contract_validation" % path,
+                    "the plan records a passing validation against contract %r while the active "
+                    "pin is %r; a pass against a different contract is not a pass"
+                    % (validation.get("contract_version"), active_version),
+                )
+            )
+
+    # --- no current plan may cite legacy contract material ----------------------------------
+    import json as _json
+
+    text = _json.dumps(plan)
+    for marker in LEGACY_CONTRACT_MARKERS:
+        if marker in text:
+            reasons.append(
+                reason(
+                    "KB_PROVENANCE_LEGACY_REFERENCE",
+                    path,
+                    "a current plan cites legacy contract material (%s); legacy 1.0.0 belongs "
+                    "only in explicitly labelled historical and compatibility fixtures" % marker,
+                )
+            )
+
+    return reasons
 
 
 def _describe_generation(source_path, entry):
@@ -407,6 +555,19 @@ def _resolve_governance(register, artifact_id, artifact_version, digest):
     return {"claims": claims, "resolved": resolved, "reasons": reasons}
 
 
+REGISTER_RELATIVE_PATH = "publication/governance/decision_register_v1.json"
+
+
+def _register_digest():
+    """The governance register's own sha256, so the plan's citation of it is immutable."""
+    import hashlib
+    import os as _os
+
+    path = _os.path.join(REPO_ROOT, *REGISTER_RELATIVE_PATH.split("/"))
+    with open(path, "rb") as handle:
+        return hashlib.sha256(handle.read()).hexdigest()
+
+
 def _read_register_document():
     import json
     import os as _os
@@ -451,6 +612,92 @@ def _blockers_for(artifact_id, artifact_version):
     ]
     blockers.sort(key=lambda item: item["id"])
     return blockers
+
+
+def _source_provenance(entry, generation):
+    """What this plan does and does not establish about where the artifact came from.
+
+    Written out because the five things below get conflated, and conflating them is how a hash
+    ends up being read as an approval:
+
+    * **artifact-byte identity** — which bytes. `descriptor.sha256`, self-verifying, immutable.
+    * **generator input identity** — what produced them. Recorded inside the artifact's own
+      `_metadata` (and so covered by that sha256), not asserted separately by the plan.
+    * **decision-record provenance** — who decided what. The governance register, bound here by
+      hash, whose own records are each bound to their source file by hash.
+    * **publication-plan provenance** — which contract this plan was built against. The pin
+      block, bound to schema digest and byte count.
+    * **repository branch state** — deliberately absent. A branch tip is mutable, has to be
+      maintained by hand, and went stale three merges running before it was removed.
+
+    The boundary this records: **source-repository provenance is the ingestion envelope's job,
+    not this plan's.** A future ingestion must be handed the source commit by whatever performs
+    the ingestion; it must never infer it, and it must never treat a matching hash as evidence
+    that anything was approved.
+    """
+    return {
+        "artifact_byte_identity": {
+            "field": "descriptor.sha256",
+            "immutable": True,
+            "self_verifying": True,
+            "establishes": "which exact bytes this descriptor is about",
+            "does_not_establish": [
+                "that the bytes were approved",
+                "that their source was authorised",
+                "that their content was reviewed",
+                "which repository or commit they came from",
+            ],
+        },
+        "generator_input_identity": {
+            "generator": generation["generator"],
+            "generator_version": generation["generator_version"],
+            "recorded_inside_artifact_metadata": True,
+            "covered_by_artifact_sha256": True,
+            "note": "The artifact records its own sources under _metadata.provenance / "
+            "_metadata.source, including upstream repository, commit and per-file digests where "
+            "it has them. That record is inside the bytes, so descriptor.sha256 covers it: it "
+            "cannot drift from the artifact it describes.",
+        },
+        "decision_record_provenance": {
+            "register": REGISTER_RELATIVE_PATH,
+            "register_sha256": "sha256:%s" % _register_digest(),
+            "bound_by": "hash",
+            "note": "Each record in the register is itself bound to its source decision file by "
+            "path and sha256. This is the only channel through which anything in this plan may "
+            "be read as governance.",
+        },
+        "publication_plan_provenance": {
+            "bound_to": "contract_pin and contract_validation",
+            "note": "Which contract this plan was built and checked against, bound to the "
+            "schema digest and byte count. Not a claim about the artifact's origin.",
+        },
+        "repository_branch_state": {
+            "cited": False,
+            "reason": "A branch tip is mutable and hand-maintained. The one previously carried "
+            "here named a commit three merges out of date. It is not replaced by a newer commit, "
+            "because a newer one would go stale the same way.",
+        },
+        "ingestion_boundary": {
+            "supplied_by_this_plan": [
+                "artifact-byte identity",
+                "decision-record provenance (hash-bound)",
+                "publication-plan / contract provenance",
+            ],
+            "must_be_supplied_by_the_ingestion_envelope": [
+                "the source repository and commit the bytes were taken from",
+                "the actor performing the ingestion",
+                "the authorization under which the ingestion occurs",
+            ],
+            "must_never_be_inferred": [
+                "governance approval from a matching artifact hash",
+                "source authorization from a matching artifact hash",
+                "a repository commit from any field in this plan",
+            ],
+            "rule": "A matching sha256 proves the bytes are the bytes. It proves nothing about "
+            "who approved them or where they came from. An ingester that treats hash agreement "
+            "as governance evidence has skipped the governance check entirely.",
+        },
+    }
 
 
 def _product_approval_scope(artifact_id, artifact_version, governance):
@@ -582,6 +829,7 @@ def _build_descriptor(
     predecessor,
     rollback_target,
     generation,
+    contract_pin,
 ):
     """Assemble a contract 1.0.0 descriptor from resolved facts only.
 
@@ -623,7 +871,7 @@ def _build_descriptor(
         "deprecated": False,
         "expires_at": None,
         "country": entry["country"],
-        "references": _references(artifact_id, artifact_version, entry),
+        "references": _references(artifact_id, artifact_version, entry, contract_pin),
     }
     return descriptor
 
@@ -651,16 +899,33 @@ def _approval_record(resolved):
     }
 
 
-def _references(artifact_id, artifact_version, entry):
-    """Traceability references only. Never a credential, a token or a signed URL."""
+def _references(artifact_id, artifact_version, entry, contract_pin):
+    """Traceability references only. Never a credential, a token or a signed URL.
+
+    Contract provenance here is *derived from the pin*, not typed. The literal it replaced
+    named contract 1.0.0 at fc40ac3e and stayed put through the 1.1.0 re-pin, so the descriptor
+    advertised a contract it had never been near.
+
+    The knowledge-base commit that used to sit alongside it is gone rather than updated. It was
+    a hand-maintained lineage claim that went stale three merges running, and a plan does not
+    need one: the descriptor binds the artifact by sha256 over its exact bytes, which is a
+    stronger statement than a branch tip and cannot drift.
+    """
     return [
         "DRY-RUN DESCRIPTOR — generated by the Knowledge Base publication tooling (I3 Step 2). "
         "Not uploaded, not published, not activated, not served by any route, and not to be "
         "added to any live manifest.",
         "repository path: %s" % entry["repository_path"],
-        "knowledge-base develop at generation: c1b07944ea0b231914943ac17b2265441e53b85c",
-        "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
-        "governance register: publication/governance/decision_register_v1.json",
+        "the sha256 above identifies WHICH BYTES this descriptor is about, and nothing more. It "
+        "is not evidence that anyone approved them, authorised their source, or reviewed their "
+        "content: governance comes from the decision register bound below, and source-repository "
+        "provenance is supplied by the ingestion envelope at ingestion time, not by this plan",
+        "immutable source provenance for this artifact is recorded inside its own bytes "
+        "(_metadata.provenance / _metadata.source) and is therefore covered by the sha256 above; "
+        "no mutable repository branch tip is cited",
+        "backend manifest contract %s at %s"
+        % (contract_pin["contract"]["contract_version"], contract_pin["backend"]["merge_commit"]),
+        "governance register: %s (sha256:%s)" % (REGISTER_RELATIVE_PATH, _register_digest()),
         "IM-001 Product display decisions are complete (136 of 136) and scoped to display "
         "wording and ordering only. That completion is true, it is recorded here as "
         "traceability, and it is NOT artifact-publication Product approval — which remains "
@@ -671,7 +936,7 @@ def _references(artifact_id, artifact_version, entry):
     ]
 
 
-def _validate_descriptor(descriptor, contract_schema):
+def _validate_descriptor(descriptor, contract_schema, contract_pin):
     """Validate a descriptor by both routes, and compare them **asymmetrically**.
 
     The two routes are not equivalent, and treating every difference as a fault would be wrong
@@ -721,7 +986,14 @@ def _validate_descriptor(descriptor, contract_schema):
         reasons.extend(schema_reasons)
 
     return {
-        "contract_version": "1.0.0",
+        # Derived from the pinned mirror, never written as a literal. The previous literal
+        # "1.0.0" survived the 1.1.0 re-pin unchanged and the plan went on claiming it had been
+        # validated against a contract it had not been validated against — which is the whole
+        # reason this field is now computed and cross-checked rather than typed.
+        "contract_version": MANIFEST_CONTRACT_VERSION,
+        "backend_merge_commit": contract_pin["backend"]["merge_commit"],
+        "schema_sha256": contract_pin["vendored"]["sha256"],
+        "schema_byte_count": contract_pin["vendored"]["byte_count"],
         "ported_validator_reasons": ported + manifest_reasons,
         "vendored_schema_reasons": schema_reasons,
         "ported_validator_accepts": ported_ok,
