@@ -68,6 +68,20 @@ KB_REASON_CODES = (
     "KB_CONTRACT_MAJOR_UNSUPPORTED",
     "KB_CONTRACT_RULE_UNREPRESENTABLE",
     "KB_CONTRACT_KB_PASSES_BACKEND_FAILS",
+    # --- contract provenance inside a generated plan --------------------------------------
+    #
+    # A plan records which contract it was built and validated against. Those records are
+    # copied into several fields, and a copy that falls out of step with the pin is worse than
+    # no copy at all: it reads as provenance while naming a contract nobody used.
+    "KB_PROVENANCE_VERSION_MISMATCH",
+    "KB_PROVENANCE_COMMIT_MISMATCH",
+    "KB_PROVENANCE_SCHEMA_HASH_MISMATCH",
+    "KB_PROVENANCE_SCHEMA_BYTES_MISMATCH",
+    "KB_PROVENANCE_LEGACY_REFERENCE",
+    "KB_PROVENANCE_VALIDATED_AGAINST_NON_PIN",
+    "KB_PROVENANCE_STALE_PLAN",
+    "KB_PROVENANCE_VALIDATION_CONTRADICTED",
+
     # --- generation and integrity ---------------------------------------------------------
     "KB_ARTIFACT_NOT_FOUND",
     "KB_ARTIFACT_SCHEMA_INVALID",

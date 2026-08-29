@@ -9,7 +9,7 @@ Checks, for every plan under `publication/plans/`:
   * it satisfies `schema/publication_plan.v1.schema.json`, whose safety-critical fields are
     pinned by `const` — so a plan claiming an upload, a publication, an activation, eligibility
     or a granted approval fails here rather than being read as a report of one;
-  * its descriptor satisfies contract 1.0.0 by both routes, and the two routes agree;
+  * its descriptor satisfies contract 1.1.0 by both routes, and the two routes agree;
   * its integrity fields are the real digest and byte count of the artifact it names, recomputed
     from the bytes on disk rather than trusted from the plan;
   * its object key is safe, immutable, and encodes the identity it claims;
@@ -41,6 +41,8 @@ from pubkit.keys import check_key_agrees_with_identity
 from pubkit.manifest import validate_against_vendored_schema, validate_manifest
 from pubkit.origin import validate_object_key
 from pubkit.pin import load_pinned_contract
+from pubkit.plan import _validate_descriptor, check_plan_provenance
+from pubkit.reasons import reason
 from pubkit.reasons import ALL_REASON_CODES
 from verify_no_clinical_change import PHI_PATTERNS
 from vocab.artifact_io import load_json, repo_path
@@ -250,6 +252,84 @@ ALLOWED_MATCHES = {
 }
 
 
+#: Files permitted to name a contract version other than the active pin, each for a stated
+#: reason. Everything else in the publication tooling describes the contract in force, and
+#: naming a superseded one there is how "validated against 1.0.0" survived the 1.1.0 re-pin.
+CONTRACT_NARRATIVE_EXEMPT = {
+    "contracts/backend/PIN.json": "records the superseded version it replaced, by design",
+    "contracts/backend/legacy/README.md": "describes the legacy material it sits beside",
+    "contracts/backend/legacy/manifest.v1.0.0.schema.json": "is the legacy contract",
+    "publication/fixtures/compat/legacy_contract_compatibility_v1.json":
+        "is the backward-compatibility evidence, which must name 1.0.0 to test it",
+    "publication/fixtures/compat/approval_scope_reconciliation_v1.json":
+        "is the preserved historical record, bound to the superseded contract",
+    "publication/fixtures/compat/approval_scope_reconciliation_v2.json":
+        "cites the superseded contract to show the defect it closed",
+    "publication/fixtures/negative/kb_stage_fixtures_v1.json":
+        "injects superseded values deliberately, as negative test inputs",
+    "docs/PUBLICATION_LIFECYCLE.md": "narrates the re-pin and what preceded it",
+    "backend_handoff/publication_tooling_v1/README.md": "narrates the re-pin and what preceded it",
+    "publication/README.md": "narrates the re-pin and what preceded it",
+    "tools/README.md": "narrates the re-pin and what preceded it",
+    "tools/pubkit/reasons.py": "documents the codes added by the version that superseded it",
+    "tools/pubkit/plan.py": "names the superseded contract in the comment explaining this rule",
+    "tools/pubkit/pin.py": "explains the supersession policy",
+    "tools/pubkit/contract.py": "records which version the mirror was re-pinned from",
+    "tools/pubkit/eligibility.py": "records which version the port was re-pinned from",
+    "tools/build_publication_fixtures.py": "constructs the legacy and historical fixtures",
+    "tools/validate_publication_plan.py": "is this checker, which names what it forbids",
+    "testing/publication/test_publication.py": "asserts on superseded values by name",
+    ".github/workflows/i3-publication-tooling.yml": "hash-checks the legacy schema",
+}
+
+#: Trees whose prose describes the contract currently in force.
+CONTRACT_NARRATIVE_TREES = ("publication", "contracts", "tools/pubkit", "schema")
+
+
+def scan_contract_narrative(contract_pin):
+    """No active file may describe a contract version other than the one pinned.
+
+    Cross-field checks catch a stale *value*; this catches a stale *sentence*. Eight of them
+    survived the 1.1.0 re-pin — docstrings and descriptions still saying "contract 1.0.0" in
+    code that had just been re-pinned — and none of the structural checks could see them,
+    because prose is not a field.
+    """
+    import re
+
+    results = _Result()
+    active = contract_pin["contract"]["contract_version"]
+    pattern = re.compile(r"contract[_ ]?(?:version)?\W{0,12}(\d+\.\d+\.\d+)")
+    offenders = []
+    scanned = 0
+
+    for tree in CONTRACT_NARRATIVE_TREES:
+        root = repo_path(tree)
+        if not os.path.isdir(root):
+            continue
+        for directory, _sub, names in os.walk(root):
+            for name in sorted(names):
+                if not name.endswith((".py", ".json", ".md", ".yml")):
+                    continue
+                path = os.path.join(directory, name)
+                relative = os.path.relpath(path, repo_path()).replace(os.sep, "/")
+                if relative in CONTRACT_NARRATIVE_EXEMPT:
+                    continue
+                scanned += 1
+                with open(path, encoding="utf-8", errors="replace") as handle:
+                    text = handle.read()
+                for found in set(pattern.findall(text)):
+                    if found != active:
+                        offenders.append("%s names contract %s" % (relative, found))
+
+    results.add(
+        "no active file describes a contract other than the pinned %s (%d scanned, %d exempt)"
+        % (active, scanned, len(CONTRACT_NARRATIVE_EXEMPT)),
+        not offenders,
+        "; ".join(offenders[:6]),
+    )
+    return results
+
+
 def scan_content_safety():
     """PHI-scan the trees this step introduced. A hit is a failure, not a warning."""
     results = _Result()
@@ -292,7 +372,7 @@ def scan_content_safety():
     return results
 
 
-def validate_plan(path, entries, schema, contract_schema):
+def validate_plan(path, entries, schema, contract_schema, contract_pin):
     results = _Result()
     relative = os.path.relpath(path, repo_path())
     plan = load_json(path)
@@ -417,6 +497,44 @@ def validate_plan(path, entries, schema, contract_schema):
         ),
     )
 
+    # --- contract provenance --------------------------------------------------------------------
+    #
+    # Checked against the LIVE pin, not against the plan's own copy of it. A plan that was
+    # regenerated before a re-pin will still be internally consistent and completely stale, and
+    # only a comparison with the pin as it stands now can tell the difference.
+    provenance = check_plan_provenance(plan, contract_pin, relative)
+    results.add(
+        "%s: contract provenance agrees with the active pin" % relative,
+        not provenance,
+        "; ".join("%s %s" % (item["code"], item["path"]) for item in provenance[:4]),
+    )
+
+    # The stored validation verdict must survive being recomputed. Reading it back would only
+    # confirm that the file says what the file says.
+    recomputed = _validate_descriptor(descriptor, contract_schema, contract_pin)
+    stored = (
+        plan["contract_validation"]["ported_validator_accepts"],
+        plan["contract_validation"]["vendored_schema_accepts"],
+        plan["contract_validation"]["validators_agree"],
+    )
+    fresh = (
+        recomputed["ported_validator_accepts"],
+        recomputed["vendored_schema_accepts"],
+        recomputed["validators_agree"],
+    )
+    if stored != fresh:
+        results.append(
+            {
+                "check": "%s: stored validation result matches a fresh recomputation" % relative,
+                "passed": False,
+                "detail": "%s stored %s, recomputed %s"
+                % (reason("KB_PROVENANCE_VALIDATION_CONTRADICTED", relative, "")["code"],
+                   stored, fresh),
+            }
+        )
+    else:
+        results.add("%s: stored validation result matches a fresh recomputation" % relative, True)
+
     # --- reason codes -------------------------------------------------------------------------------
     unknown = sorted(
         {
@@ -450,7 +568,7 @@ def main(argv):
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
 
-    _contract_pin, contract_schema = load_pinned_contract()
+    contract_pin, contract_schema = load_pinned_contract()
     schema = load_json(PLAN_SCHEMA)
     entries = inventory.discover()
 
@@ -465,7 +583,12 @@ def main(argv):
 
     results = []
     for name in plans:
-        results.extend(validate_plan(os.path.join(PLAN_DIR, name), entries, schema, contract_schema))
+        results.extend(
+            validate_plan(
+                os.path.join(PLAN_DIR, name), entries, schema, contract_schema, contract_pin
+            )
+        )
+    results.extend(scan_contract_narrative(contract_pin))
     results.extend(validate_approval_scope_reconciliation())
     results.extend(scan_content_safety())
 

@@ -520,6 +520,115 @@
       }
     },
     {
+      "name": "validation version disagreeing with the pin is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_VERSION_MISMATCH",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_validation.contract_version",
+        "value": "1.0.0"
+      }
+    },
+    {
+      "name": "a pin version changed independently of the plan is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_VERSION_MISMATCH",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_pin.contract_version",
+        "value": "1.2.0"
+      }
+    },
+    {
+      "name": "a Backend commit changed in one reference only is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_COMMIT_MISMATCH",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_validation.backend_merge_commit",
+        "value": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd"
+      }
+    },
+    {
+      "name": "a schema hash disagreement is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_SCHEMA_HASH_MISMATCH",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_validation.schema_sha256",
+        "value": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "name": "a schema byte-count disagreement is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_SCHEMA_BYTES_MISMATCH",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_validation.schema_byte_count",
+        "value": 6375
+      }
+    },
+    {
+      "name": "a legacy schema path installed as the active one is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_LEGACY_REFERENCE",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_pin.vendored_path",
+        "value": "contracts/backend/legacy/manifest.v1.0.0.schema.json"
+      }
+    },
+    {
+      "name": "mixing a legacy contract reference into a current plan is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_LEGACY_REFERENCE",
+      "mutation": {
+        "kind": "plan_append_reference",
+        "value": "backend manifest contract 1.0.0 at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd"
+      }
+    },
+    {
+      "name": "a passing validation recorded against a non-pinned contract is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_VALIDATED_AGAINST_NON_PIN",
+      "mutation": {
+        "kind": "plan_set_many",
+        "values": {
+          "contract_pin.contract_version": "1.0.0",
+          "contract_validation.contract_version": "1.0.0"
+        }
+      }
+    },
+    {
+      "name": "a plan left stale after a pin update is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_STALE_PLAN",
+      "mutation": {
+        "kind": "plan_set_many",
+        "values": {
+          "contract_pin.contract_version": "1.0.0",
+          "contract_pin.backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+          "contract_pin.schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+          "contract_pin.schema_byte_count": 6375,
+          "contract_validation.contract_version": "1.0.0",
+          "contract_validation.backend_merge_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+          "contract_validation.schema_sha256": "66fa3a94f17c2765eb1eca29208d2494c4c1b7be57eae61856bdb34761082ce9",
+          "contract_validation.schema_byte_count": 6375
+        }
+      }
+    },
+    {
+      "name": "a stored validation result contradicting recomputation is refused",
+      "stage": "provenance",
+      "expected_code": "KB_PROVENANCE_VALIDATION_CONTRADICTED",
+      "mutation": {
+        "kind": "plan_set",
+        "path": "contract_validation.ported_validator_accepts",
+        "value": false
+      }
+    },
+    {
       "name": "the dry-run path attempting a network connection fails the run",
       "stage": "write_safety",
       "expected_code": "KB_NETWORK_ATTEMPTED",

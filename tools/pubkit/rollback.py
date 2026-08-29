@@ -21,7 +21,7 @@ from .reasons import reason
 
 #: Rolling back to content whose approval has lapsed is not automatically wrong — the whole
 #: point of a rollback is often to return to something that was superseded. But it is not
-#: automatically right either, and contract 1.0.0 defines no policy for it. Until one exists,
+#: automatically right either, and contract 1.1.0 defines no policy for it. Until one exists,
 #: the answer is refusal with a named reason rather than a guess in either direction.
 UNAUTHORIZED_TARGET_POLICY = (
     "Contract 1.0.0 defines no policy for rolling back to content whose approval has expired, "

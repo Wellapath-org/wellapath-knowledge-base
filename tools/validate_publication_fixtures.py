@@ -40,6 +40,7 @@ import tempfile
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pubkit import eligibility, inventory, keys, lifecycle, manifest as manifest_module, origin, pin, rollback
+from pubkit import plan as plan_module
 from pubkit.governance import DecisionRegister, GovernanceClaim, open_blockers, validate_record
 from pubkit.integrity import verify_bytes
 from pubkit.plan import PLAN_EVALUATION_DATE, PLAN_EVALUATION_INSTANT
@@ -544,6 +545,50 @@ def run_kb_case(case, entries, register_document):
             return _judge(case, reasons)
         raise SystemExit("unknown rollback mutation %r" % kind)
 
+    # --- contract provenance ------------------------------------------------------------------------------
+    if stage == "provenance":
+        import copy as _copy
+
+        from pubkit.pin import load_pinned_contract
+        from pubkit.plan import _validate_descriptor, check_plan_provenance
+
+        contract_pin, contract_schema = load_pinned_contract()
+        plan = load_json(repo_path("publication", "plans", "question_flow.ng.v1.1.dryrun.json"))
+        plan = _copy.deepcopy(plan)
+
+        if kind == "plan_set":
+            _set_path(plan, mutation["path"], mutation["value"])
+        elif kind == "plan_set_many":
+            for path, value in mutation["values"].items():
+                _set_path(plan, path, value)
+        elif kind == "plan_append_reference":
+            plan["descriptor"]["references"].append(mutation["value"])
+        else:
+            raise SystemExit("unknown provenance mutation %r" % kind)
+
+        reasons = check_plan_provenance(plan, contract_pin, "plan")
+
+        # The stored-vs-recomputed check lives in the validator rather than in
+        # check_plan_provenance, because it needs to re-run validation rather than compare
+        # fields. Reproduced here so the fixture exercises the same rule the validator applies.
+        recomputed = _validate_descriptor(plan["descriptor"], contract_schema, contract_pin)
+        stored = plan["contract_validation"]
+        if (
+            stored.get("ported_validator_accepts") != recomputed["ported_validator_accepts"]
+            or stored.get("vendored_schema_accepts") != recomputed["vendored_schema_accepts"]
+            or stored.get("validators_agree") != recomputed["validators_agree"]
+        ):
+            from pubkit.reasons import reason as make_reason
+
+            reasons.append(
+                make_reason(
+                    "KB_PROVENANCE_VALIDATION_CONTRADICTED",
+                    "plan.contract_validation",
+                    "the stored validation verdict does not survive recomputation",
+                )
+            )
+        return _judge(case, reasons)
+
     # --- write and network safety ------------------------------------------------------------------------
     if stage == "write_safety":
         if kind in ("attempt_network", "attempt_subprocess", "attempt_write_outside_staging"):
@@ -643,6 +688,21 @@ COMPAT_MUTATION_PROOFS = (
 )
 
 MUTATION_PROOFS = (
+    (
+        "plan provenance: cross-field equality checks",
+        "validation version disagreeing with the pin is refused",
+        lambda: _patch(plan_module, "check_plan_provenance", lambda *a, **k: []),
+    ),
+    (
+        "plan provenance: legacy-marker rejection",
+        "mixing a legacy contract reference into a current plan is refused",
+        lambda: _patch(plan_module, "LEGACY_CONTRACT_MARKERS", ()),
+    ),
+    (
+        "plan provenance: staleness against the live pin",
+        "a plan left stale after a pin update is refused",
+        lambda: _patch(plan_module, "check_plan_provenance", lambda *a, **k: []),
+    ),
     (
         "object-key mutable-alias rejection",
         "a mutable alias key is refused by name",

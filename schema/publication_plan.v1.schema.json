@@ -153,7 +153,9 @@
           "pattern": "^[0-9a-f]{40}$"
         },
         "contract_version": {
-          "const": "1.1.0"
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Shape only, deliberately. A `const` here would be a second place the contract version has to be updated by hand on every re-pin, and the one that went stale last time: the schema pinned 1.0.0, the pin moved to 1.1.0, and the schema went on validating a plan that named a contract it had never been checked against. The actual value is enforced against the live pin by tools/pubkit/plan.py:check_plan_provenance, which JSON Schema cannot do because the invariant is cross-field equality."
         },
         "supported_major": {
           "const": 1
@@ -401,7 +403,7 @@
     },
     "descriptor": {
       "type": "object",
-      "description": "A contract 1.0.0 artifact descriptor. Its full shape is validated against the vendored Backend schema, not restated here; what this schema pins is that a plan's descriptor is never published, never active and never activation-authorized.",
+      "description": "A contract 1.1.0 artifact descriptor. Its full shape is validated against the vendored Backend schema, not restated here; what this schema pins is that a plan's descriptor is never published, never active and never activation-authorized.",
       "required": [
         "release_status",
         "activation_status",
@@ -503,11 +505,16 @@
         "validators_agree",
         "reasons",
         "kb_stricter_than_schema",
-        "kb_looser_than_schema"
+        "kb_looser_than_schema",
+        "backend_merge_commit",
+        "schema_sha256",
+        "schema_byte_count"
       ],
       "properties": {
         "contract_version": {
-          "const": "1.0.0"
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Shape only, deliberately. A `const` here would be a second place the contract version has to be updated by hand on every re-pin, and the one that went stale last time: the schema pinned 1.0.0, the pin moved to 1.1.0, and the schema went on validating a plan that named a contract it had never been checked against. The actual value is enforced against the live pin by tools/pubkit/plan.py:check_plan_provenance, which JSON Schema cannot do because the invariant is cross-field equality."
         },
         "ported_validator_accepts": {
           "const": true
@@ -529,6 +536,21 @@
         "kb_looser_than_schema": {
           "const": false,
           "description": "Pinned false. The KB accepting what the schema rejects would mean emitting a descriptor a schema-validating consumer refuses."
+        },
+        "backend_merge_commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "The Backend commit the contract was taken from. Must equal contract_pin.backend_merge_commit and the live pin; enforced in code."
+        },
+        "schema_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Must equal contract_pin.schema_sha256 and the live pin; enforced in code."
+        },
+        "schema_byte_count": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Must equal contract_pin.schema_byte_count and the live pin; enforced in code."
         }
       }
     },
