@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-08-31
 
 ## Merged
 
@@ -14,6 +14,19 @@ Last updated: 2026-08-24
 | #7 | `feat/case04-malaria-explanation` | Case 04: updated malaria `explanation_template` with clinical-reviewer-approved under-5/rainy-season wording. Regenerated `kb.ng.v2.3.json` (all 50 conditions, version 2.3). SHA256 reported to engineering lead for R2 verification (not yet uploaded). |
 | #10 | `docs/progress-log` | Added this progress.md file. |
 | #11 | `feat/lagos-hfr-phone-enrichment` | Applied 45 verified Lagos facility phone numbers (`source/lagos_facility_phone_enrichment_v1.csv`, matched by `facility_id`) to `facilities.ng.v1.0.json`. Saved as `facilities.ng.v1.1.json` (v1.0 left untouched), phones normalized to `+234` E.164 format. 45/45 matched, 0 unmatched. SHA256 reported to engineering lead for R2 verification (not yet uploaded). |
+| #25 | `feat/i2-w2-vocabulary-schema` | I2/W2 Step 1: Symptom Vocabulary 2.0 foundation — candidate `token_dictionary.ng.v2.0.json` (unpublished), schema, stdlib tooling, frozen-baseline checks, Top-50 case-bank baseline. |
+| #26 | `feat/i2-w2-cb211-cb232-adjudication` | I2/W2 Step 3: CB_211/CB_232 adjudication contract; Option D disposition recorded. |
+| #27 | `feat/i2-w2-vocabulary-catalogue` | I2/W2 Step 5: vocabulary catalogue governance package (25 proposals, 295 label rows, 0 publication-eligible); `trigger_tokens` bug fixed pre-merge. |
+| #28 | `feat/i2-w3-question-flow-contract` | I2/W3 Step 1: question flow 1.0 frozen from vendored Dart; Adaptive Question contract; IM-001…IM-007 impedance disclosure with engineering dispositions. |
+| #30 | `feat/i2-w3-im001-option-ordering` | I2/W3 Step 5B: IM-001 option-ordering evidence (2,300 comparisons, 903 groups, display-order-only) + one global Product decision `IM001-ORD-GLOBAL-001` (then pending). |
+| #31 | `feat/i2-w3-im003-impact-analysis` | I2/W3 Step 6: IM-003 re-branching impact analysis; `newly_reachable` second-hop bug fixed pre-merge (15 tokens / 31 conditions). |
+| #32 | `feat/i2-w3-im003-mobile-measurement` | I2/W3 Step 8: Mobile shipped-engine measurement reconciled (63 scenarios; 1 de-escalation); safety blocker **IM003-SB-001** registered; D004 evidence updated; S10 ranked order + path-limit validity added pre-merge (Step 8A). |
+| #33 | `feat/i2-w3-step9-product-disposition` | I2/W3 Step 9/9A: Product disposition + 7 open clinical requirements recorded from the 2026-08-22 decision record; reviewer Ayodele John Oluwaseyi (Product authority); nothing approved, IM003-SB-001 stays open. |
+| #34 | `feat/i2-w3-step10-im001-workbook` | I2/W3 Step 10: IM-001 Product decision workbook (135 wording decisions in 20 slot batches + global ordering decision), review tooling only, nothing approved at merge. |
+| #35 | `feat/i2-w3-step11-im001-verdicts` | I2/W3 Step 11/11A: all 136 IM-001 Product verdicts recorded (135 × `keep_candidate_wording`, ORD-A); `im_001_resolved` given machine-readable scope; clinical flag IM001-CLIN-FLAG-001 open; no activation/publication/clinical/Mobile authorization. |
+| #37 | `feat/i3-step2-publication-tooling` | I3 Step 2/2A: inactive publication tooling against Backend manifest contract **1.0.0** — vendored + pinned contract, nine-state lifecycle, governance evidence resolution, immutable object keys, dry-run plans for both blocked candidates, receipt and rollback contracts. Step 2A added the approval-scope reconciliation and found the Backend fixture defect. Nothing uploaded, published or activated. |
+| #38 | `feat/i3-step2c-contract-1-1-0` | I3 Step 2C/2C-R: re-pinned to Backend contract **1.1.0** (`bbaeadd6`) after the Backend fixed both Step 2A findings. Ported `decision_scope` approval-scope rules; legacy 1.0.0 retained as labelled test material; reconciliation v1 preserved, v2 added. 39/39 parity on the Backend's own fixtures. |
+| #39 | `fix/i3-step3a-plan-contract-provenance` | I3 Step 3A/3A-R: corrected stale contract provenance in the dry-run plans (they claimed validation against 1.0.0/`fc40ac3e` while pinned to 1.1.0/`bbaeadd6`). Provenance now derived from the pin and cross-checked in code; source provenance hash-bound; ingestion boundary recorded. |
 
 ## Open
 
@@ -821,8 +834,10 @@ adjudication, no approval, no implementation.** Full package:
   check · W3 grouping 25/25 · W2/W3 23/23 · content safety 117 files, 0 hits.
   All 13 frozen artifacts byte-identical; both candidates still
   `candidate_unapproved`, `branch_conditions: 0`, limit 5, IM-003 deferred;
-  R2 404; no `/config` entry. **Mobile PR #76 and this KB PR both remain
-  unmerged.**
+  R2 404; no `/config` entry. **Mobile PR #76 remains unmerged.** This KB PR
+  merged at Step 8A as PR #32 (merge `83cd5258`, pinned to verified head
+  `884c424c` after the S10 ranked-order/path-limit evidence correction;
+  clean-clone validation green).
 
 ## I2 / W3 Step 9 — Product disposition and clinical rule requirements recorded
 
@@ -888,8 +903,10 @@ KB baseline at receipt `83cd5258`; Mobile PR #76 open/unmerged at `13be0d49`.
 - **Untouched:** all frozen clinical artifacts, weights and urgency defaults;
   scoring/ranking/red-flag logic; question candidates; runtime behaviour;
   publication state; the blocker registry and decision package (byte-identical,
-  still open/pending); Mobile and Backend. **Mobile PR #76 remains unmerged;
-  this KB PR is left unmerged for review.**
+  still open/pending); Mobile and Backend. **Mobile PR #76 remains
+  unmerged.** This KB PR merged at Step 9B as PR #33 (merge `7035e03c`,
+  pinned to Step 9A head `360b1090` carrying the authoritative reviewer
+  identity; post-merge CI and clean-clone validation green).
 
 ## I2 / W3 Step 10 — IM-001 Product decision workbook prepared
 
@@ -941,7 +958,9 @@ dimensions agree · every clinical-impact dimension zero.
   oracle and fixtures, IM-001 evidence and decision artifacts, IM-003
   records, case bank, known findings, manifest and publication state,
   Mobile and Backend. **IM-003 remains blocked; Mobile PR #76 remains
-  unmerged; this PR is left unmerged for review.**
+  unmerged.** This PR merged at Step 10A as PR #34 (merge `38e2af6b`, pinned
+  to head `a9178e3b`; a simulated approval without reviewer evidence was
+  proven to fail closed before merging; clean-clone validation green).
 
 ## I2 / W3 Step 11 — IM-001 Product verdicts recorded (136/136)
 
@@ -993,4 +1012,179 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
 - **Untouched:** question candidates, schemas, clinical artifacts, runtime
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
-  and unmerged; this PR is left unmerged for review.**
+  and unmerged.** This PR merged at Step 11A as PR #35 (merge `c1b07944`,
+  pinned to head `6ce01581` after the `im_001_resolved_scope`
+  strengthening below).
+
+## I2 / W3 Steps 11A–11B — verdicts merged; merge identity reconciled
+
+- **Step 11A (2026-08-24): PR #35 merged** as `c1b07944`, pinned to final head
+  `6ce01581` — one strengthening commit was added during final review:
+  `im_001_resolved` now carries a machine-readable
+  `im_001_resolved_scope` (`means_only`: all Product display decisions in
+  the IM-001 decision set are recorded; `does_not_mean`: activation-ready,
+  clinical review complete, content clinically approved, publication
+  approved, Mobile implementation authorized, beta/production approved).
+  Verdict validator 30 checks + **19/19 mutations**, including the four
+  Step 11A-required proofs: resolution cannot authorize activation; the
+  clinical flag cannot be dropped/moved/hidden after Product completion; a
+  nonzero clinical-impact dimension fails closed (reopening Clinical
+  review); an approval cannot survive reviewer or rationale removal.
+  Clean-clone rerun at `c1b07944`: all suites green.
+
+- **Step 11B (read-only): merge identity reconciled.** PR #34 merged once as
+  `38e2af6b` (head `a9178e3b`); PR #35 merged once as `c1b07944` (parents
+  exactly `38e2af6b` + `6ce01581`); `origin/develop` = `c1b07944`; no
+  duplicate merges (one merge commit per branch in history). The
+  "Merge pull request #34" text next to PR #35's first parent is that
+  parent commit's own subject line — the previous develop tip — not a
+  second merge operation.
+
+### Standing state after Step 11B
+
+| Item | State |
+|---|---|
+| IM-001 decision set | **Resolved (decision-set-only)** — 136/136 recorded: 135 × `keep_candidate_wording`, ordering ORD-A |
+| `im_001_resolved` scope | Machine-readable; carries the six explicit does-not-mean exclusions |
+| Clinical flag | **IM001-CLIN-FLAG-001 open** — `fast_breathing_child.severity` (IM001-D018/D027); Clinical review required before any activation decision involving that question |
+| Authorization | clinical approval / activation / publication / Mobile implementation — **all false** |
+| Candidate 1.1 / Vocabulary 2.0 | Unpublished, inactive, `candidate_unapproved` |
+| IM-003 | **DISABLED**; IM003-SB-001 **OPEN**; D004 **PENDING**; clinical rule required, not approved |
+| Mobile PR #76 | **OPEN, unmerged, unauthorized** at `13be0d49` |
+| develop tip | `c1b07944` (PR #35 merge) |
+
+---
+
+## I3 Step 2 — Inactive publication tooling (Backend contract 1.0.0)
+
+**PR #37** · merge `2325e3f9` · base `c1b07944` · pinned to reviewed head `9d9d69f5`.
+
+Deterministic, offline, fail-closed tooling that *prepares* governed artifacts and
+Backend-contract-compatible descriptors. It inventories, validates, hashes from exact
+bytes, packages into a disposable staging directory, resolves governance evidence and
+emits dry-run publication plans. **It performs no upload, publication, activation or
+deployment, and contains no code path that could** — no upload command, no cloud SDK, no
+HTTP client, no credential handling.
+
+- **Contract pinned, not remembered.** Backend `fc40ac3e` contract 1.0.0 vendored
+  byte-for-byte with a pin record. `tools/verify_contract_pin.py` re-verifies offline every
+  run and fails closed, including that the Python mirror still agrees with the vendored
+  schema — a hash proves the file is unchanged and says nothing about whether the code
+  reading it still means the same thing.
+- **Nine lifecycle states that cannot collapse.** `generated → validated → packaged →
+  present → uploaded → published → approved → active → eligible_for_environment`, none
+  derived from another. The five externally-established states can never be asserted true
+  by this repository at all: it cannot observe them. Unobserved is refused, not defaulted.
+- **Governance is derived, never authored.** The register transcribes only decision records
+  that already exist here, each hash-bound to its source. **No clinical record exists at
+  all** — not a pending one, not a placeholder — because no Clinical reviewer is assigned.
+  `im_001_resolved` is bound with its machine-readable scope and refused as authority with
+  its own code.
+- **Step 2A — the approval-scope ruling.** Four facts kept distinct: IM-001 display
+  decisions complete; artifact-publication Product approval pending; Clinical approval
+  pending; publication/activation authorization false.
+
+**Finding reported to Backend (Step 2A).** The Backend's blocked-candidate fixture set
+`approvals.product: granted` citing IM-001 decision-set completion. As shipped it was
+ineligible — but only because clinical was pending and two blockers were open. Lifting
+those unrelated conditions made it `approved: true` and `eligible: true` on the strength of
+a display-wording decision. A field safe only while something else is in the way is a
+latent defect, so the KB did not weaken to match. Also reported: the Backend called
+Vocabulary 2.0 `vocabulary`, while this repository's artifact is `token_dictionary`.
+
+---
+
+## I3 Step 2C — Re-pinned to Backend contract 1.1.0
+
+**PR #38** · merge `77beffec` · base `2325e3f9` · pinned to reviewed head `458a1e48`.
+
+The Backend fixed **both** Step 2A findings and shipped contract **1.1.0**
+(`bbaeadd6`, schema `948299bc…5038a`, 7,806 bytes), adding the optional approval field
+`decision_scope` and tightening one previously unsafe claim: a `granted` approval declaring
+no `artifact_publication` scope no longer counts. **The substitution is now
+unrepresentable, not merely ineffective** — replaying the old encoding under 1.1.0 fails
+validation with `APPROVAL_SCOPE_MISSING`.
+
+- Approval-scope rules ported exactly, enforced at **both** validation and eligibility, so a
+  descriptor evaluated in isolation fails closed rather than inheriting a guarantee from a
+  validation pass that may never have run. Three new reason codes.
+- **39/39 parity** running the Backend's own `negative-fixtures.json` at `bbaeadd6` through
+  the KB port, at each case's declared stage and reason code.
+- Contract 1.0.0 retained at `contracts/backend/legacy/` as **explicitly labelled legacy
+  test material**, hash-pinned, with the pin refusing to let it masquerade as active.
+- **Reconciliation history preserved.** v1 is untouched byte-for-byte (`36efa4e9…`, 8,578
+  bytes) — the Backend cites it by hash — and CI now asserts it is never modified. v2 is
+  bound to `bbaeadd6` and computes its claims rather than asserting them.
+- **Representation divergence closed, in the Backend's favour.** The KB had carried the
+  IM-001 completion as a resolved `blocker_record`. The Backend objected that the blocker
+  list is the safety channel, and a completed decision sitting in it inverts its meaning for
+  anyone scanning for what is unresolved. That is right, and `decision_scope` removes the
+  reason the workaround existed.
+
+Step 2C-R review also closed three latent gaps: an ambiguous fixture selector, reason-code
+**order** drift that nothing detected, and a validator/schema comparison that failed in the
+*safe* direction — the published draft-07 schema cannot express a rule conditional on
+`status`, so it is deliberately the looser of the two.
+
+---
+
+## I3 Step 3A — Plan contract provenance corrected
+
+**PR #39** · merge `1f1b8dd0` · base `77beffec` · pinned to reviewed head `028e9d48`.
+
+Both dry-run plans claimed validation against **contract 1.0.0 at `fc40ac3e`** while the
+tooling had been pinned to **1.1.0 at `bbaeadd6`** since Step 2C. The values were literals:
+the re-pin moved everything derived and left everything typed. Worse, the plan schema pinned
+`contract_validation.contract_version` to the same stale `const "1.0.0"`, so **the schema was
+validating the staleness rather than catching it** — confirmed by running the base schema
+against the base plan, which returned valid.
+
+- Provenance is now **derived from the pin, never typed**, and cross-checked in code. JSON
+  Schema cannot express *"this field equals that field"*, and pinning literals is what caused
+  the defect — so the schema checks *shape* and the code checks *value against the live pin*.
+- `check_plan_provenance()` runs at generation (raising, so an inconsistent plan never reaches
+  disk) and again at validation **against the live pin**, because a plan can be perfectly
+  self-consistent and completely stale. Eight new reason codes.
+- A **narrative guard** catches what field checks cannot see: no active file may describe a
+  contract version other than the pinned one. Eight stale sentences had survived the re-pin.
+- A hand-maintained "knowledge-base develop at generation" reference, three merges out of
+  date, was **removed rather than updated** — a newer commit would go stale the same way.
+
+Step 3A-R review added source-provenance binding: the governance register was cited by
+**path only** (the same mutable-pointer defect one level out) and is now hash-bound, and a
+schema-pinned `source_provenance` block records what the plan establishes, what the ingestion
+envelope must supply, and what must never be inferred. **A matching sha256 proves the bytes
+are the bytes; it proves nothing about who approved them.** Asserted behaviourally: a
+descriptor whose hash and byte count verify perfectly is still approved by nobody and
+eligible nowhere.
+
+### Standing state after I3 Step 3A
+
+| Item | State |
+|---|---|
+| Backend contract | **1.1.0** at `bbaeadd6`, schema `948299bc…5038a` (7,806 bytes); 1.0.0 retained as labelled legacy test material |
+| Vocabulary 2.0 (`token_dictionary` 2.0) | Unpublished, inactive, ineligible in every environment |
+| Question Flow 1.1 | Unpublished, inactive, ineligible; both blockers open |
+| Product approval (artifact publication) | **pending** — IM-001 completion is display wording and ordering only, and grants nothing |
+| Clinical approval | **pending**; no Clinical reviewer assigned |
+| IM001-CLIN-FLAG-001 / IM003-SB-001 | **Both OPEN** |
+| IM-003 | **DISABLED** |
+| Rollback targets | **null** — both candidates cross a content-schema boundary and contract 1.1.0 defines no policy |
+| Publication / activation / Mobile authorization | **All false** |
+| Mobile PR #76 | **OPEN, unmerged, unauthorized** at `13be0d49` |
+| Uploads / publications / activations / deployments | **None.** No R2 write, no `/config` change |
+| Suites | publication 9 · W2 23 · W3 30 · IM-003 27 · 161 unit tests · 120 negative fixtures · 14 mutation proofs |
+| develop tip | `1f1b8dd0` (PR #39 merge) |
+
+### Open gaps carried forward
+
+- **No Clinical reviewer is assigned.** Until one is, no clinical approval can exist for any
+  artifact, and the tooling assigns nobody.
+- **Manifest and receipt signing do not exist.** No key, no custody, no verification path,
+  and no substitute invented.
+- **Cross-schema rollback has no policy.** Both proposed rollbacks cross a content-schema
+  boundary; refused pending an explicit decision.
+- **No upload mechanism exists**, deliberately.
+- **Backend PR #35** (`feat/i3-ingestion-registry-foundation`) is open and unmerged. When it
+  lands, ingestion must accept source provenance from its envelope, never infer a commit from
+  a plan, and never read hash agreement as governance evidence.
