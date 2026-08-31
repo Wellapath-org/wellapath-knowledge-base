@@ -78,8 +78,15 @@ SCANNED_TREES = [
 #: rather than rewarded with a green run.
 PHI_PATTERNS = [
     ("email address", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")),
+    # A third narrowing, for the same reason as the first two. The pattern's `\d{2,4}[ .-]`
+    # group happily matches the integer part of a decimal, so a geographic coordinate like
+    # 10.272931 read as a phone number: the nationwide facilities candidate produced 7,998
+    # such hits and not one real number among them. A negative lookahead rejects a match that
+    # is a bare decimal — one dot, a short integer part, a long fractional part — which no
+    # phone number in any format looks like. Real numbers are unaffected: they carry a leading
+    # +, several separators, or no dot at all, and the positive controls below still catch them.
     ("phone number", re.compile(
-        r"(?<![\dA-Fa-f])(?:\+\d{1,3}[ .-]?)?"
+        r"(?<![\dA-Fa-f])(?!\d{1,4}\.\d{4,}(?!\d))(?:\+\d{1,3}[ .-]?)?"
         r"(?:\(\d{2,4}\)[ .-]?|\d{2,4}[ .-])(?:\d[ .-]?){5,11}\d(?![\dA-Fa-f])")),
     ("date of birth", re.compile(
         r"(?:\bdate[_ ]of[_ ]birth\b|[\"\']dob[\"\']\s*[:=]|\bdob\s*[:=])", re.I)),
@@ -123,6 +130,11 @@ PHI_NEGATIVE_CONTROLS = [
     "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
     "657739cc1745104dd1194a57ef14cc9793c9b98e",
     "No PHI fields \u2014 no name, dob, phone, email, address, no free text",
+    # Geographic coordinates. Facility latitudes and longitudes are not contact details, and
+    # a two-digit integer part is what made them look like one.
+    "10.272931",
+    "13.005900",
+    '"latitude": 12.358056, "longitude": 8.731447',
 ]
 
 

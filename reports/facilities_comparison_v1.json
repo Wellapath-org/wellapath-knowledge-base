@@ -1,0 +1,653 @@
+{
+  "_metadata": {
+    "report_id": "facilities_comparison",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 1",
+    "generator": "tools/report_facilities_comparison.py",
+    "generator_version": "1.0.0",
+    "note": "A comparison, not a merge. The two datasets have different provenance chains and are kept apart deliberately; the consolidation entries below are proposals for review."
+  },
+  "record_counts": {
+    "facilities_1_1": 5344,
+    "candidate": 31274,
+    "change": 25930,
+    "multiplier": 5.85
+  },
+  "file_size": {
+    "facilities_1_1_bytes": 1695844,
+    "candidate_bytes": 30961471,
+    "multiplier": 18.3
+  },
+  "matching": {
+    "method": "Positional: candidate records within 250 m of a 1.1 record, preferring an identical normalised name. Normalisation strips common facility words so 'X Hospital' and 'X' compare equal. Deterministic and order-independent.",
+    "exact_name_and_location": 429,
+    "probable_location_only": 1187,
+    "only_in_facilities_1_1": 3728,
+    "only_in_candidate": 30312,
+    "conflicts": {
+      "city_area_differs": 143,
+      "coordinates_differ_over_50m": 725,
+      "emergency_capable_present_in_1_1_absent_in_candidate": 305,
+      "phone_differs": 9,
+      "state_differs": 9,
+      "type_present_in_1_1_absent_in_candidate": 1616
+    }
+  },
+  "coverage_change_by_state": {
+    "Abia": {
+      "facilities_1_1": 0,
+      "candidate": 756
+    },
+    "Akwa Ibom": {
+      "facilities_1_1": 0,
+      "candidate": 733
+    },
+    "Anambra": {
+      "facilities_1_1": 0,
+      "candidate": 1352
+    },
+    "Bauchi": {
+      "facilities_1_1": 0,
+      "candidate": 689
+    },
+    "Bayelsa": {
+      "facilities_1_1": 0,
+      "candidate": 76
+    },
+    "Benue": {
+      "facilities_1_1": 0,
+      "candidate": 1670
+    },
+    "Borno": {
+      "facilities_1_1": 0,
+      "candidate": 343
+    },
+    "Cross River": {
+      "facilities_1_1": 0,
+      "candidate": 1157
+    },
+    "Delta": {
+      "facilities_1_1": 0,
+      "candidate": 861
+    },
+    "Ebonyi": {
+      "facilities_1_1": 0,
+      "candidate": 415
+    },
+    "Edo": {
+      "facilities_1_1": 0,
+      "candidate": 458
+    },
+    "Ekiti": {
+      "facilities_1_1": 0,
+      "candidate": 582
+    },
+    "Enugu": {
+      "facilities_1_1": 0,
+      "candidate": 929
+    },
+    "FCT": {
+      "facilities_1_1": 614,
+      "candidate": 664
+    },
+    "Gombe": {
+      "facilities_1_1": 0,
+      "candidate": 743
+    },
+    "Imo": {
+      "facilities_1_1": 0,
+      "candidate": 1498
+    },
+    "Jigawa": {
+      "facilities_1_1": 0,
+      "candidate": 1053
+    },
+    "Kaduna": {
+      "facilities_1_1": 0,
+      "candidate": 1113
+    },
+    "Kano": {
+      "facilities_1_1": 2040,
+      "candidate": 1441
+    },
+    "Katsina": {
+      "facilities_1_1": 0,
+      "candidate": 425
+    },
+    "Kogi": {
+      "facilities_1_1": 0,
+      "candidate": 1138
+    },
+    "Kwara": {
+      "facilities_1_1": 0,
+      "candidate": 847
+    },
+    "Lagos": {
+      "facilities_1_1": 2690,
+      "candidate": 1521
+    },
+    "Nasarawa": {
+      "facilities_1_1": 0,
+      "candidate": 665
+    },
+    "Niger": {
+      "facilities_1_1": 0,
+      "candidate": 822
+    },
+    "Ogun": {
+      "facilities_1_1": 0,
+      "candidate": 1081
+    },
+    "Ondo": {
+      "facilities_1_1": 0,
+      "candidate": 861
+    },
+    "Osun": {
+      "facilities_1_1": 0,
+      "candidate": 1676
+    },
+    "Oyo": {
+      "facilities_1_1": 0,
+      "candidate": 1593
+    },
+    "Plateau": {
+      "facilities_1_1": 0,
+      "candidate": 1591
+    },
+    "Rivers": {
+      "facilities_1_1": 0,
+      "candidate": 893
+    },
+    "Taraba": {
+      "facilities_1_1": 0,
+      "candidate": 948
+    },
+    "Yobe": {
+      "facilities_1_1": 0,
+      "candidate": 498
+    },
+    "Zamfara": {
+      "facilities_1_1": 0,
+      "candidate": 182
+    }
+  },
+  "states_gained": [
+    "Abia",
+    "Akwa Ibom",
+    "Anambra",
+    "Bauchi",
+    "Bayelsa",
+    "Benue",
+    "Borno",
+    "Cross River",
+    "Delta",
+    "Ebonyi",
+    "Edo",
+    "Ekiti",
+    "Enugu",
+    "Gombe",
+    "Imo",
+    "Jigawa",
+    "Kaduna",
+    "Katsina",
+    "Kogi",
+    "Kwara",
+    "Nasarawa",
+    "Niger",
+    "Ogun",
+    "Ondo",
+    "Osun",
+    "Oyo",
+    "Plateau",
+    "Rivers",
+    "Taraba",
+    "Yobe",
+    "Zamfara"
+  ],
+  "states_lost": [],
+  "duplicate_consolidation_proposals": {
+    "group_count": 1229,
+    "rows_involved": 2530,
+    "rule": "Same normalised name, state and LGA. NOT applied \u2014 two facilities may genuinely share a name within one LGA, and collapsing them would delete a real clinic from a user's results.",
+    "largest_groups": [
+      {
+        "key": "okpoko primary healthcare | Anambra | Ogbaru",
+        "facility_ids": [
+          "ng_nhf_22920485",
+          "ng_nhf_36937632",
+          "ng_nhf_54585519",
+          "ng_nhf_70210679",
+          "ng_nhf_83092520",
+          "ng_nhf_85290291"
+        ],
+        "count": 6
+      },
+      {
+        "key": "essien udim | Akwa Ibom | Etim Ekpo",
+        "facility_ids": [
+          "ng_nhf_23944193",
+          "ng_nhf_45564067",
+          "ng_nhf_64719871",
+          "ng_nhf_67537171",
+          "ng_nhf_87373160"
+        ],
+        "count": 5
+      },
+      {
+        "key": "christ apostolic church | Ondo | Owo",
+        "facility_ids": [
+          "ng_nhf_23922185",
+          "ng_nhf_27258669",
+          "ng_nhf_69352948",
+          "ng_nhf_73017315"
+        ],
+        "count": 4
+      },
+      {
+        "key": "cocin | Plateau | Mangu",
+        "facility_ids": [
+          "ng_nhf_36227619",
+          "ng_nhf_44966510",
+          "ng_nhf_46441597",
+          "ng_nhf_56594819"
+        ],
+        "count": 4
+      },
+      {
+        "key": "essien udim | Akwa Ibom | Essien Udim",
+        "facility_ids": [
+          "ng_nhf_14507170",
+          "ng_nhf_30940939",
+          "ng_nhf_42413142",
+          "ng_nhf_55684597"
+        ],
+        "count": 4
+      },
+      {
+        "key": "first faith | Lagos | Surulere",
+        "facility_ids": [
+          "ng_nhf_24131662",
+          "ng_nhf_75691143",
+          "ng_nhf_83557354",
+          "ng_nhf_86682504"
+        ],
+        "count": 4
+      },
+      {
+        "key": "southern gem | Lagos | Eti-Osa",
+        "facility_ids": [
+          "ng_nhf_34752050",
+          "ng_nhf_41459989",
+          "ng_nhf_45199909",
+          "ng_nhf_81390825"
+        ],
+        "count": 4
+      },
+      {
+        "key": "achalla post | Anambra | Awka North",
+        "facility_ids": [
+          "ng_nhf_23130055",
+          "ng_nhf_40561953",
+          "ng_nhf_82779968"
+        ],
+        "count": 3
+      },
+      {
+        "key": "achau primary | Jigawa | Jahun",
+        "facility_ids": [
+          "ng_nhf_26918394",
+          "ng_nhf_35137137",
+          "ng_nhf_74229111"
+        ],
+        "count": 3
+      },
+      {
+        "key": "albasu primary | Jigawa | Sule-Tankarkar",
+        "facility_ids": [
+          "ng_nhf_37053287",
+          "ng_nhf_42064458",
+          "ng_nhf_46270868"
+        ],
+        "count": 3
+      },
+      {
+        "key": "alheri | Plateau | Mangu",
+        "facility_ids": [
+          "ng_nhf_33552875",
+          "ng_nhf_78062142",
+          "ng_nhf_82445281"
+        ],
+        "count": 3
+      },
+      {
+        "key": "aso pada primary care | Nasarawa | Karu",
+        "facility_ids": [
+          "ng_nhf_42104353",
+          "ng_nhf_58437750",
+          "ng_nhf_65562629"
+        ],
+        "count": 3
+      },
+      {
+        "key": "ayegbogbo primary | Osun | Ejigbo",
+        "facility_ids": [
+          "ng_nhf_26494146",
+          "ng_nhf_34921579",
+          "ng_nhf_40134138"
+        ],
+        "count": 3
+      },
+      {
+        "key": "ayoola | Ogun | Ijebu Ode",
+        "facility_ids": [
+          "ng_nhf_15161289",
+          "ng_nhf_28653134",
+          "ng_nhf_35974367"
+        ],
+        "count": 3
+      },
+      {
+        "key": "bassa cottage | Plateau | Bassa",
+        "facility_ids": [
+          "ng_nhf_54682956",
+          "ng_nhf_62542438",
+          "ng_nhf_83726516"
+        ],
+        "count": 3
+      },
+      {
+        "key": "calvary | Rivers | Obio/Akpor",
+        "facility_ids": [
+          "ng_nhf_13914481",
+          "ng_nhf_24569773",
+          "ng_nhf_33974929"
+        ],
+        "count": 3
+      },
+      {
+        "key": "cedarcare | Lagos | Eti-Osa",
+        "facility_ids": [
+          "ng_nhf_22524567",
+          "ng_nhf_53036615",
+          "ng_nhf_54114454"
+        ],
+        "count": 3
+      },
+      {
+        "key": "cocin primary care | Plateau | Shendam",
+        "facility_ids": [
+          "ng_nhf_14617151",
+          "ng_nhf_26020009",
+          "ng_nhf_28559057"
+        ],
+        "count": 3
+      },
+      {
+        "key": "comprehensive ibokun | Osun | Obokun",
+        "facility_ids": [
+          "ng_nhf_34073307",
+          "ng_nhf_53694829",
+          "ng_nhf_72052799"
+        ],
+        "count": 3
+      },
+      {
+        "key": "dadin kowa nursing home | Kano | Doguwa",
+        "facility_ids": [
+          "ng_nhf_16995202",
+          "ng_nhf_57905432",
+          "ng_nhf_59555574"
+        ],
+        "count": 3
+      },
+      {
+        "key": "dungu | Nasarawa | Lafia",
+        "facility_ids": [
+          "ng_nhf_23155091",
+          "ng_nhf_43257178",
+          "ng_nhf_64833891"
+        ],
+        "count": 3
+      },
+      {
+        "key": "ecwa | Plateau | Bassa",
+        "facility_ids": [
+          "ng_nhf_56328514",
+          "ng_nhf_57936551",
+          "ng_nhf_76965787"
+        ],
+        "count": 3
+      },
+      {
+        "key": "enugwu ukwu general | Anambra | Njikoka",
+        "facility_ids": [
+          "ng_nhf_25534844",
+          "ng_nhf_71196741",
+          "ng_nhf_72193928"
+        ],
+        "count": 3
+      },
+      {
+        "key": "faith shield | Ogun | Obafemi Owode",
+        "facility_ids": [
+          "ng_nhf_40111926",
+          "ng_nhf_78750950",
+          "ng_nhf_84774680"
+        ],
+        "count": 3
+      },
+      {
+        "key": "family | Lagos | Surulere",
+        "facility_ids": [
+          "ng_nhf_39816591",
+          "ng_nhf_56963156",
+          "ng_nhf_73976945"
+        ],
+        "count": 3
+      }
+    ]
+  },
+  "reconciliation_proposals": [
+    "Do not merge. Ship one lineage or the other; a fused artifact cannot answer where a record came from, which is the question every later data dispute turns on.",
+    "The 45 manually verified Lagos phone numbers in 1.1 are the single piece of human-verified content in either dataset. If the candidate is adopted, they should be re-applied as an explicit, listed enrichment, not silently inherited.",
+    "1.1 records with no candidate match are not evidence of closure; the candidate is missing three states and 94 LGAs, so absence there means absence of data."
+  ],
+  "samples": {
+    "exact_matches": [
+      {
+        "current_facility_id": "ng_lag_004",
+        "candidate_facility_id": "ng_nhf_73181128",
+        "distance_m": 37.1,
+        "current_name": "A Harmony Hospital",
+        "candidate_name": "A Harmony Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_009",
+        "candidate_facility_id": "ng_nhf_62881568",
+        "distance_m": 17.6,
+        "current_name": "Abbey Medical Center",
+        "candidate_name": "Abbey Medical Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_014",
+        "candidate_facility_id": "ng_nhf_48294765",
+        "distance_m": 5.7,
+        "current_name": "Abisat Convalescent Center",
+        "candidate_name": "Abisat Convalescent Health Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_018",
+        "candidate_facility_id": "ng_nhf_20084195",
+        "distance_m": 7.7,
+        "current_name": "Able God Clinic",
+        "candidate_name": "Able God Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_039",
+        "candidate_facility_id": "ng_nhf_36023951",
+        "distance_m": 8.5,
+        "current_name": "Addo Primary Health Center",
+        "candidate_name": "Addo Primary Health Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_042",
+        "candidate_facility_id": "ng_nhf_53040558",
+        "distance_m": 1.6,
+        "current_name": "Adebambo Hospital",
+        "candidate_name": "Adebambo Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_043",
+        "candidate_facility_id": "ng_nhf_65090172",
+        "distance_m": 12.9,
+        "current_name": "Adebayo Hospital Specialist",
+        "candidate_name": "Adebayo Specialist Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_044",
+        "candidate_facility_id": "ng_nhf_78672993",
+        "distance_m": 9.5,
+        "current_name": "Adebayo Living Tower Hospital",
+        "candidate_name": "Adebayo Living Tower Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_045",
+        "candidate_facility_id": "ng_nhf_65456506",
+        "distance_m": 24.4,
+        "current_name": "Adebek Maternity Home",
+        "candidate_name": "Adebek Maternity Home"
+      },
+      {
+        "current_facility_id": "ng_lag_054",
+        "candidate_facility_id": "ng_nhf_30559338",
+        "distance_m": 131.3,
+        "current_name": "Adekunle Staff Clinic",
+        "candidate_name": "Adekunle Staff Clinic"
+      }
+    ],
+    "probable_matches": [
+      {
+        "current_facility_id": "ng_lag_003",
+        "candidate_facility_id": "ng_nhf_54583972",
+        "distance_m": 148.4,
+        "current_name": "A And A Diagnostic Medical Center",
+        "candidate_name": "Kalon Clinic"
+      },
+      {
+        "current_facility_id": "ng_lag_006",
+        "candidate_facility_id": "ng_nhf_70490269",
+        "distance_m": 7.2,
+        "current_name": "A.O.M Specialist",
+        "candidate_name": "Zenith Medical and Kidney Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_011",
+        "candidate_facility_id": "ng_nhf_58270836",
+        "distance_m": 2.2,
+        "current_name": "Abibat Memorial Clinic",
+        "candidate_name": "Habibat Memorial Convalescent Home"
+      },
+      {
+        "current_facility_id": "ng_lag_012",
+        "candidate_facility_id": "ng_nhf_25455252",
+        "distance_m": 116.4,
+        "current_name": "Abimbola Awoniyi Hospital",
+        "candidate_name": "Toya Clinic and Maternity Home"
+      },
+      {
+        "current_facility_id": "ng_lag_013",
+        "candidate_facility_id": "ng_nhf_23129991",
+        "distance_m": 231.8,
+        "current_name": "Abio Hospital",
+        "candidate_name": "Rachael & Nana Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_019",
+        "candidate_facility_id": "ng_nhf_64967613",
+        "distance_m": 168.4,
+        "current_name": "Able God Hospital Maternity",
+        "candidate_name": "Funto Hospital"
+      },
+      {
+        "current_facility_id": "ng_lag_023",
+        "candidate_facility_id": "ng_nhf_37619028",
+        "distance_m": 9.6,
+        "current_name": "Aboru Primary Health Center",
+        "candidate_name": "Aboru Primary Healthcare Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_024",
+        "candidate_facility_id": "ng_nhf_62969517",
+        "distance_m": 6.0,
+        "current_name": "Abs Medicare Centre And Maternity",
+        "candidate_name": "Abs Medical Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_025",
+        "candidate_facility_id": "ng_nhf_84957882",
+        "distance_m": 12.2,
+        "current_name": "Abule Eko Primary Health Care",
+        "candidate_name": "Abule Eko Primary Health Centre"
+      },
+      {
+        "current_facility_id": "ng_lag_028",
+        "candidate_facility_id": "ng_nhf_71180580",
+        "distance_m": 235.0,
+        "current_name": "Abule Titun Primary Health Center",
+        "candidate_name": "Life Builders Mission Hospital"
+      }
+    ],
+    "only_in_facilities_1_1": [
+      {
+        "facility_id": "ng_lag_001",
+        "name": "11 Plc Staff Clinic",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_002",
+        "name": "243 Batallion Medical Reception Station, Nigeria Army Barrack Ibereko Badagry",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_005",
+        "name": "A Model Specialist Hospital",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_007",
+        "name": "Abagbo Health Center",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_008",
+        "name": "Abamalo Maternity Centre",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_010",
+        "name": "Abby'S Paediatric Care",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_015",
+        "name": "Abiye Clinic And Maternity Home",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_016",
+        "name": "Abizade Source Of Joy Hospital",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_017",
+        "name": "Abizak Convalescent Home",
+        "state": "Lagos"
+      },
+      {
+        "facility_id": "ng_lag_020",
+        "name": "Abodunrin Medical Center",
+        "state": "Lagos"
+      }
+    ]
+  }
+}

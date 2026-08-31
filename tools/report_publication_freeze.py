@@ -44,12 +44,18 @@ FROZEN = {
         "candidate/question_flow.ng.v1.1.json",
         "candidate/manifest.candidate.json",
         "candidate/CANDIDATE_STATUS.md",
+        "candidate/facilities.ng.v2.0.json",
+    ],
+    "facilities_source": [
+        "facilities/source/nigeria_health_facilities.csv",
+        "facilities/source/nhf_provenance_v1.json",
     ],
     "schemas": [
         "schema/question_flow.v1.schema.json",
         "schema/question_flow.v1_1.schema.json",
         "schema/token_dictionary.v2.schema.json",
         "schema/token_dictionary_schema_v2.0.json",
+        "schema/facilities.v2.schema.json",
         "schema/kb_schema_v1.0.json",
         "schema/rules_schema_v1.0.json",
     ],
