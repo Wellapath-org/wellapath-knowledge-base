@@ -1,0 +1,39 @@
+{
+  "receipt_type": "upload",
+  "receipt_id": "EXAMPLE-UPLOAD-0001",
+  "receipt_schema_version": "1.0.0",
+  "operative": false,
+  "non_operative_declaration": "DRY-RUN EXAMPLE \u2014 NOT A RECORD OF ANY OPERATION. No upload, publication, activation or rollback has occurred. This document exists to define the shape a future authorized operation would record.",
+  "actor": {
+    "identity": null,
+    "title": null,
+    "role": "unassigned",
+    "authority_type": "none"
+  },
+  "occurred_at": null,
+  "environment": "staging",
+  "artifact": {
+    "artifact_id": "token_dictionary",
+    "artifact_version": "2.0",
+    "sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "byte_count": 339948,
+    "object_key": "token_dictionary.ng.v2.0.json",
+    "country": "ng"
+  },
+  "decision_references": [
+    "no publication authorization exists for token_dictionary@2.0",
+    "publication/plans/token_dictionary.ng.v2.0.dryrun.json"
+  ],
+  "signing": {
+    "signed": false,
+    "mechanism": null,
+    "gap": "Contract 1.0.0 defines no receipt or manifest signing. This repository holds no signing key, no key custody procedure and no verification path, and invents none: an unsigned receipt is a statement by whoever wrote the file, and a home-made signature would look like assurance without being any. Establishing a trust mechanism is new infrastructure and needs its own decision."
+  },
+  "upload_performed": false,
+  "origin": null,
+  "verified_after_upload": {
+    "performed": false,
+    "method": "A real upload is verified by re-reading the stored object and re-deriving sha256 and byte_count from the bytes actually returned. An ETag, a Content-Length or a success status is not verification: none of them is the content."
+  },
+  "note": "Upload is a separate, explicitly authorized operation that does not exist in this repository. The origin is null because no destination has been decided and writing one would make a proposal look like a plan of record."
+}

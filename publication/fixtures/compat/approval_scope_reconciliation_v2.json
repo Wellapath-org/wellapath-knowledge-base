@@ -1,0 +1,268 @@
+{
+  "_metadata": {
+    "record_id": "approval_scope_reconciliation",
+    "version": "2",
+    "supersedes": {
+      "path": "publication/fixtures/compat/approval_scope_reconciliation_v1.json",
+      "sha256": "36efa4e908df42b99463c8fe809e11e83e740d20b205f1358c51d17622e194ee",
+      "byte_count": 8578,
+      "bound_to_backend_commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+      "status": "PRESERVED, NOT REWRITTEN. v1 records a defect that genuinely existed at Backend fc40ac3e. Rewriting it to read as though the Backend was always correct would erase the evidence that the correction was needed, and with it the reason the contract moved to 1.1.0."
+    },
+    "phase": "I3 / Step 2C",
+    "generator": "tools/build_publication_fixtures.py",
+    "evaluated_at": "2026-08-28T00:00:00Z",
+    "evaluator": "tools/pubkit/eligibility.py and tools/pubkit/manifest.py \u2014 ports of the Backend's src/manifest/* at bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+    "note": "Every claim below is COMPUTED by running the contract's own validation and eligibility semantics, not asserted in prose."
+  },
+  "backend_binding": {
+    "commit": "bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+    "contract_version": "1.1.0",
+    "schema_sha256": "948299bc1ca87592e372d4ce889bdd2424a6cfc3d34c7660453dfe7d60d5038a",
+    "schema_byte_count": 7806,
+    "blocked_candidates_fixture": {
+      "path": "tests/fixtures/manifest/blocked-candidates.manifest.json",
+      "sha256": "5b0622e8efc57b09cd65c9d4964f740565c9863b9ba28729dba035c58fc3bbb7"
+    },
+    "approvals_product": {
+      "required": true,
+      "status": "pending",
+      "decision_ref": null,
+      "approved_at": null,
+      "decision_scope": null
+    }
+  },
+  "historical_defective_encoding": {
+    "commit": "fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "contract_version": "1.0.0",
+    "approvals_product": {
+      "required": true,
+      "status": "granted",
+      "decision_ref": "IM-001 \u2014 Product decisions complete; activation remains unauthorized",
+      "approved_at": null
+    }
+  },
+  "outcome": {
+    "v1_verdict": "fixture_defect",
+    "v2_verdict": "resolved_by_backend",
+    "how": "Backend 1.1.0 added decision_scope and set the blocked-candidate product approval to pending. The KB reported the substitution in I3 Step 2A; the Backend fixed both the fixture and the contract. Under 1.1.0 the substitution is not merely ineffective, it is unrepresentable.",
+    "artifact_identity": "Backend also adopted token_dictionary as the stable artifact id for Vocabulary 2.0, which was the second finding in I3 Step 2A. Both divergences are closed.",
+    "representation_divergence": "Closed in this step. The KB previously carried the IM-001 completion as a resolved blocker_record, chosen under 1.0.0 because a resolved blocker is structurally incapable of granting approval. The Backend objected that the blocker list is the safety channel and a completed decision sitting in it inverts its meaning for a human scanning for what is unresolved. That is right, and 1.1.0's decision_scope removes the need for the workaround, so the KB now carries the completion in references and in the plan's scope record. Both repositories now emit the same product approval slot, byte for byte."
+  },
+  "encodings_compared": {
+    "knowledge_base": {
+      "approvals_product": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null,
+        "decision_scope": null
+      },
+      "as_shipped": {
+        "development": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        }
+      },
+      "with_unrelated_conditions_lifted": {
+        "development": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        }
+      }
+    },
+    "backend_1_1_0": {
+      "source": "tests/fixtures/manifest/blocked-candidates.manifest.json @ bbaeadd6075eb37fd51acbe04101f939e52c7d48",
+      "approvals_product": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null,
+        "decision_scope": null
+      },
+      "as_shipped": {
+        "development": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        }
+      },
+      "with_unrelated_conditions_lifted": {
+        "development": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        }
+      }
+    },
+    "historical_defective_replayed_under_1_1_0": {
+      "source": "tests/fixtures/manifest/blocked-candidates.manifest.json @ fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+      "approvals_product": {
+        "required": true,
+        "status": "granted",
+        "decision_ref": "IM-001 \u2014 Product decisions complete; activation remains unauthorized",
+        "approved_at": null
+      },
+      "validation": {
+        "valid": false,
+        "reason_codes": [
+          "APPROVAL_SCOPE_MISSING"
+        ],
+        "vendored_schema_accepts": true
+      },
+      "with_unrelated_conditions_lifted": {
+        "development": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_SCOPE_MISSING",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_SCOPE_MISSING"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_SCOPE_MISSING",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        }
+      },
+      "note": "Under 1.0.0 this encoding validated, and became approved and eligible once unrelated conditions lifted \u2014 that was the defect. Under 1.1.0 it fails validation outright with APPROVAL_SCOPE_MISSING."
+    }
+  },
+  "new_reason_codes": {
+    "codes": [
+      "APPROVAL_SCOPE_MISSING",
+      "APPROVAL_SCOPE_UNKNOWN",
+      "APPROVAL_SCOPE_MISMATCH"
+    ],
+    "agree_across_repositories": true,
+    "evidence": "tools/validate_publication_fixtures.py executes the Backend's own tests/fixtures/manifest/negative-fixtures.json at bbaeadd6 against the KB port; all 39 cases fail at their declared stage with their declared code, including every APPROVAL_SCOPE_* case."
+  },
+  "claims": {
+    "backend_fixture_product_approval_is_now_pending": true,
+    "knowledge_base_product_approval_is_pending": true,
+    "im_001_completion_is_scoped_traceability_only": true,
+    "im_001_completion_is_not_in_the_safety_blocker_channel": true,
+    "prior_substitution_defect_no_longer_reproduces": true,
+    "lifting_clinical_and_blocker_conditions_produces_no_approval": true,
+    "both_encodings_ineligible_in_every_environment": true,
+    "both_encodings_are_now_byte_identical_in_the_product_slot": true,
+    "artifact_identity_agrees": true
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "receipt_type": "rollback",
+  "receipt_id": "EXAMPLE-ROLLBACK-0001",
+  "receipt_schema_version": "1.0.0",
+  "operative": false,
+  "non_operative_declaration": "DRY-RUN EXAMPLE \u2014 NOT A RECORD OF ANY OPERATION. No upload, publication, activation or rollback has occurred. This document exists to define the shape a future authorized operation would record.",
+  "actor": {
+    "identity": null,
+    "title": null,
+    "role": "unassigned",
+    "authority_type": "none"
+  },
+  "occurred_at": null,
+  "environment": "staging",
+  "artifact": {
+    "artifact_id": "token_dictionary",
+    "artifact_version": "2.0",
+    "sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "byte_count": 339948,
+    "object_key": "token_dictionary.ng.v2.0.json",
+    "country": "ng"
+  },
+  "decision_references": [
+    "docs/VOCABULARY_ROLLBACK.md",
+    "publication/plans/token_dictionary.ng.v2.0.dryrun.json"
+  ],
+  "signing": {
+    "signed": false,
+    "mechanism": null,
+    "gap": "Contract 1.0.0 defines no receipt or manifest signing. This repository holds no signing key, no key custody procedure and no verification path, and invents none: an unsigned receipt is a statement by whoever wrote the file, and a home-made signature would look like assurance without being any. Establishing a trust mechanism is new infrastructure and needs its own decision."
+  },
+  "rollback_performed": false,
+  "decision": "refused",
+  "rolled_back_from": {
+    "artifact_version": "2.0",
+    "sha256": "sha256:07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d"
+  },
+  "rolled_back_to": {
+    "artifact_version": "1.1",
+    "sha256": "sha256:0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+  },
+  "hash_bound": true,
+  "note": "Refused, and it would be refused even if publication had happened: token_dictionary 2.0 declares content schema 2.0 while 1.1 declares 1.0, so the return crosses a content-schema boundary that contract 1.1.0 has no policy for. Both ends are hash-bound anyway, which is what makes the refusal precise rather than vague."
+}
