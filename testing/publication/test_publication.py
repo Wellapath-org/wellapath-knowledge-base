@@ -1067,7 +1067,7 @@ class DocumentationTests(unittest.TestCase):
         self.assertEqual(counts["compat_fixtures"], 50)
         self.assertEqual(counts["kb_fixtures"], 70)
         self.assertEqual(counts["total_fixtures"], 120)
-        self.assertEqual(counts["frozen_artifacts"], 44)
+        self.assertEqual(counts["frozen_artifacts"], 48)
         self.assertEqual(counts["mutation_proofs"], 14)
 
     def test_every_documented_count_matches_reality(self):

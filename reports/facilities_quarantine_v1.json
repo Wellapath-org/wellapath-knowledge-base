@@ -1,0 +1,842 @@
+{
+  "_metadata": {
+    "report_id": "facilities_quarantine",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 1",
+    "generator": "tools/build_facilities_candidate.py",
+    "generator_version": "1.0.0",
+    "note": "Every source row the candidate does not contain, with the reason. Rows are identified by source line and source id only: the values that caused the rejection are summarised rather than reproduced, so a quarantine report does not become a second copy of the data it excluded."
+  },
+  "total_quarantined": 116,
+  "by_reason": {
+    "coordinates_null_island": 5,
+    "coordinates_out_of_bounds": 4,
+    "coordinates_swapped_suspected": 106,
+    "name_empty": 1
+  },
+  "reason_codes": {
+    "name_empty": "facility_name blank or a placeholder token",
+    "state_absent": "state_name blank",
+    "state_unmapped": "state_name outside the explicit state table",
+    "lga_absent": "lga_name blank",
+    "coordinates_unparseable": "longitude/latitude present but not numeric",
+    "coordinates_null_island": "coordinates are exactly 0,0",
+    "coordinates_out_of_bounds": "coordinates outside the Nigeria bounding box",
+    "coordinates_swapped_suspected": "implausible as given, plausible if the two fields were exchanged; NOT swapped automatically, because that is a guess about which field the source got wrong",
+    "name_is_contact_detail": "facility_name holds an email address or URL rather than a name; the row cannot be presented to a user and the value is not repeated here"
+  },
+  "rows": [
+    {
+      "source_line": 9180,
+      "source_id": "34434910",
+      "source_unique_id": "01/03/1///0154",
+      "reason_code": "coordinates_null_island",
+      "detail": "longitude='0.000000' latitude='0.000000'"
+    },
+    {
+      "source_line": 9664,
+      "source_id": "20068340",
+      "source_unique_id": "01/08/1///0133",
+      "reason_code": "coordinates_null_island",
+      "detail": "longitude='0.000000' latitude='0.000000'"
+    },
+    {
+      "source_line": 9867,
+      "source_id": "15074808",
+      "source_unique_id": "01/10/1///0180",
+      "reason_code": "coordinates_null_island",
+      "detail": "longitude='0.000000' latitude='0.000000'"
+    },
+    {
+      "source_line": 10039,
+      "source_id": "54907630",
+      "source_unique_id": "01/15/1///0356",
+      "reason_code": "coordinates_null_island",
+      "detail": "longitude='0.000000' latitude='0.000000'"
+    },
+    {
+      "source_line": 10040,
+      "source_id": "24315212",
+      "source_unique_id": "01/16/1///0157",
+      "reason_code": "coordinates_null_island",
+      "detail": "longitude='0.000000' latitude='0.000000'"
+    },
+    {
+      "source_line": 6526,
+      "source_id": "13870389",
+      "source_unique_id": "09/14/1/1/1/0007",
+      "reason_code": "coordinates_out_of_bounds",
+      "detail": "longitude='0.703950' latitude='-0.714832'"
+    },
+    {
+      "source_line": 9622,
+      "source_id": "56821852",
+      "source_unique_id": "14/09/1/1/1/0017",
+      "reason_code": "coordinates_out_of_bounds",
+      "detail": "longitude='-0.039142' latitude='0.525495'"
+    },
+    {
+      "source_line": 29216,
+      "source_id": "73353345",
+      "source_unique_id": "32/15/1/2/2/0003",
+      "reason_code": "coordinates_out_of_bounds",
+      "detail": "longitude='-10.476798' latitude='-34.985733'"
+    },
+    {
+      "source_line": 29224,
+      "source_id": "15884109",
+      "source_unique_id": "32/15/1/2/2/0004",
+      "reason_code": "coordinates_out_of_bounds",
+      "detail": "longitude='-10.479050' latitude='-34.989242'"
+    },
+    {
+      "source_line": 5457,
+      "source_id": "75729421",
+      "source_unique_id": "08/15/1/1/1/0001",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.267240' latitude='14.468059'"
+    },
+    {
+      "source_line": 5458,
+      "source_id": "66962090",
+      "source_unique_id": "08/15/1/1/1/0002",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.266695' latitude='14.468835'"
+    },
+    {
+      "source_line": 5593,
+      "source_id": "54083682",
+      "source_unique_id": "08/25/1/1/1/0002",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.370894' latitude='14.202777'"
+    },
+    {
+      "source_line": 5594,
+      "source_id": "20176623",
+      "source_unique_id": "08/25/1/1/1/0005",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.353883' latitude='14.174242'"
+    },
+    {
+      "source_line": 5595,
+      "source_id": "17399955",
+      "source_unique_id": "08/25/1/1/1/0006",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.357232' latitude='14.170324'"
+    },
+    {
+      "source_line": 5596,
+      "source_id": "86176428",
+      "source_unique_id": "08/25/1/1/1/0007",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.357013' latitude='14.170443'"
+    },
+    {
+      "source_line": 5597,
+      "source_id": "34951314",
+      "source_unique_id": "08/25/1/2/1/0004",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.344812' latitude='14.187632'"
+    },
+    {
+      "source_line": 5598,
+      "source_id": "65102030",
+      "source_unique_id": "08/25/1/1/1/0008",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.344855' latitude='14.187498'"
+    },
+    {
+      "source_line": 5599,
+      "source_id": "21415242",
+      "source_unique_id": "08/25/1/1/1/0003",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.353890' latitude='14.174265'"
+    },
+    {
+      "source_line": 5600,
+      "source_id": "87467757",
+      "source_unique_id": "08/25/1/1/1/0001",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='12.482800' latitude='14.178578'"
+    },
+    {
+      "source_line": 18308,
+      "source_id": "28262347",
+      "source_unique_id": "23/03/1/1/1/0029",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.215043' latitude='3.200556'"
+    },
+    {
+      "source_line": 18309,
+      "source_id": "19687456",
+      "source_unique_id": "23/03/1/1/1/0027",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.224170' latitude='3.197015'"
+    },
+    {
+      "source_line": 18310,
+      "source_id": "80180992",
+      "source_unique_id": "23/03/1/1/1/0028",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.203497' latitude='3.208808'"
+    },
+    {
+      "source_line": 18314,
+      "source_id": "66977020",
+      "source_unique_id": "23/03/1/1/1/0033",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.888709' latitude='3.136682'"
+    },
+    {
+      "source_line": 18316,
+      "source_id": "68297922",
+      "source_unique_id": "23/03/1/1/1/0034",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.105913' latitude='3.112341'"
+    },
+    {
+      "source_line": 18317,
+      "source_id": "52904228",
+      "source_unique_id": "23/03/1/1/1/0035",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.918061' latitude='3.416951'"
+    },
+    {
+      "source_line": 18318,
+      "source_id": "65350149",
+      "source_unique_id": "23/03/1/1/1/0037",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.886975' latitude='3.133311'"
+    },
+    {
+      "source_line": 18382,
+      "source_id": "16882430",
+      "source_unique_id": "29/16/1/1/2/0316",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.613314' latitude='3.942832'"
+    },
+    {
+      "source_line": 18383,
+      "source_id": "58110764",
+      "source_unique_id": "29/16/1/1/1/0315",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.605806' latitude='3.947916'"
+    },
+    {
+      "source_line": 18385,
+      "source_id": "62005691",
+      "source_unique_id": "29/16/1/1/2/0314",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.607179' latitude='3.949853'"
+    },
+    {
+      "source_line": 18391,
+      "source_id": "54773855",
+      "source_unique_id": "29/16/1/1/1/0324",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.606616' latitude='3.937718'"
+    },
+    {
+      "source_line": 18392,
+      "source_id": "78480208",
+      "source_unique_id": "29/16/1/1/2/0325",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.606616' latitude='3.937718'"
+    },
+    {
+      "source_line": 18422,
+      "source_id": "13971500",
+      "source_unique_id": "29/16/1/1/1/0357",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.908235' latitude='3.427054'"
+    },
+    {
+      "source_line": 18424,
+      "source_id": "31108632",
+      "source_unique_id": "29/16/1/1/1/0355",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.908235' latitude='3.427054'"
+    },
+    {
+      "source_line": 18430,
+      "source_id": "23928614",
+      "source_unique_id": "29/16/1/1/1/0356",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.908235' latitude='3.427054'"
+    },
+    {
+      "source_line": 18451,
+      "source_id": "63527095",
+      "source_unique_id": "29/16/1/1/1/0384",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.602202' latitude='3.946265'"
+    },
+    {
+      "source_line": 18452,
+      "source_id": "74149430",
+      "source_unique_id": "29/16/1/2/2/0389",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.595152' latitude='3.938058'"
+    },
+    {
+      "source_line": 18453,
+      "source_id": "77122853",
+      "source_unique_id": "29/16/1/1/2/0387",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.604140' latitude='3.936222'"
+    },
+    {
+      "source_line": 18454,
+      "source_id": "50186515",
+      "source_unique_id": "29/16/1/1/1/0385",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.602212' latitude='3.946287'"
+    },
+    {
+      "source_line": 18455,
+      "source_id": "78634462",
+      "source_unique_id": "29/16/1/2/2/0388",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.595152' latitude='3.938058'"
+    },
+    {
+      "source_line": 18456,
+      "source_id": "48005615",
+      "source_unique_id": "29/16/1/1/2/0386",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.604169' latitude='3.936151'"
+    },
+    {
+      "source_line": 18457,
+      "source_id": "77778240",
+      "source_unique_id": "29/16/1/1/2/0392",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.614953' latitude='3.961314'"
+    },
+    {
+      "source_line": 18484,
+      "source_id": "60679217",
+      "source_unique_id": "23/06/1/1/2/0032",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.657305' latitude='3.961430'"
+    },
+    {
+      "source_line": 18486,
+      "source_id": "82122176",
+      "source_unique_id": "23/06/1/1/2/0034",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.581747' latitude='3.825596'"
+    },
+    {
+      "source_line": 18488,
+      "source_id": "25177643",
+      "source_unique_id": "23/06/1/1/2/0033",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.691019' latitude='3.914774'"
+    },
+    {
+      "source_line": 18491,
+      "source_id": "60384100",
+      "source_unique_id": "23/06/1/1/1/0029",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.043826' latitude='3.336072'"
+    },
+    {
+      "source_line": 18499,
+      "source_id": "81527327",
+      "source_unique_id": "23/06/1/2/1/0030",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.912112' latitude='3.425109'"
+    },
+    {
+      "source_line": 18500,
+      "source_id": "21497702",
+      "source_unique_id": "23/06/1/1/1/0035",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.010810' latitude='3.534420'"
+    },
+    {
+      "source_line": 18504,
+      "source_id": "41971324",
+      "source_unique_id": "23/06/1/1/2/0038",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.081460' latitude='3.532543'"
+    },
+    {
+      "source_line": 18505,
+      "source_id": "14023964",
+      "source_unique_id": "23/06/1/1/1/0040",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.581747' latitude='3.825596'"
+    },
+    {
+      "source_line": 18506,
+      "source_id": "85104726",
+      "source_unique_id": "23/06/1/1/2/0051",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.718662' latitude='3.745431'"
+    },
+    {
+      "source_line": 18515,
+      "source_id": "22990832",
+      "source_unique_id": "23/06/1/1/2/0050",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.718662' latitude='3.745431'"
+    },
+    {
+      "source_line": 18519,
+      "source_id": "46389925",
+      "source_unique_id": "23/06/1/1/1/0063",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.691019' latitude='3.914774'"
+    },
+    {
+      "source_line": 18532,
+      "source_id": "57205373",
+      "source_unique_id": "23/06/1/1/2/0066",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.914336' latitude='3.425288'"
+    },
+    {
+      "source_line": 18536,
+      "source_id": "39209135",
+      "source_unique_id": "23/07/1/1/1/0005",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.870686' latitude='3.091054'"
+    },
+    {
+      "source_line": 18538,
+      "source_id": "46124298",
+      "source_unique_id": "23/07/1/2/2/0001",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.634667' latitude='3.896129'"
+    },
+    {
+      "source_line": 18542,
+      "source_id": "16585780",
+      "source_unique_id": "23/07/1/1/2/0020",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.579020' latitude='3.955634'"
+    },
+    {
+      "source_line": 18543,
+      "source_id": "26582164",
+      "source_unique_id": "23/07/1/2/2/0013",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.920836' latitude='3.307242'"
+    },
+    {
+      "source_line": 18545,
+      "source_id": "24748257",
+      "source_unique_id": "23/07/1/1/2/0014",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.920897' latitude='3.307348'"
+    },
+    {
+      "source_line": 18546,
+      "source_id": "76679284",
+      "source_unique_id": "23/07/1/2/2/0007",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.523819' latitude='3.907171'"
+    },
+    {
+      "source_line": 18547,
+      "source_id": "21133396",
+      "source_unique_id": "23/07/1/2/2/0008",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.392407' latitude='3.855362'"
+    },
+    {
+      "source_line": 18549,
+      "source_id": "31938963",
+      "source_unique_id": "23/07/1/2/2/0012",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.920836' latitude='3.307242'"
+    },
+    {
+      "source_line": 18551,
+      "source_id": "69066472",
+      "source_unique_id": "23/07/1/1/1/0010",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.387383' latitude='3.848760'"
+    },
+    {
+      "source_line": 18554,
+      "source_id": "13900738",
+      "source_unique_id": "23/07/1/2/2/0009",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.392413' latitude='3.855352'"
+    },
+    {
+      "source_line": 18561,
+      "source_id": "81612734",
+      "source_unique_id": "23/07/1/1/2/0027",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.215687' latitude='3.862894'"
+    },
+    {
+      "source_line": 18563,
+      "source_id": "30423032",
+      "source_unique_id": "23/07/1/2/2/0026",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.213645' latitude='3.864094'"
+    },
+    {
+      "source_line": 18565,
+      "source_id": "51523579",
+      "source_unique_id": "23/07/1/1/1/0024",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.383323' latitude='3.852737'"
+    },
+    {
+      "source_line": 18566,
+      "source_id": "69591346",
+      "source_unique_id": "23/07/1/1/2/0025",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.213645' latitude='3.864094'"
+    },
+    {
+      "source_line": 18567,
+      "source_id": "58333631",
+      "source_unique_id": "23/07/1/1/2/0054",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.526927' latitude='3.909529'"
+    },
+    {
+      "source_line": 18570,
+      "source_id": "52889054",
+      "source_unique_id": "23/07/1/1/2/0052",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.568461' latitude='3.962179'"
+    },
+    {
+      "source_line": 18576,
+      "source_id": "60931022",
+      "source_unique_id": "23/07/1/1/2/0053",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.526920' latitude='3.909522'"
+    },
+    {
+      "source_line": 18587,
+      "source_id": "37970792",
+      "source_unique_id": "23/07/1/2/1/0034",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.920836' latitude='3.307242'"
+    },
+    {
+      "source_line": 18591,
+      "source_id": "44938925",
+      "source_unique_id": "23/07/1/2/2/0057",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.920836' latitude='3.307242'"
+    },
+    {
+      "source_line": 18611,
+      "source_id": "17432398",
+      "source_unique_id": "23/08/1/2/2/0008",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.870731' latitude='3.091107'"
+    },
+    {
+      "source_line": 18628,
+      "source_id": "71495655",
+      "source_unique_id": "23/08/1/1/1/0027",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.870686' latitude='3.091054'"
+    },
+    {
+      "source_line": 18639,
+      "source_id": "15045471",
+      "source_unique_id": "23/08/1/2/2/0037",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.032565' latitude='3.343743'"
+    },
+    {
+      "source_line": 18684,
+      "source_id": "71728855",
+      "source_unique_id": "23/08/1/2/2/0076",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.032565' latitude='3.343743'"
+    },
+    {
+      "source_line": 18688,
+      "source_id": "25514203",
+      "source_unique_id": "23/08/1/2/2/0077",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.032581' latitude='3.343676'"
+    },
+    {
+      "source_line": 18695,
+      "source_id": "17512546",
+      "source_unique_id": "29/20/1/1/1/0257",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.474071' latitude='3.187798'"
+    },
+    {
+      "source_line": 18697,
+      "source_id": "18254198",
+      "source_unique_id": "29/20/1/1/1/0262",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.307183' latitude='3.166369'"
+    },
+    {
+      "source_line": 18702,
+      "source_id": "77091282",
+      "source_unique_id": "29/20/1/2/1/0268",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.210659' latitude='3.200935'"
+    },
+    {
+      "source_line": 18710,
+      "source_id": "69747888",
+      "source_unique_id": "29/20/1/1/1/0265",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.472727' latitude='3.186145'"
+    },
+    {
+      "source_line": 18714,
+      "source_id": "81443215",
+      "source_unique_id": "29/20/1/1/1/0278",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.216859' latitude='3.200072'"
+    },
+    {
+      "source_line": 18725,
+      "source_id": "25742980",
+      "source_unique_id": "29/20/1/2/2/0292",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.307183' latitude='3.166369'"
+    },
+    {
+      "source_line": 18731,
+      "source_id": "57004365",
+      "source_unique_id": "29/20/1/2/2/0300",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.139436' latitude='3.260734'"
+    },
+    {
+      "source_line": 18734,
+      "source_id": "72029941",
+      "source_unique_id": "29/20/1/2/2/0303",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524940' latitude='3.333862'"
+    },
+    {
+      "source_line": 18736,
+      "source_id": "30081213",
+      "source_unique_id": "29/20/1/1/1/0299",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.219002' latitude='3.198747'"
+    },
+    {
+      "source_line": 18756,
+      "source_id": "34894863",
+      "source_unique_id": "29/20/1/1/1/0316",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.160027' latitude='3.152398'"
+    },
+    {
+      "source_line": 18757,
+      "source_id": "15218335",
+      "source_unique_id": "29/20/1/2/1/0322",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18759,
+      "source_id": "22253935",
+      "source_unique_id": "23/10/1/1/1/0002",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18760,
+      "source_id": "46174381",
+      "source_unique_id": "23/10/1/1/1/0001",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18774,
+      "source_id": "86608408",
+      "source_unique_id": "23/10/1/1/1/0016",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18806,
+      "source_id": "32741999",
+      "source_unique_id": "23/11/1/1/2/0020",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.826023' latitude='3.363420'"
+    },
+    {
+      "source_line": 18807,
+      "source_id": "50514093",
+      "source_unique_id": "23/11/1/1/2/0023",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.577824' latitude='3.244909'"
+    },
+    {
+      "source_line": 18808,
+      "source_id": "70441708",
+      "source_unique_id": "23/11/1/1/1/0022",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.632683' latitude='3.291804'"
+    },
+    {
+      "source_line": 18809,
+      "source_id": "21140948",
+      "source_unique_id": "23/11/1/1/1/0021",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.826216' latitude='3.363273'"
+    },
+    {
+      "source_line": 18815,
+      "source_id": "68510672",
+      "source_unique_id": "23/11/1/1/2/0019",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.826548' latitude='3.359165'"
+    },
+    {
+      "source_line": 18849,
+      "source_id": "81142863",
+      "source_unique_id": "23/11/1/1/2/0059",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.307183' latitude='3.166369'"
+    },
+    {
+      "source_line": 18852,
+      "source_id": "18813636",
+      "source_unique_id": "23/11/1/1/1/0065",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.625935' latitude='3.291514'"
+    },
+    {
+      "source_line": 18853,
+      "source_id": "23407921",
+      "source_unique_id": "23/11/1/1/1/0062",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.769221' latitude='3.395714'"
+    },
+    {
+      "source_line": 18854,
+      "source_id": "15619165",
+      "source_unique_id": "23/11/1/1/1/0061",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18855,
+      "source_id": "55995452",
+      "source_unique_id": "23/11/1/1/1/0064",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.822653' latitude='3.366602'"
+    },
+    {
+      "source_line": 18856,
+      "source_id": "39216957",
+      "source_unique_id": "23/11/1/1/1/0060",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.524585' latitude='3.340551'"
+    },
+    {
+      "source_line": 18857,
+      "source_id": "57836435",
+      "source_unique_id": "23/11/1/1/1/0063",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.819437' latitude='3.366825'"
+    },
+    {
+      "source_line": 18876,
+      "source_id": "31133834",
+      "source_unique_id": "23/12/1/1/2/0019",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.632425' latitude='3.289669'"
+    },
+    {
+      "source_line": 18877,
+      "source_id": "80842341",
+      "source_unique_id": "23/12/1/1/2/0020",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.550557' latitude='3.224213'"
+    },
+    {
+      "source_line": 18922,
+      "source_id": "66586275",
+      "source_unique_id": "23/13/1/1/1/0006",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.832536' latitude='3.365484'"
+    },
+    {
+      "source_line": 18933,
+      "source_id": "23882995",
+      "source_unique_id": "23/13/1/1/2/0023",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.225109' latitude='3.216065'"
+    },
+    {
+      "source_line": 18936,
+      "source_id": "78780564",
+      "source_unique_id": "23/13/1/1/1/0024",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.215516' latitude='3.197359'"
+    },
+    {
+      "source_line": 18942,
+      "source_id": "23239325",
+      "source_unique_id": "23/13/1/1/1/0028",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.535548' latitude='3.219430'"
+    },
+    {
+      "source_line": 18944,
+      "source_id": "24431567",
+      "source_unique_id": "23/13/1/1/1/0032",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='8.912618' latitude='3.427459'"
+    },
+    {
+      "source_line": 18948,
+      "source_id": "45198678",
+      "source_unique_id": "23/13/1/1/1/0005",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='9.057172' latitude='2.932359'"
+    },
+    {
+      "source_line": 21299,
+      "source_id": "35153248",
+      "source_unique_id": "26/04/1/1/2/0011",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='10.377390' latitude='3.784291'"
+    },
+    {
+      "source_line": 21300,
+      "source_id": "57972418",
+      "source_unique_id": "26/04/1/1/1/0012",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='10.377390' latitude='3.784291'"
+    },
+    {
+      "source_line": 21301,
+      "source_id": "21439387",
+      "source_unique_id": "26/04/1/1/1/0013",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='10.377390' latitude='3.784291'"
+    },
+    {
+      "source_line": 21313,
+      "source_id": "71551291",
+      "source_unique_id": "26/04/1/1/1/0014",
+      "reason_code": "coordinates_swapped_suspected",
+      "detail": "longitude='10.377390' latitude='3.784291'"
+    },
+    {
+      "source_line": 27679,
+      "source_id": "23088337",
+      "source_unique_id": "31/05/1/1/2/0043",
+      "reason_code": "name_empty",
+      "detail": "facility_name is blank or a placeholder token"
+    }
+  ]
+}

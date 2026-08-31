@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/facilities.v2.schema.json",
+  "title": "WellaPath Nigeria facilities artifact — schema 2.0 (candidate)",
+  "description": "Schema for the nationwide facilities candidate. Additive over schema 1.0: every field facilities 1.1 emitted is still present under the same name and type, so the Mobile consumer's field access is unchanged. Two of those fields — type and emergency_capable — are null on every record because this source evidences neither; that is a behavioural change for the consumer even though the shape is unchanged, and it is the reason the artifact version is 2.0 rather than 1.2.\n\nAbsence convention, applied throughout: null means NOT PROVIDED (the source field was blank or a placeholder token). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_metadata", "facilities"],
+  "properties": {
+    "_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id", "version", "schema_version", "country", "release_status",
+        "release_date", "may_publish", "generated_at", "generator", "generator_version",
+        "total_facilities", "states_covered", "states_absent", "coverage_claim", "source",
+        "unresolved_fields", "absence_convention", "not_carried_from_source",
+        "absence_counts", "unmapped_source_values"
+      ],
+      "properties": {
+        "artifact_id": { "const": "facilities" },
+        "version": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "schema_version": { "const": "2.0" },
+        "country": { "const": "ng" },
+        "release_status": {
+          "const": "candidate_unapproved",
+          "description": "Pinned. A candidate becomes something else only through a recorded approval, never through regenerating it."
+        },
+        "release_date": { "type": "null" },
+        "may_publish": {
+          "const": false,
+          "description": "Pinned false. Licence for this source is not established, which is a blocking gate independent of any technical readiness."
+        },
+        "generated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$" },
+        "generator": { "type": "string", "minLength": 1 },
+        "generator_version": { "type": "string" },
+        "total_facilities": { "type": "integer", "minimum": 1 },
+        "states_covered": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "states_absent": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "States with no record at all. Present and non-empty for this candidate; the artifact states its own coverage gap rather than leaving a reader to discover it."
+        },
+        "coverage_claim": { "type": "string", "minLength": 1 },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "byte_count", "provenance_record", "organization", "licence", "licence_note"],
+          "properties": {
+            "path": { "type": "string" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "byte_count": { "type": "integer", "minimum": 1 },
+            "provenance_record": { "type": "string" },
+            "organization": {
+              "type": "null",
+              "description": "Null, not a guess. The source file names no publishing organisation anywhere."
+            },
+            "licence": {
+              "type": "null",
+              "description": "Null, not a guess. No licence accompanied the data."
+            },
+            "licence_note": { "type": "string", "minLength": 1 }
+          }
+        },
+        "unresolved_fields": {
+          "type": "object",
+          "required": ["type", "emergency_capable"],
+          "properties": {
+            "type": { "type": "string", "minLength": 1 },
+            "emergency_capable": { "type": "string", "minLength": 1 }
+          }
+        },
+        "absence_convention": { "type": "object" },
+        "not_carried_from_source": { "type": "object" },
+        "absence_counts": { "type": "object" },
+        "unmapped_source_values": { "type": "object" }
+      }
+    },
+    "facilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/facility" }
+    }
+  },
+  "$defs": {
+    "facility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facility_id", "name", "type", "state", "city_area", "latitude", "longitude",
+        "phone", "opening_hours", "emergency_capable",
+        "lga", "ward", "address", "facility_level", "ownership", "ownership_type",
+        "operational_status", "registration_status", "license_status", "beds", "services",
+        "source_record"
+      ],
+      "properties": {
+        "facility_id": {
+          "type": "string",
+          "pattern": "^ng_nhf_\\d+$",
+          "description": "Stable identity, derived from the source's own unique row id. Distinct in shape from facilities 1.1's ng_<state>_<n> ids so the two lineages can never be confused for one another."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "type": "null",
+          "description": "Null on every record, deliberately. Mobile filters non-emergency results by type against {hospital, clinic, health_centre, pharmacy}; this source has no such column, only facility_level, which is a tier of care rather than a kind of facility. The mapping is a Product decision because it determines which facilities a user is shown for self-care versus urgent care."
+        },
+        "state": { "type": "string", "minLength": 1 },
+        "city_area": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The LGA name. facilities 1.1 populated this field with a mixture of LGA names and free text, so an LGA is consistent with its dominant existing use, not a change of meaning."
+        },
+        "latitude": { "type": ["number", "null"], "minimum": 4.0, "maximum": 14.0 },
+        "longitude": { "type": ["number", "null"], "minimum": 2.5, "maximum": 15.0 },
+        "phone": {
+          "type": ["string", "null"],
+          "pattern": "^\\+234[789][01]\\d{8}$",
+          "description": "E.164, normalised from the source and never invented. Null when the source value was absent, malformed or a placeholder. Public-use intent is NOT established; see the provenance record."
+        },
+        "opening_hours": { "enum": ["24_hours", "12_hours", "8_hours", "other", null] },
+        "emergency_capable": {
+          "type": "null",
+          "description": "Null on every record. facilities 1.1 derived this from type == 'hospital'; this source has no type, and none of its 90 columns records emergency capability."
+        },
+        "lga": { "type": "string", "minLength": 1 },
+        "ward": { "type": ["string", "null"] },
+        "address": { "type": ["string", "null"] },
+        "facility_level": { "enum": ["Primary", "Secondary", "Tertiary", null] },
+        "ownership": { "enum": ["Public", "Private", null] },
+        "ownership_type": {
+          "enum": ["local_government", "state_government", "federal_government",
+                   "private_for_profit", "private_not_for_profit", "military_paramilitary", null]
+        },
+        "operational_status": {
+          "enum": ["functional", "non_functional", "closed", "under_renovation", "unknown", null]
+        },
+        "registration_status": {
+          "enum": ["registered", "provisionally_registered", "pending_registration",
+                   "registration_suspended", "registration_cancelled", "unknown", null]
+        },
+        "license_status": {
+          "enum": ["licensed", "not_licensed", "license_cancelled", "unknown", null]
+        },
+        "beds": { "type": ["integer", "null"], "minimum": 0 },
+        "services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["onsite_laboratory", "onsite_imaging", "onsite_pharmacy", "mortuary", "ambulance"],
+          "properties": {
+            "onsite_laboratory": { "type": ["boolean", "null"] },
+            "onsite_imaging": { "type": ["boolean", "null"] },
+            "onsite_pharmacy": { "type": ["boolean", "null"] },
+            "mortuary": { "type": ["boolean", "null"] },
+            "ambulance": { "type": ["boolean", "null"] }
+          },
+          "description": "Null means the source said neither Yes nor No. It is never coerced to false: 'we do not know whether this clinic has an ambulance' and 'this clinic has no ambulance' are different statements, and only one of them is safe to show a user."
+        },
+        "source_record": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["source_id", "source_unique_id"],
+          "properties": {
+            "source_id": { "type": "string", "minLength": 1 },
+            "source_unique_id": { "type": "string", "minLength": 1 }
+          },
+          "description": "Identity only. Every original value stays recoverable by joining source_id against the committed, hash-pinned source CSV."
+        }
+      }
+    }
+  }
+}

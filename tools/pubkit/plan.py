@@ -435,6 +435,7 @@ def _describe_validation(entry):
     validators = {
         "token_dictionary": "tools/validate_vocabulary.py",
         "question_flow": "tools/validate_question_flow.py",
+        "facilities": "tools/validate_facilities_candidate.py",
     }
     validator = validators.get(entry["artifact_id"])
     return {

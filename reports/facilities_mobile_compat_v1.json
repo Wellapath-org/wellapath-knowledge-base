@@ -1,0 +1,255 @@
+{
+  "_metadata": {
+    "report_id": "facilities_mobile_compat",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 1",
+    "generator": "tools/report_facilities_comparison.py",
+    "generator_version": "1.0.0",
+    "harness": "An exact port of lib/features/locator/facility_locator_service.dart as of wellapath-mobile 13be0d49 \u2014 same type chain, urgency sets, 20 km / 3-result sparse-coverage rule, haversine and `== true` emergency test. Compatibility is measured by running both artifacts through it, not asserted.",
+    "mobile_commit_inspected": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+    "mobile_repository_modified": false
+  },
+  "required_field_presence": {
+    "fields": [
+      "facility_id",
+      "name",
+      "type",
+      "state",
+      "city_area",
+      "latitude",
+      "longitude",
+      "phone",
+      "opening_hours",
+      "emergency_capable"
+    ],
+    "facilities_1_1": {
+      "facility_id": 5344,
+      "name": 5344,
+      "type": 5344,
+      "state": 5344,
+      "city_area": 5344,
+      "latitude": 5344,
+      "longitude": 5344,
+      "phone": 5344,
+      "opening_hours": 5344,
+      "emergency_capable": 5344
+    },
+    "candidate": {
+      "facility_id": 31274,
+      "name": 31274,
+      "type": 31274,
+      "state": 31274,
+      "city_area": 31274,
+      "latitude": 31274,
+      "longitude": 31274,
+      "phone": 31274,
+      "opening_hours": 31274,
+      "emergency_capable": 31274
+    },
+    "all_present_in_candidate": true
+  },
+  "type_and_null_handling": {
+    "mobile_reads_latitude_longitude_as_nullable": true,
+    "null_coordinates_sort_last": "distance becomes infinity; the record is retained, not dropped",
+    "candidate_records_without_coordinates": 524,
+    "mobile_emergency_test": "facility['emergency_capable'] == true; null is treated as false",
+    "candidate_emergency_capable_true": 0,
+    "mobile_type_filter": "non-emergency urgencies keep only {hospital, clinic, health_centre, pharmacy}",
+    "candidate_records_with_a_matching_type": 0
+  },
+  "blocking_findings": [
+    {
+      "finding": "type is null on every candidate record, so every non-emergency query returns zero results",
+      "severity": "blocking",
+      "evidence": "getNearbyFacilities filters by allowedTypes.contains(facility['type']) for urgent, non_urgent and self_care. The sparse-coverage fallback widens the type set but never removes the filter, so it cannot rescue a null type.",
+      "resolution": "A Product decision mapping facility_level (Primary/Secondary/Tertiary) to the Mobile type vocabulary, or a change to the Mobile filter. Not decided here."
+    },
+    {
+      "finding": "emergency_capable is null on every candidate record",
+      "severity": "material",
+      "evidence": "Emergency results still return facilities, but the emergency-capable-first ordering collapses to pure distance ordering.",
+      "resolution": "Either an evidenced capability field from the source owner, or an explicit Product rule. facilities 1.1 used type == 'hospital', which this source cannot support."
+    },
+    {
+      "finding": "the candidate is 18\u00d7 the size of facilities 1.1",
+      "severity": "material",
+      "evidence": "30961471 bytes against 1695844. Mobile decodes the artifact into a List<Map<String, dynamic>> held in memory for the life of the locator.",
+      "resolution": "Options, none chosen here: compact serialisation (~22.5 MB), a distribution profile carrying only the ten fields Mobile reads (~10.3 MB), or per-state partitioning. All three are distribution decisions."
+    },
+    {
+      "finding": "three states have no records at all",
+      "severity": "material",
+      "evidence": "Adamawa, Kebbi and Sokoto. A user in those states gets an empty locator, where 1.1 would also have been empty \u2014 but the candidate is presented as nationwide, which would make the gap surprising rather than expected.",
+      "resolution": "Source owner. Not fixable in transformation."
+    }
+  ],
+  "nearby_probe_results": {
+    "Lagos (Ikeja)": {
+      "emergency": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 30,
+        "candidate_returns_nothing": false
+      },
+      "urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "non_urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "self_care": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      }
+    },
+    "Abuja (Central)": {
+      "emergency": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 30,
+        "candidate_returns_nothing": false
+      },
+      "urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "non_urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "self_care": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      }
+    },
+    "Kano (city)": {
+      "emergency": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 30,
+        "candidate_returns_nothing": false
+      },
+      "urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "non_urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "self_care": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      }
+    },
+    "Sokoto (state with no candidate records)": {
+      "emergency": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 30,
+        "candidate_returns_nothing": false
+      },
+      "urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "non_urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "self_care": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      }
+    },
+    "Port Harcourt": {
+      "emergency": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 30,
+        "candidate_returns_nothing": false
+      },
+      "urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "non_urgent": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      },
+      "self_care": {
+        "facilities_1_1_results": 30,
+        "candidate_results": 0,
+        "candidate_returns_nothing": true
+      }
+    }
+  },
+  "by_location_probe_results": {
+    "Lagos / Alimosho": {
+      "emergency": {
+        "facilities_1_1": 30,
+        "candidate": 30
+      },
+      "urgent": {
+        "facilities_1_1": 30,
+        "candidate": 0
+      },
+      "non_urgent": {
+        "facilities_1_1": 30,
+        "candidate": 0
+      },
+      "self_care": {
+        "facilities_1_1": 30,
+        "candidate": 0
+      }
+    },
+    "Kano / Ajingi": {
+      "emergency": {
+        "facilities_1_1": 30,
+        "candidate": 29
+      },
+      "urgent": {
+        "facilities_1_1": 0,
+        "candidate": 0
+      },
+      "non_urgent": {
+        "facilities_1_1": 0,
+        "candidate": 0
+      },
+      "self_care": {
+        "facilities_1_1": 30,
+        "candidate": 0
+      }
+    },
+    "FCT / Abuja Municipal Area Council": {
+      "emergency": {
+        "facilities_1_1": 30,
+        "candidate": 30
+      },
+      "urgent": {
+        "facilities_1_1": 10,
+        "candidate": 0
+      },
+      "non_urgent": {
+        "facilities_1_1": 10,
+        "candidate": 0
+      },
+      "self_care": {
+        "facilities_1_1": 30,
+        "candidate": 0
+      }
+    }
+  },
+  "verdict": "NOT COMPATIBLE as it stands. The candidate satisfies every structural requirement \u2014 all ten fields present on every record, correct types, null handling consistent with the consumer \u2014 and still returns nothing for three of the four urgency paths, because the one field that drives non-emergency filtering cannot be populated from this source without a Product decision."
+}

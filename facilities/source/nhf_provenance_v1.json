@@ -1,0 +1,95 @@
+{
+  "_metadata": {
+    "record_id": "nhf_source_provenance",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 1",
+    "note": "What is established about the supplied source, and what is NOT. Fields marked not_established are recorded that way deliberately: the dataset arrived with no accompanying documentation, and inferring an organisation, a licence or a coverage claim from a filename would be inventing provenance rather than recording it.",
+    "authored": "2026-08-31"
+  },
+  "file": {
+    "supplied_as": "nigeria_health_facilities.csv, placed at the repository root",
+    "preserved_at": "facilities/source/nigeria_health_facilities.csv",
+    "bytes_altered": false,
+    "sha256": "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3",
+    "byte_count": 20913558,
+    "format": "CSV, UTF-8, no BOM, CRLF line terminators",
+    "structure": "One title line ('nigeria_health_facilities'), then a 90-column header, then 31,390 data rows. All rows are exactly 90 fields wide. 284 bare LF characters occur inside quoted fields; the CSV parses cleanly.",
+    "filesystem_mtime": "2026-08-06T17:44:49 (local machine, not authoritative for the dataset)"
+  },
+  "retention_policy": {
+    "permitted": true,
+    "basis": "facilities/source/ is this repository's established raw-source location and already holds committed upstream CSVs: GRID3_NGA_health_facilities_v2_0_*.csv (13,613,859 bytes) and hotosm_nga_health_facilities.csv (1,225,666 bytes). Retaining source bytes there is existing policy, not a new one.",
+    "bytes_preserved_unchanged": true
+  },
+  "source_organization": {
+    "established": false,
+    "recorded_name": null,
+    "what_the_file_says": "Nothing. There is no organisation name, publisher field, copyright line or contact anywhere in the 90 columns or the title row.",
+    "why_not_asserted": "The task names the dataset 'NHF'. The file itself does not. Recording an organisation on the strength of a filename would be inventing provenance."
+  },
+  "delivery": {
+    "url": null,
+    "mechanism": "Handed over as a file in the repository working tree. No download URL, no API response, no transfer receipt.",
+    "only_technical_evidence": "The macOS extended attribute com.apple.metadata:kMDItemWhereFroms records 'Numbers', i.e. the file was exported from Apple Numbers. It is therefore NOT a pristine upstream delivery: it passed through a spreadsheet application, which can silently alter number formatting, leading zeros, dates and encoding.",
+    "delivered_to_repository": "2026-08-31",
+    "chain_of_custody": "incomplete"
+  },
+  "dataset_snapshot": {
+    "declared_version": null,
+    "inferred_from_internal_timestamps": {
+      "record_created_at": "2026-05-18T16:06:51 .. 2026-07-13T10:11:03",
+      "record_updated_at": "2026-05-18T16:06:51 .. 2026-07-21T13:15:26",
+      "workflow_timestamps_requested_verified_validated_published": "2026-05-18T16:06:51 .. 2026-07-13T10:10:53",
+      "interpretation": "A snapshot taken no earlier than 2026-07-21. These are the source system's own audit timestamps, not a declared dataset version."
+    }
+  },
+  "licence": {
+    "established": false,
+    "evidence": "None. No licence file, no licence column, no terms-of-use statement accompanied the data.",
+    "consequence": "Redistribution terms are unknown. The candidate artifact produced from this source must not be published, uploaded or served until licence or reuse permission is established in writing. This is a blocking, non-technical gate."
+  },
+  "geographic_scope": {
+    "claimed": "nationwide (per the task brief, not per the data)",
+    "observed": "33 of Nigeria's 36 states, plus the Federal Capital Territory. 682 distinct LGA names against Nigeria's 774.",
+    "states_absent": ["Adamawa", "Kebbi", "Sokoto"],
+    "naming_variant": "Akwa Ibom appears as 'Akwa-Ibom' (hyphenated), which differs from the spelling used by facilities 1.1 and by the standard state list.",
+    "conclusion": "The dataset is NOT nationwide on the evidence supplied. The gap is material and is reported in the coverage report rather than smoothed over."
+  },
+  "documentation": {
+    "data_dictionary_supplied": false,
+    "readme_supplied": false,
+    "mitigating_fact": "The file resolves its own lookup tables: every *_id column is accompanied by a *_name column, and each id maps to exactly one name across all 31,390 rows (verified for state, lga, ward, facility_level, ownership, ownership_type and operational_status). Mappings are therefore derivable from the data itself and are machine-checked, not guessed.",
+    "unresolved_columns": {
+      "facility_type_id": "Three values (1, 2, 3) with NO accompanying name column, and its distribution does not match facility_level_id. Meaning unknown; carried to the unmapped report, not interpreted.",
+      "facility_level_option_id": "No name column. Meaning unknown.",
+      "facility_level_options_category_id": "No name column. Meaning unknown.",
+      "registration_status_id / license_status_id": "Name columns exist but the dominant value for both is literally 'Unknown'."
+    }
+  },
+  "contact_fields_public_use": {
+    "established": false,
+    "evidence": "None. Nothing in the file or any accompanying document states that any contact field is intended for public distribution.",
+    "fields_present": {
+      "phone_number": "30,513 of 31,390 rows populated. Positioned as a facility attribute, but public-use intent is undocumented.",
+      "alternate_number": "5,999 populated. Same uncertainty, and the column contains non-phone junk (e.g. 'http://www.com').",
+      "email_address": "6,966 populated. Contains a mix of institutional addresses and free text; some values look like individual mailboxes rather than facility addresses."
+    },
+    "fields_absent_and_therefore_no_risk": [
+      "verified_email", "verified_mobile", "validated_email", "validated_mobile",
+      "published_email", "published_mobile", "verified_id"
+    ],
+    "absent_note": "All seven of those officer/workflow contact columns are empty across all 31,390 rows. Had they been populated they would have been personal staff contacts, not facility contacts, and would have been excluded.",
+    "decision": "email_address and alternate_number are EXCLUDED from the candidate artifact: no documented public-use basis, and both carry evident data quality problems. phone_number is carried in a validated, normalised form because facilities 1.1 already surfaces a phone to users, but it is flagged for Product review before any public presentation or tel: action."
+  },
+  "accuracy_and_completeness": {
+    "asserted_by_source": "none",
+    "observed_signals": {
+      "bulk_import": "Every one of the 31,390 rows carries verify_note 'Auto-approved via bulk import', validate_note 'Auto-approved via bulk import' and publish_note 'Auto-published via bulk import'. 29,958 rows carry action 'CREATE FACILITY (BULK IMPORT)'.",
+      "meaning": "No record in this dataset was individually verified. The verified/validated/published workflow fields record an automated bulk action, not human confirmation.",
+      "created_by": "Two account identifiers only (5 and 145), consistent with two bulk loads rather than distributed data entry.",
+      "certificate_of_standard": "'No' for every row.",
+      "dhis2_synced": "0 for every row."
+    },
+    "conclusion": "Completeness and accuracy are NOT established. The dataset is a bulk-imported registry snapshot with no per-record verification, three states missing and 92 LGAs unrepresented."
+  }
+}
