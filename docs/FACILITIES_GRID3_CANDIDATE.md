@@ -9,9 +9,15 @@ kept open as research/audit evidence, source authorization incomplete) to the
 source — the same source facilities 1.0/1.1 were built from, already committed
 and hash-pinned in this repository.
 
+> **Served projection:** this 69 MB artifact is the INTERNAL AUDIT/MASTER
+> candidate and is not designated for mobile distribution. The compact
+> distribution shape is `candidate/facilities.ng.v2.0-grid3.served.json`
+> (8.7 MB raw / 2.2 MB gzip, 51,022 records, equally unapproved) —
+> `docs/FACILITIES_GRID3_SERVED.md`.
+
 | Fact | Value |
 |---|---|
-| Candidate | `candidate/facilities.ng.v2.0-grid3.json` |
+| Candidate (master/audit) | `candidate/facilities.ng.v2.0-grid3.json` |
 | Lineage / version / schema | `grid3` / 2.0 / 2.0 (`schema/facilities_grid3.v2.schema.json`) |
 | Records | **51,022** — every source row emitted, 0 quarantined |
 | Size | 69,032,692 bytes (gzip 3,810,741) |

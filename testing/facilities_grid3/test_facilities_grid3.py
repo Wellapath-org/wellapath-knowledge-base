@@ -274,6 +274,130 @@ class GovernanceTests(unittest.TestCase):
         self.assertIsNone(entry["proposed_type"])
 
 
+SERVED = load_json(repo("candidate", "facilities.ng.v2.0-grid3.served.json"))
+SERVED_META = SERVED["_metadata"]
+SERVED_RECORDS = SERVED["facilities"]
+SERVED_SCHEMA = load_json(repo("schema", "facilities_grid3_served.v2.schema.json"))
+SIZE_REPORT = load_json(repo("reports", "facilities_grid3_size_v1.json"))
+
+
+class ServedProjectionTests(unittest.TestCase):
+    """The compact served candidate: a field selection of the master, never a
+    change of values, never a channel for the fields awaiting decisions."""
+
+    def test_all_51022_records_appear_exactly_once(self):
+        self.assertEqual(len(SERVED_RECORDS), 51022)
+        ids = [rec["id"] for rec in SERVED_RECORDS]
+        self.assertEqual(len(ids), len(set(ids)))
+        self.assertEqual(set(ids), {m["facility_id"] for m in RECORDS})
+
+    def test_values_are_identical_to_the_master_in_order(self):
+        for rec, m in zip(SERVED_RECORDS, RECORDS):
+            self.assertEqual(rec["id"], m["facility_id"])
+            self.assertEqual(rec["name"], m["name"])
+            self.assertEqual(rec["state"], m["state"])
+            self.assertEqual(rec["city_area"], m["city_area"])
+            self.assertEqual(rec["latitude"], m["latitude"])
+            self.assertEqual(rec["longitude"], m["longitude"])
+
+    def test_served_records_carry_only_the_consumed_keys(self):
+        wanted = {"id", "name", "state", "city_area", "latitude", "longitude"}
+        for rec in SERVED_RECORDS[:: 500]:
+            self.assertEqual(set(rec), wanted)
+
+    def test_no_source_record_or_forbidden_field_reaches_the_wire(self):
+        facilities_bytes = json.dumps(SERVED_RECORDS, separators=(",", ":"),
+                                      ensure_ascii=True).encode("utf-8")
+        for key in ("source_record", "phone", "opening_hours", "type",
+                    "emergency_capable", "facility_id", "nhfr_uid", "ward"):
+            self.assertEqual(facilities_bytes.count(b'"%s":' % key.encode()), 0, key)
+
+    def test_no_nhfr_marker_in_served_bytes(self):
+        with open(repo("candidate", "facilities.ng.v2.0-grid3.served.json"), "rb") as handle:
+            data = handle.read()
+        for marker in S.NHFR_MARKER_STRINGS:
+            self.assertEqual(data.count(marker.encode("utf-8")), 0, marker)
+
+    def test_served_traceability_to_the_source(self):
+        rows = {}
+        for row in S.read_source():
+            gid = row["globalid"].strip()
+            rows[(gid[5:] if gid.startswith("uuid:") else gid).lower()] = row
+        for rec in SERVED_RECORDS[:: 500] + SERVED_RECORDS[-1:]:
+            row = rows[rec["id"][len("ng_g3_"):]]
+            self.assertEqual(rec["latitude"], float(row["latitude"]))
+            self.assertEqual(rec["longitude"], float(row["longitude"]))
+            self.assertEqual(rec["name"], S.clean_text(row["facility_name"]))
+
+    def test_served_artifact_satisfies_its_schema(self):
+        self.assertEqual(schema_validate(SERVED, SERVED_SCHEMA), [])
+
+    def _mutated(self, mutate):
+        clone = {"schema_version": "2.0",
+                 "_metadata": copy.deepcopy(SERVED_META),
+                 "facilities": [copy.deepcopy(SERVED_RECORDS[0])]}
+        mutate(clone)
+        return schema_validate(clone, SERVED_SCHEMA)
+
+    def test_served_schema_rejects_the_decision_gated_fields_even_as_null(self):
+        for key, value in (("type", None), ("type", "hospital"),
+                           ("emergency_capable", None), ("emergency_capable", True),
+                           ("phone", "+2348031234567"), ("opening_hours", "24_hours"),
+                           ("source_record", {})):
+            errors = self._mutated(lambda c, k=key, v=value: c["facilities"][0].__setitem__(k, v))
+            self.assertTrue(errors, key)
+
+    def test_served_schema_rejects_publication_and_role_drift(self):
+        self.assertTrue(self._mutated(lambda c: c["_metadata"].__setitem__("may_publish", True)))
+        self.assertTrue(self._mutated(lambda c: c["_metadata"].__setitem__(
+            "release_status", "approved")))
+        self.assertTrue(self._mutated(lambda c: c["_metadata"].__setitem__("role", "master")))
+        self.assertTrue(self._mutated(lambda c: c.__setitem__("schema_version", "1.0")))
+
+    def test_every_record_passes_the_verified_pr79_acceptance_rules(self):
+        from validate_facilities_grid3_served import pr79_accepts
+        self.assertTrue(all(pr79_accepts(rec) for rec in SERVED_RECORDS))
+
+    def test_attribution_travels_with_the_served_artifact(self):
+        source = SERVED_META["source"]
+        self.assertEqual(source["attribution_citation"], ATTRIBUTION_CITATION)
+        self.assertEqual(source["licence"], "CC BY 4.0")
+        self.assertEqual(source["attribution_licence_url"],
+                         "https://creativecommons.org/licenses/by/4.0")
+        self.assertIn("Modifications by WellaPath", source["modifications_disclosed"])
+
+    def test_served_publication_is_blocked(self):
+        self.assertEqual(SERVED_META["release_status"], "candidate_unapproved")
+        self.assertEqual(SERVED_META["publication_status"], "candidate_unapproved")
+        self.assertIs(SERVED_META["may_publish"], False)
+        self.assertIs(MANIFEST["served_artifact"]["may_publish"], False)
+
+    def test_served_serialization_is_compact_canonical(self):
+        with open(repo("candidate", "facilities.ng.v2.0-grid3.served.json"), "rb") as handle:
+            data = handle.read()
+        self.assertEqual(data, json.dumps(json.loads(data), separators=(",", ":"),
+                                          ensure_ascii=True).encode("utf-8"))
+        self.assertNotIn(b"\n", data)
+
+    def test_size_report_is_generated_and_truthful(self):
+        import gzip as gzip_module
+        with open(repo("candidate", "facilities.ng.v2.0-grid3.served.json"), "rb") as handle:
+            data = handle.read()
+        entry = SIZE_REPORT["artifacts"]["served_candidate"]
+        self.assertEqual(entry["bytes"], len(data))
+        self.assertEqual(entry["gzip_bytes"], len(gzip_module.compress(data, 9)))
+        self.assertEqual(SIZE_REPORT["_metadata"]["gzip_level"], 9)
+        self.assertEqual(sum(v["records"] for v in
+                             SIZE_REPORT["per_state_served_bytes"].values()), 51022)
+
+    def test_master_is_not_the_distribution_artifact(self):
+        self.assertEqual(MANIFEST["candidate_artifact"]["role"], "master_audit_candidate")
+        self.assertIn("NOT designated for mobile distribution",
+                      MANIFEST["artifact_roles"]["master_audit_candidate"])
+        self.assertEqual(SERVED_META["master_candidate"]["path"],
+                         "candidate/facilities.ng.v2.0-grid3.json")
+
+
 class DeterminismTests(unittest.TestCase):
     def test_regeneration_is_byte_identical(self):
         import build_facilities_grid3_candidate as gen

@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/facilities_grid3_served.v2.schema.json",
+  "title": "WellaPath Nigeria facilities — served projection, schema 2.0, GRID3 lineage (candidate)",
+  "description": "The compact distribution shape of the GRID3-lineage candidate, projected from the internal audit/master candidate (candidate/facilities.ng.v2.0-grid3.json) with zero value changes. Every design fact below is VERIFIED against the Mobile PR #79 parser at wellapath-mobile 854377c0 (lib/core/facilities_v2/facilities_v2_parser.dart), not assumed:\n\n * The parser requires top-level schema_version (a string starting '2.') and a non-empty facilities list; _metadata is ignored by the parser and exists for governance.\n * A record is consumed through the keys {id, name, latitude, longitude, type, emergency_capable, state, lga, city_area, phone, opening_hours}; id, name and finite in-range coordinates are required or the record is rejected; every OPTIONAL key is read with raw[...] so an ABSENT key parses identically to an explicit null (type -> unspecified, emergency_capable -> unknown, phone/opening_hours -> null). type and emergency_capable therefore REMAIN NULL to the consumer while being absent from the bytes, and this schema forbids the keys outright (additionalProperties false), so populating either before its decision (FAC-D001 / FAC-D002) is schema-invalid, not merely discouraged.\n * Keys the parser does not consume are retained per record as an opaque provenance map in device memory — so the projection carries none: no source_record, no country (constant 'ng', stated once in _metadata), no lga (the master's lga always equals city_area, and search matches lga/city_area by equality but only city_area and name by containment, so city_area alone preserves the full search surface — verified in facilities_v2_search.dart).\n * Traceability needs no extra field: id IS the source reference — 'ng_g3_' + the GRID3 globalid (uuid: prefix stripped, lowercased), joining 1:1 to the master record and to the licensed GRID3 source row.\n\nThe artifact is serialized as compact canonical JSON (no whitespace, ensure_ascii, no trailing newline); the manifest sha256 is over exactly those raw bytes (the Mobile loader hash-verifies raw bytes; gzip is a measurement, not the delivery contract).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "_metadata", "facilities"],
+  "properties": {
+    "schema_version": {
+      "const": "2.0",
+      "description": "Top level, because the verified parser reads artifact['schema_version'] there. The _metadata copy is for humans and governance tooling."
+    },
+    "_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id", "lineage", "role", "version", "schema_version", "country",
+        "release_status", "publication_status", "release_date", "may_publish",
+        "generated_at", "generator", "generator_version", "total_facilities",
+        "master_candidate", "source", "consumer_contract", "serialization"
+      ],
+      "properties": {
+        "artifact_id": { "const": "facilities" },
+        "lineage": { "const": "grid3" },
+        "role": {
+          "const": "served_projection",
+          "description": "Pinned. Distinguishes this artifact from the internal audit/master candidate (role implied master) and from the raw source CSV. The three are named apart in every manifest and document."
+        },
+        "version": { "const": "2.0" },
+        "schema_version": { "const": "2.0" },
+        "country": { "const": "ng" },
+        "release_status": { "const": "candidate_unapproved" },
+        "publication_status": { "const": "candidate_unapproved" },
+        "release_date": { "type": "null" },
+        "may_publish": { "const": false },
+        "generated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$" },
+        "generator": { "type": "string", "minLength": 1 },
+        "generator_version": { "type": "string" },
+        "total_facilities": { "type": "integer", "minimum": 1 },
+        "master_candidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["path", "sha256", "record_count", "projection"],
+          "properties": {
+            "path": { "const": "candidate/facilities.ng.v2.0-grid3.json" },
+            "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "record_count": { "type": "integer", "minimum": 1 },
+            "projection": { "type": "string", "minLength": 1 }
+          },
+          "description": "The internal audit/master candidate this projection was computed from, bound by hash. Full provenance, source_record traceability and the isolation proof live there and in its reports; they are not repeated per served record."
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["name", "sha256", "licence", "licence_evidence", "attribution_citation",
+                       "attribution_licence_url", "modifications_disclosed", "doi",
+                       "snapshot_last_updated_at"],
+          "properties": {
+            "name": { "const": "GRID3 NGA - Health Facilities v2.0" },
+            "sha256": { "const": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180" },
+            "licence": { "const": "CC BY 4.0" },
+            "licence_evidence": { "const": "facilities/source/grid3_licence_evidence_v1.json" },
+            "attribution_citation": {
+              "const": "Center for Integrated Earth System Information (CIESIN), Columbia University 2024. GRID3 NGA - Health Facilities v2.0. New York: GRID3. https://doi.org/10.7916/kv1n-0743. Accessed 20 July 2026."
+            },
+            "attribution_licence_url": { "const": "https://creativecommons.org/licenses/by/4.0" },
+            "modifications_disclosed": { "type": "string", "minLength": 1 },
+            "doi": { "const": "https://doi.org/10.7916/kv1n-0743" },
+            "snapshot_last_updated_at": { "const": "2024-11-11" }
+          },
+          "description": "Licence, citation and modification disclosure stated ONCE here rather than on every record, as the licence requires them to travel with the artifact."
+        },
+        "consumer_contract": { "type": "string", "minLength": 1 },
+        "serialization": { "type": "string", "minLength": 1 }
+      }
+    },
+    "facilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/served_facility" }
+    }
+  },
+  "$defs": {
+    "served_facility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "state", "city_area", "latitude", "longitude"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ng_g3_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "description": "The stable facility_id, under the key the verified parser consumes. Doubles as the record-level source reference: ng_g3_ + GRID3 globalid, joining 1:1 to the master record and the licensed source row."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "state": { "type": "string", "minLength": 1 },
+        "city_area": { "type": "string", "minLength": 1 },
+        "latitude": { "type": "number", "minimum": 4.0, "maximum": 14.0 },
+        "longitude": { "type": "number", "minimum": 2.5, "maximum": 15.0 }
+      },
+      "description": "type, emergency_capable, phone, opening_hours, lga, country and source_record are deliberately ABSENT: the verified parser reads an absent optional key as null (type unspecified, emergency unknown, phone/hours null), unconsumed keys would sit in device memory as opaque provenance, and additionalProperties:false makes premature population schema-invalid rather than a convention."
+    }
+  }
+}

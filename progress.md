@@ -1071,3 +1071,60 @@ coordinates, derived records, phone numbers, opening hours or any other field.
   and Mobile-compat re-measurement (Engineering). Nothing merged, uploaded,
   activated or changed in Backend/Mobile/R2//config; this PR is left unmerged
   for review.
+
+### Facilities 2.0 (GRID3) — served projection added (same branch, PR #42 updated in place)
+
+Three artifacts, three roles, named apart in filenames, manifest and docs:
+the **source** CSV (licensed GRID3, never served) · the **master/audit
+candidate** `candidate/facilities.ng.v2.0-grid3.json` (69,032,692 bytes, full
+`source_record` provenance, byte-identical to its first commit, **not
+designated for mobile distribution**) · the **served candidate**
+`candidate/facilities.ng.v2.0-grid3.served.json` — compact canonical JSON,
+**8,749,444 bytes raw / 2,216,713 gzip-9 · 51,022 records · 171.5 B/record ·
+−87.3 % vs the master · sha256 `03a58e67…bd75`** — both candidates
+`candidate_unapproved` / `may_publish: false`.
+
+- **Every served-field decision verified against Mobile PR #79** at
+  `wellapath-mobile 854377c0` (read-only): the parser consumes record key
+  `id` (not `facility_id`), requires top-level `schema_version` "2.x", and
+  reads every optional key with `raw[...]` — an absent key parses identically
+  to null. So the served record is exactly
+  `{id, name, state, city_area, latitude, longitude}`: `type` (unspecified,
+  never filtered out), `emergency_capable` (unknown, never true), `phone` /
+  `opening_hours` (null, additionally gated by the default-false
+  `FacilitiesV2Presentation`) stay null to the consumer while absent from the
+  wire; `lga` is redundant (search containment uses `city_area` + `name`, and
+  master `lga` == `city_area` everywhere); unconsumed keys would ride along in
+  device memory as opaque provenance, so none are carried; `country` is stated
+  once in `_metadata`. The served schema
+  (`schema/facilities_grid3_served.v2.schema.json`) forbids the gated keys via
+  `additionalProperties: false` — FAC-D001 approval means schema revision +
+  regeneration, not an edit. `id` doubles as the record-level source
+  reference (`ng_g3_<globalid>` joins 1:1 to master and GRID3 row).
+- **Hash/transport contract verified:** the PR #79 loader sha256-verifies the
+  **raw body** and Backend PR #36's manifest requires `sha256` — so the
+  delivery representation stays raw compact JSON and **gzip (level 9, fixed
+  and documented) is a measurement only**. Both engineering targets met:
+  raw ≤ 15 MB, gzip ≤ 5 MB (`reports/facilities_grid3_size_v1.json`,
+  generated, `--check`-guarded, per-state shard sizes included).
+- **Sharding evaluated, not implemented:** national artifact vs index+shards
+  vs shards-only compared on boundary search, nationwide manual search,
+  offline, cache, downloads, manifest change, PR #79 compatibility and
+  rollback — **recommendation: one compact national artifact** (the only
+  option the verified loader/manifest support unmodified).
+  `docs/FACILITIES_GRID3_SERVED.md`.
+- **Traceability proven:** `tools/validate_facilities_grid3_served.py` (18
+  fail-closed checks) reprojects the committed master with its own code and
+  requires **byte identity** with the committed served artifact; all 51,022
+  records exactly once, 0 duplicate ids; every `id` joined to a distinct GRID3
+  source row with exact name/coordinate equality; PR #79 acceptance rules
+  simulated (0 rejected); 0 forbidden fields, 0 NHFR markers; size report
+  recomputed; 1.0/1.1 pins re-checked.
+- **Checks:** GRID3 suite now **4 steps** (generator determinism over 9
+  outputs · 41 master checks · 18 served checks · **48 tests** incl. new
+  served schema-mutation proofs). W2 23/23 · W3 30/30 · IM-003 27/27 ·
+  publication 9/9 · content safety 138 files, 0 hits, 0/17 control failures.
+  Master candidate byte-identical (`03a5bf2d…b14a`); attribution travels in
+  the served `_metadata` (schema consts) and app display remains a
+  first-publication requirement in the handoff. Mobile repo read, never
+  written; PRs #40/#41 untouched; **PR #42 updated in place, unmerged.**

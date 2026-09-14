@@ -6,13 +6,22 @@
 
 Outputs (all deterministic, byte-reproducible):
 
-  candidate/facilities.ng.v2.0-grid3.json               the candidate artifact
+  candidate/facilities.ng.v2.0-grid3.json               INTERNAL AUDIT/MASTER candidate
+  candidate/facilities.ng.v2.0-grid3.served.json        COMPACT SERVED candidate (projection)
   candidate/facilities_grid3.manifest.candidate.json    proposed manifest, NOT live
   reports/facilities_grid3_quality_v1.json              data-quality report
   reports/facilities_grid3_quarantine_v1.json           every refused row, with reason
   reports/facilities_grid3_comparison_v1.json           against active facilities 1.1
   reports/facilities_grid3_isolation_v1.json            source-isolation proof
+  reports/facilities_grid3_size_v1.json                 served size measurements
   proposals/facilities_grid3/type_mapping_proposal_v1.json  FAC-D001 input, NOT applied
+
+Three artifacts, three roles, never confused: the SOURCE is the licensed GRID3
+CSV; the MASTER is the full audit candidate with per-record source_record
+traceability; the SERVED candidate is the master projected onto exactly the
+fields the Mobile PR #79 parser consumes (verified at wellapath-mobile
+854377c0), serialized compactly for distribution. Neither candidate may be
+published: both carry candidate_unapproved / may_publish false.
 
 The sole data source is the hash-pinned GRID3 CSV. facilities.ng.v1.1.json is
 read for the COMPARISON REPORT only and contributes no value to the candidate.
@@ -24,6 +33,7 @@ Standard library only, no network.
 """
 
 import gzip
+import json
 import os
 import sys
 
@@ -37,7 +47,15 @@ FACILITIES_GRID3_TOOLING_VERSION = "1.0.0"
 GENERATED_AT = "2026-09-14T00:00:00Z"
 
 CANDIDATE_PATH = repo_path("candidate", "facilities.ng.v2.0-grid3.json")
+SERVED_PATH = repo_path("candidate", "facilities.ng.v2.0-grid3.served.json")
+SIZE_REPORT_PATH = repo_path("reports", "facilities_grid3_size_v1.json")
 MANIFEST_PATH = repo_path("candidate", "facilities_grid3.manifest.candidate.json")
+
+#: Mobile PR #79 head this projection's parser facts were verified against.
+MOBILE_PR79_COMMIT = "854377c0170836e98f418fb4805bdb18ae78845d"
+
+#: Fixed, documented gzip level for every size measurement in this pipeline.
+GZIP_LEVEL = 9
 QUALITY_PATH = repo_path("reports", "facilities_grid3_quality_v1.json")
 QUARANTINE_PATH = repo_path("reports", "facilities_grid3_quarantine_v1.json")
 COMPARISON_PATH = repo_path("reports", "facilities_grid3_comparison_v1.json")
@@ -80,6 +98,35 @@ TYPE_MAPPING_PROPOSAL = [
     {"source_value": "unknown", "proposed_type": None,
      "basis": "The source explicitly recorded Unknown. No mapping is proposed; the record's type stays null."},
 ]
+
+
+def dump_compact_bytes(obj):
+    """Compact canonical JSON: no whitespace, ensure_ascii, no trailing newline.
+
+    The served artifact's sha256 — the value a manifest would pin and the
+    Mobile loader would verify — is over exactly these bytes. gzip at
+    GZIP_LEVEL is a measurement, never the delivery representation: the
+    verified PR #79 loader hashes the raw body.
+    """
+    return json.dumps(obj, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+
+
+def project_served_record(record):
+    """One master record -> its served projection. Field set VERIFIED against
+    the Mobile PR #79 parser (see the served schema's description): id, name
+    and coordinates are required by the parser; state and city_area feed the
+    state/LGA/manual search; every omitted optional key parses as null; any
+    other key would ride along as opaque per-record memory. Values are carried
+    verbatim — this function may select fields, never change one.
+    """
+    return {
+        "id": record["facility_id"],
+        "name": record["name"],
+        "state": record["state"],
+        "city_area": record["city_area"],
+        "latitude": record["latitude"],
+        "longitude": record["longitude"],
+    }
 
 
 def canonical_state(raw):
@@ -538,8 +585,124 @@ def build():
                      "decided_on": None, "rationale": None},
     }
 
-    # ---- manifest -------------------------------------------------------------------------
+    # ---- served projection ----------------------------------------------------------------
     digest = sha256_bytes(candidate_bytes)
+    served_records = [project_served_record(record) for record in records]
+    served = {
+        "schema_version": "2.0",
+        "_metadata": {
+            "artifact_id": "facilities",
+            "lineage": "grid3",
+            "role": "served_projection",
+            "version": "2.0",
+            "schema_version": "2.0",
+            "country": "ng",
+            "release_status": "candidate_unapproved",
+            "publication_status": "candidate_unapproved",
+            "release_date": None,
+            "may_publish": False,
+            "generated_at": GENERATED_AT,
+            "generator": "tools/build_facilities_grid3_candidate.py",
+            "generator_version": FACILITIES_GRID3_TOOLING_VERSION,
+            "total_facilities": len(served_records),
+            "master_candidate": {
+                "path": "candidate/facilities.ng.v2.0-grid3.json",
+                "sha256": digest,
+                "record_count": len(records),
+                "projection": "Field selection only, values verbatim: served id = master "
+                              "facility_id (= ng_g3_ + GRID3 globalid, the record-level "
+                              "source reference); name, state, city_area, latitude, "
+                              "longitude byte-equal to the master. Full provenance, "
+                              "source_record traceability and the isolation proof live "
+                              "with the master and its reports, once, not per record.",
+            },
+            "source": {
+                "name": "GRID3 NGA - Health Facilities v2.0",
+                "sha256": S.GRID3_SHA256,
+                "licence": "CC BY 4.0",
+                "licence_evidence": "facilities/source/grid3_licence_evidence_v1.json",
+                "attribution_citation": ATTRIBUTION_CITATION,
+                "attribution_licence_url": "https://creativecommons.org/licenses/by/4.0",
+                "modifications_disclosed": MODIFICATIONS_DISCLOSED,
+                "doi": "https://doi.org/10.7916/kv1n-0743",
+                "snapshot_last_updated_at": "2024-11-11",
+            },
+            "consumer_contract": "Verified against Mobile PR #79 at wellapath-mobile %s "
+                                 "(facilities_v2_parser.dart): records are consumed via "
+                                 "{id, name, latitude, longitude, type, emergency_capable, "
+                                 "state, lga, city_area, phone, opening_hours}; an ABSENT "
+                                 "optional key parses identically to null, so type stays "
+                                 "unspecified (never filtered out), emergency_capable stays "
+                                 "unknown (never true), and phone/opening_hours stay null. "
+                                 "Unconsumed keys are retained per record in memory, which "
+                                 "is why this projection carries none." % MOBILE_PR79_COMMIT,
+            "serialization": "Compact canonical JSON (json.dumps separators=(',',':'), "
+                             "ensure_ascii, UTF-8, no trailing newline). A manifest pins "
+                             "sha256 over exactly these raw bytes; gzip level %d is a "
+                             "measurement, not the delivery representation." % GZIP_LEVEL,
+        },
+        "facilities": served_records,
+    }
+    served_bytes = dump_compact_bytes(served)
+    served_digest = sha256_bytes(served_bytes)
+    served_gzip = len(gzip.compress(served_bytes, GZIP_LEVEL))
+
+    # ---- size report ----------------------------------------------------------------------
+    per_state_bytes = {}
+    for record in served_records:
+        entry = per_state_bytes.setdefault(record["state"], {"records": 0, "raw_bytes": 0})
+        entry["records"] += 1
+        entry["raw_bytes"] += len(dump_compact_bytes(record)) + 1  # +1 for the list comma
+    master_gzip = len(gzip.compress(candidate_bytes, GZIP_LEVEL))
+    v1_1_bytes = 1695844
+    size_report = {
+        "_metadata": {
+            "report_id": "facilities_grid3_size",
+            "version": "1",
+            "generator": "tools/build_facilities_grid3_candidate.py",
+            "generator_version": FACILITIES_GRID3_TOOLING_VERSION,
+            "gzip_level": GZIP_LEVEL,
+            "note": "Every number here is computed at build time from the emitted bytes; "
+                    "the --check mode regenerates and byte-compares this report, so a "
+                    "hand-edited figure fails the run.",
+        },
+        "artifacts": {
+            "source_csv": {"path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+                           "bytes": 13613859},
+            "master_audit_candidate": {"path": "candidate/facilities.ng.v2.0-grid3.json",
+                                       "bytes": len(candidate_bytes),
+                                       "gzip_bytes": master_gzip,
+                                       "role": "internal audit/master — NOT for mobile distribution"},
+            "served_candidate": {"path": "candidate/facilities.ng.v2.0-grid3.served.json",
+                                 "sha256": served_digest,
+                                 "bytes": len(served_bytes),
+                                 "gzip_bytes": served_gzip,
+                                 "records": len(served_records),
+                                 "role": "compact distribution shape (still candidate_unapproved)"},
+            "facilities_1_1_active": {"path": "facilities.ng.v1.1.json", "bytes": v1_1_bytes},
+        },
+        "served_measurements": {
+            "bytes_per_record": round(len(served_bytes) / len(served_records), 1),
+            "reduction_vs_master_audit": "%.1f%%" % (100.0 * (1 - len(served_bytes) / len(candidate_bytes))),
+            "size_vs_v1_1": "%.1fx the active 1.1 artifact for %.1fx the records and %.1fx the states"
+                            % (len(served_bytes) / v1_1_bytes,
+                               len(served_records) / 5344.0, 37 / 3.0),
+            "targets": {
+                "raw_at_or_below_15mb": len(served_bytes) <= 15 * 1024 * 1024,
+                "gzip_at_or_below_5mb": served_gzip <= 5 * 1024 * 1024,
+            },
+            "parser_storage_implications": "The verified PR #79 parser materialises every "
+                                           "record as a Dart object with no opaque leftovers "
+                                           "(the projection carries only consumed keys), so "
+                                           "in-memory cost tracks record count, not master "
+                                           "size. The raw bytes are the parse/storage bound "
+                                           "on device; gzip is the transfer bound.",
+        },
+        "per_state_served_bytes": {state: per_state_bytes[state]
+                                   for state in sorted(per_state_bytes)},
+    }
+
+    # ---- manifest -------------------------------------------------------------------------
     manifest = {
         "manifest_id": "facilities_grid3_v2_candidate",
         "manifest_version": "1",
@@ -551,14 +714,39 @@ def build():
                    "wellapath-backend and is UNCHANGED. Source licensing is established for "
                    "this lineage (CC BY 4.0, evidence in-repo), but licensing clearance is "
                    "not Product, Clinical or Engineering approval. Do not wire this block.",
+        "artifact_roles": {
+            "source": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv "
+                      "— the licensed GRID3 CSV, hash-pinned, never served",
+            "master_audit_candidate": "candidate/facilities.ng.v2.0-grid3.json — full "
+                                      "per-record provenance and traceability; internal "
+                                      "only, NOT designated for mobile distribution",
+            "served_candidate": "candidate/facilities.ng.v2.0-grid3.served.json — the "
+                                "compact projection a manifest would point Mobile at, once "
+                                "(and only once) every approval exists",
+        },
         "candidate_artifact": {
             "path": "candidate/facilities.ng.v2.0-grid3.json",
             "lineage": "grid3",
+            "role": "master_audit_candidate",
             "sha256": digest,
             "bytes": len(candidate_bytes),
             "record_count": len(records),
             "may_publish": False,
             "release_status": "candidate_unapproved",
+        },
+        "served_artifact": {
+            "path": "candidate/facilities.ng.v2.0-grid3.served.json",
+            "lineage": "grid3",
+            "role": "served_candidate",
+            "sha256": served_digest,
+            "bytes": len(served_bytes),
+            "gzip_bytes_level_%d" % GZIP_LEVEL: served_gzip,
+            "record_count": len(served_records),
+            "may_publish": False,
+            "release_status": "candidate_unapproved",
+            "consumer_verified_against": "wellapath-mobile %s (Mobile PR #79)" % MOBILE_PR79_COMMIT,
+            "hash_contract": "sha256 over the raw compact JSON bytes, matching the PR #79 "
+                             "loader's raw-body verification; gzip is a measurement only",
         },
         "source_licensing": {
             "licence": "CC BY 4.0",
@@ -599,6 +787,8 @@ def build():
 
     outputs = {
         CANDIDATE_PATH: candidate_bytes,
+        SERVED_PATH: served_bytes,
+        SIZE_REPORT_PATH: dump_report_bytes(size_report),
         ISOLATION_PATH: dump_report_bytes(isolation),
         QUARANTINE_PATH: dump_report_bytes(quarantine),
         QUALITY_PATH: dump_report_bytes(quality),

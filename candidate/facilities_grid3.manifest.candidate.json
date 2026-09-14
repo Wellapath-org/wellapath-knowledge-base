@@ -5,14 +5,33 @@
   "generator_version": "1.0.0",
   "IS_LIVE_MANIFEST": false,
   "WARNING": "This is a PROPOSED manifest block for a CANDIDATE artifact. It is not served by any endpoint. The live manifest is GET /config in wellapath-backend and is UNCHANGED. Source licensing is established for this lineage (CC BY 4.0, evidence in-repo), but licensing clearance is not Product, Clinical or Engineering approval. Do not wire this block.",
+  "artifact_roles": {
+    "source": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv \u2014 the licensed GRID3 CSV, hash-pinned, never served",
+    "master_audit_candidate": "candidate/facilities.ng.v2.0-grid3.json \u2014 full per-record provenance and traceability; internal only, NOT designated for mobile distribution",
+    "served_candidate": "candidate/facilities.ng.v2.0-grid3.served.json \u2014 the compact projection a manifest would point Mobile at, once (and only once) every approval exists"
+  },
   "candidate_artifact": {
     "path": "candidate/facilities.ng.v2.0-grid3.json",
     "lineage": "grid3",
+    "role": "master_audit_candidate",
     "sha256": "03a5bf2d52759103ed08b34fd2f9d0934c85322317301582e9e61cbfa8abb14a",
     "bytes": 69032692,
     "record_count": 51022,
     "may_publish": false,
     "release_status": "candidate_unapproved"
+  },
+  "served_artifact": {
+    "path": "candidate/facilities.ng.v2.0-grid3.served.json",
+    "lineage": "grid3",
+    "role": "served_candidate",
+    "sha256": "03a58e67d94bb1d7c88cc5e690472b167a82cc9f95d4f7afe937d8f5d1cebd75",
+    "bytes": 8749444,
+    "gzip_bytes_level_9": 2216713,
+    "record_count": 51022,
+    "may_publish": false,
+    "release_status": "candidate_unapproved",
+    "consumer_verified_against": "wellapath-mobile 854377c0170836e98f418fb4805bdb18ae78845d (Mobile PR #79)",
+    "hash_contract": "sha256 over the raw compact JSON bytes, matching the PR #79 loader's raw-body verification; gzip is a measurement only"
   },
   "source_licensing": {
     "licence": "CC BY 4.0",

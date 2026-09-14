@@ -4,12 +4,25 @@
 uploaded, not approved. facilities 1.1 remains the artifact your build loads.
 This handoff exists for contract review only.**
 
-- Artifact: `candidate/facilities.ng.v2.0-grid3.json` —
+Two candidates, one distribution target:
+
+- **Served candidate (what a manifest would point your loader at):**
+  `candidate/facilities.ng.v2.0-grid3.served.json` —
+  `03a58e67d94bb1d7c88cc5e690472b167a82cc9f95d4f7afe937d8f5d1cebd75`,
+  51,022 records, **8,749,444 bytes raw (gzip-9 2,216,713)**, compact JSON.
+  Record shape verified against your PR #79 parser at `854377c0`:
+  `{id, name, state, city_area, latitude, longitude}` — every omitted optional
+  key (`type`, `emergency_capable`, `phone`, `opening_hours`, `lga`) parses as
+  null in your parser, which is the intended meaning. Top-level
+  `schema_version: "2.0"`. The manifest sha256 is over these raw bytes,
+  matching your loader's raw-body verification; gzip is a measurement only.
+  Full contract evidence: `docs/FACILITIES_GRID3_SERVED.md`.
+- **Master/audit candidate (never for distribution):**
+  `candidate/facilities.ng.v2.0-grid3.json` —
   `03a5bf2d52759103ed08b34fd2f9d0934c85322317301582e9e61cbfa8abb14a`,
-  51,022 records, 69,032,692 bytes (gzip 3,810,741).
-- Schema: `schema/facilities_grid3.v2.schema.json` — the record shape is the
-  schema-2.0 consumer contract your PR #79 reader targets; field names and
-  types are unchanged from the contract you already implement.
+  69,032,692 bytes, full per-record `source_record` provenance
+  (`schema/facilities_grid3.v2.schema.json`). Trace any served record to it
+  (and to the licensed GRID3 source row) through `id` = `ng_g3_<globalid>`.
 
 ## What is different from the artifact you load today (1.1)
 
@@ -49,13 +62,15 @@ linking to `https://doi.org/10.7916/kv1n-0743` and
 attribution afterwards, so this ships with first publication or the publication
 does not happen.
 
-## Size and low-end devices (open item — do not wire downloads yet)
+## Size and low-end devices (do not wire downloads yet)
 
-69 MB raw / 3.8 MB gzip vs 1.1's 1.7 MB. Before any activation, Engineering
-decides a served projection (for example dropping `source_record`, or shipping
-per-state files). Treat gzip as the transfer bound and raw bytes
-as the on-device parse/storage bound; do not assume the full artifact fits
-comfortably on low-end devices.
+The served candidate is **8.7 MB raw / 2.2 MB gzip** (vs 1.1's 1.7 MB raw) —
+171.5 bytes/record, within reasonable low-end budgets; the 69 MB figure
+belongs to the internal master only and never reaches a device. One national
+artifact is the recommendation (sharding evaluated and set aside:
+`docs/FACILITIES_GRID3_SERVED.md`). Treat gzip as the transfer bound and raw
+bytes as the on-device parse/storage bound. Wiring a download still requires
+every open approval.
 
 ## What Mobile must NOT do
 

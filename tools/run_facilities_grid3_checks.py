@@ -28,6 +28,8 @@ STEPS = [
      ["tools/build_facilities_grid3_candidate.py", "--check"]),
     ("candidate passes source, isolation, honesty and governance validation",
      ["tools/validate_facilities_grid3_candidate.py"]),
+    ("served projection reconstructs byte-for-byte and honours the verified consumer contract",
+     ["tools/validate_facilities_grid3_served.py"]),
     ("GRID3 facilities test suite",
      ["testing/facilities_grid3/test_facilities_grid3.py"]),
 ]
