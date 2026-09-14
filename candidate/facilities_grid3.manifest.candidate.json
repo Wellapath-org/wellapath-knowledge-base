@@ -1,0 +1,50 @@
+{
+  "manifest_id": "facilities_grid3_v2_candidate",
+  "manifest_version": "1",
+  "generator": "tools/build_facilities_grid3_candidate.py",
+  "generator_version": "1.0.0",
+  "IS_LIVE_MANIFEST": false,
+  "WARNING": "This is a PROPOSED manifest block for a CANDIDATE artifact. It is not served by any endpoint. The live manifest is GET /config in wellapath-backend and is UNCHANGED. Source licensing is established for this lineage (CC BY 4.0, evidence in-repo), but licensing clearance is not Product, Clinical or Engineering approval. Do not wire this block.",
+  "candidate_artifact": {
+    "path": "candidate/facilities.ng.v2.0-grid3.json",
+    "lineage": "grid3",
+    "sha256": "03a5bf2d52759103ed08b34fd2f9d0934c85322317301582e9e61cbfa8abb14a",
+    "bytes": 69032692,
+    "record_count": 51022,
+    "may_publish": false,
+    "release_status": "candidate_unapproved"
+  },
+  "source_licensing": {
+    "licence": "CC BY 4.0",
+    "evidence": "facilities/source/grid3_licence_evidence_v1.json",
+    "attribution_notice": "facilities/ATTRIBUTION_GRID3.md",
+    "attribution_must_ship_with": "artifact metadata (present) and the consuming app UI (Mobile handoff requirement)"
+  },
+  "publication_gates": {
+    "source_licensing_established": true,
+    "fac_d001_type_mapping_approved": false,
+    "fac_d002_emergency_fallback_approved": false,
+    "fac_d003_absent_contact_fields_accepted": false,
+    "fac_d004_grid3_coordinates_accepted": false,
+    "fac_d005_quarantine_policy_accepted": false,
+    "fac_d006_duplicate_policy_accepted": false,
+    "mobile_compatibility_remeasured": false,
+    "engineering_approval": false,
+    "product_approval": false,
+    "clinical_approval": false,
+    "may_publish": false
+  },
+  "rollback": {
+    "target_file": "facilities.ng.v1.1.json",
+    "target_sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
+    "target_bytes": 1695844,
+    "note": "facilities 1.1 is the active artifact and remains so; activation of this candidate would carry this block as its rollback contract."
+  },
+  "reports": {
+    "quality": "reports/facilities_grid3_quality_v1.json",
+    "quarantine": "reports/facilities_grid3_quarantine_v1.json",
+    "comparison": "reports/facilities_grid3_comparison_v1.json",
+    "isolation": "reports/facilities_grid3_isolation_v1.json",
+    "type_mapping_proposal": "proposals/facilities_grid3/type_mapping_proposal_v1.json"
+  }
+}

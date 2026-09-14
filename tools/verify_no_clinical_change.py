@@ -78,9 +78,23 @@ SCANNED_TREES = [
 #: rather than rewarded with a green run.
 PHI_PATTERNS = [
     ("email address", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")),
+    # A third narrowing, for the same reason as the first two. The pattern's `\d{2,4}[ .-]`
+    # group happily matches the integer part of a decimal, so a geographic coordinate like
+    # 12.1052141 read as a phone number: the GRID3 facilities candidate carries 51,022
+    # latitude/longitude pairs and produced tens of thousands of such hits, not one a real
+    # number. A negative lookahead rejects a match that is a bare decimal — one dot, a short
+    # integer part, a long fractional part — which no phone number in any format looks like.
+    # Real numbers are unaffected: they carry a leading +, several separators, or no dot at
+    # all, and the positive controls below still catch them.
+    #
+    # A fourth narrowing, same discipline: an all-digit UUID segment run like
+    # "8979-4041-8147" inside a globalid is not a phone number. A match that is
+    # immediately preceded by hex-and-hyphen or followed by hyphen-and-hex is inside a
+    # hyphenated hex identifier and is rejected by context, not by weakening the digit
+    # pattern itself.
     ("phone number", re.compile(
-        r"(?<![\dA-Fa-f])(?:\+\d{1,3}[ .-]?)?"
-        r"(?:\(\d{2,4}\)[ .-]?|\d{2,4}[ .-])(?:\d[ .-]?){5,11}\d(?![\dA-Fa-f])")),
+        r"(?<![\dA-Fa-f])(?<![0-9A-Fa-f]-)(?!\d{1,4}\.\d{4,}(?!\d))(?:\+\d{1,3}[ .-]?)?"
+        r"(?:\(\d{2,4}\)[ .-]?|\d{2,4}[ .-])(?:\d[ .-]?){5,11}\d(?![\dA-Fa-f])(?!-[0-9A-Fa-f])")),
     ("date of birth", re.compile(
         r"(?:\bdate[_ ]of[_ ]birth\b|[\"\']dob[\"\']\s*[:=]|\bdob\s*[:=])", re.I)),
     ("national id", re.compile(r"\b(?:nin|bvn|ssn|nhs[_ ]?number|passport)\b", re.I)),
@@ -123,6 +137,10 @@ PHI_NEGATIVE_CONTROLS = [
     "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
     "657739cc1745104dd1194a57ef14cc9793c9b98e",
     "No PHI fields \u2014 no name, dob, phone, email, address, no free text",
+    '"latitude": 12.1052141',
+    '"longitude": 9.8382236',
+    "ng_g3_9c2b58dd-1e99-49b9-970e-eabce1c7dd10",
+    "ab12cd34-8979-4041-8147-333344445555",
 ]
 
 

@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-09-14
 
 ## Merged
 
@@ -994,3 +994,80 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
   and unmerged; this PR is left unmerged for review.**
+
+## Facilities 2.0 — pivot to the GRID3 lineage (independent candidate)
+
+Branch `feat/facilities-2-0-grid3-candidate`, cut clean from `develop` `1f1b8dd`
+— **not stacked on PR #40 or #41**, which stay open, unmerged, and untouched as
+research/audit evidence of the NHFR-export investigation. Decision recorded:
+the 31,390-row NHFR internal export is not used — not its CSV, corrected
+coordinates, derived records, phone numbers, opening hours or any other field.
+
+- **Permitted source verified, not assumed.** `GRID3 NGA - Health Facilities
+  v2.0` (`facilities/source/GRID3_NGA_health_facilities_v2_0_…csv`,
+  `154f3c9b…f180`, 13,613,859 bytes, 51,022 rows, committed `29307a99`,
+  2026-07-20). Licence re-verified at the publisher's own metadata endpoint and
+  preserved verbatim — **CC BY 4.0**, "use, copy, distribute, transmit, and
+  adapt … for commercial and non-commercial purposes … as long as clear
+  attribution … is provided" — with the legal code vendored and hash-pinned,
+  citation + DOI (`10.7916/kv1n-0743`) recorded, and the committed CSV tied to
+  the published layer by count, schema, snapshot-date and record-level identity
+  (`facilities/source/grid3_licence_evidence_v1.json`). **Licensing clearance
+  is not Product/Clinical/Engineering approval.**
+
+- **Candidate** `candidate/facilities.ng.v2.0-grid3.json` — lineage `grid3`,
+  version 2.0, schema `schema/facilities_grid3.v2.schema.json` (record shape =
+  the schema-2.0 consumer contract of Mobile PR #79 / Backend PR #36; ids
+  `ng_g3_<globalid>`). **51,022 records, 69,032,692 bytes (gzip 3.8 MB),
+  sha256 `03a5bf2d…b14a`, `candidate_unapproved` / `may_publish: false`.**
+  **All 36 states + FCT covered** — Adamawa 1,561 · Kebbi 1,207 · Sokoto 937,
+  the three states the NHFR export lacked. 0 rows quarantined (every category
+  enforced and empty: the source has 0 blank names/LGAs, 0 invalid
+  coordinates); 0 exact duplicates; 410 near-duplicate groups listed, not
+  merged; coordinates accepted exactly as published (`coordinate_transformation`
+  is the schema constant `none`) with `state_position_consistency_v1` finding
+  0 anomalies.
+
+- **Nothing invented:** `type`, `phone`, `opening_hours`, `emergency_capable`,
+  `address`, statuses, `beds` and all service flags null on every record;
+  source `Unknown` carried as `"unknown"`; type mapping **proposed, not
+  applied** (`proposals/facilities_grid3/type_mapping_proposal_v1.json`,
+  PENDING_PRODUCT_REVIEW — the table equals E5's, i.e. what 1.1 already ships).
+
+- **Source isolation, proven three ways:** the pipeline's input door
+  (`tools/facilities_grid3/source.py`) whitelists exactly the GRID3 CSV and the
+  1.1 comparison baseline and refuses the NHFR export; the emitted bytes carry
+  0 of 12 NHFR markers; the validator re-derives every record's coordinates and
+  name from the GRID3 CSV and confirms no forbidden source is tracked on the
+  branch. GRID3's own `nhfr_uid` columns are the publisher's licensed
+  cross-reference, carried from the GRID3 file — no NHFR export was read or
+  joined. `reports/facilities_grid3_isolation_v1.json`.
+
+- **Attribution** (CC BY 4.0 condition): `facilities/ATTRIBUTION_GRID3.md`,
+  embedded in `_metadata.source.attribution`, and required of the app UI by
+  `mobile_handoff/facilities_grid3_v2/README.md` before first publication.
+
+- **Deliverables:** candidate · manifest
+  (`candidate/facilities_grid3.manifest.candidate.json`, gates all false except
+  the licensing fact, rollback bound to 1.1 by hash) · quality, quarantine,
+  comparison and isolation reports · type-mapping proposal ·
+  `docs/FACILITIES_GRID3_CANDIDATE.md` · `docs/FACILITIES_GRID3_DECISIONS.md`
+  (FAC-D001…D006 recommendations + Adamawa/Kebbi/Sokoto answer) ·
+  `docs/FACILITIES_GRID3_CHANGELOG.md` (the 1.1 phone regression stated, not
+  smoothed) · Mobile handoff.
+
+- **Checks:** `tools/run_facilities_grid3_checks.py` — generator determinism
+  (7 outputs), **41 validator checks**, **33 tests** incl. schema-mutation
+  proofs (populated type/phone/emergency, swap_lat_lon, may_publish, NHFR
+  lineage claim — all rejected). W2 23/23 · W3 30/30 · IM-003 27/27 ·
+  publication 9/9. The W3 PHI scan's phone pattern gained two precise
+  narrowings (decimal coordinates; all-digit UUID segments) with new negative
+  controls — 131 files, 0 hits, 0/17 controls failed. `facilities.ng.v1.0.json`
+  and `v1.1.json` byte-identical to their pins; **1.1 remains the active
+  artifact.**
+
+- **Still required:** FAC-D001 (Product) · FAC-D002 (Product+Clinical) ·
+  FAC-D003, FAC-D006 (Product) · FAC-D004, FAC-D005, artifact-size projection
+  and Mobile-compat re-measurement (Engineering). Nothing merged, uploaded,
+  activated or changed in Backend/Mobile/R2//config; this PR is left unmerged
+  for review.

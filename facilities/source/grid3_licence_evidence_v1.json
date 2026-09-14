@@ -1,0 +1,102 @@
+{
+  "_metadata": {
+    "record_id": "grid3_licence_evidence",
+    "version": "1",
+    "phase": "Facilities 2.0 (GRID3) / Step 1 — permitted-source verification",
+    "authored": "2026-09-14",
+    "note": "Authoritative licence and identity evidence for the GRID3 source, captured from the publisher's own metadata service rather than relied on from a prior note. Verbatim quotations are marked; everything else states where it was read. The tie between the committed CSV and the published dataset is established by count, field-list, snapshot-date and record-level identity checks recorded below, each reproducible without credentials."
+  },
+  "source_file": {
+    "path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+    "sha256": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180",
+    "byte_count": 13613859,
+    "data_rows": 51022,
+    "columns": 23,
+    "column_note": "The 21 attribute fields of the published layer, plus x and y — the geometry columns ArcGIS Hub appends to a CSV export. The filename's trailing digits are the Hub export job identifier.",
+    "acquisition": {
+      "committed": "2026-07-20T20:59:01+03:00",
+      "commit": "29307a99e930774597ad5b6fcf342e053dd6eb84",
+      "committed_by": "John Oluwaseyi",
+      "context": "E5 facility locator work (PR #2); the same source built facilities.ng.v1.0.json and, by enrichment, v1.1.",
+      "access_date_bound": "Downloaded no later than 2026-07-20 (the commit instant). No earlier download record exists; the citation uses this bound."
+    }
+  },
+  "dataset_identity": {
+    "title": "GRID3 NGA - Health Facilities v2.0",
+    "publisher": "GRID3 — Geo-Referenced Infrastructure and Demographic Data for Development",
+    "copyright_holder_verbatim": "Copyright 2024. The Trustees of Columbia University in the City of New York.",
+    "producer": "Center for Integrated Earth System Information (CIESIN), Columbia University",
+    "doi": "https://doi.org/10.7916/kv1n-0743",
+    "landing_page": "https://data.grid3.org/maps/GRID3::grid3-nga-health-facilities-v2-0",
+    "arcgis_item_id": "a0ed9627a8b240ff8b315a84575754a4",
+    "arcgis_item_metadata": "https://www.arcgis.com/sharing/rest/content/items/a0ed9627a8b240ff8b315a84575754a4?f=json",
+    "feature_service": "https://services3.arcgis.com/BU6Aadhn6tbBEdyk/arcgis/rest/services/GRID3_NGA_health_facilities_v2_0/FeatureServer",
+    "item_created": "2024-11-13T20:25:54Z",
+    "data_last_edit": "2024-11-13T20:20:38Z",
+    "snippet_verbatim": "The GRID3 NGA - Health Facilities v2.0 dataset is a non-exhaustive, non-validated geographic representation of health facility points in Nigeria. The dataset incorporates recent updates from both the Nigeria Health Facility Registry (HFR) and GRID3. This dataset is considered operational.",
+    "citation_template_verbatim": "Center for Integrated Earth System Information (CIESIN), Columbia University 2024. GRID3 NGA - Health Facilities v2.0. New York: GRID3. https://doi.org/10.7916/kv1n-0743. Accessed [DAY MONTH YEAR]."
+  },
+  "licence": {
+    "name": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+    "captured": "2026-09-14",
+    "captured_from": "licenseInfo field of the ArcGIS item a0ed9627a8b240ff8b315a84575754a4, read through the publisher's own metadata endpoint (arcgis_item_metadata above).",
+    "licence_statement_verbatim": "Terms of use  Users are free to use, copy, distribute, transmit, and adapt the work for commercial and non-commercial purposes, without restriction, as long as clear attribution of the source is provided.   Copyright 2024. The Trustees of Columbia University in the City of New York.     Data license  The data and accompanying document are licensed under a Creative Commons Attribution 4.0 International License, CC BY 4.0 (https://creativecommons.org/licenses/by/4.0) and specified in legal code (https://creativecommons.org/licenses/by/4.0/legalcode).",
+    "legal_code_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "legal_code_vendored": {
+      "path": "facilities/source/CC-BY-4.0.legalcode.txt",
+      "sha256": "9ba9550ad48438d0836ddab3da480b3b69ffa0aac7b7878b5a0039e7ab429411",
+      "byte_count": 18657,
+      "fetched_from": "https://creativecommons.org/licenses/by/4.0/legalcode.txt",
+      "fetched": "2026-09-14"
+    },
+    "permissions_conclusion": {
+      "modification": "PERMITTED — the licence statement grants the right to 'adapt the work'; CC BY 4.0 section 2(a)(1)(B) grants the right to produce, reproduce and Share Adapted Material.",
+      "redistribution": "PERMITTED — 'copy, distribute, transmit'; CC BY 4.0 section 2(a)(1)(A).",
+      "commercial_and_public_app_use": "PERMITTED — 'for commercial and non-commercial purposes, without restriction'. CC BY 4.0 imposes no field-of-use restriction; serving a derived dataset through a public mobile application is Sharing Adapted Material.",
+      "conditions": "Attribution required (CC BY 4.0 section 3(a)): identify the creator, copyright notice, licence notice, a URI to the material, and indicate whether modifications were made. Satisfied by facilities/ATTRIBUTION_GRID3.md, embedded in the candidate's _metadata.source.attribution and required of the consuming app by the Mobile handoff.",
+      "boundary": "This clears the SOURCE LICENSING gate only. It is not Product, Clinical or Engineering approval, and the candidate remains candidate_unapproved / may_publish: false."
+    }
+  },
+  "exact_file_verification": {
+    "method": "The committed CSV is compared against the live published layer through the publisher's own service, on identity dimensions that need no credential.",
+    "captured": "2026-09-14",
+    "checks": [
+      {
+        "check": "record count",
+        "published": "FeatureServer/0/query returnCountOnly: 51022",
+        "committed_csv": 51022,
+        "match": true
+      },
+      {
+        "check": "attribute field list",
+        "published": "OBJECTID, globalid, nhfr_uid, nhfr_facility_code, country, iso, state, lga, lga_name_disagreement, ward, ward_name_disagreement, facility_name, facility_name_source, ownership, ownership_type, facility_level, facility_level_option, latitude, longitude, geocoordinates_source, last_updated",
+        "committed_csv": "identical 21 fields, in the same order, plus the export-appended x and y",
+        "match": true
+      },
+      {
+        "check": "snapshot date",
+        "published": "dataLastEditDate 2024-11-13; every published record's last_updated is 2024-11-11",
+        "committed_csv": "last_updated is the constant 2024-11-11 on all 51,022 rows",
+        "match": true
+      },
+      {
+        "check": "record-level identity spot check",
+        "published": "globalid 9c2b58dd-1e99-49b9-970e-eabce1c7dd10 -> Gumsuri Primary Health Care Center, Borno, 11.05984, 12.80855, last_updated 2024-11-11",
+        "committed_csv": "identical values on the same globalid",
+        "match": true
+      },
+      {
+        "check": "coordinate extent",
+        "published": "service extent x 2.70779..14.636383, y 4.28171..13.865239 (WGS 84)",
+        "committed_csv": "all 51,022 coordinate pairs parse, none at 0,0, none outside lat 4..14 / lon 2.5..15",
+        "match": true
+      }
+    ],
+    "conclusion": "The committed CSV is an ArcGIS Hub CSV export of the published GRID3 NGA - Health Facilities v2.0 layer: identical record count, identical attribute schema and order, identical constant snapshot date, and record-level value identity on the published stable identifier. No byte-level upstream artifact exists to hash-compare (the Hub generates exports on demand), so identity rests on these checks; they are reproducible at the URLs above.",
+    "superseded_note": "The v1.0 metadata's source URL (data.grid3.org/datasets/GRID3::grid3-nga-health-facilities-/explore) now returns 404 — that page described the superseded v1 dataset. The landing page above is the current v2.0 page; the publisher has since also released a v3.0, which this repository does not hold and this record does not cover."
+  },
+  "coverage": {
+    "states_in_source": 37,
+    "note": "All 36 states plus the FCT have rows, including the three states absent from the NHFR-derived export: Adamawa (1,561), Kebbi (1,207), Sokoto (937). The source spells the capital territory 'Fct'; normalization maps it to 'FCT'."
+  }
+}

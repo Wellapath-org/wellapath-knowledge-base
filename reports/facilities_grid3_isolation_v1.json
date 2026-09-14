@@ -1,0 +1,60 @@
+{
+  "_metadata": {
+    "report_id": "facilities_grid3_isolation",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0",
+    "note": "Proof that the GRID3-lineage candidate is sourced from the GRID3 CSV alone. The generator can only open whitelisted inputs (tools/facilities_grid3/source.py ALLOWED_INPUTS); this report scans the emitted bytes for NHFR markers; and tools/validate_facilities_grid3_candidate.py independently re-derives every record's values from the GRID3 CSV and re-runs this scan, so the proof does not rest on the generator auditing itself."
+  },
+  "permitted_inputs": [
+    {
+      "path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+      "sha256": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180",
+      "role": "sole data source"
+    },
+    {
+      "path": "facilities.ng.v1.1.json",
+      "sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
+      "role": "comparison baseline (report only; contributes no value to the candidate)"
+    }
+  ],
+  "forbidden_sources": [
+    "nigeria_health_facilities.csv",
+    "facilities/source/nigeria_health_facilities.csv",
+    "candidate/facilities.ng.v2.0.json",
+    "candidate/facilities.manifest.candidate.json",
+    "reports/facilities_quality_v1.json",
+    "reports/facilities_quarantine_v1.json",
+    "reports/facilities_coordinate_audit_v1.json",
+    "reports/facilities_comparison_v1.json",
+    "reports/facilities_mobile_compat_v1.json"
+  ],
+  "forbidden_source_policy": "None of these paths is opened by the pipeline; the whitelist refuses them structurally. None is committed on this branch.",
+  "nhfr_marker_scan": {
+    "scanned_bytes": 69032692,
+    "markers": {
+      "Auto-approved via bulk import": 0,
+      "Auto-published via bulk import": 0,
+      "CREATE FACILITY (BULK IMPORT)": 0,
+      "ng_nhf_": 0,
+      "state_unique_id": 0,
+      "registration_no": 0,
+      "alternate_number": 0,
+      "email_address": 0,
+      "verify_note": 0,
+      "validate_note": 0,
+      "publish_note": 0,
+      "swap_lat_lon": 0
+    },
+    "total_hits": 0
+  },
+  "structural_facts": {
+    "records": 51022,
+    "phone_values_non_null": 0,
+    "opening_hours_values_non_null": 0,
+    "coordinate_transformations_other_than_none": 0,
+    "facility_ids_not_ng_g3": 0,
+    "note": "The zeros are computed from the records list at build time and re-computed by the validator from the committed bytes."
+  },
+  "nhfr_uid_clarification": "source_record.nhfr_uid and nhfr_facility_code are columns OF THE GRID3 FILE \u2014 the publisher's own cross-reference to the national registry, licensed CC BY 4.0 with the rest of the file. Their presence is not NHFR-export contamination; nothing was read from any NHFR export."
+}

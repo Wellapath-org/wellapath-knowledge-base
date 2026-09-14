@@ -1,0 +1,270 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/facilities_grid3.v2.schema.json",
+  "title": "WellaPath Nigeria facilities artifact — schema 2.0, GRID3 lineage (candidate)",
+  "description": "Schema for the GRID3-only nationwide facilities candidate. The RECORD shape is the schema-2.0 consumer contract: every field name and type a schema-2.0 reader (Mobile PR #79, Backend PR #36) accesses is present under the same name, so the reader needs no code change between the two 2.0 lineages. What differs is the truth the _metadata tells: this source has an established licence (CC BY 4.0, evidence vendored in-repo), a declared version and snapshot date, a named publisher, an attribution obligation — and no coordinate remediation, because its coordinates are accepted exactly as published or the row is quarantined; there is no swap rule and no corrected pair anywhere in this lineage.\n\nAbsence convention, unchanged from the sibling schema: null means NOT PROVIDED (the source has no such column, or the field was blank). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value. type, phone, opening_hours, emergency_capable, address, operational_status, registration_status, license_status, beds and every service flag are null on every record: GRID3 evidences none of them, and the type mapping is a Product decision (FAC-D001) that is proposed, not applied.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["_metadata", "facilities"],
+  "properties": {
+    "_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_id", "lineage", "version", "schema_version", "country", "release_status",
+        "publication_status", "release_date", "may_publish", "generated_at", "generator",
+        "generator_version", "total_facilities", "states_covered", "states_absent",
+        "states_with_no_emitted_records", "coverage_claim", "source", "source_isolation",
+        "deduplication", "coordinate_policy", "unresolved_fields", "absence_convention",
+        "not_carried_from_source", "absence_counts", "unmapped_source_values"
+      ],
+      "properties": {
+        "artifact_id": { "const": "facilities" },
+        "lineage": {
+          "const": "grid3",
+          "description": "Pinned. Distinguishes this candidate from the NHFR-derived candidate held as audit evidence on PRs #40/#41; the two must never be confused, joined or merged."
+        },
+        "version": { "const": "2.0" },
+        "schema_version": { "const": "2.0" },
+        "country": { "const": "ng" },
+        "release_status": { "const": "candidate_unapproved" },
+        "publication_status": { "const": "candidate_unapproved" },
+        "release_date": { "type": "null" },
+        "may_publish": {
+          "const": false,
+          "description": "Pinned false. Source licensing is established for this lineage, but licensing clearance is not Product, Clinical or Engineering approval; FAC-D001..D006 are open."
+        },
+        "generated_at": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$" },
+        "generator": { "type": "string", "minLength": 1 },
+        "generator_version": { "type": "string" },
+        "total_facilities": { "type": "integer", "minimum": 1 },
+        "states_covered": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "minItems": 37,
+          "maxItems": 37,
+          "description": "All 36 states plus the FCT. The count is pinned: losing a state must fail validation, not shrink a list."
+        },
+        "states_absent": { "const": [] },
+        "states_with_no_emitted_records": { "const": [] },
+        "coverage_claim": { "type": "string", "minLength": 1 },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name", "path", "sha256", "byte_count", "organization", "publisher",
+            "copyright", "licence", "licence_evidence", "attribution", "doi",
+            "landing_page", "snapshot_declared_version", "snapshot_last_updated_at",
+            "acquisition_commit", "access_date_bound"
+          ],
+          "properties": {
+            "name": { "const": "GRID3 NGA - Health Facilities v2.0" },
+            "path": { "const": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv" },
+            "sha256": { "const": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180" },
+            "byte_count": { "const": 13613859 },
+            "organization": { "const": "Center for Integrated Earth System Information (CIESIN), Columbia University" },
+            "publisher": { "const": "GRID3" },
+            "copyright": { "const": "Copyright 2024. The Trustees of Columbia University in the City of New York." },
+            "licence": { "const": "CC BY 4.0" },
+            "licence_evidence": { "const": "facilities/source/grid3_licence_evidence_v1.json" },
+            "attribution": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["required", "citation", "notice_file", "modifications_disclosed"],
+              "properties": {
+                "required": { "const": true },
+                "citation": {
+                  "const": "Center for Integrated Earth System Information (CIESIN), Columbia University 2024. GRID3 NGA - Health Facilities v2.0. New York: GRID3. https://doi.org/10.7916/kv1n-0743. Accessed 20 July 2026."
+                },
+                "notice_file": { "const": "facilities/ATTRIBUTION_GRID3.md" },
+                "modifications_disclosed": { "type": "string", "minLength": 1 }
+              }
+            },
+            "doi": { "const": "https://doi.org/10.7916/kv1n-0743" },
+            "landing_page": { "const": "https://data.grid3.org/maps/GRID3::grid3-nga-health-facilities-v2-0" },
+            "snapshot_declared_version": { "const": "2.0" },
+            "snapshot_last_updated_at": { "const": "2024-11-11" },
+            "acquisition_commit": { "const": "29307a99e930774597ad5b6fcf342e053dd6eb84" },
+            "access_date_bound": { "type": "string", "minLength": 1 }
+          }
+        },
+        "source_isolation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["permitted_inputs", "forbidden_sources", "report"],
+          "properties": {
+            "permitted_inputs": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["path", "sha256", "role"],
+                "properties": {
+                  "path": { "type": "string", "minLength": 1 },
+                  "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                  "role": { "type": "string", "minLength": 1 }
+                }
+              }
+            },
+            "forbidden_sources": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 },
+              "description": "The NHFR internal export and everything derived from it. The isolation report proves, and the validator re-proves, that nothing in this artifact is sourced from any of them."
+            },
+            "report": { "const": "reports/facilities_grid3_isolation_v1.json" }
+          }
+        },
+        "deduplication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rule_id", "key", "survivor", "values_merged", "groups_collapsed", "rows_removed", "near_duplicates_proposed_not_merged"],
+          "properties": {
+            "rule_id": { "const": "exact_match_v1" },
+            "key": { "type": "string", "minLength": 1 },
+            "survivor": { "type": "string", "minLength": 1 },
+            "values_merged": { "const": false },
+            "groups_collapsed": { "type": "integer", "minimum": 0 },
+            "rows_removed": { "type": "integer", "minimum": 0 },
+            "near_duplicates_proposed_not_merged": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "coordinate_policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rule", "transformation", "state_consistency_check", "quarantine_report"],
+          "properties": {
+            "rule": { "type": "string", "minLength": 1 },
+            "transformation": {
+              "const": "none",
+              "description": "Pinned. GRID3 coordinates are accepted exactly as published or the row is quarantined. No pair is ever swapped, snapped, moved or fabricated in this lineage."
+            },
+            "state_consistency_check": { "type": "string", "minLength": 1 },
+            "quarantine_report": { "const": "reports/facilities_grid3_quarantine_v1.json" }
+          }
+        },
+        "unresolved_fields": {
+          "type": "object",
+          "required": ["type", "emergency_capable", "type_vocabulary", "type_mapping_proposal", "consumer_contract"],
+          "properties": {
+            "type": { "type": "string", "minLength": 1 },
+            "emergency_capable": { "type": "string", "minLength": 1 },
+            "type_vocabulary": {
+              "type": "array",
+              "items": { "enum": ["hospital", "clinic", "health_centre", "pharmacy", "laboratory", "other"] },
+              "uniqueItems": true,
+              "minItems": 6,
+              "maxItems": 6
+            },
+            "type_mapping_proposal": { "const": "proposals/facilities_grid3/type_mapping_proposal_v1.json" },
+            "consumer_contract": { "type": "string", "minLength": 1 }
+          }
+        },
+        "absence_convention": { "type": "object" },
+        "not_carried_from_source": { "type": "object" },
+        "absence_counts": { "type": "object" },
+        "unmapped_source_values": { "type": "object" }
+      }
+    },
+    "facilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/facility" }
+    }
+  },
+  "$defs": {
+    "facility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "facility_id", "name", "type", "state", "city_area", "latitude", "longitude",
+        "phone", "opening_hours", "emergency_capable",
+        "lga", "ward", "address", "facility_level", "ownership", "ownership_type",
+        "operational_status", "registration_status", "license_status", "beds", "services",
+        "source_record"
+      ],
+      "properties": {
+        "facility_id": {
+          "type": "string",
+          "pattern": "^ng_g3_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
+          "description": "ng_g3_ + the source's stable globalid (uuid: prefix stripped, lowercased). Distinct in shape from facilities 1.1's ng_<state>_<n> and the NHFR lineage's ng_nhf_<n>, so the three lineages can never be confused."
+        },
+        "name": { "type": "string", "minLength": 1 },
+        "type": {
+          "type": "null",
+          "description": "Null on every record. The facility_level_option -> type mapping is proposed for Product review (FAC-D001) and NOT applied. A null type is not a member of the declared vocabulary and must never be filtered out or treated as one."
+        },
+        "state": { "type": "string", "minLength": 1 },
+        "city_area": { "type": "string", "minLength": 1, "description": "The LGA name, as in the sibling lineage." },
+        "latitude": { "type": "number", "minimum": 4.0, "maximum": 14.0 },
+        "longitude": { "type": "number", "minimum": 2.5, "maximum": 15.0 },
+        "phone": { "type": "null", "description": "Null on every record: GRID3 publishes no contact fields. Nothing is carried from any other source (FAC-D003)." },
+        "opening_hours": { "type": "null", "description": "Null on every record: GRID3 publishes no operating-hours field." },
+        "emergency_capable": { "type": "null", "description": "Null on every record: GRID3 records no emergency capability, and none is inferred (FAC-D002)." },
+        "lga": { "type": "string", "minLength": 1 },
+        "ward": { "type": ["string", "null"] },
+        "address": { "type": "null", "description": "Null on every record: GRID3 publishes no address field." },
+        "facility_level": { "enum": ["Primary", "Secondary", "Tertiary", "unknown"] },
+        "ownership": { "enum": ["Public", "Private", "unknown"] },
+        "ownership_type": {
+          "enum": ["local_government", "state_government", "federal_government",
+                   "for_profit", "not_for_profit", "military_paramilitary", "unknown"],
+          "description": "Source-faithful tokens. for_profit / not_for_profit are deliberately NOT prefixed private_: the source pairs 'For Profit' with Public ownership on 4 rows and 'Not For Profit' with Public on 10, so a private_ prefix would assert a pairing the source contradicts."
+        },
+        "operational_status": { "type": "null", "description": "Null on every record: GRID3 has no operational-status column. Null (not provided) is a different statement from the sibling lineage's 'unknown' (source said Unknown)." },
+        "registration_status": { "type": "null" },
+        "license_status": { "type": "null" },
+        "beds": { "type": "null" },
+        "services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["onsite_laboratory", "onsite_imaging", "onsite_pharmacy", "mortuary", "ambulance"],
+          "properties": {
+            "onsite_laboratory": { "type": "null" },
+            "onsite_imaging": { "type": "null" },
+            "onsite_pharmacy": { "type": "null" },
+            "mortuary": { "type": "null" },
+            "ambulance": { "type": "null" }
+          },
+          "description": "The consumer-contract shape with every value null: GRID3 records no service capability, and none is invented."
+        },
+        "source_record": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "source_objectid", "source_globalid", "nhfr_uid", "nhfr_facility_code",
+            "facility_level_option", "facility_name_source", "geocoordinates_source",
+            "lga_name_disagreement", "ward_name_disagreement", "source_last_updated",
+            "coordinate_transformation"
+          ],
+          "properties": {
+            "source_objectid": { "type": "string", "pattern": "^\\d+$" },
+            "source_globalid": { "type": "string", "minLength": 1, "description": "Verbatim as the source wrote it, uuid: prefix included where present, so a join back to the CSV is byte-exact." },
+            "nhfr_uid": {
+              "type": ["string", "null"],
+              "description": "GRID3's own published cross-reference to the national registry, carried verbatim FROM THE GRID3 FILE. It is licensed GRID3 content; nothing here was read from any NHFR export."
+            },
+            "nhfr_facility_code": { "type": ["string", "null"] },
+            "facility_level_option": {
+              "enum": ["Primary Health Center", "Primary Health Clinic", "Health Post",
+                       "General Hospital", "Teaching/Tertiary Hospital", "Specialized Hospital",
+                       "unknown"],
+              "description": "The source's finer facility descriptor, whitespace-normalised, carried so the FAC-D001 type mapping can be reviewed and later applied against the very value each record holds. 'unknown' records the source's explicit Unknown."
+            },
+            "facility_name_source": { "enum": ["NHFR_2024", "GRID3_EHEALTH", "GRID3_2024"] },
+            "geocoordinates_source": { "enum": ["NHFR_2024", "GRID3_EHEALTH", "GRID3_2024"] },
+            "lga_name_disagreement": { "type": "boolean" },
+            "ward_name_disagreement": { "type": "boolean" },
+            "source_last_updated": { "const": "2024-11-11" },
+            "coordinate_transformation": {
+              "const": "none",
+              "description": "Pinned on every record. This lineage has no swap rule; latitude and longitude are the source's values exactly."
+            }
+          }
+        }
+      }
+    }
+  }
+}

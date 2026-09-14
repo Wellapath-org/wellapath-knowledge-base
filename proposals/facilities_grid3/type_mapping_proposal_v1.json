@@ -1,0 +1,77 @@
+{
+  "_metadata": {
+    "proposal_id": "facilities_grid3_type_mapping",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0",
+    "status": "PENDING_PRODUCT_REVIEW",
+    "applied": false,
+    "note": "Deterministic mapping table for FAC-D001. NOT applied: every candidate record's type is null, enforced by schema const and validators. Approval means regenerating the candidate with the approved table, never editing the artifact."
+  },
+  "target_vocabulary": [
+    "hospital",
+    "clinic",
+    "health_centre",
+    "pharmacy",
+    "laboratory",
+    "other"
+  ],
+  "source_value_inventory": {
+    "General Hospital": 1120,
+    "Health Post": 8726,
+    "Primary Health Center": 22239,
+    "Primary Health Clinic": 13903,
+    "Specialized Hospital": 38,
+    "Teaching/Tertiary Hospital": 87,
+    "unknown": 4909
+  },
+  "mapping": [
+    {
+      "source_value": "General Hospital",
+      "proposed_type": "hospital",
+      "basis": "The source value names a hospital. E5 precedent: mapped to hospital in facilities 1.0/1.1."
+    },
+    {
+      "source_value": "Teaching/Tertiary Hospital",
+      "proposed_type": "hospital",
+      "basis": "The source value names a hospital. E5 precedent: mapped to hospital in facilities 1.0/1.1."
+    },
+    {
+      "source_value": "Specialized Hospital",
+      "proposed_type": "hospital",
+      "basis": "The source value names a hospital. E5 precedent: mapped to hospital in facilities 1.0/1.1."
+    },
+    {
+      "source_value": "Primary Health Center",
+      "proposed_type": "health_centre",
+      "basis": "Primary-care facility. E5 precedent: mapped to health_centre in facilities 1.0/1.1."
+    },
+    {
+      "source_value": "Primary Health Clinic",
+      "proposed_type": "health_centre",
+      "basis": "E5 precedent mapped this to health_centre alongside Primary Health Center. The word 'Clinic' makes 'clinic' arguable; flagged for explicit Product choice rather than silently inheriting the precedent.",
+      "flag": "product_choice_health_centre_vs_clinic"
+    },
+    {
+      "source_value": "Health Post",
+      "proposed_type": "health_centre",
+      "basis": "Smallest primary-care tier. E5 precedent: mapped to health_centre in facilities 1.0/1.1."
+    },
+    {
+      "source_value": "unknown",
+      "proposed_type": null,
+      "basis": "The source explicitly recorded Unknown. No mapping is proposed; the record's type stays null."
+    }
+  ],
+  "coverage_if_approved": {
+    "records_mapped": 46113,
+    "records_left_null": 4909
+  },
+  "decision": {
+    "status": "pending",
+    "reviewer_role": "Product",
+    "reviewer": null,
+    "decided_on": null,
+    "rationale": null
+  }
+}

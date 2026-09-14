@@ -1,0 +1,35 @@
+{
+  "_metadata": {
+    "report_id": "facilities_grid3_comparison",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0",
+    "baseline": {
+      "path": "facilities.ng.v1.1.json",
+      "sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398"
+    },
+    "note": "facilities 1.1 stays the active artifact until every approval exists. This report informs the changelog; no value from 1.1 enters the candidate."
+  },
+  "records": {
+    "facilities_1_1": 5344,
+    "candidate": 51022
+  },
+  "per_state_1_1": {
+    "FCT": 614,
+    "Kano": 2040,
+    "Lagos": 2690
+  },
+  "per_state_candidate_for_1_1_states": {
+    "FCT": 652,
+    "Kano": 1723,
+    "Lagos": 2798
+  },
+  "name_state_exact_overlap": 4332,
+  "fields_1_1_has_that_candidate_lacks": {
+    "type": "1.1 carries a mapped type; the candidate's is null pending FAC-D001.",
+    "emergency_capable": "1.1 derives it from type; the candidate's is null (FAC-D002).",
+    "phone": "1.1 carries phones including 45 hand-verified Lagos numbers; the candidate carries none (FAC-D003) \u2014 GRID3 publishes no contact data, and this lineage adds nothing from any other source.",
+    "opening_hours": "1.1 carries opening hours for some records; the candidate carries none (FAC-D003)."
+  },
+  "coverage_1_1_lacks": "34 of the candidate's 37 states have no 1.1 records at all; 1.1 covers Lagos, FCT and Kano only."
+}
