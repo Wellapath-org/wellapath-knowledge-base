@@ -8,7 +8,7 @@
     "note": "The exact bytes I3 Step 2 must not have touched. Regenerated and compared in --check mode, so a single changed byte in any listed file fails the run. The report cannot be fixed by editing it: an edited report no longer matches what the generator produces, which is the same failure."
   },
   "rule": "The publication tooling reads these files, hashes them and copies them into a disposable staging directory. It has no code path that opens any of them for writing, and every packaging operation re-hashes the source afterwards to prove it did not.",
-  "frozen_artifact_count": 48,
+  "frozen_artifact_count": 51,
   "groups": {
     "candidates": [
       {
@@ -38,8 +38,13 @@
       },
       {
         "path": "candidate/facilities.ng.v2.0.json",
-        "sha256": "2f42db7026a20eda4af8315ee8cb97fac07600edbd611d2cee919d99b1acad7d",
-        "byte_count": 30961471
+        "sha256": "8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+        "byte_count": 36077142
+      },
+      {
+        "path": "candidate/facilities.manifest.candidate.json",
+        "sha256": "17457490da329f9e886128ec7231f2aa206c87ac49406be57c1b637f72de5bcd",
+        "byte_count": 6669
       }
     ],
     "case_bank_and_findings": [
@@ -109,8 +114,18 @@
       },
       {
         "path": "facilities/source/nhf_provenance_v1.json",
-        "sha256": "93fdaaa99b9e98364865f5ee4c6ad2d719eb2db1d5e40cb0f2695779d90404ff",
-        "byte_count": 7538
+        "sha256": "4f17f920f59053b91c86e42073fef75db733e0f053c3f9d326523c5b4d59bf51",
+        "byte_count": 16345
+      },
+      {
+        "path": "facilities/source/nhf_authorization_checklist_v1.json",
+        "sha256": "fb22080a5d8e18eb105e075d45b7677b04347000f60738f01057e10557858d27",
+        "byte_count": 7184
+      },
+      {
+        "path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+        "sha256": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180",
+        "byte_count": 13613859
       }
     ],
     "im001_records": [
@@ -252,8 +267,8 @@
       },
       {
         "path": "schema/facilities.v2.schema.json",
-        "sha256": "7bf5b5c1cd34473940686690649f80b4c395f65720ac699fb8b45f92ff284768",
-        "byte_count": 9440
+        "sha256": "fc96d9142c9e669af6c02d6bb4e186fef025aa5a841fc65da4da2aff394c2e24",
+        "byte_count": 17610
       },
       {
         "path": "schema/kb_schema_v1.0.json",

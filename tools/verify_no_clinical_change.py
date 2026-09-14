@@ -108,7 +108,18 @@ IM003_REPORTS_SCANNED_ELSEWHERE = frozenset({
 #: Strings that would otherwise trip a pattern, each with the reason. Empty is
 #: the correct state: an entry here is an admission the scan is imprecise, so it
 #: has to be written down rather than folded silently into a regex.
-PHI_ALLOWLIST = {}
+#: Exact matched strings that are deliberately published, with the reason each one is not
+#: personal data. Exact strings only, never patterns: an allowlisted VALUE cannot widen a
+#: pattern, and anything that is not byte-identical to an entry still fails the scan.
+PHI_ALLOWLIST = {
+    "hfr@health.gov.ng": (
+        "Institutional contact of the Nigeria Health Facility Registry, published by the "
+        "Federal Ministry of Health on https://hfr.fmohconnect.gov.ng/ and recorded by the "
+        "facilities provenance investigation as the authorization addressee "
+        "(docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md). An organisational mailbox, "
+        "not a person's."
+    ),
+}
 
 #: Positive controls. Every one MUST be caught, or the scan is decorative.
 PHI_SELF_TEST = [

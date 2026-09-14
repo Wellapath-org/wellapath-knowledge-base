@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-09-14
 
 ## Merged
 
@@ -20,6 +20,8 @@ Last updated: 2026-08-24
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #40 | `feat/facilities-nhf-candidate` | Nationwide Facilities Step 1 (commit `4afffe1`): `candidate/facilities.ng.v2.0.json` from the supplied `nigeria_health_facilities.csv`, schema 2.0, generator, provenance record, quality/quarantine/comparison/Mobile-compat reports. `facilities.ng.v1.1.json` untouched. | Open, unmerged; superseded in content by #41 |
+| #41 | `feat/facilities-2-0-candidate-pipeline` (stacked on #40) | Steps 2–3 (commits `4bb8e26`, `55a4af6`): pipeline policies, coordinate-orientation remediation study, candidate manifest, coordinate audit, source-authorization checklist, Mobile handoff. Candidate 29,028 records, `8fb80d3d…6da2`, `candidate_unapproved` / `may_publish: false`. Sections "Nationwide Facilities — Step 2/3" below. | Open, unmerged; awaiting source authorization (9 items) and FAC-D001…D006 |
 
 | Issue | Title | Status |
 |---|---|---|
@@ -30,6 +32,7 @@ Last updated: 2026-08-24
 
 - **Decision (2026-07-26):** ship the 45 phone-matched Lagos facilities as `facilities.ng.v1.1.json` now; treat manual enrichment as the interim v1.x strategy, with a future NHFR API integration as the v2.0 rebuild path.
 - **NHFR in-portal API request (hfr.fmohconnect.gov.ng):** retry was **not submitted** — WellaPath's organization domain isn't verified yet and a personal email was not used as a substitute. Still outstanding; needs a proper org domain/email before resubmission.
+- **v2.0 rebuild status (2026-09-14):** a bulk registry export was supplied as a file instead of the API and built into an unapproved candidate on PRs #40/#41 (sections "Nationwide Facilities — Step 2/3/4" at the end of this log). Publication is blocked by the source-authorization checklist (`docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md`, nine items missing) and by the Product/Clinical decisions in `docs/FACILITIES_DECISIONS_REQUIRED.md`. **v1.1 remains the active artifact.** Step 4's provenance investigation identified the source system as the NHFR (evidence-backed inference) and prepared an unsent authorization request to the Federal Ministry of Health for founder review.
 
 ## Known Issues
 
@@ -994,3 +997,219 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
   and unmerged; this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 2: candidate pipeline, schema, manifest, handoff
+
+Commit `4bb8e26` on `feat/facilities-2-0-candidate-pipeline` (PR #41, stacked
+on #40). **The record counts, coverage and coordinate treatment in this section
+are superseded by Step 3 below**; the section is kept because Step 3's
+remediation is only intelligible against what Step 2 found and refused.
+
+Builds on the Step 1 candidate (commit `4afffe1`). Same source
+(`nigeria_health_facilities.csv`, `e598cecc…becb3`, 31,390 rows); the file
+the brief re-supplied at the repository root is byte identical to the
+committed copy and was not committed twice.
+
+- **Blockers restated, not resolved:** source licence and publishing
+  organisation are NOT established, no data dictionary was supplied, and
+  the data is not nationwide (Adamawa, Kebbi, Sokoto absent). The candidate
+  is `candidate_unapproved` / `may_publish: false` under both
+  `release_status` and the brief's `publication_status`, pinned by schema
+  `const`.
+
+- **Headline source finding:** the source writes latitude and longitude
+  the wrong way round for whole states. The national bounding box (all
+  Step 1 checked) is blind to a northern transposition because both values
+  stay inside Nigeria. A per-state reference yardstick
+  (`mappings.STATE_REFERENCE_POINTS`, ±0.5°, cross-checked against
+  facilities 1.1's independent medians at 7/5/20 km) sees it: **9,911 rows
+  refused as transposed**, 81 as not in the claimed state, nothing
+  exchanged. **FCT, Kano, Katsina, Kwara, Niger, Taraba and Zamfara have
+  no surviving record; FCT and Kano are served by 1.1 today** — recorded
+  as a blocking Mobile finding. Instrument uncertain where lat ≈ lon
+  (Bauchi, Gombe, Yobe, Borno, Kogi); said so per state.
+
+- **Pipeline policies added, all counted:** rows without a usable
+  coordinate pair are quarantined (639: 524 absent, 106 box-transposed,
+  5 null island, 4 out of bounds), never emitted with nulls or a
+  substitute; exact duplicates (same name, state, LGA and coordinates)
+  collapse to the smallest registry `unique_id` with no value merging
+  (62 pairs, each listed with its survivor). 31,390 = 20,696 emitted +
+  10,694 quarantined.
+
+- **Provenance carried per record:** `source_record` gains `state_id`,
+  `lga_id`, `ward_id`, `source_updated_at`; `_metadata.source` gains the
+  snapshot instant (≤ 2026-07-21T13:15:26, zone undeclared).
+
+- **Further source findings:** `lga_id` is scoped to the LGA name — six
+  homonymous LGAs carry one id in two states each, so `(state, city_area)`
+  is the only LGA key; five Enugu-labelled rows carry Abia LGAs (all 0,0,
+  quarantined). Recorded in the provenance record.
+
+- **Still null by decision, guarded by tests:** `type` (vocabulary declared,
+  mapping table empty) and `emergency_capable`. Mobile compatibility
+  re-measured: NOT COMPATIBLE — two blocking findings (type null; FCT and
+  Kano lost).
+
+- **New deliverables:** `candidate/facilities.manifest.candidate.json`
+  (`IS_LIVE_MANIFEST: false`, every gate false, rollback bound to 1.1 by
+  hash), `docs/FACILITIES_2_0_CHANGELOG.md`,
+  `mobile_handoff/facilities_v2/` (README + Dart types). The validator
+  fails if either document stops citing the candidate's current digest.
+
+- **Candidate:** `candidate/facilities.ng.v2.0.json`, 20,696 records,
+  23,318,064 bytes, sha256 `e8bc4d72…d791`; schema 2.0 `f716f184…9837`.
+  `facilities.ng.v1.1.json` byte identical (`25684c71…2398`). Thirteen
+  unresolved decisions in `docs/FACILITIES_NHF_CANDIDATE.md` §10, of which
+  #13 (apply the transposition, or return the file to the source owner)
+  decides whether the candidate can ever reach 1.1's coverage.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **Nothing published, uploaded, activated or approved;
+  this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 3: coordinate-orientation remediation study
+
+Commit `55a4af6` on `feat/facilities-2-0-candidate-pipeline` (PR #41,
+https://github.com/Wellapath-org/wellapath-knowledge-base/pull/41, description
+updated in place — no new PR). Controlled remediation of the Step 2 finding.
+Nothing merged, published, uploaded, activated or handed to Backend/Mobile.
+Full study: `docs/FACILITIES_COORDINATE_REMEDIATION.md`.
+
+- **Boundary instrument:** the repository's own GRID3 facility points
+  (51,022, all 37 states, CC BY 4.0, hash-pinned) as an empirical
+  boundary via deterministic k-NN state membership
+  (`tools/facilities/geometry.py`). No polygons downloaded; the Step 2
+  centroid table decides nothing and survives only as a 300 km sanity
+  invariant.
+
+- **Rule `coordinate_orientation_v1`:** a pair is exchanged only when it
+  is outside its declared state as given and strictly inside it exchanged;
+  source values kept on the record; every correction listed in
+  `reports/facilities_coordinate_audit_v1.json`. Both plausible / either
+  uncertain / GRID3 names another state for the same NHFR facility →
+  ambiguous, held. Both outside → invalid. Outcomes: **18,210 unchanged ·
+  11,141 corrected · 1,442 ambiguous · 67 invalid**; 529 not orientable.
+  Record-level corroboration from the same facility's GRID3 point: within
+  20 km of the exchanged pair 3,005 times, of the pair as given 2 times.
+
+- **Coverage preserved:** 34 states; **FCT 632 (v1.1 614), Kano 1,293
+  (v1.1 2,040)**; no v1.1 state lost; the seven states Step 2 emptied are
+  all recovered by verified swaps. Candidate 29,028 records, 36,077,142
+  bytes, sha256 `8fb80d3d…6da2`; schema 2.0 `fc96d914…2e24`.
+
+- **Options:** A (corrected candidate) is the only candidate path; B (1.1
+  overlay) quantified and rejected — buys no coverage, adds 4,387 records
+  of another lineage, 1,985 of uncertain identity; **C (keep 1.1 active)
+  recommended for the active artifact** until source authorization and
+  FAC-D001 exist.
+
+- **Still null by decision:** `type` (null is not a vocabulary member; the
+  consumer contract — never filter it out, never an empty list — is in
+  the artifact metadata and the handoff) and `emergency_capable` (no
+  verified positive record; distance fallback pending FAC-D002). Exact
+  decisions: `docs/FACILITIES_DECISIONS_REQUIRED.md`.
+
+- **Source authorization checklist** (nine items, all missing) in
+  `facilities/source/nhf_authorization_checklist_v1.json`; the validator
+  refuses `may_publish` other than false while any is unsatisfied.
+
+- **Validation:** facilities 5/5 (91 validator checks, 104 tests),
+  publication 9/9 (frozen count 51), W2 23/23, W3 30/30, IM-003 27/27.
+  `facilities.ng.v1.0.json` and `v1.1.json` byte identical.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **PR #40 and PR #41 remain unmerged.**
+
+- **What unblocks the next step, in order:** (1) the nine authorization
+  items recorded with evidence in
+  `facilities/source/nhf_authorization_checklist_v1.json`; (2) FAC-D004
+  (engineering lead accepts or rejects `coordinate_orientation_v1`);
+  (3) FAC-D001 (`type`) and FAC-D002 (`emergency_capable`, with Clinical);
+  then re-measure Mobile compatibility. Until (1) exists the candidate
+  cannot leave `candidate_unapproved` whatever (2)–(3) decide.
+
+## Nationwide Facilities — Step 4: source-provenance investigation
+
+On `feat/facilities-2-0-candidate-pipeline` (PR #41). Provenance investigation
+only: **no checklist status changed, no candidate byte changed, nothing
+published, uploaded, activated or sent.** Verdict: **authorization incomplete**
+— the addressee is now identified and the request is drafted, but every AUTH
+item remains `missing`.
+
+- **Source system identified — as an evidence-backed inference, not owner
+  confirmation.** The CSV derives from the **Nigeria Health Facility Registry
+  (NHFR), Federal Ministry of Health, Nigeria** (hfr.fmohconnect.gov.ng).
+  Evidence, all reproducible in-repo: `unique_id` uses the six-segment
+  facility-code shape that GRID3's independently published `nhfr_facility_code`
+  column (labelled NHFR_2024) uses, with **12,619 of 31,390 exact value
+  matches**; record-level coordinate corroboration 3,005 vs 2 within 20 km
+  (Step 3 audit); registry-workflow schema shape. Recorded in
+  `nhf_provenance_v1.json` → `source_system_identification`, with the
+  inference labelled. **Registry-side export (inference):** internal workflow
+  columns (`created_by`, `verify_note`, `action`) are not what public pages or
+  the documented API serve, so the copy did not arrive through a documented
+  public channel — AUTH-09's gap exactly.
+
+- **Rights posture captured from the primary source (2026-09-14):** the
+  registry publishes **no licence, no terms of use, no data dictionary**; its
+  only rights statement is *"Copyright ©2026 Federal Ministry of Health. All
+  Rights Reserved"*. API access is key-gated behind an approval form
+  (`/developers`); no bulk export documented. Contact: **hfr@health.gov.ng**.
+  So the licence position is worse than unknown: the presumed owner's one
+  public statement reserves all rights; AUTH-02…05 need a **written grant**.
+  Legacy `hfr.health.gov.ng` has a broken TLS cert (not fetched); the NCDC
+  data-portal mirror was unreachable, and a mirror licence would not licence a
+  registry-side export anyway.
+
+- **Correction to the v1 provenance record:** the download-origin claim cited
+  `kMDItemWhereFroms`; the actual attribute is `com.apple.quarantine` naming
+  **Numbers**, and **no WhereFroms/URL attribute exists at all**. The
+  substance (passed through a spreadsheet, not pristine) stands. Root
+  duplicate CSV: byte-identical, no additional provenance, still untracked.
+
+- **Fingerprint for AUTH-09:** `facilities/source/nhf_source_fingerprint_v1.json`
+  (`tools/report_source_fingerprint.py`, deterministic, `--check`, wired into
+  `run_facilities_checks.py`): header + row/column counts, null pattern per
+  column, state counts, identifier-set hashes and shape census (31,383 of
+  31,390 canonical), GRID3 cross-reference, timestamp bounds
+  (2026-05-18T16:06:51 … 2026-07-21T13:15:26, zone undeclared), per-state
+  coordinate medians as-given (the transposition signature, e.g. Kano
+  8.51/11.96), canonical sample hashes. Lets the owner confirm or refute this
+  exact snapshot without any credential.
+
+- **Prepared, unsent authorization request:**
+  `facilities/source/nhf_authorization_request_draft_v1.md` — addressed to the
+  NHFR (hfr@health.gov.ng), asks for permission to transform and redistribute
+  via CDN and public mobile apps (incl. offline caching), the public-display
+  basis for phones/coordinates/hours, attribution text, snapshot version, data
+  dictionary, authority evidence and chain-of-custody confirmation, and
+  discloses the coordinate-orientation finding to the owner. **For founder
+  review; must be sent from a verified org address (the same prerequisite that
+  stalled the in-portal API request).**
+
+- **Checklist untouched in substance:** all nine items still `missing`,
+  `all_satisfied: false`; a status-free `investigation` block records
+  addressee, evidence trail and the draft. Six new fail-closed tests
+  (`ProvenanceInvestigationTests`) pin the evidence: fingerprint reproducible
+  and bound to the pinned digest, identification stays labelled INFERENCE with
+  `source_organization.established` still false, the verbatim All-Rights-
+  Reserved footer and contact, the draft's DRAFT-NOT-SENT marker and exact
+  digest, and zero checklist-status drift.
+
+- **One scanner change:** the PHI scan now has its first allowlist entry — the
+  exact string `hfr@health.gov.ng` (institutional mailbox, published by the
+  Ministry, deliberately recorded). Exact value only, never a pattern; 137
+  files, 0 hits, 0/16 controls failed.
+
+- **Checks:** facilities **6/6** (fingerprint check added) · publication 9/9
+  (freeze regenerated for the two deliberately revised provenance files) · W2
+  23/23 · W3 grouping 30/30 · IM-003 27/27. Candidate, both facilities
+  artifacts and the source CSV byte-identical; `candidate_unapproved` /
+  `may_publish: false` unchanged. **PRs #40 and #41 remain open and unmerged.**
+
+- **Still required from humans:** founder reviews and sends the request from a
+  verified WellaPath address; the Ministry's written grant lands AUTH-01…09
+  with evidence references; Legal reviews the grant's terms; then FAC-D001…D006
+  and the re-measured Mobile compatibility. Nothing in this step authorizes
+  publication.

@@ -1,12 +1,24 @@
-# Nationwide facilities candidate — NHF source, Step 1
+# Nationwide facilities candidate — NHF source, Steps 1 to 3
 
-> **Candidate only.** `candidate/facilities.ng.v2.0.json` is unapproved and unpublished.
+> **Candidate only.** `candidate/facilities.ng.v2.0.json` is unapproved and unpublished
+> (`release_status` and `publication_status` both `candidate_unapproved`, `may_publish: false`).
 > `facilities.ng.v1.1.json` remains the active artifact and is byte identical.
-> Nothing was uploaded, published, activated or deployed, and `/config` is unchanged.
+> Nothing was uploaded, published, activated, deployed or handed to Backend/Mobile, and
+> `/config` is unchanged.
 
 ```bash
-python3 tools/run_facilities_checks.py     # everything
+python3 tools/run_facilities_checks.py     # everything: regenerate-and-compare, validate, test
 ```
+
+Companion documents:
+
+| Document | What it is |
+|---|---|
+| `docs/FACILITIES_COORDINATE_REMEDIATION.md` | The Step 3 study: the orientation rule, its evidence, per-state coverage, options A/B/C and the recommendation |
+| `docs/FACILITIES_2_0_CHANGELOG.md` | What changed against 1.1 and across the three steps |
+| `docs/FACILITIES_DECISIONS_REQUIRED.md` | The exact Product / Clinical / engineering decisions still needed |
+| `docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md` | The written evidence required before publication (nine items, all missing) |
+| `mobile_handoff/facilities_v2/README.md` | Every field, for the consumer, with the null-type and emergency-ordering contract |
 
 ---
 
@@ -18,215 +30,186 @@ The supplied file is `nigeria_health_facilities.csv`, preserved unchanged at
 
 **What is established:** the bytes, their structure (a title line, a 90-column header, 31,390
 uniform data rows), and the dataset's own internal audit timestamps, which put the snapshot no
-earlier than 2026-07-21.
+earlier than **2026-07-21T13:15:26** (source-local, zone undeclared).
 
 **What is not, and is recorded as not:**
 
 | Question | Answer |
 |---|---|
-| Publishing organisation | **Not established.** The file names none — no publisher field, no copyright line, no contact. The brief calls it "NHF"; the data does not. |
-| Licence or reuse permission | **Not established.** Nothing accompanied the data. **This alone blocks publication**, independent of any technical readiness. |
-| Delivery URL | None. The only technical evidence of origin is a macOS `WhereFroms` attribute naming **Apple Numbers**, so the file passed through a spreadsheet rather than arriving as a pristine upstream export. |
-| Data dictionary | None supplied. Mitigated: every `*_id` column has a `*_name` column beside it, and each id maps to exactly one name across all 31,390 rows — verified, not assumed. |
+| Publishing organisation | **Not established.** The file names none. (AUTH-01) |
+| Licence or reuse permission | **Not established.** Nothing accompanied the data. **This alone blocks publication.** (AUTH-02…05) |
+| Delivery / chain of custody | None. The copy passed through Apple Numbers (macOS `WhereFroms`); not a pristine upstream export. (AUTH-09) |
+| Snapshot version | None declared. (AUTH-06) |
+| Data dictionary | None. Three id columns have no name column; `lga_id` is name-scoped. (AUTH-07) |
 | Contact fields intended for public use | **Not established.** See §5. |
-| Completeness / accuracy | **Not established.** Every row carries `verify_note: "Auto-approved via bulk import"`. No record in this dataset was individually verified. |
+| Completeness / accuracy | **Not established.** Every row is `Auto-approved via bulk import`; whole states have latitude and longitude transposed (§6). |
+
+The pipeline was still built, because building it invents nothing and publishes nothing; the
+candidate cannot leave `candidate_unapproved` until the checklist is satisfied in writing.
 
 ---
 
-## 2. "Nationwide" is a claim the data does not support
+## 2. Coverage
 
 | | |
 |---|---|
-| States with records | **33 of 36**, plus the FCT |
-| **States with no records at all** | **Adamawa, Kebbi, Sokoto** |
-| Distinct LGA names | **680 of Nigeria's 774** |
-| Spelling variant found | `Akwa-Ibom`, normalised to `Akwa Ibom` through the explicit state table |
+| States with records | **34** — 33 states plus the FCT |
+| States with no row in the source | **Adamawa, Kebbi, Sokoto** |
+| States emptied by refusal | **none** (Step 2 had emptied seven; the Step 3 rule recovers all of them) |
+| v1.1 states present | Lagos 1,502 · **FCT 632** (v1.1: 614) · **Kano 1,293** (v1.1: 2,040) |
+| Distinct LGA names | **679 of 774** (693 in the source; 8 state/LGA pairs lost entirely to quarantine) |
 
-This is the headline finding. A user in Sokoto gets an empty locator. The artifact states the
-gap in its own `_metadata.coverage_claim` rather than leaving a reader to discover it.
+Per state, before and after correction: `docs/FACILITIES_COORDINATE_REMEDIATION.md` §5. The
+artifact states its own gaps in `_metadata.states_absent`, `states_with_no_emitted_records` and
+`coverage_claim`.
 
 ---
 
 ## 3. What was built
 
-31,390 source rows → **31274 emitted**, **116 quarantined**, and the two numbers add up. No row was
-silently discarded.
+31,390 source rows → **29,028 emitted**, **2,362 quarantined**, and the two numbers add up.
 
 | Deliverable | Path |
 |---|---|
 | Source bytes (unchanged) | `facilities/source/nigeria_health_facilities.csv` |
+| Reference geometry (unchanged, CC BY 4.0) | `facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv` |
 | Provenance record | `facilities/source/nhf_provenance_v1.json` |
+| Source authorization checklist | `facilities/source/nhf_authorization_checklist_v1.json` |
 | Canonical schema | `schema/facilities.v2.schema.json` |
-| Generator | `tools/build_facilities_candidate.py` |
+| Generator | `tools/build_facilities_candidate.py` (+ `tools/facilities/{geometry,mappings,normalize}.py`) |
 | Candidate artifact | `candidate/facilities.ng.v2.0.json` |
+| Candidate manifest entry | `candidate/facilities.manifest.candidate.json` |
 | Data-quality report | `reports/facilities_quality_v1.json` |
 | Quarantine report | `reports/facilities_quarantine_v1.json` |
-| Comparison with 1.1 | `reports/facilities_comparison_v1.json` |
+| Coordinate audit (every correction listed) | `reports/facilities_coordinate_audit_v1.json` |
+| Comparison with 1.1, option-B overlay analysis | `reports/facilities_comparison_v1.json` |
 | Mobile compatibility | `reports/facilities_mobile_compat_v1.json` |
+| Validator / tests | `tools/validate_facilities_candidate.py` · `testing/facilities/test_facilities.py` |
 | Publication dry-run plan | `publication/plans/facilities.ng.v2.0.dryrun.json` |
 
 ### Why version 2.0
 
-Not assumed — assessed. The schema is *additive*: all ten fields facilities 1.1 emits are
-present under the same names and types, so the Mobile consumer's field access is unchanged.
-That alone would argue for a minor bump. What makes it major is behaviour: `type` and
-`emergency_capable` are null on every record, so a consumer reading the same shape gets
-different results. A shape-compatible artifact that changes what the app shows is not a minor
-version.
+The schema is additive — all ten 1.1 fields present under the same names — but `type` and
+`emergency_capable` are null on every record, and the consumer filters and orders on both. A
+shape-compatible artifact that changes what the app shows is not a minor version.
+
+### Pipeline policies
+
+| Policy | Rule | Rows |
+|---|---|---|
+| Not orientable | coordinates absent / 0,0 → quarantined, never substituted | 524 / 5 |
+| **Orientation rule** `coordinate_orientation_v1` | see §6 | unchanged 18,210 · corrected 11,141 · ambiguous 1,442 · invalid 67 |
+| Exact-duplicate collapse | same name + state + LGA + point → smallest registry `unique_id`; no values merged; each removed row listed with its survivor | 323 |
+| Name guard | blank, placeholder or contact detail | 1 |
 
 ---
 
 ## 4. The two fields that are deliberately empty
 
-These are the substance of this step, and neither is a defect in the tooling.
+**`type` — null on every record, blocking.** The source has no facility-kind column;
+`facility_level` is a tier of care. Mapping tier to kind decides which facilities a user is
+shown for self-care versus urgent care: Product decision **FAC-D001**. The vocabulary a
+decision would map into is declared in `_metadata.unresolved_fields.type_vocabulary`, and
+**null is not a member of it**. The consumer contract — a null type must not be filtered out
+and must never produce an empty result list — is stated in the artifact metadata and in the
+handoff. `facility_type_id` is a near-copy of the level and is reported, not interpreted.
 
-**`type` — null on every record, blocking.** Mobile filters non-emergency results by `type`
-against `{hospital, clinic, health_centre, pharmacy}`. This source has no such column. What it
-has is `facility_level` — Primary, Secondary, Tertiary — which is a *tier of care*, not a kind
-of facility: a Primary facility may be a health centre, a clinic or a dispensary, and the
-source does not say which. Mapping tier to kind decides which facilities a user is shown for
-self-care versus urgent care, so it is a Product decision. `tools/facilities/mappings.py`
-carries the table as deliberately empty, and a test fails if it is filled in.
-
-**`emergency_capable` — null on every record, material.** facilities 1.1 derived it from
-`type == 'hospital'`. This source has no type, and none of its 90 columns records emergency
-capability. `ambulance_services` and `inpatient` are adjacent but are not the same claim, and
-treating either as emergency capability would put a facility at the top of an emergency list on
-a guess.
+**`emergency_capable` — null on every record, material.** No source column records emergency
+capability; `ambulance_services` and `inpatient` are adjacent claims. No record carries
+verified positive evidence, so prioritisation cannot apply to any; ordering falls back to
+distance until Product and Clinical record a fallback decision (**FAC-D002**). Data Engineering
+has not invented one.
 
 ---
 
 ## 5. Contact fields and privacy
 
-`email_address` (6,966 populated) and `alternate_number` (5,999) are **excluded**: no
-documented public-use basis, and both columns carry evident junk. The seven officer/workflow
-contact columns — `verified_email`, `verified_mobile`, `validated_email`, `validated_mobile`,
-`published_email`, `published_mobile`, `verified_id` — are empty in all 31,390 rows; had they
-been populated they would have been staff contacts, not facility contacts, and would have been
-excluded on that ground.
-
-`phone_number` **is** carried, normalised to E.164 and validated as a Nigerian mobile, because
-facilities 1.1 already surfaces a phone to users. Public-use intent is still not established,
-so it is flagged for Product review before any public presentation or `tel:` action.
-
-**One personal email address was found typed into a facility's `physical_location` field** and
-is not in the candidate. The value was dropped and the removal counted
-(`address_contact_detail_in_free_text_field: 1`); the facility itself is legitimate and was
-kept. Free-text fields are now screened for contact-shaped values, and the quarantine report
-does not reproduce them.
+`email_address` and `alternate_number` are excluded (no public-use basis, evident junk). The
+seven officer/workflow contact columns are empty in every row. `phone_number` is carried,
+normalised to E.164 and validated as a Nigerian mobile, because 1.1 already surfaces a phone;
+public-use intent is not established and no `tel:` action should be offered before
+**FAC-D003**. Free-text fields are screened for contact-shaped values (the one personal email
+found in Step 1 sits in a row that is now quarantined earlier). The validator scans every key
+at every depth for user, device, session, search, history, symptom, diagnosis, patient,
+assessment or telemetry tokens; none exist.
 
 ---
 
-## 6. Data quality
+## 6. Source findings
+
+**Latitude and longitude are transposed for whole states.** The national bounding box (all
+Step 1 checked) is blind to a northern transposition because both values stay inside Nigeria.
+Step 2 saw it with a centroid yardstick and refused 9,911 rows, emptying seven states. Step 3
+replaces the yardstick with the repository's GRID3 facility points (51,022, all 37 states,
+CC BY 4.0) as an empirical boundary and tests each pair as given and exchanged against the
+state the row claims. A pair is exchanged **only** when it is outside its state as given and
+strictly inside it exchanged; the source values stay on the record and every correction is
+listed. Both plausible, either uncertain, or GRID3 naming a different state for the same NHFR
+facility → held as ambiguous. Both outside → invalid. The direction is corroborated at record
+level: for corrected rows, the *same facility's* GRID3 point is within 20 km of the exchanged
+pair 3,005 times and of the pair as given 2 times. Whether the transposition arose upstream or
+in the spreadsheet the copy passed through is not established (AUTH-09). Full study:
+`docs/FACILITIES_COORDINATE_REMEDIATION.md`.
+
+**`lga_id` is name-scoped.** Six homonymous LGA names (Nasarawa, Obi, Ifelodun, Irepodun,
+Surulere, Bassa) carry one id in two states each; five single Enugu-labelled rows carry Abia
+LGAs (all 0,0, quarantined). `(state, city_area)` is the only unambiguous LGA key.
+
+---
+
+## 7. Data quality
 
 | Measure | Count |
 |---|---|
-| Emitted | 31274 |
-| With coordinates | 30750 |
-| Without coordinates (kept; Mobile sorts them last) | 524 |
-| With a valid normalised phone | 29823 |
-| Quarantined — suspected swapped coordinates | 106 |
-| Quarantined — outside Nigeria | 4 |
+| Emitted | 29,028 |
+| With coordinates, verified inside the state | 29,028 (100%) |
+| …of which the source pair exchanged under the rule | 10,862 |
+| With a valid normalised phone | 28,090 (96.8%) |
+| With opening hours | 28,772 (99.1%) |
+| `type` / `emergency_capable` populated | 0 (by decision) |
+| Quarantined — orientation ambiguous | 1,442 |
+| Quarantined — coordinates absent | 524 |
+| Quarantined — exact duplicate | 323 |
+| Quarantined — not in the state claimed | 67 |
 | Quarantined — exactly 0,0 | 5 |
-| Quarantined — name empty or a contact detail | 1 |
-| Same name + state + LGA (duplicate *candidates*, not merged) | 1094 groups |
-| Identical coordinates (duplicate *candidates*, not merged) | 1877 groups |
-
-**Suspected swapped coordinates are refused, not swapped.** 106 rows are implausible as given
-and plausible with latitude and longitude exchanged. Swapping them would be a guess about which
-of two fields the source got wrong, and a wrong guess moves a facility hundreds of kilometres.
-
-**Duplicates are reported, not resolved.** Two facilities sharing a name within one LGA may be
-a duplicate or two genuine facilities; collapsing them would delete a real clinic from a user's
-results.
+| Quarantined — name empty | 1 |
+| Remaining same name + state + LGA groups (candidates, not merged) | 673 |
+| Remaining identical-coordinate groups (candidates, not merged) | 1,540 |
 
 ---
 
-## 7. Mobile compatibility — measured, not asserted
+## 8. Mobile compatibility — measured, not asserted
 
 `reports/facilities_mobile_compat_v1.json` runs both artifacts through a port of
-`lib/features/locator/facility_locator_service.dart` at wellapath-mobile `13be0d49` — the same
-type chain, urgency sets, 20 km / 3-result sparse-coverage rule, haversine and `== true`
-emergency test. **The Mobile repository was not modified.**
+`facility_locator_service.dart` at wellapath-mobile `13be0d49`. The Mobile repository was not
+modified.
 
-**Verdict: NOT COMPATIBLE as it stands.** Every structural requirement is met — all ten fields
-on every record, correct types, null handling consistent with the consumer — and three of the
-four urgency paths return **zero results**, because `type` drives the filter and cannot be
-populated from this source without a Product decision. Emergency queries still work, with
-ordering degraded to pure distance.
+**Verdict: NOT COMPATIBLE as it stands**, for one blocking reason:
 
 | Finding | Severity |
 |---|---|
-| `type` null → every non-emergency query returns nothing | **blocking** |
-| `emergency_capable` null → emergency ordering degrades to distance | material |
-| Artifact is **18×** the size of 1.1 (31.0 MB vs 1.70 MB), held in memory | material |
-| Three states have no records | material |
+| `type` null → the current build's `allowedTypes.contains(type)` drops every record; three of four urgency paths return nothing | **blocking** (FAC-D001, and the §7 contract in the handoff) |
+| `emergency_capable` null → emergency ordering is pure distance | material (FAC-D002) |
+| Artifact is **21.3×** the size of 1.1, held in memory | material |
+| Three states have no rows in the source | material |
 
-Size options, none chosen here: compact serialisation (~22.5 MB), a distribution profile with
-only the ten fields Mobile reads (~10.3 MB), or per-state partitioning. All are distribution
-decisions.
+Coverage is no longer a finding: FCT and Kano by-location queries return results.
 
 ---
 
-## 8. Comparison with facilities 1.1
+## 9. Comparison with facilities 1.1
 
 | | 1.1 | Candidate |
 |---|---|---|
-| Records | 5,344 | 31274 |
-| Bytes | 1,695,844 | 30961471 |
+| Records | 5,344 | 29,028 |
+| Bytes | 1,695,844 | 36,077,142 |
 | States | 3 | 34 |
+| States lost | — | **none** |
 
-Matching by position (within 250 m, preferring identical normalised names): **429** exact,
-**1187** probable, **3728** only in 1.1, **30312** only in the candidate. No state present in 1.1 is
-lost.
-
-**The two datasets are not merged.** They have different provenance chains — 1.1 is GRID3 + OSM
-plus a manual phone enrichment; the candidate is a single bulk registry export — and a fused
-artifact could no longer answer where a record came from, which is the question every later
-data dispute turns on. The 45 manually verified Lagos phone numbers in 1.1 are the only
-human-verified content in either dataset; if the candidate is adopted they should be re-applied
-as an explicit, listed enrichment rather than silently inherited.
-
----
-
-## 9. Coverage by state
-
-| State | Facilities | LGAs |
-|---|---|---|
-| Abia | 756 | 17 |
-| Akwa Ibom | 733 | 31 |
-| Anambra | 1352 | 21 |
-| Bauchi | 689 | 20 |
-| Bayelsa | 76 | 1 |
-| Benue | 1670 | 23 |
-| Borno | 343 | 23 |
-| Cross River | 1157 | 18 |
-| Delta | 861 | 25 |
-| Ebonyi | 415 | 13 |
-| Edo | 458 | 18 |
-| Ekiti | 582 | 16 |
-| Enugu | 929 | 16 |
-| FCT | 664 | 6 |
-| Gombe | 743 | 11 |
-| Imo | 1498 | 27 |
-| Jigawa | 1053 | 27 |
-| Kaduna | 1113 | 23 |
-| Kano | 1441 | 44 |
-| Katsina | 425 | 24 |
-| Kogi | 1138 | 21 |
-| Kwara | 847 | 16 |
-| Lagos | 1521 | 20 |
-| Nasarawa | 665 | 13 |
-| Niger | 822 | 25 |
-| Ogun | 1081 | 20 |
-| Ondo | 861 | 17 |
-| Osun | 1676 | 30 |
-| Oyo | 1593 | 33 |
-| Plateau | 1591 | 17 |
-| Rivers | 893 | 23 |
-| Taraba | 948 | 16 |
-| Yobe | 498 | 17 |
-| Zamfara | 182 | 14 |
+Positional match (≤ 250 m, preferring identical normalised names): **957** exact, **1,985**
+probable, **2,402** only in 1.1, **27,054** only in the candidate. The two lineages are not
+merged; option B (a provenance-labelled 1.1 overlay) is quantified in the comparison report and
+rejected — it buys no coverage and would add 4,387 records, 1,985 of uncertain identity.
 
 ---
 
@@ -234,16 +217,17 @@ as an explicit, listed enrichment rather than silently inherited.
 
 | # | Decision | Owner | Blocking |
 |---|---|---|---|
-| 1 | **Licence / reuse permission for the source** | Legal + engineering lead | **Publication** |
-| 2 | **Source organisation and chain of custody** — who produced this, and is the spreadsheet-exported copy authoritative? | Engineering lead | Provenance |
-| 3 | **`facility_level` → Mobile `type` mapping** | Product | **Mobile use** |
-| 4 | **`emergency_capable` rule**, or an evidenced field from the source owner | Product | Emergency ordering |
-| 5 | **Public-use basis for `phone_number`**, before any `tel:` action | Product | Public presentation |
-| 6 | Three missing states and 94 missing LGAs | Source owner | Coverage |
-| 7 | Artifact size / distribution profile | Engineering lead | Delivery |
-| 8 | Duplicate consolidation (1229 groups) | Product + data | Quality |
-| 9 | Whether to re-apply 1.1's 45 verified phone numbers | Product | Quality |
-| 10 | `facility_type_id`, `facility_level_option_id`, `facility_level_options_category_id` — present with no name column and no dictionary | Source owner | Interpretation |
+| 1 | **Source authorization** — nine checklist items, all missing | Legal + engineering lead + source owner | **Publication** |
+| 2 | **FAC-D001 `type` mapping**, or the null-type consumer contract | Product | **Mobile use** |
+| 3 | **FAC-D002 `emergency_capable` fallback** | Product + Clinical | Emergency ordering |
+| 4 | **FAC-D003 public use of `phone`** | Product | Public presentation |
+| 5 | **FAC-D004 acceptance of `coordinate_orientation_v1`** | Engineering lead | Whether corrected rows may stand |
+| 6 | FAC-D005 reinstating the 1,442 ambiguous and 524 coordinate-less rows for name search | Product | Coverage |
+| 7 | FAC-D006 looser duplicate consolidation (673 name groups, 1,540 point groups) | Product + data | Quality |
+| 8 | Three states with no rows and 95 missing LGA names | Source owner | Coverage |
+| 9 | Artifact size / distribution profile (36 MB) | Engineering lead | Delivery |
+| 10 | Whether to re-apply 1.1's 45 verified phone numbers | Product | Quality |
+| 11 | `facility_type_id` and the two option-id columns — no dictionary | Source owner | Interpretation |
 
-Nothing in this step grants Product approval, publication authorization or activation
-authorization, and none is recorded.
+Nothing in this work grants Product approval, clinical approval, publication authorization or
+activation authorization, and none is recorded.

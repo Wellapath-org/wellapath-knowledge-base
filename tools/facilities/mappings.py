@@ -30,6 +30,31 @@ NIGERIA_STATES = (
 )
 FCT_NAME = "FCT"
 
+#: Approximate reference point (latitude, longitude) for each state and the FCT, accurate to
+#: about half a degree. Since Step 3 this table DECIDES NOTHING: the coordinate-orientation
+#: rule uses the GRID3 facility points in `geometry.py` as its boundary instrument. It is kept
+#: as a coarse, independent sanity invariant for the validator — no emitted record may sit
+#: more than 300 km from its state's point — so a regression in the geometry module that let a
+#: transposed northern pair through would still be caught by something that does not share
+#: its code. Cross-checked against facilities 1.1's medians for Lagos, FCT and Kano (7, 5 and
+#: 20 km).
+STATE_REFERENCE_POINTS = {
+    "Abia": (5.5, 7.5), "Adamawa": (9.3, 12.4), "Akwa Ibom": (5.0, 7.8), "Anambra": (6.2, 7.0),
+    "Bauchi": (10.5, 9.8), "Bayelsa": (4.8, 6.1), "Benue": (7.3, 8.8), "Borno": (11.8, 13.2),
+    "Cross River": (5.9, 8.6), "Delta": (5.7, 6.0), "Ebonyi": (6.3, 8.1), "Edo": (6.6, 5.9),
+    "Ekiti": (7.7, 5.3), "Enugu": (6.5, 7.5), "FCT": (9.0, 7.3), "Gombe": (10.3, 11.2),
+    "Imo": (5.5, 7.0), "Jigawa": (12.2, 9.5), "Kaduna": (10.4, 7.7), "Kano": (11.8, 8.5),
+    "Katsina": (12.5, 7.6), "Kebbi": (11.5, 4.2), "Kogi": (7.7, 6.7), "Kwara": (8.9, 4.7),
+    "Lagos": (6.5, 3.4), "Nasarawa": (8.5, 8.3), "Niger": (9.9, 5.9), "Ogun": (7.0, 3.4),
+    "Ondo": (7.0, 5.2), "Osun": (7.6, 4.5), "Oyo": (8.1, 3.9), "Plateau": (9.2, 9.4),
+    "Rivers": (4.9, 6.9), "Sokoto": (13.1, 5.2), "Taraba": (8.0, 10.8), "Yobe": (12.3, 11.7),
+    "Zamfara": (12.2, 6.2),
+}
+
+#: The validator's sanity radius: no Nigerian state extends 300 km from its reference point,
+#: so an emitted record farther than this is wrong whatever the geometry module said.
+NOT_IN_STATE_KM = 300.0
+
 FACILITY_LEVELS = {"Primary": "Primary", "Secondary": "Secondary", "Tertiary": "Tertiary"}
 
 OWNERSHIP = {"Public": "Public", "Private": "Private"}
@@ -80,9 +105,29 @@ OPENING_HOURS = {
     "Other": "other",
 }
 
+#: The boolean service flags the candidate carries, each bound to the ONE source column it is
+#: read from. This table is the whole of the evidence for `services`: a key that is not here
+#: has no source column and therefore cannot be emitted. The validator checks the emitted key
+#: set against this table, which is what "no invented service-capability field" means in code.
+#: (The source spells the pharmacy column 'onsite_pharmarcy'; the candidate does not.)
+SERVICES_SOURCE_COLUMNS = {
+    "onsite_laboratory": "onsite_laboratory",
+    "onsite_imaging": "onsite_imaging",
+    "onsite_pharmacy": "onsite_pharmarcy",
+    "mortuary": "mortuary_services",
+    "ambulance": "ambulance_services",
+}
+
 #: ---------------------------------------------------------------------------------------
 #: DELIBERATELY EMPTY. Both need a Product decision, and neither is evidenced by the source.
 #: ---------------------------------------------------------------------------------------
+
+#: The closed facility-type vocabulary a future decision would map INTO. The first four are
+#: the values the Mobile consumer filters on today (facilities 1.1 emits them); `laboratory`
+#: and `other` are reserved so a later mapping has somewhere honest to put a facility that is
+#: neither. Documented here so the enum exists to validate against; NOT applied — see the
+#: empty table below. Every emitted `type` is null, and the validator checks both facts.
+FACILITY_TYPES = ("hospital", "clinic", "health_centre", "pharmacy", "laboratory", "other")
 
 #: Mobile filters non-emergency results by `type` against {hospital, clinic, health_centre,
 #: pharmacy}. The source has no such column. What it has is facility_level (Primary /
@@ -91,6 +136,11 @@ OPENING_HOURS = {
 #: tier to kind would be an interpretation with clinical consequences — it decides which
 #: facilities a user is shown for self-care versus urgent care — so it is left to Product.
 #: `reports/facilities_mobile_compat_v1.json` quantifies the impact both ways.
+#:
+#: The source also carries `facility_type_id` (1, 2, 3) with no name column. Cross-tabulated
+#: against facility_level in the quality report it is a near-copy of the level (1≈Primary,
+#: 2≈Secondary, 3≈Tertiary, 157 rows disagree), which is evidence that it is not a facility
+#: kind either. It is reported, not interpreted.
 FACILITY_TYPE_FROM_LEVEL = {}
 
 #: facilities 1.1 set emergency_capable = (type == 'hospital'), a derivation this source cannot

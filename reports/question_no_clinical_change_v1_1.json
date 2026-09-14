@@ -442,7 +442,7 @@
     }
   },
   "content_safety": {
-    "files_scanned": 131,
+    "files_scanned": 137,
     "files_excluded": [
       "reports/im003_decision_package_v1.json",
       "reports/im003_impact_analysis_v1.json",
@@ -453,7 +453,7 @@
     "control_failures": [],
     "positive_controls": 9,
     "negative_controls": 7,
-    "allowlist_entries": 0,
+    "allowlist_entries": 1,
     "clean": true
   },
   "assertions": {
