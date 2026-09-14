@@ -25,6 +25,8 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 STEPS = [
+    ("source fingerprint is current",
+     ["tools/report_source_fingerprint.py", "--check"]),
     ("candidate and reports are reproducible",
      ["tools/build_facilities_candidate.py", "--check"]),
     ("comparison and Mobile reports are current",

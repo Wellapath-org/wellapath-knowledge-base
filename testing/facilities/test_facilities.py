@@ -629,6 +629,70 @@ class SourceAuthorizationTests(unittest.TestCase):
         self.assertIs(MANIFEST["publication_gates"]["source_authorization_checklist_satisfied"], False)
 
 
+class ProvenanceInvestigationTests(unittest.TestCase):
+    """The Step 4 investigation's evidence cannot be silently removed or weakened.
+
+    The investigation identified the source system by evidence and captured the owner's
+    published rights posture. Those findings gate what the authorization request asks for;
+    losing them would send the founder back to an unaddressed letter. None of them is owner
+    confirmation, and the tests also pin that boundary: the checklist stays all-missing and
+    the identification stays labelled an inference.
+    """
+
+    PROVENANCE = load_json(repo("facilities", "source", "nhf_provenance_v1.json"))
+    FINGERPRINT = load_json(repo("facilities", "source", "nhf_source_fingerprint_v1.json"))
+
+    def test_the_fingerprint_binds_to_the_pinned_source(self):
+        self.assertEqual(self.FINGERPRINT["file"]["sha256"], SOURCE_SHA256)
+        self.assertEqual(self.FINGERPRINT["file"]["byte_count"], 20913558)
+        self.assertEqual(self.FINGERPRINT["file"]["row_count"], 31390)
+        self.assertEqual(self.FINGERPRINT["file"]["column_count"], 90)
+
+    def test_the_fingerprint_is_reproducible(self):
+        import report_source_fingerprint as gen
+        from vocab.artifact_io import dump_report_bytes
+
+        with open(repo("facilities", "source", "nhf_source_fingerprint_v1.json"), "rb") as handle:
+            self.assertEqual(handle.read(), dump_report_bytes(gen.build()))
+
+    def test_identification_is_an_inference_not_owner_confirmation(self):
+        ident = self.PROVENANCE["source_system_identification"]
+        self.assertEqual(ident["status"], "identified_by_evidence_pending_owner_confirmation")
+        self.assertIn("INFERENCE", ident["classification"])
+        self.assertIn("Nigeria Health Facility Registry", ident["identified_system"])
+        self.assertFalse(self.PROVENANCE["source_organization"]["established"])
+        self.assertIsNone(self.PROVENANCE["source_organization"]["recorded_name"])
+
+    def test_the_identifier_evidence_matches_the_fingerprint(self):
+        xref = self.FINGERPRINT["grid3_cross_reference"]
+        self.assertEqual(xref["unique_id_matching_grid3_nhfr_facility_code"], 12619)
+        self.assertEqual(xref["grid3_sha256"], G.GRID3_SHA256)
+
+    def test_the_rights_posture_is_recorded_verbatim_and_grants_nothing(self):
+        research = self.PROVENANCE["authoritative_source_research"]
+        self.assertIs(research["licence_found"], False)
+        self.assertEqual(research["registry"]["copyright_footer_verbatim"],
+                         "Copyright ©2026 Federal Ministry of Health. All Rights Reserved")
+        self.assertEqual(research["registry"]["contact"]["email"], "hfr@health.gov.ng")
+        self.assertIs(self.PROVENANCE["licence"]["established"], False)
+
+    def test_the_prepared_request_is_unsent_and_names_the_exact_file(self):
+        with open(repo("facilities", "source", "nhf_authorization_request_draft_v1.md"),
+                  encoding="utf-8") as handle:
+            request = handle.read()
+        self.assertIn("DRAFT, NOT SENT", request)
+        self.assertIn(SOURCE_SHA256, request)
+        self.assertIn("hfr@health.gov.ng", request)
+        for topic in ("redistribute", "attribution", "data dictionary", "phone numbers",
+                      "operational days/hours", "coordinates"):
+            self.assertIn(topic, request, topic)
+
+    def test_the_investigation_changed_no_checklist_status(self):
+        self.assertEqual({i["status"] for i in CHECKLIST["items"]}, {"missing"})
+        self.assertIn("investigation", CHECKLIST)
+        self.assertIn("changes NO item status", CHECKLIST["investigation"]["scope"])
+
+
 class ManifestTests(unittest.TestCase):
     def test_the_manifest_is_not_live_and_grants_nothing(self):
         self.assertIs(MANIFEST["IS_LIVE_MANIFEST"], False)

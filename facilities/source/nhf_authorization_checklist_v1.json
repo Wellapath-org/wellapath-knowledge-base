@@ -13,6 +13,18 @@
     "status_vocabulary": ["missing", "requested", "satisfied", "refused"]
   },
   "all_satisfied": false,
+  "investigation": {
+    "date": "2026-09-14",
+    "scope": "Provenance investigation only. It changes NO item status: under this checklist's own rule, only evidence from the source owner, Legal or the engineering lead can satisfy an item, and none has been received. What it adds is the addressee, the evidence trail and the ready-to-send request.",
+    "identified_addressee": {
+      "organisation": "Federal Ministry of Health, Nigeria — Nigeria Health Facility Registry (NHFR)",
+      "basis": "Identifier and schema congruence with the registry, reproducible in facilities/source/nhf_source_fingerprint_v1.json, plus direct capture of the registry's pages; recorded as an evidence-backed inference in nhf_provenance_v1.json (source_system_identification), pending the owner's confirmation which is itself AUTH-01's evidence.",
+      "contact": "hfr@health.gov.ng — published on https://hfr.fmohconnect.gov.ng/ on 2026-09-14",
+      "rights_posture_found": "No public licence or terms of use; footer reads 'Copyright ©2026 Federal Ministry of Health. All Rights Reserved'. AUTH-02..05 therefore require a written grant, not a pointer to an open licence."
+    },
+    "prepared_request": "facilities/source/nhf_authorization_request_draft_v1.md — drafted for the founder to review and send; NOT sent by this repository's tooling.",
+    "fingerprint_for_auth_09": "facilities/source/nhf_source_fingerprint_v1.json lets the owner (or anyone with a pristine export) confirm or refute that this exact snapshot came from the registry, without any credential."
+  },
   "items": [
     {
       "id": "AUTH-01",

@@ -453,7 +453,7 @@
     "control_failures": [],
     "positive_controls": 9,
     "negative_controls": 7,
-    "allowlist_entries": 0,
+    "allowlist_entries": 1,
     "clean": true
   },
   "assertions": {

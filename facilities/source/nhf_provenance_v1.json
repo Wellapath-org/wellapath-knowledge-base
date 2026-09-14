@@ -1,10 +1,11 @@
 {
   "_metadata": {
     "record_id": "nhf_source_provenance",
-    "version": "1",
-    "phase": "Nationwide Facilities / Step 1",
-    "note": "What is established about the supplied source, and what is NOT. Fields marked not_established are recorded that way deliberately: the dataset arrived with no accompanying documentation, and inferring an organisation, a licence or a coverage claim from a filename would be inventing provenance rather than recording it.",
-    "authored": "2026-08-31"
+    "version": "2",
+    "phase": "Nationwide Facilities / Step 1; source_system_identification, authoritative_source_research and the delivery correction added by the Step 4 provenance investigation",
+    "note": "What is established about the supplied source, and what is NOT. Fields marked not_established are recorded that way deliberately: the dataset arrived with no accompanying documentation, and inferring an organisation, a licence or a coverage claim from a filename would be inventing provenance rather than recording it. Version 2 adds evidence gathered by the provenance investigation of 2026-09-14; every conclusion drawn from that evidence is labelled inference where it is one.",
+    "authored": "2026-08-31",
+    "revised": "2026-09-14"
   },
   "file": {
     "supplied_as": "nigeria_health_facilities.csv, placed at the repository root",
@@ -14,7 +15,12 @@
     "byte_count": 20913558,
     "format": "CSV, UTF-8, no BOM, CRLF line terminators",
     "structure": "One title line ('nigeria_health_facilities'), then a 90-column header, then 31,390 data rows. All rows are exactly 90 fields wide. 284 bare LF characters occur inside quoted fields; the CSV parses cleanly.",
-    "filesystem_mtime": "2026-08-06T17:44:49 (local machine, not authoritative for the dataset)"
+    "filesystem_mtime": "2026-08-06T17:44:49 (local machine, not authoritative for the dataset)",
+    "fingerprint": {
+      "report": "facilities/source/nhf_source_fingerprint_v1.json",
+      "generator": "tools/report_source_fingerprint.py",
+      "purpose": "Reproducible identity of this exact file — header, row count, null pattern, state counts, identifier sets, timestamps, per-state coordinate-orientation signature and canonical sample hashes — so a pristine export supplied by the owner (AUTH-09) can be compared against the copy this repository was handed."
+    }
   },
   "retention_policy": {
     "permitted": true,
@@ -25,12 +31,51 @@
     "established": false,
     "recorded_name": null,
     "what_the_file_says": "Nothing. There is no organisation name, publisher field, copyright line or contact anywhere in the 90 columns or the title row.",
-    "why_not_asserted": "The task names the dataset 'NHF'. The file itself does not. Recording an organisation on the strength of a filename would be inventing provenance."
+    "why_not_asserted": "established/recorded_name follow the AUTH-01 evidence standard: a document or correspondence FROM the owner naming the organisation. That has not been received. The investigation's identification of the source system (see source_system_identification) is evidence-backed but is not owner confirmation, so these fields do not claim it.",
+    "see": "source_system_identification"
+  },
+  "source_system_identification": {
+    "status": "identified_by_evidence_pending_owner_confirmation",
+    "identified_system": "Nigeria Health Facility Registry (NHFR), operated by the Federal Ministry of Health, Nigeria (hfr.fmohconnect.gov.ng)",
+    "classification": "INFERENCE from structural and identifier congruence — strong, reproducible in this repository, and still not a substitute for the owner's written confirmation (AUTH-01).",
+    "evidence": {
+      "identifier_congruence": "unique_id uses the six-segment facility-code shape NN/NN/N/N/N/NNNN. The repository's independently sourced GRID3 CSV (CC BY 4.0, hash-pinned) carries the columns nhfr_uid and nhfr_facility_code, labels their source NHFR_2024, and uses the identical shape. 12,619 of the 31,390 unique_id values match a GRID3 nhfr_facility_code exactly; the two snapshots are roughly two years apart, which bounds the overlap below. Reproducible: facilities/source/nhf_source_fingerprint_v1.json, grid3_cross_reference.",
+      "record_level_corroboration": "For rows joinable on the facility code, GRID3's independently published coordinate for the same NHFR facility lies within 20 km of this file's (orientation-corrected) pair 3,005 times and of the pair as given 2 times (reports/facilities_coordinate_audit_v1.json).",
+      "schema_congruence": "The 90 columns include registry-workflow fields (requested_by/verified_by/validated_by/published_by with *_at and *_note), dhis2_synced, and facility-code and state-code identifiers — the shape of a facility-registry backend, not of a hand-built spreadsheet.",
+      "schema_implication": "Those workflow and audit columns (created_by, verify_note, action, the seven empty officer-contact columns) are internal registry-side fields. INFERENCE: this is a registry-side database export, not the output of the registry's public search pages or documented public API. Whoever produced it had, or obtained, registry-side access; the public channel this copy came through is not established."
+    },
+    "what_this_does_not_establish": "Which NHFR export produced this file, when, by whom, under what authority, and whether the bytes were altered en route (the copy demonstrably passed through Apple Numbers). AUTH-09 remains open."
+  },
+  "authoritative_source_research": {
+    "captured": "2026-09-14",
+    "method": "Direct fetches of the registry's own pages. No third-party summary, repost or undocumented licence claim is relied on for any statement below.",
+    "registry": {
+      "name": "Nigeria Health Facility Registry (HFR)",
+      "landing_page": "https://hfr.fmohconnect.gov.ng/",
+      "publisher_as_stated": "Federal Ministry of Health",
+      "copyright_footer_verbatim": "Copyright ©2026 Federal Ministry of Health. All Rights Reserved",
+      "contact": {
+        "email": "hfr@health.gov.ng",
+        "address": "New Federal Secretariat Complex, Ahmadu Bello Way, Central Business District"
+      }
+    },
+    "licence_found": false,
+    "licence_finding": "No terms of use, licence, data-reuse policy, attribution instruction or data dictionary was found on the landing page or the developers page. The only rights statement present is the All-Rights-Reserved copyright footer. Consequence: the registry's own public statements grant nothing; reuse permission must come from the Ministry in writing.",
+    "api": {
+      "developers_page": "https://hfr.fmohconnect.gov.ng/developers",
+      "access_model": "RESTful API; key required (X-API-Key header); key issued via a request form, 'approval is typically within 24 hours'.",
+      "bulk_export": "No bulk export or CSV download is documented on the developers page.",
+      "terms_published": false
+    },
+    "other_channels_checked": {
+      "hfr.health.gov.ng": "Legacy domain; TLS certificate is issued for health.gov.ng only and does not cover the hfr subdomain — not fetched.",
+      "dataportal.ncdc.gov.ng/dataset/national-health-facility-registry": "NCDC data-portal listing of a 'National Health Facility Registry' dataset; host unreachable (connection refused) at capture time, so any licence it declares is unverified. A licence on a mirror would in any case not licence this registry-side export."
+    }
   },
   "delivery": {
     "url": null,
     "mechanism": "Handed over as a file in the repository working tree. No download URL, no API response, no transfer receipt.",
-    "only_technical_evidence": "The macOS extended attribute com.apple.metadata:kMDItemWhereFroms records 'Numbers', i.e. the file was exported from Apple Numbers. It is therefore NOT a pristine upstream delivery: it passed through a spreadsheet application, which can silently alter number formatting, leading zeros, dates and encoding.",
+    "only_technical_evidence": "The macOS quarantine attribute com.apple.quarantine names 'Numbers' as the application that produced the file, i.e. it was saved or exported from Apple Numbers. Correction to version 1 of this record, which attributed that to kMDItemWhereFroms: no kMDItemWhereFroms attribute exists on either copy, so there is no recorded download URL at all. The substance stands — the file is NOT a pristine upstream delivery: it passed through a spreadsheet application, which can silently alter number formatting, leading zeros, dates and encoding.",
     "delivered_to_repository": "2026-08-31",
     "chain_of_custody": "incomplete"
   },
@@ -46,6 +91,7 @@
   "licence": {
     "established": false,
     "evidence": "None. No licence file, no licence column, no terms-of-use statement accompanied the data.",
+    "research_finding_2026_09_14": "The identified source system's own site publishes no licence or terms of use; its only rights statement is 'Copyright ©2026 Federal Ministry of Health. All Rights Reserved' (see authoritative_source_research). So the position is worse than unknown: the one statement the presumed owner makes publicly reserves all rights, and permission must be obtained in writing. A prepared, unsent request is at facilities/source/nhf_authorization_request_draft_v1.md.",
     "consequence": "Redistribution terms are unknown. The candidate artifact produced from this source must not be published, uploaded or served until licence or reuse permission is established in writing. This is a blocking, non-technical gate."
   },
   "geographic_scope": {
