@@ -2,19 +2,27 @@
   "_metadata": {
     "report_id": "facilities_quality",
     "version": "1",
-    "phase": "Nationwide Facilities / Step 2",
+    "phase": "Nationwide Facilities / Step 3",
     "generator": "tools/build_facilities_candidate.py",
-    "generator_version": "1.1.0",
+    "generator_version": "1.2.0",
     "source_sha256": "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3",
     "source_snapshot_last_updated_at": "2026-07-21T13:15:26",
     "note": "Profile of the source and of what the generator produced from it. No row was silently discarded: every row is either in the candidate or in the quarantine report with a reason code."
   },
   "row_accounting": {
     "source_rows": 31390,
-    "emitted": 20696,
-    "quarantined": 10694,
-    "quarantined_of_which_exact_duplicates": 62,
+    "emitted": 29028,
+    "quarantined": 2362,
+    "quarantined_of_which_exact_duplicates": 323,
     "balances": true
+  },
+  "coordinate_remediation": {
+    "rule_id": "coordinate_orientation_v1",
+    "accepted_unchanged": 18210,
+    "accepted_after_verified_swap": 11141,
+    "quarantined_ambiguous": 1442,
+    "quarantined_invalid": 67,
+    "detail": "reports/facilities_coordinate_audit_v1.json"
   },
   "identifiers": {
     "source_id_unique": true,
@@ -23,382 +31,652 @@
     "emitted_facility_id_unique": true
   },
   "coverage": {
-    "states_present": 27,
+    "states_present": 34,
     "states_expected": 37,
     "states_absent_from_source": [
       "Adamawa",
       "Kebbi",
       "Sokoto"
     ],
-    "states_in_source_with_no_emitted_records": [
-      "FCT",
-      "Kano",
-      "Katsina",
-      "Kwara",
-      "Niger",
-      "Taraba",
-      "Zamfara"
-    ],
-    "states_emptied_note": "Every row of these states was refused, almost entirely by the per-state coordinate instrument: their coordinates are written the wrong way round in the source. Listed, not smoothed over.",
-    "fct_present": false,
+    "states_in_source_with_no_emitted_records": [],
+    "fct_present": true,
     "by_state": {
-      "Abia": 756,
-      "Akwa Ibom": 731,
-      "Anambra": 1345,
-      "Bauchi": 627,
+      "Abia": 743,
+      "Akwa Ibom": 725,
+      "Anambra": 1339,
+      "Bauchi": 598,
       "Bayelsa": 76,
-      "Benue": 269,
-      "Borno": 97,
-      "Cross River": 1157,
-      "Delta": 858,
-      "Ebonyi": 415,
-      "Edo": 456,
-      "Ekiti": 582,
-      "Enugu": 929,
-      "Gombe": 346,
-      "Imo": 1497,
-      "Jigawa": 5,
-      "Kaduna": 10,
-      "Kogi": 557,
-      "Lagos": 1520,
-      "Nasarawa": 658,
-      "Ogun": 902,
-      "Ondo": 860,
-      "Osun": 1499,
-      "Oyo": 1592,
-      "Plateau": 1589,
-      "Rivers": 892,
-      "Yobe": 471
+      "Benue": 1572,
+      "Borno": 309,
+      "Cross River": 1133,
+      "Delta": 825,
+      "Ebonyi": 409,
+      "Edo": 448,
+      "Ekiti": 572,
+      "Enugu": 921,
+      "FCT": 632,
+      "Gombe": 689,
+      "Imo": 1482,
+      "Jigawa": 650,
+      "Kaduna": 1064,
+      "Kano": 1293,
+      "Katsina": 416,
+      "Kogi": 993,
+      "Kwara": 787,
+      "Lagos": 1502,
+      "Nasarawa": 556,
+      "Niger": 690,
+      "Ogun": 895,
+      "Ondo": 847,
+      "Osun": 1459,
+      "Oyo": 1576,
+      "Plateau": 1425,
+      "Rivers": 881,
+      "Taraba": 916,
+      "Yobe": 428,
+      "Zamfara": 177
     },
-    "lga_names_distinct": 461,
+    "remediation_by_state": [
+      {
+        "state": "Abia",
+        "source_rows": 756,
+        "accepted_unchanged": 743,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 12,
+        "quarantined_invalid": 1,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 743,
+        "candidate": 743,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Adamawa",
+        "source_rows": 0,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 0,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 0,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Akwa Ibom",
+        "source_rows": 733,
+        "accepted_unchanged": 727,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 6,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 2,
+        "candidate_without_correction": 725,
+        "candidate": 725,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Anambra",
+        "source_rows": 1352,
+        "accepted_unchanged": 1346,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 5,
+        "quarantined_invalid": 1,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 7,
+        "candidate_without_correction": 1339,
+        "candidate": 1339,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Bauchi",
+        "source_rows": 689,
+        "accepted_unchanged": 173,
+        "accepted_after_verified_swap": 425,
+        "quarantined_ambiguous": 91,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 173,
+        "candidate": 598,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Bayelsa",
+        "source_rows": 76,
+        "accepted_unchanged": 76,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 0,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 76,
+        "candidate": 76,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Benue",
+        "source_rows": 1670,
+        "accepted_unchanged": 59,
+        "accepted_after_verified_swap": 1515,
+        "quarantined_ambiguous": 68,
+        "quarantined_invalid": 28,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 2,
+        "candidate_without_correction": 59,
+        "candidate": 1572,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Borno",
+        "source_rows": 353,
+        "accepted_unchanged": 10,
+        "accepted_after_verified_swap": 299,
+        "quarantined_ambiguous": 44,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 10,
+        "candidate": 309,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Cross River",
+        "source_rows": 1158,
+        "accepted_unchanged": 1133,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 24,
+        "quarantined_invalid": 1,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 1133,
+        "candidate": 1133,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Delta",
+        "source_rows": 861,
+        "accepted_unchanged": 828,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 33,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 3,
+        "candidate_without_correction": 825,
+        "candidate": 825,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Ebonyi",
+        "source_rows": 415,
+        "accepted_unchanged": 409,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 6,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 409,
+        "candidate": 409,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Edo",
+        "source_rows": 458,
+        "accepted_unchanged": 450,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 8,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 2,
+        "candidate_without_correction": 448,
+        "candidate": 448,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Ekiti",
+        "source_rows": 582,
+        "accepted_unchanged": 572,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 6,
+        "quarantined_invalid": 4,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 572,
+        "candidate": 572,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Enugu",
+        "source_rows": 935,
+        "accepted_unchanged": 921,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 8,
+        "quarantined_invalid": 1,
+        "quarantined_missing_coordinates": 5,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 921,
+        "candidate": 921,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "FCT",
+        "source_rows": 664,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 632,
+        "quarantined_ambiguous": 32,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 632,
+        "facilities_1_1": 614
+      },
+      {
+        "state": "Gombe",
+        "source_rows": 743,
+        "accepted_unchanged": 67,
+        "accepted_after_verified_swap": 623,
+        "quarantined_ambiguous": 52,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 1,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 67,
+        "candidate": 689,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Imo",
+        "source_rows": 1498,
+        "accepted_unchanged": 1483,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 8,
+        "quarantined_invalid": 7,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 1482,
+        "candidate": 1482,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Jigawa",
+        "source_rows": 1053,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 866,
+        "quarantined_ambiguous": 187,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 216,
+        "candidate_without_correction": 0,
+        "candidate": 650,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Kaduna",
+        "source_rows": 1113,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 1065,
+        "quarantined_ambiguous": 48,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 0,
+        "candidate": 1064,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Kano",
+        "source_rows": 1441,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 1323,
+        "quarantined_ambiguous": 86,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 32,
+        "quarantined_duplicate": 30,
+        "candidate_without_correction": 0,
+        "candidate": 1293,
+        "facilities_1_1": 2040
+      },
+      {
+        "state": "Katsina",
+        "source_rows": 425,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 416,
+        "quarantined_ambiguous": 9,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 416,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Kebbi",
+        "source_rows": 0,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 0,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 0,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Kogi",
+        "source_rows": 1138,
+        "accepted_unchanged": 265,
+        "accepted_after_verified_swap": 758,
+        "quarantined_ambiguous": 115,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 30,
+        "candidate_without_correction": 255,
+        "candidate": 993,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Kwara",
+        "source_rows": 939,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 788,
+        "quarantined_ambiguous": 50,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 101,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 0,
+        "candidate": 787,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Lagos",
+        "source_rows": 1521,
+        "accepted_unchanged": 1503,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 15,
+        "quarantined_invalid": 3,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 1502,
+        "candidate": 1502,
+        "facilities_1_1": 2690
+      },
+      {
+        "state": "Nasarawa",
+        "source_rows": 665,
+        "accepted_unchanged": 307,
+        "accepted_after_verified_swap": 256,
+        "quarantined_ambiguous": 102,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 7,
+        "candidate_without_correction": 302,
+        "candidate": 556,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Niger",
+        "source_rows": 826,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 690,
+        "quarantined_ambiguous": 92,
+        "quarantined_invalid": 3,
+        "quarantined_missing_coordinates": 41,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 690,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Ogun",
+        "source_rows": 1081,
+        "accepted_unchanged": 895,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 7,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 179,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 895,
+        "candidate": 895,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Ondo",
+        "source_rows": 861,
+        "accepted_unchanged": 848,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 13,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 847,
+        "candidate": 847,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Osun",
+        "source_rows": 1676,
+        "accepted_unchanged": 1466,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 28,
+        "quarantined_invalid": 12,
+        "quarantined_missing_coordinates": 170,
+        "quarantined_duplicate": 7,
+        "candidate_without_correction": 1459,
+        "candidate": 1459,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Oyo",
+        "source_rows": 1593,
+        "accepted_unchanged": 1577,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 14,
+        "quarantined_invalid": 2,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 1576,
+        "candidate": 1576,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Plateau",
+        "source_rows": 1591,
+        "accepted_unchanged": 1260,
+        "accepted_after_verified_swap": 166,
+        "quarantined_ambiguous": 165,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 1259,
+        "candidate": 1425,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Rivers",
+        "source_rows": 895,
+        "accepted_unchanged": 882,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 11,
+        "quarantined_invalid": 2,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 1,
+        "candidate_without_correction": 881,
+        "candidate": 881,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Sokoto",
+        "source_rows": 0,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 0,
+        "quarantined_ambiguous": 0,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 0,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Taraba",
+        "source_rows": 948,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 921,
+        "quarantined_ambiguous": 25,
+        "quarantined_invalid": 2,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 5,
+        "candidate_without_correction": 0,
+        "candidate": 916,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Yobe",
+        "source_rows": 498,
+        "accepted_unchanged": 210,
+        "accepted_after_verified_swap": 221,
+        "quarantined_ambiguous": 67,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 3,
+        "candidate_without_correction": 208,
+        "candidate": 428,
+        "facilities_1_1": 0
+      },
+      {
+        "state": "Zamfara",
+        "source_rows": 182,
+        "accepted_unchanged": 0,
+        "accepted_after_verified_swap": 177,
+        "quarantined_ambiguous": 5,
+        "quarantined_invalid": 0,
+        "quarantined_missing_coordinates": 0,
+        "quarantined_duplicate": 0,
+        "candidate_without_correction": 0,
+        "candidate": 177,
+        "facilities_1_1": 0
+      }
+    ],
+    "lga_names_distinct": 679,
     "lga_names_expected_nationally": 774,
     "lga_names_in_source": 693,
     "lgas_lost_to_quarantine": [
-      "Benue / Ado",
-      "Benue / Buruku",
-      "Benue / Gboko",
-      "Benue / Gwer East",
-      "Benue / Katsina-Ala",
-      "Benue / Konshisha",
-      "Benue / Kwande",
-      "Benue / Logo",
-      "Benue / Obi",
-      "Benue / Tarka",
-      "Benue / Ukum",
-      "Benue / Ushongo",
-      "Benue / Vandeikya",
-      "Borno / Askira/Uba",
-      "Borno / Bama",
-      "Borno / Chibok",
-      "Borno / Dikwa",
-      "Borno / Gwoza",
-      "Borno / Jere",
-      "Borno / Kala/Balge",
-      "Borno / Mafa",
-      "Borno / Magumeri",
-      "Borno / Maiduguri",
-      "Borno / Marte",
-      "Borno / Ngala",
-      "Borno / Nganzai",
-      "Borno / Shani",
+      "Borno / Gubio",
+      "Borno / Monguno",
       "Enugu / Arochukwu",
       "Enugu / Isuikwuato",
       "Enugu / Ohafia",
       "Enugu / Umuahia North",
       "Enugu / Umuahia South",
-      "FCT / Abaji",
-      "FCT / Abuja Municipal Area Council",
-      "FCT / Bwari",
-      "FCT / Gwagwalada",
-      "FCT / Kuje",
-      "FCT / Kwali",
-      "Gombe / Balanga",
-      "Gombe / Billiri",
-      "Gombe / Kaltungo",
-      "Gombe / Shongom",
-      "Jigawa / Auyo",
-      "Jigawa / Babura",
-      "Jigawa / Birnin Kudu",
-      "Jigawa / Birniwa",
-      "Jigawa / Buji",
-      "Jigawa / Dutse",
-      "Jigawa / Gagarawa",
-      "Jigawa / Garki",
-      "Jigawa / Gumel",
-      "Jigawa / Guri",
-      "Jigawa / Gwiwa",
-      "Jigawa / Hadejia",
-      "Jigawa / Jahun",
-      "Jigawa / Kafin Hausa",
-      "Jigawa / Kaugama",
-      "Jigawa / Kazaure",
-      "Jigawa / Kiri Kasamma",
-      "Jigawa / Kiyawa",
-      "Jigawa / Maigatari",
-      "Jigawa / Malam Madori",
-      "Jigawa / Miga",
-      "Jigawa / Ringim",
-      "Jigawa / Roni",
-      "Jigawa / Sule-Tankarkar",
-      "Jigawa / Taura",
-      "Jigawa / Yankwashi",
-      "Kaduna / Birnin Gwari",
-      "Kaduna / Chikun",
-      "Kaduna / Giwa",
-      "Kaduna / Igabi",
-      "Kaduna / Ikara",
-      "Kaduna / Jema'a",
-      "Kaduna / Kachia",
-      "Kaduna / Kaduna North",
-      "Kaduna / Kaduna South",
-      "Kaduna / Kagarko",
-      "Kaduna / Kajuru",
-      "Kaduna / Kaura",
-      "Kaduna / Kauru",
-      "Kaduna / Kubau",
-      "Kaduna / Kudan",
-      "Kaduna / Lere",
-      "Kaduna / Makarfi",
-      "Kaduna / Sabon Gari",
-      "Kaduna / Soba",
-      "Kaduna / Zangon Kataf",
-      "Kaduna / Zaria",
-      "Kaduna / jaba",
-      "Kano / Ajingi",
-      "Kano / Albasu",
-      "Kano / Bagwai",
-      "Kano / Bebeji",
-      "Kano / Bichi",
-      "Kano / Bunkure",
-      "Kano / Dala",
-      "Kano / Danbatta",
-      "Kano / Dawakin Kudu",
-      "Kano / Dawakin Tofa",
-      "Kano / Doguwa",
-      "Kano / Fagge",
-      "Kano / Gabasawa",
-      "Kano / Garko",
-      "Kano / Garum Mallam",
-      "Kano / Gaya",
-      "Kano / Gezawa",
-      "Kano / Gwale",
-      "Kano / Gwarzo",
-      "Kano / Kabo",
-      "Kano / Kano Municipal",
-      "Kano / Karaye",
-      "Kano / Kibiya",
-      "Kano / Kiru",
-      "Kano / Kumbotso",
-      "Kano / Kunchi",
-      "Kano / Kura",
-      "Kano / Madobi",
-      "Kano / Makoda",
-      "Kano / Minjibir",
-      "Kano / Nasarawa",
-      "Kano / Rano",
-      "Kano / Rimin Gado",
-      "Kano / Rogo",
-      "Kano / Shanono",
-      "Kano / Sumaila",
-      "Kano / Takai",
-      "Kano / Tarauni",
-      "Kano / Tofa",
-      "Kano / Tsanyawa",
-      "Kano / Tudun Wada",
-      "Kano / Ungogo",
-      "Kano / Warawa",
-      "Kano / Wudil",
-      "Katsina / Bakori",
-      "Katsina / Batagarawa",
-      "Katsina / Batsari",
-      "Katsina / Baure",
-      "Katsina / Bindawa",
-      "Katsina / Charanchi",
-      "Katsina / Danja",
-      "Katsina / Dutsi",
-      "Katsina / Dutsin-Ma",
-      "Katsina / Faskari",
-      "Katsina / Funtua",
-      "Katsina / Ingawa",
-      "Katsina / Jibia",
-      "Katsina / Kafur",
-      "Katsina / Kaita",
-      "Katsina / Kankara",
-      "Katsina / Kankia",
-      "Katsina / Katsina",
-      "Katsina / Kurfi",
-      "Katsina / Mai'Adua",
-      "Katsina / Mashi",
-      "Katsina / Matazu",
-      "Katsina / Musawa",
-      "Katsina / Rimi",
-      "Kwara / Asa",
-      "Kwara / Baruten",
-      "Kwara / Edu",
-      "Kwara / Ekiti",
-      "Kwara / Ifelodun",
-      "Kwara / Ilorin East",
-      "Kwara / Ilorin South",
-      "Kwara / Ilorin West",
-      "Kwara / Irepodun",
-      "Kwara / Isin",
-      "Kwara / Kaiama",
-      "Kwara / Moro",
-      "Kwara / Offa",
-      "Kwara / Oke-Ero",
-      "Kwara / Oyun",
-      "Kwara / Pategi",
-      "Niger / Agaie",
-      "Niger / Agwara",
-      "Niger / Bida",
-      "Niger / Borgu",
-      "Niger / Bosso",
-      "Niger / Chanchaga",
-      "Niger / Edati",
-      "Niger / Gbako",
-      "Niger / Gurara",
-      "Niger / Katcha",
-      "Niger / Kontagora",
-      "Niger / Lapai",
-      "Niger / Lavun",
-      "Niger / Magama",
-      "Niger / Mariga",
-      "Niger / Mashegu",
-      "Niger / Mokwa",
-      "Niger / Muya",
-      "Niger / Paikoro",
-      "Niger / Rafi",
-      "Niger / Rijau",
-      "Niger / Shiroro",
-      "Niger / Suleja",
-      "Niger / Tafa",
-      "Niger / Wushishi",
-      "Osun / Ila",
-      "Taraba / Ardo-kola",
-      "Taraba / Bali",
-      "Taraba / Donga",
-      "Taraba / Gashaka",
-      "Taraba / Gassol",
-      "Taraba / Ibi",
-      "Taraba / Jalingo",
-      "Taraba / Karim-Lamido",
-      "Taraba / Kurmi",
-      "Taraba / Lau",
-      "Taraba / Sardauna",
-      "Taraba / Takum",
-      "Taraba / Ussa",
-      "Taraba / Wukari",
-      "Taraba / Yorro",
-      "Taraba / Zing",
-      "Zamfara / Anka",
-      "Zamfara / Bakura",
-      "Zamfara / Birnin Magaji",
-      "Zamfara / Bukkuyum",
-      "Zamfara / Bungudu",
-      "Zamfara / Gummi",
-      "Zamfara / Gusau",
-      "Zamfara / Kaura Namoda",
-      "Zamfara / Maradun",
-      "Zamfara / Maru",
-      "Zamfara / Shinkafi",
-      "Zamfara / Talata Mafara",
-      "Zamfara / Tsafe",
-      "Zamfara / Zurmi"
+      "Osun / Ila"
     ],
-    "lgas_lost_note": "State/LGA pairs present in the source whose every row was quarantined. A consequence of the coordinate policy, stated rather than hidden.",
+    "lgas_lost_note": "State/LGA pairs present in the source whose every row was quarantined. Stated rather than hidden.",
     "lgas_per_state": {
       "Abia": 17,
       "Akwa Ibom": 31,
       "Anambra": 21,
       "Bauchi": 20,
       "Bayelsa": 1,
-      "Benue": 10,
-      "Borno": 11,
+      "Benue": 23,
+      "Borno": 23,
       "Cross River": 18,
       "Delta": 25,
       "Ebonyi": 13,
       "Edo": 18,
       "Ekiti": 16,
       "Enugu": 16,
-      "Gombe": 7,
+      "FCT": 6,
+      "Gombe": 11,
       "Imo": 27,
-      "Jigawa": 1,
-      "Kaduna": 1,
+      "Jigawa": 27,
+      "Kaduna": 23,
+      "Kano": 44,
+      "Katsina": 24,
       "Kogi": 21,
+      "Kwara": 16,
       "Lagos": 20,
       "Nasarawa": 13,
+      "Niger": 25,
       "Ogun": 20,
       "Ondo": 17,
       "Osun": 29,
       "Oyo": 33,
       "Plateau": 17,
       "Rivers": 23,
-      "Yobe": 17
+      "Taraba": 16,
+      "Yobe": 17,
+      "Zamfara": 14
     }
   },
   "categorical_counts": {
     "type": {
-      "null": 20696
+      "null": 29028
     },
     "facility_level": {
-      "Primary": 15184,
-      "Secondary": 5364,
-      "Tertiary": 147,
+      "Primary": 22373,
+      "Secondary": 6471,
+      "Tertiary": 183,
       "null": 1
     },
     "ownership": {
-      "Private": 8711,
-      "Public": 11985
+      "Private": 10951,
+      "Public": 18077
     },
     "ownership_type": {
-      "federal_government": 116,
-      "local_government": 8535,
-      "military_paramilitary": 38,
-      "private_for_profit": 7208,
-      "private_not_for_profit": 217,
-      "state_government": 1251,
-      "null": 3331
+      "federal_government": 180,
+      "local_government": 14363,
+      "military_paramilitary": 53,
+      "private_for_profit": 9236,
+      "private_not_for_profit": 301,
+      "state_government": 1579,
+      "null": 3316
     },
     "operational_status": {
       "closed": 62,
-      "functional": 19462,
+      "functional": 27817,
       "non_functional": 1,
       "under_renovation": 7,
-      "unknown": 304,
-      "null": 860
+      "unknown": 294,
+      "null": 847
     },
     "registration_status": {
-      "pending_registration": 663,
-      "provisionally_registered": 744,
-      "registered": 7163,
+      "pending_registration": 836,
+      "provisionally_registered": 986,
+      "registered": 9006,
       "registration_cancelled": 3,
-      "registration_suspended": 14,
-      "unknown": 12109
+      "registration_suspended": 17,
+      "unknown": 18180
     },
     "license_status": {
-      "license_cancelled": 8,
-      "licensed": 7949,
-      "not_licensed": 592,
-      "unknown": 12071,
+      "license_cancelled": 10,
+      "licensed": 10043,
+      "not_licensed": 748,
+      "unknown": 18151,
       "null": 76
     },
     "opening_hours": {
-      "12_hours": 2309,
-      "24_hours": 15737,
-      "8_hours": 2055,
-      "other": 379,
-      "null": 216
+      "12_hours": 3985,
+      "24_hours": 20230,
+      "8_hours": 4065,
+      "other": 492,
+      "null": 256
+    },
+    "coordinate_transformation": {
+      "none": 18166,
+      "swap_lat_lon": 10862
     }
   },
   "completeness": {
-    "with_coordinates": 20696,
+    "with_coordinates": 29028,
     "without_coordinates": 0,
-    "with_normalised_phone": 20135,
-    "without_normalised_phone": 561,
-    "with_address": 20682,
-    "with_ward": 20690,
-    "with_beds": 20481,
-    "with_source_updated_at": 20696
+    "with_normalised_phone": 28090,
+    "without_normalised_phone": 938,
+    "with_address": 28871,
+    "with_ward": 29022,
+    "with_beds": 28775,
+    "with_source_updated_at": 29028
   },
   "missingness_rates": {
     "note": "Share of EMITTED records with a null in the field. Coordinates are 0 by policy (rows without them are quarantined); type and emergency_capable are 1.0 by decision (see _metadata.unresolved_fields).",
@@ -407,595 +685,49 @@
       "rate": 0.0
     },
     "phone": {
-      "count": 561,
-      "rate": 0.0271
+      "count": 938,
+      "rate": 0.0323
     },
     "opening_hours": {
-      "count": 216,
-      "rate": 0.0104
+      "count": 256,
+      "rate": 0.0088
     },
     "emergency_capable": {
-      "count": 20696,
+      "count": 29028,
       "rate": 1.0
     },
     "type": {
-      "count": 20696,
+      "count": 29028,
       "rate": 1.0
     },
     "address": {
-      "count": 14,
-      "rate": 0.0007
+      "count": 157,
+      "rate": 0.0054
     }
   },
   "duplicates": {
     "exact_duplicates_resolved": {
       "rule_id": "exact_match_v1",
-      "key": "casefolded normalised name + state + casefolded LGA + identical longitude and latitude as emitted",
+      "key": "casefolded normalised name + state + casefolded LGA + identical longitude and latitude as emitted (after any coordinate correction)",
       "survivor": "the member with the smallest registry unique_id, then the smallest source id \u2014 the earlier registration in the source's own sequence",
       "values_merged": false,
-      "groups_collapsed": 62,
-      "rows_removed": 62,
+      "groups_collapsed": 322,
+      "rows_removed": 323,
       "group_sizes": {
-        "2": 62
+        "2": 321,
+        "3": 1
       },
       "not_collapsed": "same name in the same LGA at a different point; same point under a different name. Both remain in the artifact and are counted as duplicate CANDIDATES in the quality report for a reconciliation decision."
     },
     "remaining_candidates": {
-      "same_name_state_lga_groups": 477,
-      "same_name_state_lga_extra_rows": 507,
-      "identical_coordinate_groups": 983,
-      "identical_coordinate_extra_rows": 2085,
+      "same_name_state_lga_groups": 673,
+      "same_name_state_lga_extra_rows": 706,
+      "identical_coordinate_groups": 1540,
+      "identical_coordinate_extra_rows": 3351,
       "note": "Counted after exact-match resolution. Reported, not resolved: two facilities sharing a name within one LGA at different points may be a duplicate or two genuine facilities, and consolidating them is a reconciliation decision, not a normalization one."
     }
   },
   "source_evidence": {
-    "coordinate_consistency_by_state": [
-      {
-        "state": "Abia",
-        "reference_point": [
-          5.5,
-          7.5
-        ],
-        "in_box_rows": 756,
-        "median_latitude_as_given": 5.1464,
-        "median_longitude_as_given": 7.3883,
-        "median_km_from_reference_as_given": 43.5,
-        "median_km_from_reference_transposed": 332.7,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 756,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Akwa Ibom",
-        "reference_point": [
-          5.0,
-          7.8
-        ],
-        "in_box_rows": 733,
-        "median_latitude_as_given": 4.9003,
-        "median_longitude_as_given": 7.8381,
-        "median_km_from_reference_as_given": 29.4,
-        "median_km_from_reference_transposed": 449.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 731,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Anambra",
-        "reference_point": [
-          6.2,
-          7.0
-        ],
-        "in_box_rows": 1352,
-        "median_latitude_as_given": 6.1214,
-        "median_longitude_as_given": 6.925,
-        "median_km_from_reference_as_given": 22.0,
-        "median_km_from_reference_transposed": 128.4,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1345,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Bauchi",
-        "reference_point": [
-          10.5,
-          9.8
-        ],
-        "in_box_rows": 689,
-        "median_latitude_as_given": 9.9949,
-        "median_longitude_as_given": 11.0616,
-        "median_km_from_reference_as_given": 165.8,
-        "median_km_from_reference_transposed": 98.6,
-        "refused_swapped_suspected_by_state": 62,
-        "refused_not_in_state": 0,
-        "emitted": 627,
-        "reading": "mixed"
-      },
-      {
-        "state": "Bayelsa",
-        "reference_point": [
-          4.8,
-          6.1
-        ],
-        "in_box_rows": 76,
-        "median_latitude_as_given": 4.9497,
-        "median_longitude_as_given": 6.3238,
-        "median_km_from_reference_as_given": 30.4,
-        "median_km_from_reference_transposed": 212.5,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 76,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Benue",
-        "reference_point": [
-          7.3,
-          8.8
-        ],
-        "in_box_rows": 1670,
-        "median_latitude_as_given": 8.7463,
-        "median_longitude_as_given": 7.2847,
-        "median_km_from_reference_as_given": 238.4,
-        "median_km_from_reference_transposed": 64.8,
-        "refused_swapped_suspected_by_state": 1400,
-        "refused_not_in_state": 0,
-        "emitted": 269,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Borno",
-        "reference_point": [
-          11.8,
-          13.2
-        ],
-        "in_box_rows": 343,
-        "median_latitude_as_given": 12.8945,
-        "median_longitude_as_given": 10.8662,
-        "median_km_from_reference_as_given": 278.0,
-        "median_km_from_reference_transposed": 117.9,
-        "refused_swapped_suspected_by_state": 177,
-        "refused_not_in_state": 69,
-        "emitted": 97,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Cross River",
-        "reference_point": [
-          5.9,
-          8.6
-        ],
-        "in_box_rows": 1157,
-        "median_latitude_as_given": 5.9777,
-        "median_longitude_as_given": 8.5254,
-        "median_km_from_reference_as_given": 83.2,
-        "median_km_from_reference_transposed": 419.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1157,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Delta",
-        "reference_point": [
-          5.7,
-          6.0
-        ],
-        "in_box_rows": 861,
-        "median_latitude_as_given": 5.638,
-        "median_longitude_as_given": 6.0199,
-        "median_km_from_reference_as_given": 39.2,
-        "median_km_from_reference_transposed": 63.4,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 858,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Ebonyi",
-        "reference_point": [
-          6.3,
-          8.1
-        ],
-        "in_box_rows": 415,
-        "median_latitude_as_given": 6.1954,
-        "median_longitude_as_given": 7.9964,
-        "median_km_from_reference_as_given": 27.1,
-        "median_km_from_reference_transposed": 282.2,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 415,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Edo",
-        "reference_point": [
-          6.6,
-          5.9
-        ],
-        "in_box_rows": 458,
-        "median_latitude_as_given": 6.4901,
-        "median_longitude_as_given": 5.7198,
-        "median_km_from_reference_as_given": 45.2,
-        "median_km_from_reference_transposed": 119.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 456,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Ekiti",
-        "reference_point": [
-          7.7,
-          5.3
-        ],
-        "in_box_rows": 582,
-        "median_latitude_as_given": 7.6584,
-        "median_longitude_as_given": 5.2261,
-        "median_km_from_reference_as_given": 24.4,
-        "median_km_from_reference_transposed": 378.4,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 582,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Enugu",
-        "reference_point": [
-          6.5,
-          7.5
-        ],
-        "in_box_rows": 929,
-        "median_latitude_as_given": 6.4747,
-        "median_longitude_as_given": 7.477,
-        "median_km_from_reference_as_given": 29.9,
-        "median_km_from_reference_transposed": 158.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 929,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "FCT",
-        "reference_point": [
-          9.0,
-          7.3
-        ],
-        "in_box_rows": 664,
-        "median_latitude_as_given": 7.3627,
-        "median_longitude_as_given": 9.0099,
-        "median_km_from_reference_as_given": 263.2,
-        "median_km_from_reference_transposed": 20.6,
-        "refused_swapped_suspected_by_state": 664,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Gombe",
-        "reference_point": [
-          10.3,
-          11.2
-        ],
-        "in_box_rows": 742,
-        "median_latitude_as_given": 11.2185,
-        "median_longitude_as_given": 10.1959,
-        "median_km_from_reference_as_given": 155.7,
-        "median_km_from_reference_transposed": 51.9,
-        "refused_swapped_suspected_by_state": 395,
-        "refused_not_in_state": 0,
-        "emitted": 346,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Imo",
-        "reference_point": [
-          5.5,
-          7.0
-        ],
-        "in_box_rows": 1498,
-        "median_latitude_as_given": 5.5738,
-        "median_longitude_as_given": 7.0564,
-        "median_km_from_reference_as_given": 26.3,
-        "median_km_from_reference_transposed": 237.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1497,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Jigawa",
-        "reference_point": [
-          12.2,
-          9.5
-        ],
-        "in_box_rows": 1053,
-        "median_latitude_as_given": 9.5337,
-        "median_longitude_as_given": 12.3572,
-        "median_km_from_reference_as_given": 415.4,
-        "median_km_from_reference_transposed": 62.4,
-        "refused_swapped_suspected_by_state": 1047,
-        "refused_not_in_state": 0,
-        "emitted": 5,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Kaduna",
-        "reference_point": [
-          10.4,
-          7.7
-        ],
-        "in_box_rows": 1113,
-        "median_latitude_as_given": 7.8256,
-        "median_longitude_as_given": 10.4801,
-        "median_km_from_reference_as_given": 443.5,
-        "median_km_from_reference_transposed": 82.8,
-        "refused_swapped_suspected_by_state": 1103,
-        "refused_not_in_state": 0,
-        "emitted": 10,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Kano",
-        "reference_point": [
-          11.8,
-          8.5
-        ],
-        "in_box_rows": 1409,
-        "median_latitude_as_given": 8.5105,
-        "median_longitude_as_given": 11.9619,
-        "median_km_from_reference_as_given": 528.6,
-        "median_km_from_reference_transposed": 43.7,
-        "refused_swapped_suspected_by_state": 1409,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Katsina",
-        "reference_point": [
-          12.5,
-          7.6
-        ],
-        "in_box_rows": 425,
-        "median_latitude_as_given": 7.6013,
-        "median_longitude_as_given": 12.7538,
-        "median_km_from_reference_as_given": 766.8,
-        "median_km_from_reference_transposed": 48.0,
-        "refused_swapped_suspected_by_state": 425,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Kogi",
-        "reference_point": [
-          7.7,
-          6.7
-        ],
-        "in_box_rows": 1138,
-        "median_latitude_as_given": 6.7447,
-        "median_longitude_as_given": 7.5843,
-        "median_km_from_reference_as_given": 149.1,
-        "median_km_from_reference_transposed": 65.9,
-        "refused_swapped_suspected_by_state": 558,
-        "refused_not_in_state": 2,
-        "emitted": 557,
-        "reading": "mixed"
-      },
-      {
-        "state": "Kwara",
-        "reference_point": [
-          8.9,
-          4.7
-        ],
-        "in_box_rows": 746,
-        "median_latitude_as_given": 4.7245,
-        "median_longitude_as_given": 8.4743,
-        "median_km_from_reference_as_given": 626.2,
-        "median_km_from_reference_transposed": 60.2,
-        "refused_swapped_suspected_by_state": 746,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Lagos",
-        "reference_point": [
-          6.5,
-          3.4
-        ],
-        "in_box_rows": 1521,
-        "median_latitude_as_given": 6.5251,
-        "median_longitude_as_given": 3.3416,
-        "median_km_from_reference_as_given": 15.4,
-        "median_km_from_reference_transposed": 493.1,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1520,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Nasarawa",
-        "reference_point": [
-          8.5,
-          8.3
-        ],
-        "in_box_rows": 665,
-        "median_latitude_as_given": 8.2675,
-        "median_longitude_as_given": 8.6274,
-        "median_km_from_reference_as_given": 77.4,
-        "median_km_from_reference_transposed": 60.4,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 658,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Niger",
-        "reference_point": [
-          9.9,
-          5.9
-        ],
-        "in_box_rows": 781,
-        "median_latitude_as_given": 6.0665,
-        "median_longitude_as_given": 9.6665,
-        "median_km_from_reference_as_given": 578.3,
-        "median_km_from_reference_transposed": 108.2,
-        "refused_swapped_suspected_by_state": 781,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Ogun",
-        "reference_point": [
-          7.0,
-          3.4
-        ],
-        "in_box_rows": 902,
-        "median_latitude_as_given": 6.8309,
-        "median_longitude_as_given": 3.3508,
-        "median_km_from_reference_as_given": 35.9,
-        "median_km_from_reference_transposed": 555.6,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 902,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Ondo",
-        "reference_point": [
-          7.0,
-          5.2
-        ],
-        "in_box_rows": 861,
-        "median_latitude_as_given": 7.1179,
-        "median_longitude_as_given": 5.047,
-        "median_km_from_reference_as_given": 47.7,
-        "median_km_from_reference_transposed": 297.8,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 860,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Osun",
-        "reference_point": [
-          7.6,
-          4.5
-        ],
-        "in_box_rows": 1506,
-        "median_latitude_as_given": 7.6667,
-        "median_longitude_as_given": 4.5708,
-        "median_km_from_reference_as_given": 29.1,
-        "median_km_from_reference_transposed": 492.9,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1499,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Oyo",
-        "reference_point": [
-          8.1,
-          3.9
-        ],
-        "in_box_rows": 1593,
-        "median_latitude_as_given": 7.6819,
-        "median_longitude_as_given": 3.9074,
-        "median_km_from_reference_as_given": 75.1,
-        "median_km_from_reference_transposed": 628.5,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1592,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Plateau",
-        "reference_point": [
-          9.2,
-          9.4
-        ],
-        "in_box_rows": 1591,
-        "median_latitude_as_given": 9.1529,
-        "median_longitude_as_given": 9.3714,
-        "median_km_from_reference_as_given": 62.4,
-        "median_km_from_reference_transposed": 64.9,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 1589,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Rivers",
-        "reference_point": [
-          4.9,
-          6.9
-        ],
-        "in_box_rows": 893,
-        "median_latitude_as_given": 4.8298,
-        "median_longitude_as_given": 7.0177,
-        "median_km_from_reference_as_given": 21.3,
-        "median_km_from_reference_transposed": 328.4,
-        "refused_swapped_suspected_by_state": 0,
-        "refused_not_in_state": 0,
-        "emitted": 892,
-        "reading": "consistent with the state"
-      },
-      {
-        "state": "Taraba",
-        "reference_point": [
-          8.0,
-          10.8
-        ],
-        "in_box_rows": 948,
-        "median_latitude_as_given": 11.0656,
-        "median_longitude_as_given": 7.9085,
-        "median_km_from_reference_as_given": 447.4,
-        "median_km_from_reference_transposed": 124.2,
-        "refused_swapped_suspected_by_state": 948,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      },
-      {
-        "state": "Yobe",
-        "reference_point": [
-          12.3,
-          11.7
-        ],
-        "in_box_rows": 498,
-        "median_latitude_as_given": 11.1059,
-        "median_longitude_as_given": 12.0642,
-        "median_km_from_reference_as_given": 142.3,
-        "median_km_from_reference_transposed": 97.6,
-        "refused_swapped_suspected_by_state": 14,
-        "refused_not_in_state": 10,
-        "emitted": 471,
-        "reading": "mixed"
-      },
-      {
-        "state": "Zamfara",
-        "reference_point": [
-          12.2,
-          6.2
-        ],
-        "in_box_rows": 182,
-        "median_latitude_as_given": 6.1933,
-        "median_longitude_as_given": 12.152,
-        "median_km_from_reference_as_given": 959.5,
-        "median_km_from_reference_transposed": 76.5,
-        "refused_swapped_suspected_by_state": 182,
-        "refused_not_in_state": 0,
-        "emitted": 0,
-        "reading": "predominantly transposed in the source"
-      }
-    ],
-    "coordinate_consistency_note": "For every state, the in-box pairs measured against the state's approximate reference point, as given and with latitude and longitude exchanged. Where the transposed reading is the near one for most rows the state is written the wrong way round in the source; those rows are refused (coordinates_swapped_suspected_by_state), never exchanged. Where a state's latitude and longitude are numerically close (Bauchi, Gombe, Yobe, Borno, Kogi) the two readings are only 100-250 km apart and the instrument is uncertain: some transposed rows will have been kept and a few genuine ones refused. The bounding box alone cannot see any of this; it only catches a transposition that leaves Nigeria, which happens in the south.",
     "lga_ids_spanning_multiple_states": [
       {
         "lga_id": "1003",
@@ -1104,16 +836,16 @@
           {
             "state": "Kano",
             "source_rows": 40,
-            "emitted": 0,
-            "median_latitude": null,
-            "median_longitude": null
+            "emitted": 40,
+            "median_latitude": 12.0103,
+            "median_longitude": 8.5705
           },
           {
             "state": "Nasarawa",
             "source_rows": 124,
-            "emitted": 124,
-            "median_latitude": 7.7176,
-            "median_longitude": 8.5014
+            "emitted": 100,
+            "median_latitude": 8.5368,
+            "median_longitude": 7.7081
           }
         ]
       },
@@ -1124,9 +856,9 @@
           {
             "state": "Benue",
             "source_rows": 63,
-            "emitted": 0,
-            "median_latitude": null,
-            "median_longitude": null
+            "emitted": 63,
+            "median_latitude": 7.0299,
+            "median_longitude": 8.3002
           },
           {
             "state": "Nasarawa",
@@ -1144,9 +876,9 @@
           {
             "state": "Kwara",
             "source_rows": 113,
-            "emitted": 0,
-            "median_latitude": null,
-            "median_longitude": null
+            "emitted": 102,
+            "median_latitude": 8.5056,
+            "median_longitude": 4.6048
           },
           {
             "state": "Osun",
@@ -1164,9 +896,9 @@
           {
             "state": "Kwara",
             "source_rows": 67,
-            "emitted": 0,
-            "median_latitude": null,
-            "median_longitude": null
+            "emitted": 46,
+            "median_latitude": 8.5869,
+            "median_longitude": 4.7244
           },
           {
             "state": "Osun",
@@ -1191,9 +923,9 @@
           {
             "state": "Oyo",
             "source_rows": 56,
-            "emitted": 56,
-            "median_latitude": 8.0786,
-            "median_longitude": 4.3467
+            "emitted": 55,
+            "median_latitude": 8.0782,
+            "median_longitude": 4.3457
           }
         ]
       },
@@ -1204,21 +936,21 @@
           {
             "state": "Kogi",
             "source_rows": 57,
-            "emitted": 23,
-            "median_latitude": 7.2628,
-            "median_longitude": 7.9278
+            "emitted": 46,
+            "median_latitude": 7.9657,
+            "median_longitude": 6.8241
           },
           {
             "state": "Plateau",
             "source_rows": 88,
-            "emitted": 88,
-            "median_latitude": 8.7848,
-            "median_longitude": 9.9582
+            "emitted": 71,
+            "median_latitude": 8.7628,
+            "median_longitude": 9.9526
           }
         ]
       }
     ],
-    "lga_id_scope_note": "The source's lga_id is scoped to the LGA name, not to the state: each entry above carries one id in two states. Where both sides have many rows and distinct median points they are homonymous LGAs that genuinely exist in both states; where one side has a single row it is a mislabelled row (all such rows in the pinned source also lack coordinates and are quarantined on that ground). Consequence for every consumer: (state, city_area) is the unambiguous LGA key in this artifact; source_record.lga_id alone is not.",
+    "lga_id_scope_note": "The source's lga_id is scoped to the LGA name, not the state: each entry above carries one id in two states. Where both sides have many rows and distinct median points they are homonymous LGAs that genuinely exist in both states; where one side has a single row it is a mislabelled row. Consequence for every consumer: (state, city_area) is the unambiguous LGA key in this artifact; source_record.lga_id alone is not.",
     "facility_type_id_by_level_and_ownership": [
       {
         "facility_type_id": null,
@@ -1298,12 +1030,13 @@
   "differences_from_facilities_1_1": {
     "records": {
       "facilities_1_1": 5344,
-      "candidate": 20696
+      "candidate": 29028
     },
     "states_covered": {
       "facilities_1_1": 3,
-      "candidate": 27
+      "candidate": 34
     },
+    "states_in_1_1_absent_from_candidate": [],
     "schema_version": {
       "facilities_1_1": "1.0",
       "candidate": "2.0"
@@ -1326,19 +1059,18 @@
     "detail": "reports/facilities_comparison_v1.json"
   },
   "known_limitations": [
-    "Licence and publishing organisation for the source are NOT established; the candidate must not be published, uploaded or served until they are.",
-    "NOT nationwide: Adamawa, Kano, Katsina, Kebbi, Kwara, Niger, Sokoto, Taraba, Zamfara have no records; 313 of 774 LGA names are absent. A user in those places gets an empty locator.",
-    "type is null on every record, so the Mobile consumer's non-emergency filters return nothing until a Product mapping decision is recorded.",
-    "emergency_capable is null on every record; emergency ordering degrades to pure distance.",
+    "Licence and publishing organisation for the source are NOT established; the candidate must not be published, uploaded or served until they are (facilities/source/nhf_authorization_checklist_v1.json).",
+    "NOT nationwide: Adamawa, Kebbi, Sokoto have no rows in the source; 95 of 774 LGA names are absent.",
+    "type is null on every record. A null type is not a member of the declared vocabulary; the consumer must not filter it out and must never produce an empty result list because of it. Which facilities to show for which urgency is a Product decision that has not been made.",
+    "emergency_capable is null on every record; there is no verified positive record, so emergency prioritisation cannot apply and ordering falls back to distance until Product/Clinical record an explicit fallback decision.",
+    "The source writes latitude and longitude the wrong way round for whole states. 11141 rows were corrected under coordinate_orientation_v1 with the source values kept on the record; 1442 rows are held as ambiguous and 67 refused as invalid. Every correction is listed in reports/facilities_coordinate_audit_v1.json.",
+    "The boundary instrument is GRID3's facility points, not polygons: a facility more than 25 km from any GRID3 facility, or near a state line, reads as uncertain and is held rather than decided. Where a state's latitude and longitude are numerically close, both orientations can be inside the state; those rows are held too.",
     "No record in the source was individually verified (every row is a bulk import).",
     "phone is carried in normalised form, but public-use intent for it is not established; no tel: action should be offered before Product review.",
-    "10631 source rows without a usable coordinate pair are quarantined, not emitted; they are findable in no build of this candidate.",
+    "524 source rows without a coordinate pair are quarantined, not emitted.",
     "Exact duplicates are collapsed by a strict rule; looser duplicates (same name and LGA at different points) remain and are counted, not merged.",
     "source_record.lga_id identifies an LGA name, not a state/LGA pair: 11 names carry one id across two states. Key LGAs by (state, city_area), never by lga_id alone.",
-    "The source writes latitude and longitude the wrong way round for whole states. 9911 rows were refused on that ground and 81 more as not in the state they claim; FCT, Kano, Katsina, Kwara, Niger, Taraba, Zamfara have no emitted record at all as a result. The rows are listed with both distances; nothing was exchanged. Correction is the source owner's, or an explicitly recorded decision \u2014 not this pipeline's.",
-    "The per-state coordinate instrument uses approximate reference points and is uncertain where a state's latitude and longitude are numerically close (Bauchi, Gombe, Yobe, Borno, Kogi): some transposed rows there will have been kept.",
-    "In states the evidence reads as predominantly transposed but not emptied (Benue 269, Borno 97, Gombe 346, Jigawa 5, Kaduna 10), the few surviving rows sat close enough to the diagonal to pass the instrument; they are probably transposed too and cannot be told apart from genuine ones.",
-    "502 facility names are entirely upper case in the source and are carried as such; re-casing was not applied because it corrupts acronyms (PHC, LUTH). Display casing is a consumer concern.",
+    "498 facility names are entirely upper case in the source and are carried as such; re-casing was not applied because it corrupts acronyms. Display casing is a consumer concern.",
     "The artifact is an order of magnitude larger than facilities 1.1; a distribution profile is an open engineering decision."
   ],
   "source_missingness_by_field": {
@@ -1435,27 +1167,26 @@
   },
   "unmapped_source_values": {
     "operational_hours": {
-      "124_Hours": 2
+      "0": 2,
+      "124_Hours": 1
     }
   },
   "absence_counts": {
     "facility_level_not_provided": 2,
     "license_status_not_provided": 76,
-    "opening_hours_not_provided": 217,
-    "operational_status_not_provided": 861,
-    "ownership_type_not_provided": 3342,
-    "phone_absent": 221,
-    "phone_low_entropy_placeholder": 39,
-    "phone_not_a_nigerian_mobile": 304
+    "opening_hours_not_provided": 257,
+    "operational_status_not_provided": 848,
+    "ownership_type_not_provided": 3327,
+    "phone_absent": 427,
+    "phone_low_entropy_placeholder": 85,
+    "phone_not_a_nigerian_mobile": 439
   },
   "quarantine_reason_counts": {
     "coordinates_absent": 524,
-    "coordinates_not_in_state": 81,
+    "coordinates_not_in_state": 67,
     "coordinates_null_island": 5,
-    "coordinates_out_of_bounds": 4,
-    "coordinates_swapped_suspected": 106,
-    "coordinates_swapped_suspected_by_state": 9911,
-    "duplicate_exact_match": 62,
+    "coordinates_orientation_ambiguous": 1442,
+    "duplicate_exact_match": 323,
     "name_empty": 1
   }
 }

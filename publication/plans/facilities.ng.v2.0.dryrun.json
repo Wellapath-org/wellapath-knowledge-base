@@ -67,8 +67,8 @@
   },
   "generation": {
     "generator": "tools/build_facilities_candidate.py",
-    "generator_version": "1.1.0",
-    "artifact_generated_at": "2026-09-14T00:00:00Z",
+    "generator_version": "1.2.0",
+    "artifact_generated_at": "2026-09-14T12:00:00Z",
     "declared_release_status": "candidate_unapproved",
     "declared_schema_version": "2.0",
     "reproducible": true,
@@ -90,7 +90,7 @@
     },
     "generator_input_identity": {
       "generator": "tools/build_facilities_candidate.py",
-      "generator_version": "1.1.0",
+      "generator_version": "1.2.0",
       "recorded_inside_artifact_metadata": true,
       "covered_by_artifact_sha256": true,
       "note": "The artifact records its own sources under _metadata.provenance / _metadata.source, including upstream repository, commit and per-file digests where it has them. That record is inside the bytes, so descriptor.sha256 covers it: it cannot drift from the artifact it describes."
@@ -135,16 +135,16 @@
     "note": "This records that a validator exists and is run by tools/run_publication_checks.py. validated does not mean packaged."
   },
   "integrity": {
-    "sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "sha256_bare": "e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "byte_count": 23318064,
+    "sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "sha256_bare": "8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "byte_count": 36077142,
     "content_type": "application/json",
     "computed_from": "the exact bytes of candidate/facilities.ng.v2.0.json, read in binary"
   },
   "packaging": {
     "packaged": true,
-    "staged_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "staged_byte_count": 23318064,
+    "staged_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "staged_byte_count": 36077142,
     "matches_source": true,
     "staging_root": ".publication-staging/ (git-ignored, disposable)",
     "staging_path_recorded": false,
@@ -173,8 +173,8 @@
     "artifact_version": "2.0",
     "schema_version": "wellapath.artifact/1",
     "content_type": "application/json",
-    "sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "byte_count": 23318064,
+    "sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "byte_count": 36077142,
     "object_key": "facilities.ng.v2.0.json",
     "release_status": "candidate",
     "activation_status": "inactive",
@@ -206,7 +206,7 @@
       "sha256": "sha256:25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398"
     },
     "rollback_target": null,
-    "created_at": "2026-09-14T00:00:00Z",
+    "created_at": "2026-09-14T12:00:00Z",
     "published_at": null,
     "deprecated": false,
     "expires_at": null,
@@ -245,7 +245,7 @@
       {
         "kind": "product_approval",
         "artifact": "facilities@2.0",
-        "artifact_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "artifact_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
         "granted": false,
         "decision_ref": null,
         "decision_scope": [],
@@ -260,7 +260,7 @@
       {
         "kind": "clinical_approval",
         "artifact": "facilities@2.0",
-        "artifact_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "artifact_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
         "granted": false,
         "decision_ref": null,
         "decision_scope": [],
@@ -275,7 +275,7 @@
       {
         "kind": "publication_authorization",
         "artifact": "facilities@2.0",
-        "artifact_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "artifact_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
         "granted": false,
         "decision_ref": null,
         "decision_scope": [],
@@ -290,7 +290,7 @@
       {
         "kind": "activation_authorization",
         "artifact": "facilities@2.0",
-        "artifact_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "artifact_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
         "granted": false,
         "decision_ref": null,
         "decision_scope": [],
@@ -305,7 +305,7 @@
       {
         "kind": "mobile_implementation_authorization",
         "artifact": "facilities@2.0",
-        "artifact_sha256": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "artifact_sha256": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
         "granted": false,
         "decision_ref": null,
         "decision_scope": [],

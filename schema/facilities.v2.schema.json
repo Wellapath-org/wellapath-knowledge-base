@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellapath.org/schema/facilities.v2.schema.json",
   "title": "WellaPath Nigeria facilities artifact — schema 2.0 (candidate)",
-  "description": "Schema for the nationwide facilities candidate. Additive over schema 1.0: every field facilities 1.1 emitted is still present under the same name and type, so the Mobile consumer's field access is unchanged. Two of those fields — type and emergency_capable — are null on every record because this source evidences neither; that is a behavioural change for the consumer even though the shape is unchanged, and it is the reason the artifact version is 2.0 rather than 1.2.\n\nCoordinate policy (Step 2): latitude and longitude are non-null on every record. A source row without a usable pair is quarantined with its reason, never emitted with nulls and never given a substitute point. Exact duplicates (same name, state, LGA and coordinates) are collapsed to one survivor by a documented, total rule recorded in _metadata.deduplication; no values are merged.\n\nAbsence convention, applied throughout: null means NOT PROVIDED (the source field was blank or a placeholder token). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value.",
+  "description": "Schema for the nationwide facilities candidate. Additive over schema 1.0: every field facilities 1.1 emitted is still present under the same name and type, so the Mobile consumer's field access is unchanged. Two of those fields — type and emergency_capable — are null on every record because this source evidences neither; that is a behavioural change for the consumer even though the shape is unchanged, and it is the reason the artifact version is 2.0 rather than 1.2.\n\nCoordinate policy (Step 3): latitude and longitude are non-null on every record and verified inside the state the row claims, using the repository's GRID3 facility points as the boundary instrument. A pair that was outside its state as given and strictly inside it with the two values exchanged is emitted exchanged; source_record.coordinate_transformation says so and source_record.source_latitude/source_longitude keep the source values. Ambiguous and invalid pairs are quarantined, never guessed. Exact duplicates (same name, state, LGA and coordinates) are collapsed to one survivor by a documented, total rule recorded in _metadata.deduplication; no values are merged.\n\nAbsence convention, applied throughout: null means NOT PROVIDED (the source field was blank or a placeholder token). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value.",
   "type": "object",
   "additionalProperties": false,
   "required": ["_metadata", "facilities"],
@@ -15,7 +15,7 @@
         "publication_status", "release_date", "may_publish", "generated_at", "generator",
         "generator_version", "total_facilities", "states_covered", "states_absent",
         "states_with_no_emitted_records", "coverage_claim", "source", "deduplication",
-        "coordinate_policy", "coordinate_reference", "unresolved_fields",
+        "coordinate_policy", "coordinate_remediation", "unresolved_fields",
         "absence_convention", "not_carried_from_source", "absence_counts",
         "unmapped_source_values"
       ],
@@ -51,7 +51,7 @@
           "type": "array",
           "items": { "type": "string" },
           "uniqueItems": true,
-          "description": "States that have rows in the source but no record in the artifact, because every row was refused — for this source, because their coordinates are written the wrong way round. Disjoint from states_absent and from states_covered."
+          "description": "States that have rows in the source but no record in the artifact, because every row was refused. Disjoint from states_absent and from states_covered. Empty when the orientation rule recovers every state, and the artifact says so either way."
         },
         "coverage_claim": { "type": "string", "minLength": 1 },
         "source": {
@@ -102,23 +102,39 @@
           }
         },
         "coordinate_policy": { "type": "string", "minLength": 1 },
-        "coordinate_reference": {
+        "coordinate_remediation": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["instrument", "reference_accuracy", "cross_check", "refused_as_transposed_when", "refused_as_not_in_state_when", "records_moved_or_exchanged", "evidence"],
+          "required": [
+            "rule_id", "instrument", "reference_geometry", "accepted_unchanged",
+            "accepted_after_verified_swap", "quarantined_ambiguous", "quarantined_invalid",
+            "records_corrected_in_artifact", "transformation", "audit"
+          ],
           "properties": {
+            "rule_id": { "const": "coordinate_orientation_v1" },
             "instrument": { "type": "string", "minLength": 1 },
-            "reference_accuracy": { "type": "string", "minLength": 1 },
-            "cross_check": { "type": "string", "minLength": 1 },
-            "refused_as_transposed_when": { "type": "string", "minLength": 1 },
-            "refused_as_not_in_state_when": { "type": "string", "minLength": 1 },
-            "records_moved_or_exchanged": { "const": 0, "description": "Pinned. The instrument refuses; it never corrects." },
-            "evidence": { "type": "string", "minLength": 1 }
+            "reference_geometry": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["path", "sha256", "citation"],
+              "properties": {
+                "path": { "type": "string", "minLength": 1 },
+                "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "citation": { "type": "string", "minLength": 1 }
+              }
+            },
+            "accepted_unchanged": { "type": "integer", "minimum": 0 },
+            "accepted_after_verified_swap": { "type": "integer", "minimum": 0 },
+            "quarantined_ambiguous": { "type": "integer", "minimum": 0 },
+            "quarantined_invalid": { "type": "integer", "minimum": 0 },
+            "records_corrected_in_artifact": { "type": "integer", "minimum": 0 },
+            "transformation": { "type": "string", "minLength": 1 },
+            "audit": { "const": "reports/facilities_coordinate_audit_v1.json" }
           }
         },
         "unresolved_fields": {
           "type": "object",
-          "required": ["type", "emergency_capable", "type_vocabulary"],
+          "required": ["type", "emergency_capable", "type_vocabulary", "consumer_contract"],
           "properties": {
             "type": { "type": "string", "minLength": 1 },
             "emergency_capable": { "type": "string", "minLength": 1 },
@@ -128,9 +144,10 @@
               "uniqueItems": true,
               "minItems": 6,
               "maxItems": 6,
-              "description": "The closed vocabulary a Product mapping decision would map INTO. Declared, not applied: every record's type is null."
+              "description": "The closed vocabulary a Product mapping decision would map INTO. Declared, not applied: every record's type is null, and null is not a member."
             },
-            "type_vocabulary_note": { "type": "string" }
+            "type_vocabulary_note": { "type": "string" },
+            "consumer_contract": { "type": "string", "minLength": 1 }
           }
         },
         "absence_convention": { "type": "object" },
@@ -169,7 +186,7 @@
         },
         "type": {
           "type": "null",
-          "description": "Null on every record, deliberately. Mobile filters non-emergency results by type against {hospital, clinic, health_centre, pharmacy}; this source has no such column, only facility_level, which is a tier of care rather than a kind of facility. The mapping is a Product decision because it determines which facilities a user is shown for self-care versus urgent care. The vocabulary a decision would map into is declared in _metadata.unresolved_fields.type_vocabulary."
+          "description": "Null on every record, deliberately. Mobile filters non-emergency results by type against {hospital, clinic, health_centre, pharmacy}; this source has no such column, only facility_level, which is a tier of care rather than a kind of facility. The mapping is a Product decision because it determines which facilities a user is shown for self-care versus urgent care. A null type is not a member of the declared vocabulary and must never be filtered out or treated as one."
         },
         "state": { "type": "string", "minLength": 1 },
         "city_area": {
@@ -181,13 +198,13 @@
           "type": "number",
           "minimum": 4.0,
           "maximum": 14.0,
-          "description": "Non-null on every record. Rows without a usable pair are quarantined."
+          "description": "Non-null on every record and verified inside the declared state. When source_record.coordinate_transformation is swap_lat_lon this value is the source's longitude column."
         },
         "longitude": {
           "type": "number",
           "minimum": 2.5,
           "maximum": 15.0,
-          "description": "Non-null on every record. Rows without a usable pair are quarantined."
+          "description": "Non-null on every record and verified inside the declared state. When source_record.coordinate_transformation is swap_lat_lon this value is the source's latitude column."
         },
         "phone": {
           "type": ["string", "null"],
@@ -200,7 +217,7 @@
         },
         "emergency_capable": {
           "type": "null",
-          "description": "Null on every record. facilities 1.1 derived this from type == 'hospital'; this source has no type, and none of its 90 columns records emergency capability."
+          "description": "Null on every record. facilities 1.1 derived this from type == 'hospital'; this source has no type, and none of its 90 columns records emergency capability. Prioritisation may apply only to a record whose value is true; there is none."
         },
         "lga": { "type": "string", "minLength": 1 },
         "ward": { "type": ["string", "null"] },
@@ -238,7 +255,10 @@
         "source_record": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["source_id", "source_unique_id", "state_id", "lga_id", "ward_id", "source_updated_at"],
+          "required": [
+            "source_id", "source_unique_id", "state_id", "lga_id", "ward_id", "source_updated_at",
+            "coordinate_transformation", "source_latitude", "source_longitude"
+          ],
           "properties": {
             "source_id": { "type": "string", "pattern": "^\\d+$" },
             "source_unique_id": { "type": "string", "minLength": 1 },
@@ -253,6 +273,18 @@
               "type": ["string", "null"],
               "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
               "description": "The source's record-level audit timestamp, zone undeclared."
+            },
+            "coordinate_transformation": {
+              "enum": ["none", "swap_lat_lon"],
+              "description": "none: latitude and longitude are the source's values as given. swap_lat_lon: the source's two values were exchanged under coordinate_orientation_v1, because as given the pair was outside the declared state and exchanged it was strictly inside; the source values are kept in source_latitude and source_longitude."
+            },
+            "source_latitude": {
+              "type": ["number", "null"],
+              "description": "The source's latitude column, present only when coordinate_transformation is not none."
+            },
+            "source_longitude": {
+              "type": ["number", "null"],
+              "description": "The source's longitude column, present only when coordinate_transformation is not none."
             }
           },
           "description": "Identity and provenance only. Every original value stays recoverable by joining source_id against the committed, hash-pinned source CSV. The administrative ids are the source's own and each maps to exactly one name."

@@ -65,6 +65,25 @@ def free_text(raw):
     return value, None
 
 
+def parse_coordinates(lon_raw, lat_raw):
+    """Return `(longitude, latitude, reason)` with no plausibility judgement at all.
+
+    Only three things stop a pair here: nothing present, not numeric, or exactly 0,0. Whether
+    the pair is plausible for its state — as given or with the values exchanged — is the
+    orientation rule's question (facilities.geometry), not a parsing one.
+    """
+    lon_text, lat_text = (lon_raw or "").strip(), (lat_raw or "").strip()
+    if not lon_text and not lat_text:
+        return None, None, "coordinates_absent"
+    try:
+        lon, lat = float(lon_text), float(lat_text)
+    except ValueError:
+        return None, None, "coordinates_unparseable"
+    if lon == 0.0 and lat == 0.0:
+        return None, None, "coordinates_null_island"
+    return lon, lat, None
+
+
 def coordinate(lon_raw, lat_raw):
     """Return `(longitude, latitude, reason)`.
 

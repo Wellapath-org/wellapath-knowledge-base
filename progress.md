@@ -1059,3 +1059,53 @@ committed copy and was not committed twice.
 - **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
   telemetry (none). **Nothing published, uploaded, activated or approved;
   this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 3: coordinate-orientation remediation study
+
+Controlled remediation of the Step 2 finding, on PR #41. Nothing merged,
+published, uploaded, activated or handed to Backend/Mobile.
+
+- **Boundary instrument:** the repository's own GRID3 facility points
+  (51,022, all 37 states, CC BY 4.0, hash-pinned) as an empirical
+  boundary via deterministic k-NN state membership
+  (`tools/facilities/geometry.py`). No polygons downloaded; the Step 2
+  centroid table decides nothing and survives only as a 300 km sanity
+  invariant.
+
+- **Rule `coordinate_orientation_v1`:** a pair is exchanged only when it
+  is outside its declared state as given and strictly inside it exchanged;
+  source values kept on the record; every correction listed in
+  `reports/facilities_coordinate_audit_v1.json`. Both plausible / either
+  uncertain / GRID3 names another state for the same NHFR facility →
+  ambiguous, held. Both outside → invalid. Outcomes: **18,210 unchanged ·
+  11,141 corrected · 1,442 ambiguous · 67 invalid**; 529 not orientable.
+  Record-level corroboration from the same facility's GRID3 point: within
+  20 km of the exchanged pair 3,005 times, of the pair as given 2 times.
+
+- **Coverage preserved:** 34 states; **FCT 632 (v1.1 614), Kano 1,293
+  (v1.1 2,040)**; no v1.1 state lost; the seven states Step 2 emptied are
+  all recovered by verified swaps. Candidate 29,028 records, 36,077,142
+  bytes, sha256 `8fb80d3d…6da2`; schema 2.0 `fc96d914…2e24`.
+
+- **Options:** A (corrected candidate) is the only candidate path; B (1.1
+  overlay) quantified and rejected — buys no coverage, adds 4,387 records
+  of another lineage, 1,985 of uncertain identity; **C (keep 1.1 active)
+  recommended for the active artifact** until source authorization and
+  FAC-D001 exist.
+
+- **Still null by decision:** `type` (null is not a vocabulary member; the
+  consumer contract — never filter it out, never an empty list — is in
+  the artifact metadata and the handoff) and `emergency_capable` (no
+  verified positive record; distance fallback pending FAC-D002). Exact
+  decisions: `docs/FACILITIES_DECISIONS_REQUIRED.md`.
+
+- **Source authorization checklist** (nine items, all missing) in
+  `facilities/source/nhf_authorization_checklist_v1.json`; the validator
+  refuses `may_publish` other than false while any is unsatisfied.
+
+- **Validation:** facilities 5/5 (91 validator checks, 104 tests),
+  publication 9/9 (frozen count 51), W2 23/23, W3 30/30, IM-003 27/27.
+  `facilities.ng.v1.0.json` and `v1.1.json` byte identical.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **PR #40 and PR #41 remain unmerged.**

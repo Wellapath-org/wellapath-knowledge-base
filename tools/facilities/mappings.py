@@ -31,20 +31,13 @@ NIGERIA_STATES = (
 FCT_NAME = "FCT"
 
 #: Approximate reference point (latitude, longitude) for each state and the FCT, accurate to
-#: about half a degree. Reference geography, NOT facility data: it is a yardstick for deciding
-#: whether a source coordinate pair is plausible FOR THE STATE THE ROW CLAIMS, and for nothing
-#: else. No record is ever placed, moved, swapped or corrected by it; a pair that fails is
-#: refused with a reason, exactly as the bounding box refuses one.
-#:
-#: Why it exists: the bounding box is blind to a transposed pair whenever both values happen
-#: to fall inside Nigeria, which is true for most of the north (Kano is 12.0N 8.5E; written
-#: the other way round it is 8.5N 12.0E, still inside the box, 500 km away in Taraba). The
-#: pinned source has entire states written that way. Only a per-state yardstick can see it.
-#:
-#: Cross-checked, not trusted: facilities 1.1 (GRID3/OSM lineage, independent of this source)
-#: has its Lagos, FCT and Kano medians 7, 5 and 20 km from these points, and every candidate
-#: state the instrument leaves alone has a median within 83 km of its point. The quality
-#: report tabulates both readings for every state so the calibration is auditable.
+#: about half a degree. Since Step 3 this table DECIDES NOTHING: the coordinate-orientation
+#: rule uses the GRID3 facility points in `geometry.py` as its boundary instrument. It is kept
+#: as a coarse, independent sanity invariant for the validator — no emitted record may sit
+#: more than 300 km from its state's point — so a regression in the geometry module that let a
+#: transposed northern pair through would still be caught by something that does not share
+#: its code. Cross-checked against facilities 1.1's medians for Lagos, FCT and Kano (7, 5 and
+#: 20 km).
 STATE_REFERENCE_POINTS = {
     "Abia": (5.5, 7.5), "Adamawa": (9.3, 12.4), "Akwa Ibom": (5.0, 7.8), "Anambra": (6.2, 7.0),
     "Bauchi": (10.5, 9.8), "Bayelsa": (4.8, 6.1), "Benue": (7.3, 8.8), "Borno": (11.8, 13.2),
@@ -58,17 +51,8 @@ STATE_REFERENCE_POINTS = {
     "Zamfara": (12.2, 6.2),
 }
 
-#: A pair is refused as transposed when it lies farther than this from its state's point AND
-#: the transposed pair is at least SWAP_FACTOR times closer. Calibrated on the pinned source so
-#: that a genuine facility at the edge of a large state is kept and a state written the wrong
-#: way round is refused. Where a state's latitude and longitude are numerically close (Bauchi,
-#: Gombe, Yobe, Borno, Kogi) the two readings are only ~100-250 km apart and the instrument is
-#: genuinely uncertain; the quality report says so per state.
-SWAP_MIN_DISTANCE_KM = 150.0
-SWAP_FACTOR = 2.0
-
-#: A pair farther than this from its state's point under either reading is refused as not in
-#: the state the row claims. No Nigerian state extends 300 km from its reference point.
+#: The validator's sanity radius: no Nigerian state extends 300 km from its reference point,
+#: so an emitted record farther than this is wrong whatever the geometry module said.
 NOT_IN_STATE_KM = 300.0
 
 FACILITY_LEVELS = {"Primary": "Primary", "Secondary": "Secondary", "Tertiary": "Tertiary"}

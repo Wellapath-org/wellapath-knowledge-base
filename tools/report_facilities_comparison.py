@@ -39,7 +39,7 @@ COMPARISON = repo_path("reports", "facilities_comparison_v1.json")
 MOBILE = repo_path("reports", "facilities_mobile_compat_v1.json")
 
 GENERATOR_VERSION = FACILITIES_TOOLING_VERSION
-PHASE = "Nationwide Facilities / Step 2"
+PHASE = "Nationwide Facilities / Step 3"
 
 # --- an exact re-implementation of the Mobile locator -------------------------------------
 TYPE_CHAIN = {"pharmacy": "health_centre", "health_centre": "clinic", "clinic": "hospital"}
@@ -180,6 +180,27 @@ def compare(current, candidate):
         coverage[state] = {"facilities_1_1": cur_states.get(state, 0),
                            "candidate": new_states.get(state, 0)}
 
+    # Option B in the remediation study: a candidate with a provenance-labelled facilities 1.1
+    # overlay for any state the candidate leaves uncovered. Quantified per 1.1 state, applied
+    # nowhere: how many 1.1 records would be additions, how many would be near-duplicates of a
+    # candidate record, and how many of those have an uncertain identity (position matches,
+    # name does not).
+    exact_by_state = Counter(e["current_facility_id"].split("_")[1] for e in exact)
+    probable_by_state = Counter(e["current_facility_id"].split("_")[1] for e in probable)
+    unmatched_by_state = Counter(f["facility_id"].split("_")[1] for f in only_current)
+    code = {"lag": "Lagos", "abj": "FCT", "kan": "Kano"}
+    overlay = {}
+    for prefix, state in code.items():
+        overlay[state] = {
+            "facilities_1_1_records": cur_states.get(state, 0),
+            "candidate_records": new_states.get(state, 0),
+            "candidate_covers_state": new_states.get(state, 0) > 0,
+            "overlay_needed_for_coverage": new_states.get(state, 0) == 0,
+            "1_1_records_matching_a_candidate_record_by_name_and_position": exact_by_state.get(prefix, 0),
+            "1_1_records_matching_by_position_only_identity_uncertain": probable_by_state.get(prefix, 0),
+            "1_1_records_with_no_candidate_within_250m_would_be_additions": unmatched_by_state.get(prefix, 0),
+        }
+
     dup_groups = defaultdict(list)
     for f in new:
         dup_groups[(norm_name(f["name"]), f["state"], f["city_area"])].append(f["facility_id"])
@@ -222,6 +243,28 @@ def compare(current, candidate):
         "coverage_change_by_state": coverage,
         "states_gained": sorted(set(new_states) - set(cur_states)),
         "states_lost": sorted(set(cur_states) - set(new_states)),
+        "option_b_overlay_analysis": {
+            "question": "If facilities 1.1 records were overlaid, provenance-labelled, onto the "
+            "candidate for states the candidate does not cover, what would be added and what "
+            "would be duplicated?",
+            "by_1_1_state": overlay,
+            "duplicate_risk": "A 1.1 record within 250 m of a candidate record with the same "
+            "normalised name is the same facility twice under two id lineages; one matching by "
+            "position only may be the same facility renamed, or a neighbour — identity is not "
+            "established either way. An overlay would have to carry every such pair as two "
+            "records or resolve them by a rule this repository does not have.",
+            "conclusion": "No 1.1 state is uncovered by the candidate, so the overlay buys no "
+            "coverage; it would add %d records of a different lineage and provenance to "
+            "states the candidate already serves, %d of them positional duplicates of "
+            "uncertain identity. Not applied."
+            % (sum(v["1_1_records_with_no_candidate_within_250m_would_be_additions"]
+                   + v["1_1_records_matching_by_position_only_identity_uncertain"]
+                   for v in overlay.values()),
+               sum(v["1_1_records_matching_by_position_only_identity_uncertain"]
+                   for v in overlay.values()))
+            if not any(v["overlay_needed_for_coverage"] for v in overlay.values())
+            else "At least one 1.1 state is uncovered by the candidate; see by_1_1_state.",
+        },
         "duplicate_consolidation_proposals": {
             "group_count": len(proposals),
             "rows_involved": sum(p["count"] for p in proposals),
@@ -297,14 +340,10 @@ def mobile_compat(current, candidate):
             "severity": "blocking",
             "evidence": "getFacilitiesByLocation returns nothing for any urgency in %s; "
             "getNearbyFacilities still returns the nearest 30 records, which for a user "
-            "there are in a neighbouring state. Every source row for these states was "
-            "refused because its coordinates are written the wrong way round "
-            "(reports/facilities_quality_v1.json source_evidence.coordinate_consistency_by_state)."
-            % " and ".join(lost),
-            "resolution": "Source owner corrects the transposition, or a recorded decision "
-            "authorises applying it to the rows refused as "
-            "coordinates_swapped_suspected_by_state. The pipeline refuses; it does not "
-            "exchange.",
+            "there are in a neighbouring state (reports/facilities_coordinate_audit_v1.json "
+            "coverage_by_state)." % " and ".join(lost),
+            "resolution": "Source owner corrects the source, or the orientation rule is "
+            "revisited under a recorded decision. Nothing is guessed to close the gap.",
         })
 
     return {
@@ -333,7 +372,14 @@ def mobile_compat(current, candidate):
             "candidate_records_without_coordinates": sum(1 for r in new if r["latitude"] is None),
             "candidate_coordinate_policy": "zero by construction — rows without a usable pair "
             "are quarantined, so the consumer's null-coordinate path is never exercised by "
-            "this candidate",
+            "this candidate; every emitted pair is verified inside its declared state",
+            "candidate_records_with_exchanged_coordinates": sum(
+                1 for r in new if r["source_record"]["coordinate_transformation"] != "none"),
+            "mobile_null_type_handling": "getNearbyFacilities and getFacilitiesByLocation "
+            "filter non-emergency urgencies with allowedTypes.contains(type); a null type is "
+            "never contained, so every such record is dropped and the list is empty. The "
+            "handoff contract for the next build requires the opposite: a null type must not "
+            "be filtered out and must never produce an empty list.",
             "mobile_emergency_test": "facility['emergency_capable'] == true; null is treated as false",
             "candidate_emergency_capable_true": sum(1 for r in new if r["emergency_capable"] is True),
             "mobile_type_filter": "non-emergency urgencies keep only {hospital, clinic, health_centre, pharmacy}",

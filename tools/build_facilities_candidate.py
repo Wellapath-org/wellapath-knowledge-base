@@ -4,8 +4,8 @@
     python3 tools/build_facilities_candidate.py           # write
     python3 tools/build_facilities_candidate.py --check    # fail if the committed copy differs
 
-Writes `candidate/facilities.ng.v2.0.json`, plus the quality and quarantine reports that
-explain what it did and did not keep.
+Writes `candidate/facilities.ng.v2.0.json`, the quality and quarantine reports that explain
+what it did and did not keep, and the coordinate audit that lists every correction.
 
 The generator refuses to guess. A source value outside an explicit mapping table becomes an
 `unmapped` entry, and a row missing something the artifact cannot be honest without is
@@ -14,12 +14,16 @@ fields the Mobile consumer reads — `type` and `emergency_capable` — are emit
 every record, because this source does not evidence either and inventing them would decide
 which facilities a user is shown in an emergency.
 
-Two pipeline policies are applied deliberately and counted (Step 2):
+Coordinates (Step 3). The source writes latitude and longitude the wrong way round for whole
+states. Each in-box pair is tested against the state the row claims, as given and with the two
+values exchanged, using the repository's GRID3 facility points as the boundary instrument
+(tools/facilities/geometry.py). A pair is corrected ONLY when as given it is outside the state
+and exchanged it is strictly inside; the source values stay on the record and every correction
+is listed in the audit. Both plausible, either uncertain, or GRID3 naming a different state for
+the same facility -> quarantined as ambiguous. Both outside -> quarantined as invalid.
 
-  * a row with no usable coordinate pair — absent, unparseable, 0,0, out of bounds or
-    suspected swapped — is quarantined, never emitted with nulls or a substitute;
-  * rows that are exact duplicates (same name, state, LGA and coordinates) collapse to one
-    survivor chosen by a total, documented rule. No values are merged across members.
+Exact duplicates (same name, state, LGA and coordinates) collapse to one survivor chosen by a
+total, documented rule. No values are merged across members.
 
 Nothing here uploads, publishes or activates anything, and it does not touch
 `facilities.ng.v1.1.json`.
@@ -38,8 +42,9 @@ from collections import Counter, defaultdict
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from facilities import FACILITIES_TOOLING_VERSION
+from facilities import geometry as G
 from facilities import mappings as M
-from facilities.normalize import (coordinate, coordinate_vs_state, duplicate_key, free_text,
+from facilities.normalize import (duplicate_key, free_text, haversine_km, parse_coordinates,
                                   phone, sort_key, survivor_key, text, timestamp)
 from vocab.artifact_io import dump_artifact_bytes, dump_report_bytes, load_json, repo_path, write_bytes
 
@@ -50,37 +55,45 @@ SOURCE_BYTES = 20913558
 CANDIDATE = repo_path("candidate", "facilities.ng.v2.0.json")
 QUALITY = repo_path("reports", "facilities_quality_v1.json")
 QUARANTINE = repo_path("reports", "facilities_quarantine_v1.json")
+AUDIT = repo_path("reports", "facilities_coordinate_audit_v1.json")
 CURRENT = repo_path("facilities.ng.v1.1.json")
 
 ARTIFACT_ID = "facilities"
 CANDIDATE_VERSION = "2.0"
 SCHEMA_VERSION = "2.0"
 COUNTRY = "ng"
-PHASE = "Nationwide Facilities / Step 2"
+PHASE = "Nationwide Facilities / Step 3"
 
 #: Fixed, so regeneration is byte-stable. Not a clock read.
-GENERATED_AT = "2026-09-14T00:00:00Z"
+GENERATED_AT = "2026-09-14T12:00:00Z"
 GENERATOR_VERSION = FACILITIES_TOOLING_VERSION
 
 #: A row without one of these cannot be represented honestly, so it is quarantined rather
 #: than emitted with a filler value.
 REQUIRED = ("facility_name", "state_name", "lga_name")
 
-#: Every coordinate outcome other than "usable" quarantines the row. Listed in full rather
-#: than as "anything non-empty" so that adding a reason to `normalize.coordinate` is a
-#: visible decision here too. The last two come from the per-state instrument, which runs
-#: only on pairs the national box has already accepted.
-COORDINATE_QUARANTINE_REASONS = (
-    "coordinates_absent", "coordinates_unparseable", "coordinates_null_island",
-    "coordinates_out_of_bounds", "coordinates_swapped_suspected",
-    "coordinates_swapped_suspected_by_state", "coordinates_not_in_state",
-)
-
 #: The ten fields facilities 1.1 emits, in its order. The candidate keeps every one under the
 #: same name so the Mobile consumer's field access is unchanged; the schema and the validator
 #: both assert it.
 MOBILE_SURFACE = ("facility_id", "name", "type", "state", "city_area", "latitude",
                   "longitude", "phone", "opening_hours", "emergency_capable")
+
+#: How close the GRID3 point for the SAME NHFR facility must be to count as corroborating an
+#: orientation. GRID3's coordinates are a different geocoding vintage, so this is a loose
+#: corroboration band, reported as evidence and never used to decide.
+CORROBORATION_KM = 20.0
+
+DEDUPLICATION_RULE = {
+    "rule_id": "exact_match_v1",
+    "key": "casefolded normalised name + state + casefolded LGA + identical longitude and "
+    "latitude as emitted (after any coordinate correction)",
+    "survivor": "the member with the smallest registry unique_id, then the smallest source "
+    "id — the earlier registration in the source's own sequence",
+    "values_merged": False,
+    "not_collapsed": "same name in the same LGA at a different point; same point under a "
+    "different name. Both remain in the artifact and are counted as duplicate CANDIDATES "
+    "in the quality report for a reconciliation decision.",
+}
 
 
 class SourceDrift(Exception):
@@ -108,6 +121,7 @@ def read_source():
 def build():
     header, body = read_source()
     at = {name: index for index, name in enumerate(header)}
+    geometry = G.StateGeometry.load()
 
     records = []
     quarantined = []
@@ -116,9 +130,13 @@ def build():
     absence = Counter()
     line_of = {}          # source_id -> source line, for the duplicate quarantine entries
     latest_update = None  # the newest audit timestamp anywhere in the source
-    # Per-state evidence for the coordinate instrument: every in-box pair, both readings.
-    state_geo = defaultdict(lambda: {"given": [], "transposed": [], "lat": [], "lon": [],
-                                     "refused_swapped": 0, "refused_not_in_state": 0})
+
+    # Coordinate audit: every outcome counted, every correction listed, per state.
+    outcomes = Counter()
+    evidence_counts = Counter()
+    corrections = []
+    corroboration = defaultdict(Counter)
+    per_state = defaultdict(Counter)
 
     for line_number, row in enumerate(body, start=3):  # +1 title, +1 header, +1 to 1-index
         source_id = row[at["id"]].strip()
@@ -129,16 +147,16 @@ def build():
         if updated_at and (latest_update is None or updated_at > latest_update):
             latest_update = updated_at
 
-        def quarantine(code, detail):
-            quarantined.append(
-                {
-                    "source_line": line_number,
-                    "source_id": source_id,
-                    "source_unique_id": unique_id,
-                    "reason_code": code,
-                    "detail": detail,
-                }
-            )
+        def quarantine(code, detail, **extra):
+            entry = {
+                "source_line": line_number,
+                "source_id": source_id,
+                "source_unique_id": unique_id,
+                "reason_code": code,
+                "detail": detail,
+            }
+            entry.update(extra)
+            quarantined.append(entry)
             reasons[code] += 1
 
         name, name_reason = free_text(row[at["facility_name"]])
@@ -164,33 +182,79 @@ def build():
         if lga is None:
             quarantine("lga_absent", "lga_name is blank")
             continue
+        per_state[state]["source_rows"] += 1
 
-        lon, lat, coord_reason = coordinate(row[at["longitude"]], row[at["latitude"]])
-        if coord_reason in COORDINATE_QUARANTINE_REASONS:
-            # A locator record without a point cannot be sorted by distance and cannot be
-            # placed on a map. It is quarantined with its reason, never emitted with nulls
-            # and never given a centroid or a geocoded guess.
-            quarantine(coord_reason, "longitude=%r latitude=%r"
+        # --- coordinates ---------------------------------------------------------------------
+        lon, lat, parse_reason = parse_coordinates(row[at["longitude"]], row[at["latitude"]])
+        if parse_reason:
+            # absent, unparseable or 0,0: nothing to orient. Quarantined, never substituted.
+            quarantine(parse_reason, "longitude=%r latitude=%r"
                        % (row[at["longitude"]].strip(), row[at["latitude"]].strip()))
+            per_state[state]["quarantined_missing"] += 1
             continue
-        assert coord_reason is None, coord_reason  # every reason is in the tuple above
 
-        # The box accepted the pair. Now ask whether it is plausible for the STATE the row
-        # claims, because a transposed northern pair stays inside the box. Both readings are
-        # recorded as evidence before anything is refused.
-        ref_lat, ref_lon = M.STATE_REFERENCE_POINTS[state]
-        given_km, transposed_km, state_reason = coordinate_vs_state(
-            lon, lat, ref_lat, ref_lon, M.SWAP_MIN_DISTANCE_KM, M.SWAP_FACTOR, M.NOT_IN_STATE_KM)
-        geo = state_geo[state]
-        geo["given"].append(given_km)
-        geo["transposed"].append(transposed_km)
-        geo["lat"].append(lat)
-        geo["lon"].append(lon)
-        if state_reason:
-            geo["refused_swapped" if state_reason.endswith("by_state") else "refused_not_in_state"] += 1
-            quarantine(state_reason, "%.0f km from the %s reference point as given, %.0f km "
-                       "transposed; refused, not exchanged" % (given_km, state, transposed_km))
+        outcome, evidence, given_m, exchanged_m = geometry.orientation(lat, lon, state)
+        grid_state = geometry.declared_state_of(source_id, unique_id)
+        if grid_state is not None and grid_state != state and outcome != G.QUARANTINED_INVALID:
+            # The row's own state is in doubt: GRID3 records the same NHFR facility elsewhere.
+            outcome = G.QUARANTINED_AMBIGUOUS
+            evidence = "declared_state_disagrees_with_grid3"
+        outcomes[outcome] += 1
+        evidence_counts[evidence] += 1
+
+        if outcome == G.QUARANTINED_AMBIGUOUS:
+            detail = ("%s; as given %s, exchanged %s; neither orientation is established, so "
+                      "the row is held rather than guessed" % (evidence, given_m, exchanged_m))
+            if evidence == "declared_state_disagrees_with_grid3":
+                detail = ("GRID3 records this NHFR facility in %s, the row says %s; the declared "
+                          "state is uncertain, so no orientation can be verified against it"
+                          % (grid_state, state))
+            quarantine("coordinates_orientation_ambiguous", detail,
+                       as_given=given_m, exchanged=exchanged_m)
+            per_state[state]["quarantined_ambiguous"] += 1
             continue
+        if outcome == G.QUARANTINED_INVALID:
+            quarantine("coordinates_not_in_state",
+                       "outside %s under both orientations (as given %s, exchanged %s)"
+                       % (state, given_m, exchanged_m), as_given=given_m, exchanged=exchanged_m)
+            per_state[state]["quarantined_invalid"] += 1
+            continue
+
+        source_lat, source_lon = lat, lon
+        transformation = "none"
+        if outcome == G.ACCEPTED_AFTER_SWAP:
+            lat, lon = lon, lat
+            transformation = "swap_lat_lon"
+            per_state[state]["accepted_after_verified_swap"] += 1
+        else:
+            per_state[state]["accepted_unchanged"] += 1
+
+        # Corroboration only: how far GRID3's point for the SAME facility is from the pair
+        # we are emitting, versus from the pair we are not. Reported, never decided on.
+        grid_point = geometry.grid3_point_of(source_id, unique_id)
+        corroboration_km = None
+        if grid_point:
+            corroboration_km = round(haversine_km(grid_point[0], grid_point[1], lat, lon), 1)
+            other_km = haversine_km(grid_point[0], grid_point[1], lon, lat)
+            corroboration[outcome]["joined"] += 1
+            corroboration[outcome]["emitted_pair_within_%dkm" % CORROBORATION_KM] += (
+                corroboration_km <= CORROBORATION_KM)
+            corroboration[outcome]["other_pair_within_%dkm" % CORROBORATION_KM] += (
+                other_km <= CORROBORATION_KM)
+        if transformation != "none":
+            corrections.append({
+                "source_line": line_number,
+                "source_id": source_id,
+                "state": state,
+                "source_latitude": source_lat,
+                "source_longitude": source_lon,
+                "latitude": lat,
+                "longitude": lon,
+                "evidence": evidence,
+                "as_given": given_m,
+                "exchanged": exchanged_m,
+                "grid3_same_facility_km_from_applied": corroboration_km,
+            })
 
         e164, phone_reason = phone(row[at["phone_number"]])
         if phone_reason:
@@ -240,13 +304,10 @@ def build():
                 for field, column in M.SERVICES_SOURCE_COLUMNS.items()
             },
             # Identity and provenance only. Every original value stays recoverable by joining
-            # source_id against the committed, hash-pinned source CSV, so copying raw
-            # coordinates and phone strings into each record would duplicate a file this
-            # repository already holds — and it tripled the artifact, from 12 MB to 37 MB,
-            # for no consumer. The administrative ids are the source's own (each maps to
-            # exactly one name, verified in the provenance record) and make an LGA unambiguous
-            # where two states share a name for one. The audit timestamp is the source's own
-            # record-level last-updated value, zone undeclared.
+            # source_id against the committed, hash-pinned source CSV. The administrative ids
+            # are the source's own; lga_id is scoped to the LGA name, not the state. The
+            # coordinate fields record whether the emitted pair is the source's pair or the
+            # source's pair exchanged, and keep the source values when it is the latter.
             "source_record": {
                 "source_id": source_id,
                 "source_unique_id": unique_id,
@@ -254,14 +315,14 @@ def build():
                 "lga_id": row[at["lga_id"]].strip(),
                 "ward_id": row[at["ward_id"]].strip() or None,
                 "source_updated_at": updated_at,
+                "coordinate_transformation": transformation,
+                "source_latitude": source_lat if transformation != "none" else None,
+                "source_longitude": source_lon if transformation != "none" else None,
             },
         }
         records.append(record)
 
     # --- conflicting duplicates -------------------------------------------------------------
-    # `id` is unique across the source, so a duplicate facility_id would be a generator fault
-    # rather than a data fault. Checked anyway: it is the one error that would silently drop a
-    # facility during serialization.
     by_id = Counter(r["facility_id"] for r in records)
     duplicate_ids = {k: v for k, v in by_id.items() if v > 1}
     if duplicate_ids:
@@ -283,30 +344,23 @@ def build():
             }
         )
         reasons["duplicate_exact_match"] += 1
+        per_state[loser["state"]]["quarantined_duplicate"] += 1
 
     records.sort(key=sort_key)
 
+    audit = {
+        "outcomes": outcomes, "evidence": evidence_counts, "corrections": corrections,
+        "corroboration": corroboration, "per_state": per_state, "geometry": geometry,
+    }
     artifact = {
-        "_metadata": _metadata(records, absence, unmapped, dedup, latest_update, header, body),
+        "_metadata": _metadata(records, absence, unmapped, dedup, latest_update, header, body, audit),
         "facilities": records,
     }
     quality = _quality_report(header, body, records, quarantined, reasons, unmapped, absence,
-                              dedup, latest_update, state_geo)
+                              dedup, latest_update, audit)
     quarantine_report = _quarantine_report(quarantined, reasons)
-    return artifact, quality, quarantine_report
-
-
-DEDUPLICATION_RULE = {
-    "rule_id": "exact_match_v1",
-    "key": "casefolded normalised name + state + casefolded LGA + identical longitude and "
-    "latitude as emitted",
-    "survivor": "the member with the smallest registry unique_id, then the smallest source "
-    "id — the earlier registration in the source's own sequence",
-    "values_merged": False,
-    "not_collapsed": "same name in the same LGA at a different point; same point under a "
-    "different name. Both remain in the artifact and are counted as duplicate CANDIDATES "
-    "in the quality report for a reconciliation decision.",
-}
+    audit_report = _audit_report(records, audit, reasons)
+    return artifact, quality, quarantine_report, audit_report
 
 
 def deduplicate(records):
@@ -374,9 +428,17 @@ def _states_in_source(header, body):
     return found
 
 
-def _metadata(records, absence, unmapped, dedup, latest_update, header, body):
+def _metadata(records, absence, unmapped, dedup, latest_update, header, body, audit):
     states = sorted({r["state"] for r in records})
     emptied = sorted(_states_in_source(header, body) - set(states))
+    absent = [s for s in M.NIGERIA_STATES if s not in states and s not in emptied]
+    claim = "NOT nationwide. %d states%s carry records. %s have no rows in the source at all" % (
+        len(states) - (1 if M.FCT_NAME in states else 0),
+        " plus the FCT" if M.FCT_NAME in states else "",
+        ", ".join(absent))
+    if emptied:
+        claim += "; %s have rows in the source but every one was refused" % ", ".join(emptied)
+    claim += "."
     return {
         "artifact_id": ARTIFACT_ID,
         "version": CANDIDATE_VERSION,
@@ -394,15 +456,9 @@ def _metadata(records, absence, unmapped, dedup, latest_update, header, body):
         "generator_version": GENERATOR_VERSION,
         "total_facilities": len(records),
         "states_covered": states,
-        "states_absent": [s for s in M.NIGERIA_STATES if s not in states and s not in emptied],
+        "states_absent": absent,
         "states_with_no_emitted_records": emptied,
-        "coverage_claim": "NOT nationwide. %d states%s carry records. Adamawa, Kebbi and "
-        "Sokoto have no rows in the source at all; %s have rows in the source but every one "
-        "was refused, almost all because their coordinates are written the wrong way round "
-        "(see coordinate_reference)."
-        % (len(states) - (1 if M.FCT_NAME in states else 0),
-           " plus the FCT" if M.FCT_NAME in states else "",
-           ", ".join(emptied) if emptied else "no states"),
+        "coverage_claim": claim,
         "source": {
             "path": "facilities/source/nigeria_health_facilities.csv",
             "sha256": SOURCE_SHA256,
@@ -411,7 +467,9 @@ def _metadata(records, absence, unmapped, dedup, latest_update, header, body):
             "organization": None,
             "licence": None,
             "licence_note": "Not established. No licence accompanied the data. This candidate "
-            "must not be published, uploaded or served until reuse permission is confirmed.",
+            "must not be published, uploaded or served until reuse permission is confirmed; "
+            "the written evidence required is listed in "
+            "facilities/source/nhf_authorization_checklist_v1.json.",
             "snapshot_declared_version": None,
             "snapshot_last_updated_at": latest_update,
             "snapshot_note": "The source declares no version. snapshot_last_updated_at is the "
@@ -428,25 +486,32 @@ def _metadata(records, absence, unmapped, dedup, latest_update, header, body):
             "removed_rows_listed_in": "reports/facilities_quarantine_v1.json "
             "(reason_code duplicate_exact_match, each with its survivor_facility_id)",
         },
-        "coordinate_policy": "Every emitted record carries a usable coordinate pair inside "
-        "the Nigeria bounding box AND plausible for the state the row claims. A source row "
-        "with absent, unparseable, 0,0, out-of-bounds, suspected-swapped or not-in-state "
-        "coordinates is quarantined with that reason, never emitted with nulls, never "
-        "exchanged and never given a substitute point.",
-        "coordinate_reference": {
-            "instrument": "distance from an approximate per-state reference point, both as "
-            "given and with latitude and longitude exchanged (tools/facilities/mappings.py "
-            "STATE_REFERENCE_POINTS)",
-            "reference_accuracy": "about 0.5 degrees; reference geography, not facility data",
-            "cross_check": "facilities 1.1 (GRID3/OSM lineage) medians for Lagos, FCT and "
-            "Kano lie 7, 5 and 20 km from the reference points",
-            "refused_as_transposed_when": "more than %.0f km from the state's point as given "
-            "and at least %.0fx closer transposed" % (M.SWAP_MIN_DISTANCE_KM, M.SWAP_FACTOR),
-            "refused_as_not_in_state_when": "more than %.0f km from the state's point under "
-            "either reading" % M.NOT_IN_STATE_KM,
-            "records_moved_or_exchanged": 0,
-            "evidence": "reports/facilities_quality_v1.json source_evidence."
-            "coordinate_consistency_by_state",
+        "coordinate_policy": "Every emitted record carries a coordinate pair inside the "
+        "Nigeria bounding box AND verified inside the state the row claims. A row whose pair "
+        "is absent, unparseable or 0,0 is quarantined. A pair that is outside its state as "
+        "given and strictly inside it with latitude and longitude exchanged is emitted "
+        "exchanged, with the source values kept on the record and the correction listed in "
+        "the audit. A pair that is plausible either way, uncertain, or whose declared state "
+        "GRID3 contradicts is quarantined as ambiguous; a pair outside its state either way is "
+        "quarantined as invalid. No point is ever invented, moved or snapped.",
+        "coordinate_remediation": {
+            "rule_id": G.RULE_ID,
+            "instrument": audit["geometry"].describe()["instrument"],
+            "reference_geometry": {
+                "path": audit["geometry"].describe()["reference_points"]["path"],
+                "sha256": G.GRID3_SHA256,
+                "citation": G.GRID3_CITATION,
+            },
+            "accepted_unchanged": audit["outcomes"][G.ACCEPTED_UNCHANGED],
+            "accepted_after_verified_swap": audit["outcomes"][G.ACCEPTED_AFTER_SWAP],
+            "quarantined_ambiguous": audit["outcomes"][G.QUARANTINED_AMBIGUOUS],
+            "quarantined_invalid": audit["outcomes"][G.QUARANTINED_INVALID],
+            "records_corrected_in_artifact": sum(
+                1 for r in records if r["source_record"]["coordinate_transformation"] != "none"),
+            "transformation": "swap_lat_lon — the source's latitude and longitude values "
+            "exchanged; source_record.source_latitude/source_longitude keep the original "
+            "values on every corrected record",
+            "audit": "reports/facilities_coordinate_audit_v1.json",
         },
         "unresolved_fields": {
             "type": "null on every record. Mobile filters non-emergency results by type against "
@@ -460,7 +525,12 @@ def _metadata(records, absence, unmapped, dedup, latest_update, header, body):
             "fall back to distance ordering.",
             "type_vocabulary": list(M.FACILITY_TYPES),
             "type_vocabulary_note": "The closed vocabulary a Product decision would map into. "
-            "Declared so the enum exists to validate against; not applied to any record.",
+            "Declared so the enum exists to validate against; not applied to any record. A null "
+            "type is NOT a member of this vocabulary and must never be treated as one.",
+            "consumer_contract": "A null type must not be filtered out and must never produce "
+            "an empty result list; emergency prioritisation may apply only to records whose "
+            "emergency_capable is true; with no such record, ordering falls back to distance "
+            "pending an explicit Product/Clinical decision (mobile_handoff/facilities_v2/README.md).",
         },
         "absence_convention": {
             "null": "not_provided — the source field was blank or a placeholder token",
@@ -486,8 +556,36 @@ def _rate(count, total):
     return {"count": count, "rate": round(count / total, 4) if total else None}
 
 
+def _coverage_table(records, audit):
+    """Every state and the FCT: what came in, what happened to it, what came out, and 1.1."""
+    current = load_json(CURRENT)["facilities"]
+    current_by_state = Counter(f["state"] for f in current)
+    emitted = Counter(r["state"] for r in records)
+    # What a pipeline that refused every correction would emit: the accepted-unchanged rows
+    # that survived deduplication.
+    unchanged = Counter(
+        r["state"] for r in records if r["source_record"]["coordinate_transformation"] == "none")
+    table = []
+    for state in sorted(set(M.NIGERIA_STATES) | {M.FCT_NAME}):
+        p = audit["per_state"].get(state, Counter())
+        table.append({
+            "state": state,
+            "source_rows": p["source_rows"],
+            "accepted_unchanged": p["accepted_unchanged"],
+            "accepted_after_verified_swap": p["accepted_after_verified_swap"],
+            "quarantined_ambiguous": p["quarantined_ambiguous"],
+            "quarantined_invalid": p["quarantined_invalid"],
+            "quarantined_missing_coordinates": p["quarantined_missing"],
+            "quarantined_duplicate": p["quarantined_duplicate"],
+            "candidate_without_correction": unchanged.get(state, 0),
+            "candidate": emitted.get(state, 0),
+            "facilities_1_1": current_by_state.get(state, 0),
+        })
+    return table
+
+
 def _quality_report(header, body, records, quarantined, reasons, unmapped, absence, dedup,
-                    latest_update, state_geo):
+                    latest_update, audit):
     at = {name: index for index, name in enumerate(header)}
     total = len(records)
     by_state = Counter(r["state"] for r in records)
@@ -499,14 +597,9 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
         column: sum(1 for row in body if not row[at[column]].strip()) for column in header
     }
     name_dupes = Counter((r["name"].casefold(), r["state"], r["city_area"]) for r in records)
-    coord_dupes = Counter(
-        (r["longitude"], r["latitude"]) for r in records if r["longitude"] is not None
-    )
+    coord_dupes = Counter((r["longitude"], r["latitude"]) for r in records)
     source_state_unique = Counter(row[at["state_unique_id"]].strip() for row in body)
 
-    # facility_type_id has no name column. Its joint distribution with facility_level and
-    # ownership is the evidence a decision owner needs to say whether it means anything the
-    # candidate could use; it is reported here and interpreted nowhere.
     type_id_crosstab = Counter(
         (row[at["facility_type_id"]].strip() or None,
          row[at["facility_level_name"]].strip() or None,
@@ -526,20 +619,16 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             states_by_lga_id[(row[at["lga_id"]].strip(), lga)][state] += 1
     emitted_lgas = {(r["state"], r["city_area"]) for r in records}
 
-    # The source's lga_id identifies an LGA NAME, not a (state, LGA) pair: several names exist
-    # in two states and carry one id across both. Reported with each side's emitted count and
-    # median point, so a reader can see the two sides are in different places without anyone
-    # here deciding which side is "right" — for the genuine homonyms both are.
     def median(values):
         values = sorted(values)
         return round(values[len(values) // 2], 4) if values else None
 
     lga_id_spanning = []
-    for (lga_id, lga), per_state in sorted(states_by_lga_id.items()):
-        if len(per_state) < 2:
+    for (lga_id, lga), per_state_rows in sorted(states_by_lga_id.items()):
+        if len(per_state_rows) < 2:
             continue
         sides = []
-        for state, source_rows in sorted(per_state.items()):
+        for state, source_rows in sorted(per_state_rows.items()):
             emitted = [r for r in records if r["state"] == state and r["city_area"] == lga]
             sides.append({
                 "state": state, "source_rows": source_rows, "emitted": len(emitted),
@@ -548,37 +637,8 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             })
         lga_id_spanning.append({"lga_id": lga_id, "lga_name": lga, "states": sides})
 
-    # The coordinate instrument's evidence, per state: how far the in-box pairs sit from the
-    # state's reference point as given and transposed, what was refused, and a plain-language
-    # reading of the two medians. The reading is arithmetic on the counts, not a judgement.
-    consistency = []
-    for state in sorted(state_geo):
-        geo = state_geo[state]
-        in_box = len(geo["given"])
-        refused = geo["refused_swapped"] + geo["refused_not_in_state"]
-        if geo["refused_swapped"] * 2 > in_box:
-            reading = "predominantly transposed in the source"
-        elif refused == 0:
-            reading = "consistent with the state"
-        else:
-            reading = "mixed"
-        consistency.append({
-            "state": state,
-            "reference_point": list(M.STATE_REFERENCE_POINTS[state]),
-            "in_box_rows": in_box,
-            # Two keyed scalars rather than a [lat, lon] pair: the repository's content-safety
-            # scanner treats a comma-separated decimal pair as a possible location disclosure,
-            # and a state median is not one, but the report should not need an exception.
-            "median_latitude_as_given": median(geo["lat"]),
-            "median_longitude_as_given": median(geo["lon"]),
-            "median_km_from_reference_as_given": round(median(geo["given"]), 1),
-            "median_km_from_reference_transposed": round(median(geo["transposed"]), 1),
-            "refused_swapped_suspected_by_state": geo["refused_swapped"],
-            "refused_not_in_state": geo["refused_not_in_state"],
-            "emitted": by_state.get(state, 0),
-            "reading": reading,
-        })
-    states_emptied = sorted(s for s in state_geo if by_state.get(s, 0) == 0)
+    states_emptied = sorted(s for s in _states_in_source(header, body) if by_state.get(s, 0) == 0)
+    coverage_table = _coverage_table(records, audit)
 
     return {
         "_metadata": {
@@ -600,6 +660,14 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             "quarantined_of_which_exact_duplicates": dedup["rows_removed"],
             "balances": len(body) == len(records) + len(quarantined),
         },
+        "coordinate_remediation": {
+            "rule_id": G.RULE_ID,
+            "accepted_unchanged": audit["outcomes"][G.ACCEPTED_UNCHANGED],
+            "accepted_after_verified_swap": audit["outcomes"][G.ACCEPTED_AFTER_SWAP],
+            "quarantined_ambiguous": audit["outcomes"][G.QUARANTINED_AMBIGUOUS],
+            "quarantined_invalid": audit["outcomes"][G.QUARANTINED_INVALID],
+            "detail": "reports/facilities_coordinate_audit_v1.json",
+        },
         "identifiers": {
             "source_id_unique": len({row[at["id"]] for row in body}) == len(body),
             "source_unique_id_unique": len({row[at["unique_id"]] for row in body}) == len(body),
@@ -614,18 +682,16 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             "states_absent_from_source": [s for s in M.NIGERIA_STATES
                                           if s not in by_state and s not in states_emptied],
             "states_in_source_with_no_emitted_records": states_emptied,
-            "states_emptied_note": "Every row of these states was refused, almost entirely "
-            "by the per-state coordinate instrument: their coordinates are written the "
-            "wrong way round in the source. Listed, not smoothed over.",
             "fct_present": M.FCT_NAME in by_state,
             "by_state": dict(sorted(by_state.items())),
+            "remediation_by_state": coverage_table,
             "lga_names_distinct": len({r["city_area"] for r in records}),
             "lga_names_expected_nationally": 774,
             "lga_names_in_source": len(source_lgas),
             "lgas_lost_to_quarantine": sorted(
                 "%s / %s" % (state, lga) for state, lga in source_lgas - emitted_lgas),
             "lgas_lost_note": "State/LGA pairs present in the source whose every row was "
-            "quarantined. A consequence of the coordinate policy, stated rather than hidden.",
+            "quarantined. Stated rather than hidden.",
             "lgas_per_state": {k: len(v) for k, v in sorted(lgas_by_state.items())},
         },
         "categorical_counts": {
@@ -645,6 +711,8 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
                                            key=lambda kv: (kv[0] is None, kv[0]))),
             "opening_hours": dict(sorted(Counter(r["opening_hours"] for r in records).items(),
                                           key=lambda kv: (kv[0] is None, kv[0]))),
+            "coordinate_transformation": dict(sorted(Counter(
+                r["source_record"]["coordinate_transformation"] for r in records).items())),
         },
         "completeness": {
             "with_coordinates": sum(1 for r in records if r["latitude"] is not None),
@@ -694,25 +762,13 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             },
         },
         "source_evidence": {
-            "coordinate_consistency_by_state": consistency,
-            "coordinate_consistency_note": "For every state, the in-box pairs measured "
-            "against the state's approximate reference point, as given and with latitude and "
-            "longitude exchanged. Where the transposed reading is the near one for most rows "
-            "the state is written the wrong way round in the source; those rows are refused "
-            "(coordinates_swapped_suspected_by_state), never exchanged. Where a state's "
-            "latitude and longitude are numerically close (Bauchi, Gombe, Yobe, Borno, Kogi) "
-            "the two readings are only 100-250 km apart and the instrument is uncertain: "
-            "some transposed rows will have been kept and a few genuine ones refused. The "
-            "bounding box alone cannot see any of this; it only catches a transposition that "
-            "leaves Nigeria, which happens in the south.",
             "lga_ids_spanning_multiple_states": lga_id_spanning,
-            "lga_id_scope_note": "The source's lga_id is scoped to the LGA name, not to the "
+            "lga_id_scope_note": "The source's lga_id is scoped to the LGA name, not the "
             "state: each entry above carries one id in two states. Where both sides have many "
             "rows and distinct median points they are homonymous LGAs that genuinely exist in "
-            "both states; where one side has a single row it is a mislabelled row (all such "
-            "rows in the pinned source also lack coordinates and are quarantined on that "
-            "ground). Consequence for every consumer: (state, city_area) is the unambiguous "
-            "LGA key in this artifact; source_record.lga_id alone is not.",
+            "both states; where one side has a single row it is a mislabelled row. Consequence "
+            "for every consumer: (state, city_area) is the unambiguous LGA key in this "
+            "artifact; source_record.lga_id alone is not.",
             "facility_type_id_by_level_and_ownership": [
                 {"facility_type_id": k[0], "facility_level": k[1], "ownership": k[2], "rows": v}
                 for k, v in sorted(type_id_crosstab.items(),
@@ -726,6 +782,8 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
             "records": {"facilities_1_1": current_meta["total_facilities"], "candidate": total},
             "states_covered": {"facilities_1_1": len(current_meta["states_covered"]),
                                "candidate": len(by_state)},
+            "states_in_1_1_absent_from_candidate": sorted(
+                set(current_meta["states_covered"]) - set(by_state)),
             "schema_version": {"facilities_1_1": current_meta["schema_version"],
                                "candidate": SCHEMA_VERSION},
             "fields_null_on_every_candidate_record_but_populated_in_1_1": [
@@ -738,47 +796,41 @@ def _quality_report(header, body, records, quarantined, reasons, unmapped, absen
         },
         "known_limitations": [
             "Licence and publishing organisation for the source are NOT established; the "
-            "candidate must not be published, uploaded or served until they are.",
-            "NOT nationwide: %s have no records; %d of 774 LGA names are absent. A user in "
-            "those places gets an empty locator."
-            % (", ".join(s for s in M.NIGERIA_STATES if s not in by_state),
+            "candidate must not be published, uploaded or served until they are "
+            "(facilities/source/nhf_authorization_checklist_v1.json).",
+            "NOT nationwide: %s have no rows in the source; %d of 774 LGA names are absent."
+            % (", ".join(s for s in M.NIGERIA_STATES if s not in by_state and s not in states_emptied),
                774 - len({r["city_area"] for r in records})),
-            "type is null on every record, so the Mobile consumer's non-emergency filters "
-            "return nothing until a Product mapping decision is recorded.",
-            "emergency_capable is null on every record; emergency ordering degrades to pure "
-            "distance.",
+            "type is null on every record. A null type is not a member of the declared "
+            "vocabulary; the consumer must not filter it out and must never produce an empty "
+            "result list because of it. Which facilities to show for which urgency is a "
+            "Product decision that has not been made.",
+            "emergency_capable is null on every record; there is no verified positive record, "
+            "so emergency prioritisation cannot apply and ordering falls back to distance until "
+            "Product/Clinical record an explicit fallback decision.",
+            "The source writes latitude and longitude the wrong way round for whole states. "
+            "%d rows were corrected under %s with the source values kept on the record; %d "
+            "rows are held as ambiguous and %d refused as invalid. Every correction is listed "
+            "in reports/facilities_coordinate_audit_v1.json."
+            % (audit["outcomes"][G.ACCEPTED_AFTER_SWAP], G.RULE_ID,
+               audit["outcomes"][G.QUARANTINED_AMBIGUOUS], audit["outcomes"][G.QUARANTINED_INVALID]),
+            "The boundary instrument is GRID3's facility points, not polygons: a facility more "
+            "than 25 km from any GRID3 facility, or near a state line, reads as uncertain and is "
+            "held rather than decided. Where a state's latitude and longitude are numerically "
+            "close, both orientations can be inside the state; those rows are held too.",
             "No record in the source was individually verified (every row is a bulk import).",
             "phone is carried in normalised form, but public-use intent for it is not "
             "established; no tel: action should be offered before Product review.",
-            "%d source rows without a usable coordinate pair are quarantined, not emitted; "
-            "they are findable in no build of this candidate."
-            % sum(v for k, v in reasons.items() if k.startswith("coordinates_")),
+            "%d source rows without a coordinate pair are quarantined, not emitted."
+            % sum(v for k, v in reasons.items() if k in ("coordinates_absent", "coordinates_unparseable")),
             "Exact duplicates are collapsed by a strict rule; looser duplicates (same name and "
             "LGA at different points) remain and are counted, not merged.",
             "source_record.lga_id identifies an LGA name, not a state/LGA pair: %d names carry "
             "one id across two states. Key LGAs by (state, city_area), never by lga_id alone."
             % len(lga_id_spanning),
-            "The source writes latitude and longitude the wrong way round for whole states. "
-            "%d rows were refused on that ground and %d more as not in the state they claim; "
-            "%s have no emitted record at all as a result. The rows are listed with both "
-            "distances; nothing was exchanged. Correction is the source owner's, or an "
-            "explicitly recorded decision — not this pipeline's."
-            % (reasons.get("coordinates_swapped_suspected_by_state", 0),
-               reasons.get("coordinates_not_in_state", 0),
-               ", ".join(states_emptied) if states_emptied else "no states"),
-            "The per-state coordinate instrument uses approximate reference points and is "
-            "uncertain where a state's latitude and longitude are numerically close (Bauchi, "
-            "Gombe, Yobe, Borno, Kogi): some transposed rows there will have been kept.",
-            "In states the evidence reads as predominantly transposed but not emptied (%s), "
-            "the few surviving rows sat close enough to the diagonal to pass the instrument; "
-            "they are probably transposed too and cannot be told apart from genuine ones."
-            % ", ".join("%s %d" % (e["state"], e["emitted"]) for e in consistency
-                        if e["reading"] == "predominantly transposed in the source"
-                        and e["emitted"] > 0),
             "%d facility names are entirely upper case in the source and are carried as such; "
-            "re-casing was not applied because it corrupts acronyms (PHC, LUTH). Display "
-            "casing is a consumer concern."
-            % sum(1 for r in records if r["name"].isupper()),
+            "re-casing was not applied because it corrupts acronyms. Display casing is a "
+            "consumer concern." % sum(1 for r in records if r["name"].isupper()),
             "The artifact is an order of magnitude larger than facilities 1.1; a distribution "
             "profile is an open engineering decision.",
         ],
@@ -813,19 +865,13 @@ def _quarantine_report(quarantined, reasons):
             "point is quarantined rather than emitted with nulls, and never given a substitute",
             "coordinates_unparseable": "longitude/latitude present but not numeric",
             "coordinates_null_island": "coordinates are exactly 0,0",
-            "coordinates_out_of_bounds": "coordinates outside the Nigeria bounding box",
-            "coordinates_swapped_suspected": "outside the Nigeria bounding box as given, inside "
-            "it if the two fields were exchanged; NOT swapped automatically, because that is a "
-            "guess about which field the source got wrong",
-            "coordinates_swapped_suspected_by_state": "inside the bounding box, but more than "
-            "%.0f km from the reference point of the state the row claims as given and at "
-            "least %.0fx closer with latitude and longitude exchanged; the same refusal as "
-            "above, seen by a per-state yardstick because a northern transposition stays "
-            "inside Nigeria. NOT exchanged. Both distances are in the detail"
-            % (M.SWAP_MIN_DISTANCE_KM, M.SWAP_FACTOR),
-            "coordinates_not_in_state": "more than %.0f km from the reference point of the "
-            "state the row claims under either reading; either the state or the point is "
-            "wrong and the pipeline does not choose which" % M.NOT_IN_STATE_KM,
+            "coordinates_orientation_ambiguous": "under %s neither orientation of the pair is "
+            "established for the state the row claims — both plausible, either uncertain, or "
+            "GRID3 records the same NHFR facility in another state. Held, not guessed; the "
+            "memberships found are in as_given and exchanged" % G.RULE_ID,
+            "coordinates_not_in_state": "under %s the pair is outside the state the row claims "
+            "in both orientations; either the state or the point is wrong and the pipeline does "
+            "not choose which" % G.RULE_ID,
             "name_is_contact_detail": "facility_name holds an email address or URL rather than "
             "a name; the row cannot be presented to a user and the value is not repeated here",
             "duplicate_exact_match": "an exact duplicate (same name, state, LGA and "
@@ -838,16 +884,69 @@ def _quarantine_report(quarantined, reasons):
     }
 
 
+def _audit_report(records, audit, reasons):
+    geometry = audit["geometry"]
+    corroboration = {}
+    for outcome in (G.ACCEPTED_UNCHANGED, G.ACCEPTED_AFTER_SWAP):
+        c = audit["corroboration"].get(outcome, Counter())
+        joined = c["joined"]
+        corroboration[outcome] = {
+            "rows_joinable_to_grid3_by_nhfr_id": joined,
+            "grid3_same_facility_within_%dkm_of_emitted_pair" % CORROBORATION_KM: c[
+                "emitted_pair_within_%dkm" % CORROBORATION_KM],
+            "grid3_same_facility_within_%dkm_of_other_pair" % CORROBORATION_KM: c[
+                "other_pair_within_%dkm" % CORROBORATION_KM],
+        }
+    return {
+        "_metadata": {
+            "report_id": "facilities_coordinate_audit",
+            "version": "1",
+            "phase": PHASE,
+            "generator": "tools/build_facilities_candidate.py",
+            "generator_version": GENERATOR_VERSION,
+            "source_sha256": SOURCE_SHA256,
+            "note": "Every coordinate decision the generator made, counted; every correction "
+            "it applied, listed with the source values it replaced. Ambiguous and invalid rows "
+            "are in reports/facilities_quarantine_v1.json with their memberships. Nothing in "
+            "this report was decided by a centroid or a median distance.",
+        },
+        "algorithm": geometry.describe(),
+        "calibration_on_grid3_itself": geometry.calibration(),
+        "outcomes": {
+            G.ACCEPTED_UNCHANGED: audit["outcomes"][G.ACCEPTED_UNCHANGED],
+            G.ACCEPTED_AFTER_SWAP: audit["outcomes"][G.ACCEPTED_AFTER_SWAP],
+            G.QUARANTINED_AMBIGUOUS: audit["outcomes"][G.QUARANTINED_AMBIGUOUS],
+            G.QUARANTINED_INVALID: audit["outcomes"][G.QUARANTINED_INVALID],
+            "not_orientable_missing_or_zero": sum(
+                v for k, v in reasons.items()
+                if k in ("coordinates_absent", "coordinates_unparseable", "coordinates_null_island")),
+        },
+        "evidence_classes": dict(sorted(audit["evidence"].items())),
+        "grid3_record_level_corroboration": {
+            "note": "GRID3 carries the NHFR facility id, so the SAME facility's independently "
+            "published point can be compared with each orientation. GRID3 is a different "
+            "geocoding vintage, so agreement is loose; it corroborates the rule's direction and "
+            "decided nothing.",
+            "by_outcome": corroboration,
+        },
+        "records_corrected_in_artifact": sum(
+            1 for r in records if r["source_record"]["coordinate_transformation"] != "none"),
+        "coverage_by_state": _coverage_table(records, audit),
+        "corrections": sorted(audit["corrections"], key=lambda c: c["source_line"]),
+    }
+
+
 def main(argv):
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--check", action="store_true", help="fail if a committed file differs")
     args = parser.parse_args(argv)
 
-    artifact, quality, quarantine_report = build()
+    artifact, quality, quarantine_report, audit_report = build()
     outputs = [
         (CANDIDATE, dump_artifact_bytes(artifact)),
         (QUALITY, dump_report_bytes(quality)),
         (QUARANTINE, dump_report_bytes(quarantine_report)),
+        (AUDIT, dump_report_bytes(audit_report)),
     ]
 
     failures = 0

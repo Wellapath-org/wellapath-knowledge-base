@@ -1,0 +1,108 @@
+{
+  "_metadata": {
+    "record_id": "nhf_source_authorization_checklist",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 3",
+    "authored": "2026-09-14",
+    "applies_to": {
+      "source_path": "facilities/source/nigeria_health_facilities.csv",
+      "source_sha256": "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3",
+      "candidate": "candidate/facilities.ng.v2.0.json"
+    },
+    "rule": "Every item below must be SATISFIED, each with a resolvable written evidence reference, before _metadata.may_publish may leave false or release_status/publication_status may leave candidate_unapproved. tools/validate_facilities_candidate.py refuses a candidate that claims otherwise while any item is missing. Nothing in this repository can satisfy an item: the evidence comes from the source owner, Legal or the engineering lead, and is recorded here by reference.",
+    "status_vocabulary": ["missing", "requested", "satisfied", "refused"]
+  },
+  "all_satisfied": false,
+  "items": [
+    {
+      "id": "AUTH-01",
+      "requirement": "Source owner / publishing organisation identified",
+      "evidence_required": "A document or correspondence naming the organisation that produced and published the dataset, with an authoritative contact.",
+      "why": "The file names no organisation anywhere in its 90 columns; the brief's name for it (NHF) is not in the data.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-02",
+      "requirement": "Licence or written permission to use the data",
+      "evidence_required": "A licence text, or a written grant from the owner, covering WellaPath's use of this snapshot.",
+      "why": "Nothing accompanied the data. Without this, no downstream question about redistribution or app use can even be asked.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-03",
+      "requirement": "Permitted redistribution and modification",
+      "evidence_required": "The licence or grant states, or the owner confirms in writing, that a derived artifact (normalised, deduplicated, coordinate-corrected) may be redistributed.",
+      "why": "The candidate is a modified derivative: fields are dropped, values normalised, 11,000+ coordinate pairs exchanged under a recorded rule.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-04",
+      "requirement": "Permitted public mobile-app use",
+      "evidence_required": "Written confirmation that the data may be served to the public through a mobile application, including offline caching on the device.",
+      "why": "The artifact is downloaded to and held on users' phones; some licences permit internal use only.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-05",
+      "requirement": "Attribution requirements",
+      "evidence_required": "The exact attribution text the owner requires, or written confirmation that none is required.",
+      "why": "Attribution, if required, must appear in the artifact metadata and in the app before first publication; it cannot be added to an immutable published version afterwards.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-06",
+      "requirement": "Snapshot date / dataset version",
+      "evidence_required": "The owner's declared version or export date for this snapshot.",
+      "why": "The file declares none. The candidate carries only an inferred bound (newest record updated_at 2026-07-21T13:15:26, zone undeclared).",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-07",
+      "requirement": "Data dictionary or field definitions",
+      "evidence_required": "Definitions for every column used, at minimum facility_type_id, facility_level_option_id, facility_level_options_category_id, operational_hours, the service Yes/No columns, and the meaning of the verified/validated/published workflow fields.",
+      "why": "Three id columns have no name column and no dictionary; the meaning of 'Auto-approved via bulk import' on every row is undocumented; lga_id turned out to be name-scoped.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-08",
+      "requirement": "Contact or document establishing authority to grant the above",
+      "evidence_required": "Evidence that the person or office giving AUTH-02 to AUTH-05 is entitled to speak for the owner.",
+      "why": "A permission from someone without authority is not a permission.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    },
+    {
+      "id": "AUTH-09",
+      "requirement": "Chain of custody for the supplied copy",
+      "evidence_required": "Confirmation of how the file travelled from the owner to this repository, or a fresh export obtained directly from the owner.",
+      "why": "The supplied copy passed through Apple Numbers (macOS WhereFroms attribute) and is not a pristine upstream export; the coordinate transposition may have been introduced or preserved anywhere along that path.",
+      "status": "missing",
+      "evidence": null,
+      "recorded_by": null,
+      "recorded_on": null
+    }
+  ]
+}

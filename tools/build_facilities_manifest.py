@@ -44,6 +44,7 @@ def build():
     current_meta = load_json(CURRENT)["_metadata"]
     quality = load_json(QUALITY)
     compat = load_json(COMPAT)
+    checklist = load_json(repo_path("facilities", "source", "nhf_authorization_checklist_v1.json"))
     digest = sha256_file(CANDIDATE)
 
     return {
@@ -119,12 +120,24 @@ def build():
             "quarantined": quality["row_accounting"]["quarantined"],
             "quarantine_by_reason": quality["quarantine_reason_counts"],
             "exact_duplicates_collapsed": meta["deduplication"]["rows_removed"],
+            "coordinate_remediation": {
+                k: v for k, v in meta["coordinate_remediation"].items()
+                if k in ("rule_id", "accepted_unchanged", "accepted_after_verified_swap",
+                         "quarantined_ambiguous", "quarantined_invalid",
+                         "records_corrected_in_artifact", "audit")
+            },
             "reports": {
                 "quality": "reports/facilities_quality_v1.json",
                 "quarantine": "reports/facilities_quarantine_v1.json",
+                "coordinate_audit": "reports/facilities_coordinate_audit_v1.json",
                 "comparison_with_1_1": "reports/facilities_comparison_v1.json",
                 "mobile_compatibility": "reports/facilities_mobile_compat_v1.json",
             },
+        },
+        "source_authorization": {
+            "checklist": "facilities/source/nhf_authorization_checklist_v1.json",
+            "all_satisfied": checklist["all_satisfied"],
+            "items_missing": sorted(i["id"] for i in checklist["items"] if i["status"] != "satisfied"),
         },
         "proposed_config_block": {
             "_comment": "Shape matches the existing entries in src/routes/config.ts. NOT to be applied.",
@@ -155,6 +168,7 @@ def build():
             "report": "reports/facilities_mobile_compat_v1.json",
         },
         "publication_gates": {
+            "source_authorization_checklist_satisfied": checklist["all_satisfied"],
             "source_licence_established": False,
             "source_organization_established": False,
             "product_type_mapping_decided": False,

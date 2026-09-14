@@ -50,6 +50,8 @@ FROZEN = {
     "facilities_source": [
         "facilities/source/nigeria_health_facilities.csv",
         "facilities/source/nhf_provenance_v1.json",
+        "facilities/source/nhf_authorization_checklist_v1.json",
+        "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
     ],
     "schemas": [
         "schema/question_flow.v1.schema.json",

@@ -2,7 +2,7 @@
   "manifest_id": "facilities_v2_candidate",
   "manifest_version": "1",
   "generator": "tools/build_facilities_manifest.py",
-  "generator_version": "1.1.0",
+  "generator_version": "1.2.0",
   "IS_LIVE_MANIFEST": false,
   "WARNING": "This is a PROPOSED manifest block for a CANDIDATE artifact. It is not served by any endpoint. The live manifest is GET /config in wellapath-backend (src/routes/config.ts) and is UNCHANGED. The source licence is not established, which blocks publication independently of every other gate. Do not wire this block.",
   "live_manifest": {
@@ -22,13 +22,13 @@
     "version": "2.0",
     "schema_version": "2.0",
     "schema_path": "schema/facilities.v2.schema.json",
-    "schema_sha256": "f716f184f6cb4f7ba3e28aba8598ea0bb883cd05c5805bdd5c6a714394f59837",
+    "schema_sha256": "fc96d9142c9e669af6c02d6bb4e186fef025aa5a841fc65da4da2aff394c2e24",
     "filename": "facilities.ng.v2.0.json",
     "repository_path": "candidate/facilities.ng.v2.0.json",
-    "sha256": "e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "hash": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
-    "bytes": 23318064,
-    "record_count": 20696,
+    "sha256": "8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "hash": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+    "bytes": 36077142,
+    "record_count": 29028,
     "content_type": "application/json",
     "charset": "utf-8",
     "compression": "None at rest. The artifact is stored and served uncompressed, exactly as the current artifacts are; transport-level gzip/brotli is the CDN's business and the SHA256 is always of the uncompressed bytes.",
@@ -37,9 +37,9 @@
     "may_publish": false,
     "release_date": null,
     "country": "ng",
-    "generated_at": "2026-09-14T00:00:00Z",
+    "generated_at": "2026-09-14T12:00:00Z",
     "generator": "tools/build_facilities_candidate.py",
-    "generator_version": "1.1.0",
+    "generator_version": "1.2.0",
     "uploaded_to_r2": false,
     "proposed_r2_url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/facilities.ng.v2.0.json",
     "proposed_r2_url_is_live": false
@@ -54,36 +54,59 @@
     "snapshot_declared_version": null,
     "snapshot_last_updated_at": "2026-07-21T13:15:26",
     "rows": 31390,
-    "coverage_claim": "NOT nationwide. 27 states carry records. Adamawa, Kebbi and Sokoto have no rows in the source at all; FCT, Kano, Katsina, Kwara, Niger, Taraba, Zamfara have rows in the source but every one was refused, almost all because their coordinates are written the wrong way round (see coordinate_reference)."
+    "coverage_claim": "NOT nationwide. 33 states plus the FCT carry records. Adamawa, Kebbi, Sokoto have no rows in the source at all."
   },
   "pipeline_accounting": {
     "source_rows": 31390,
-    "emitted": 20696,
-    "quarantined": 10694,
+    "emitted": 29028,
+    "quarantined": 2362,
     "quarantine_by_reason": {
       "coordinates_absent": 524,
-      "coordinates_not_in_state": 81,
+      "coordinates_not_in_state": 67,
       "coordinates_null_island": 5,
-      "coordinates_out_of_bounds": 4,
-      "coordinates_swapped_suspected": 106,
-      "coordinates_swapped_suspected_by_state": 9911,
-      "duplicate_exact_match": 62,
+      "coordinates_orientation_ambiguous": 1442,
+      "duplicate_exact_match": 323,
       "name_empty": 1
     },
-    "exact_duplicates_collapsed": 62,
+    "exact_duplicates_collapsed": 323,
+    "coordinate_remediation": {
+      "rule_id": "coordinate_orientation_v1",
+      "accepted_unchanged": 18210,
+      "accepted_after_verified_swap": 11141,
+      "quarantined_ambiguous": 1442,
+      "quarantined_invalid": 67,
+      "records_corrected_in_artifact": 10862,
+      "audit": "reports/facilities_coordinate_audit_v1.json"
+    },
     "reports": {
       "quality": "reports/facilities_quality_v1.json",
       "quarantine": "reports/facilities_quarantine_v1.json",
+      "coordinate_audit": "reports/facilities_coordinate_audit_v1.json",
       "comparison_with_1_1": "reports/facilities_comparison_v1.json",
       "mobile_compatibility": "reports/facilities_mobile_compat_v1.json"
     }
+  },
+  "source_authorization": {
+    "checklist": "facilities/source/nhf_authorization_checklist_v1.json",
+    "all_satisfied": false,
+    "items_missing": [
+      "AUTH-01",
+      "AUTH-02",
+      "AUTH-03",
+      "AUTH-04",
+      "AUTH-05",
+      "AUTH-06",
+      "AUTH-07",
+      "AUTH-08",
+      "AUTH-09"
+    ]
   },
   "proposed_config_block": {
     "_comment": "Shape matches the existing entries in src/routes/config.ts. NOT to be applied.",
     "facilities": {
       "version": "2.0",
       "url": "${config.artifactBaseUrl}/facilities.ng.v2.0.json",
-      "hash": "sha256:e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+      "hash": "sha256:8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
       "release_date": "<set at approval time \u2014 currently null>",
       "country": "ng"
     }
@@ -101,12 +124,12 @@
   "mobile_compatibility": {
     "verdict": "NOT COMPATIBLE as it stands. The candidate satisfies every structural requirement \u2014 all ten fields present on every record, correct types, null handling consistent with the consumer \u2014 and still returns nothing for three of the four urgency paths, because the one field that drives non-emergency filtering cannot be populated from this source without a Product decision.",
     "blocking_findings": [
-      "FCT and Kano \u2014 served by facilities 1.1 \u2014 have no records in the candidate",
       "type is null on every candidate record, so every non-emergency query returns zero results"
     ],
     "report": "reports/facilities_mobile_compat_v1.json"
   },
   "publication_gates": {
+    "source_authorization_checklist_satisfied": false,
     "source_licence_established": false,
     "source_organization_established": false,
     "product_type_mapping_decided": false,
