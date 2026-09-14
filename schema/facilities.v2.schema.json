@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellapath.org/schema/facilities.v2.schema.json",
   "title": "WellaPath Nigeria facilities artifact — schema 2.0 (candidate)",
-  "description": "Schema for the nationwide facilities candidate. Additive over schema 1.0: every field facilities 1.1 emitted is still present under the same name and type, so the Mobile consumer's field access is unchanged. Two of those fields — type and emergency_capable — are null on every record because this source evidences neither; that is a behavioural change for the consumer even though the shape is unchanged, and it is the reason the artifact version is 2.0 rather than 1.2.\n\nAbsence convention, applied throughout: null means NOT PROVIDED (the source field was blank or a placeholder token). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value.",
+  "description": "Schema for the nationwide facilities candidate. Additive over schema 1.0: every field facilities 1.1 emitted is still present under the same name and type, so the Mobile consumer's field access is unchanged. Two of those fields — type and emergency_capable — are null on every record because this source evidences neither; that is a behavioural change for the consumer even though the shape is unchanged, and it is the reason the artifact version is 2.0 rather than 1.2.\n\nCoordinate policy (Step 2): latitude and longitude are non-null on every record. A source row without a usable pair is quarantined with its reason, never emitted with nulls and never given a substitute point. Exact duplicates (same name, state, LGA and coordinates) are collapsed to one survivor by a documented, total rule recorded in _metadata.deduplication; no values are merged.\n\nAbsence convention, applied throughout: null means NOT PROVIDED (the source field was blank or a placeholder token). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value.",
   "type": "object",
   "additionalProperties": false,
   "required": ["_metadata", "facilities"],
@@ -12,10 +12,12 @@
       "additionalProperties": false,
       "required": [
         "artifact_id", "version", "schema_version", "country", "release_status",
-        "release_date", "may_publish", "generated_at", "generator", "generator_version",
-        "total_facilities", "states_covered", "states_absent", "coverage_claim", "source",
-        "unresolved_fields", "absence_convention", "not_carried_from_source",
-        "absence_counts", "unmapped_source_values"
+        "publication_status", "release_date", "may_publish", "generated_at", "generator",
+        "generator_version", "total_facilities", "states_covered", "states_absent",
+        "states_with_no_emitted_records", "coverage_claim", "source", "deduplication",
+        "coordinate_policy", "coordinate_reference", "unresolved_fields",
+        "absence_convention", "not_carried_from_source", "absence_counts",
+        "unmapped_source_values"
       ],
       "properties": {
         "artifact_id": { "const": "facilities" },
@@ -24,7 +26,11 @@
         "country": { "const": "ng" },
         "release_status": {
           "const": "candidate_unapproved",
-          "description": "Pinned. A candidate becomes something else only through a recorded approval, never through regenerating it."
+          "description": "Pinned. A candidate becomes something else only through a recorded approval, never through regenerating it. This is the lifecycle field every artifact in the repository carries."
+        },
+        "publication_status": {
+          "const": "candidate_unapproved",
+          "description": "Pinned to the same constant as release_status. The two names describe one fact; pinning both means neither can drift."
         },
         "release_date": { "type": "null" },
         "may_publish": {
@@ -39,13 +45,22 @@
         "states_absent": {
           "type": "array",
           "items": { "type": "string" },
-          "description": "States with no record at all. Present and non-empty for this candidate; the artifact states its own coverage gap rather than leaving a reader to discover it."
+          "description": "States with no row in the source at all. Present and non-empty for this candidate; the artifact states its own coverage gap rather than leaving a reader to discover it."
+        },
+        "states_with_no_emitted_records": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "description": "States that have rows in the source but no record in the artifact, because every row was refused — for this source, because their coordinates are written the wrong way round. Disjoint from states_absent and from states_covered."
         },
         "coverage_claim": { "type": "string", "minLength": 1 },
         "source": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["path", "sha256", "byte_count", "provenance_record", "organization", "licence", "licence_note"],
+          "required": [
+            "path", "sha256", "byte_count", "provenance_record", "organization", "licence",
+            "licence_note", "snapshot_declared_version", "snapshot_last_updated_at", "snapshot_note"
+          ],
           "properties": {
             "path": { "type": "string" },
             "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
@@ -59,15 +74,63 @@
               "type": "null",
               "description": "Null, not a guess. No licence accompanied the data."
             },
-            "licence_note": { "type": "string", "minLength": 1 }
+            "licence_note": { "type": "string", "minLength": 1 },
+            "snapshot_declared_version": {
+              "type": "null",
+              "description": "Null, not a guess. The source declares no dataset version."
+            },
+            "snapshot_last_updated_at": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
+              "description": "The newest record-level updated_at in the source: its own audit timestamp, zone undeclared, so no zone suffix is claimed."
+            },
+            "snapshot_note": { "type": "string", "minLength": 1 }
+          }
+        },
+        "deduplication": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["rule_id", "key", "survivor", "values_merged", "groups_collapsed", "rows_removed", "removed_rows_listed_in"],
+          "properties": {
+            "rule_id": { "const": "exact_match_v1" },
+            "key": { "type": "string", "minLength": 1 },
+            "survivor": { "type": "string", "minLength": 1 },
+            "values_merged": { "const": false },
+            "groups_collapsed": { "type": "integer", "minimum": 0 },
+            "rows_removed": { "type": "integer", "minimum": 0 },
+            "removed_rows_listed_in": { "type": "string", "minLength": 1 }
+          }
+        },
+        "coordinate_policy": { "type": "string", "minLength": 1 },
+        "coordinate_reference": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["instrument", "reference_accuracy", "cross_check", "refused_as_transposed_when", "refused_as_not_in_state_when", "records_moved_or_exchanged", "evidence"],
+          "properties": {
+            "instrument": { "type": "string", "minLength": 1 },
+            "reference_accuracy": { "type": "string", "minLength": 1 },
+            "cross_check": { "type": "string", "minLength": 1 },
+            "refused_as_transposed_when": { "type": "string", "minLength": 1 },
+            "refused_as_not_in_state_when": { "type": "string", "minLength": 1 },
+            "records_moved_or_exchanged": { "const": 0, "description": "Pinned. The instrument refuses; it never corrects." },
+            "evidence": { "type": "string", "minLength": 1 }
           }
         },
         "unresolved_fields": {
           "type": "object",
-          "required": ["type", "emergency_capable"],
+          "required": ["type", "emergency_capable", "type_vocabulary"],
           "properties": {
             "type": { "type": "string", "minLength": 1 },
-            "emergency_capable": { "type": "string", "minLength": 1 }
+            "emergency_capable": { "type": "string", "minLength": 1 },
+            "type_vocabulary": {
+              "type": "array",
+              "items": { "enum": ["hospital", "clinic", "health_centre", "pharmacy", "laboratory", "other"] },
+              "uniqueItems": true,
+              "minItems": 6,
+              "maxItems": 6,
+              "description": "The closed vocabulary a Product mapping decision would map INTO. Declared, not applied: every record's type is null."
+            },
+            "type_vocabulary_note": { "type": "string" }
           }
         },
         "absence_convention": { "type": "object" },
@@ -99,10 +162,14 @@
           "pattern": "^ng_nhf_\\d+$",
           "description": "Stable identity, derived from the source's own unique row id. Distinct in shape from facilities 1.1's ng_<state>_<n> ids so the two lineages can never be confused for one another."
         },
-        "name": { "type": "string", "minLength": 1 },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "NFC-normalised, control characters stripped, whitespace collapsed. Casing is carried as the source has it: re-casing corrupts acronyms, so it is a consumer display concern."
+        },
         "type": {
           "type": "null",
-          "description": "Null on every record, deliberately. Mobile filters non-emergency results by type against {hospital, clinic, health_centre, pharmacy}; this source has no such column, only facility_level, which is a tier of care rather than a kind of facility. The mapping is a Product decision because it determines which facilities a user is shown for self-care versus urgent care."
+          "description": "Null on every record, deliberately. Mobile filters non-emergency results by type against {hospital, clinic, health_centre, pharmacy}; this source has no such column, only facility_level, which is a tier of care rather than a kind of facility. The mapping is a Product decision because it determines which facilities a user is shown for self-care versus urgent care. The vocabulary a decision would map into is declared in _metadata.unresolved_fields.type_vocabulary."
         },
         "state": { "type": "string", "minLength": 1 },
         "city_area": {
@@ -110,14 +177,27 @@
           "minLength": 1,
           "description": "The LGA name. facilities 1.1 populated this field with a mixture of LGA names and free text, so an LGA is consistent with its dominant existing use, not a change of meaning."
         },
-        "latitude": { "type": ["number", "null"], "minimum": 4.0, "maximum": 14.0 },
-        "longitude": { "type": ["number", "null"], "minimum": 2.5, "maximum": 15.0 },
+        "latitude": {
+          "type": "number",
+          "minimum": 4.0,
+          "maximum": 14.0,
+          "description": "Non-null on every record. Rows without a usable pair are quarantined."
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": 2.5,
+          "maximum": 15.0,
+          "description": "Non-null on every record. Rows without a usable pair are quarantined."
+        },
         "phone": {
           "type": ["string", "null"],
           "pattern": "^\\+234[789][01]\\d{8}$",
           "description": "E.164, normalised from the source and never invented. Null when the source value was absent, malformed or a placeholder. Public-use intent is NOT established; see the provenance record."
         },
-        "opening_hours": { "enum": ["24_hours", "12_hours", "8_hours", "other", null] },
+        "opening_hours": {
+          "enum": ["24_hours", "12_hours", "8_hours", "other", null],
+          "description": "Mapped only from the source's clean enum values; the free-text tail becomes null and is listed in _metadata.unmapped_source_values."
+        },
         "emergency_capable": {
           "type": "null",
           "description": "Null on every record. facilities 1.1 derived this from type == 'hospital'; this source has no type, and none of its 90 columns records emergency capability."
@@ -153,17 +233,29 @@
             "mortuary": { "type": ["boolean", "null"] },
             "ambulance": { "type": ["boolean", "null"] }
           },
-          "description": "Null means the source said neither Yes nor No. It is never coerced to false: 'we do not know whether this clinic has an ambulance' and 'this clinic has no ambulance' are different statements, and only one of them is safe to show a user."
+          "description": "Each key is read from exactly one source Yes/No column (tools/facilities/mappings.py SERVICES_SOURCE_COLUMNS); no other capability exists. Null means the source said neither Yes nor No. It is never coerced to false: 'we do not know whether this clinic has an ambulance' and 'this clinic has no ambulance' are different statements, and only one of them is safe to show a user."
         },
         "source_record": {
           "type": "object",
           "additionalProperties": false,
-          "required": ["source_id", "source_unique_id"],
+          "required": ["source_id", "source_unique_id", "state_id", "lga_id", "ward_id", "source_updated_at"],
           "properties": {
-            "source_id": { "type": "string", "minLength": 1 },
-            "source_unique_id": { "type": "string", "minLength": 1 }
+            "source_id": { "type": "string", "pattern": "^\\d+$" },
+            "source_unique_id": { "type": "string", "minLength": 1 },
+            "state_id": { "type": "string", "pattern": "^\\d+$" },
+            "lga_id": {
+              "type": "string",
+              "pattern": "^\\d+$",
+              "description": "The source's own id, scoped to the LGA NAME rather than the state: six homonymous LGA names carry one id in two states each. Key an LGA by (state, city_area); never by lga_id alone."
+            },
+            "ward_id": { "type": ["string", "null"], "pattern": "^\\d+$" },
+            "source_updated_at": {
+              "type": ["string", "null"],
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}$",
+              "description": "The source's record-level audit timestamp, zone undeclared."
+            }
           },
-          "description": "Identity only. Every original value stays recoverable by joining source_id against the committed, hash-pinned source CSV."
+          "description": "Identity and provenance only. Every original value stays recoverable by joining source_id against the committed, hash-pinned source CSV. The administrative ids are the source's own and each maps to exactly one name."
         }
       }
     }

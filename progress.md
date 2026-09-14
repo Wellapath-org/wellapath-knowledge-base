@@ -994,3 +994,68 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
   and unmerged; this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 2: candidate pipeline, schema, manifest, handoff
+
+Builds on the Step 1 candidate (commit `4afffe1`). Same source
+(`nigeria_health_facilities.csv`, `e598cecc…becb3`, 31,390 rows); the file
+the brief re-supplied at the repository root is byte identical to the
+committed copy and was not committed twice.
+
+- **Blockers restated, not resolved:** source licence and publishing
+  organisation are NOT established, no data dictionary was supplied, and
+  the data is not nationwide (Adamawa, Kebbi, Sokoto absent). The candidate
+  is `candidate_unapproved` / `may_publish: false` under both
+  `release_status` and the brief's `publication_status`, pinned by schema
+  `const`.
+
+- **Headline source finding:** the source writes latitude and longitude
+  the wrong way round for whole states. The national bounding box (all
+  Step 1 checked) is blind to a northern transposition because both values
+  stay inside Nigeria. A per-state reference yardstick
+  (`mappings.STATE_REFERENCE_POINTS`, ±0.5°, cross-checked against
+  facilities 1.1's independent medians at 7/5/20 km) sees it: **9,911 rows
+  refused as transposed**, 81 as not in the claimed state, nothing
+  exchanged. **FCT, Kano, Katsina, Kwara, Niger, Taraba and Zamfara have
+  no surviving record; FCT and Kano are served by 1.1 today** — recorded
+  as a blocking Mobile finding. Instrument uncertain where lat ≈ lon
+  (Bauchi, Gombe, Yobe, Borno, Kogi); said so per state.
+
+- **Pipeline policies added, all counted:** rows without a usable
+  coordinate pair are quarantined (639: 524 absent, 106 box-transposed,
+  5 null island, 4 out of bounds), never emitted with nulls or a
+  substitute; exact duplicates (same name, state, LGA and coordinates)
+  collapse to the smallest registry `unique_id` with no value merging
+  (62 pairs, each listed with its survivor). 31,390 = 20,696 emitted +
+  10,694 quarantined.
+
+- **Provenance carried per record:** `source_record` gains `state_id`,
+  `lga_id`, `ward_id`, `source_updated_at`; `_metadata.source` gains the
+  snapshot instant (≤ 2026-07-21T13:15:26, zone undeclared).
+
+- **Further source findings:** `lga_id` is scoped to the LGA name — six
+  homonymous LGAs carry one id in two states each, so `(state, city_area)`
+  is the only LGA key; five Enugu-labelled rows carry Abia LGAs (all 0,0,
+  quarantined). Recorded in the provenance record.
+
+- **Still null by decision, guarded by tests:** `type` (vocabulary declared,
+  mapping table empty) and `emergency_capable`. Mobile compatibility
+  re-measured: NOT COMPATIBLE — two blocking findings (type null; FCT and
+  Kano lost).
+
+- **New deliverables:** `candidate/facilities.manifest.candidate.json`
+  (`IS_LIVE_MANIFEST: false`, every gate false, rollback bound to 1.1 by
+  hash), `docs/FACILITIES_2_0_CHANGELOG.md`,
+  `mobile_handoff/facilities_v2/` (README + Dart types). The validator
+  fails if either document stops citing the candidate's current digest.
+
+- **Candidate:** `candidate/facilities.ng.v2.0.json`, 20,696 records,
+  23,318,064 bytes, sha256 `e8bc4d72…d791`; schema 2.0 `f716f184…9837`.
+  `facilities.ng.v1.1.json` byte identical (`25684c71…2398`). Thirteen
+  unresolved decisions in `docs/FACILITIES_NHF_CANDIDATE.md` §10, of which
+  #13 (apply the transposition, or return the file to the source owner)
+  decides whether the candidate can ever reach 1.1's coverage.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **Nothing published, uploaded, activated or approved;
+  this PR is left unmerged for review.**

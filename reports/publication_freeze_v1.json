@@ -8,7 +8,7 @@
     "note": "The exact bytes I3 Step 2 must not have touched. Regenerated and compared in --check mode, so a single changed byte in any listed file fails the run. The report cannot be fixed by editing it: an edited report no longer matches what the generator produces, which is the same failure."
   },
   "rule": "The publication tooling reads these files, hashes them and copies them into a disposable staging directory. It has no code path that opens any of them for writing, and every packaging operation re-hashes the source afterwards to prove it did not.",
-  "frozen_artifact_count": 48,
+  "frozen_artifact_count": 49,
   "groups": {
     "candidates": [
       {
@@ -38,8 +38,13 @@
       },
       {
         "path": "candidate/facilities.ng.v2.0.json",
-        "sha256": "2f42db7026a20eda4af8315ee8cb97fac07600edbd611d2cee919d99b1acad7d",
-        "byte_count": 30961471
+        "sha256": "e8bc4d72054b71004ed91af169432789830274f7db8ef25e8de5d4ffab9cd791",
+        "byte_count": 23318064
+      },
+      {
+        "path": "candidate/facilities.manifest.candidate.json",
+        "sha256": "1bb1bf3ead1ecfc16ff2e7eed07db64f7fc544b52224942378575c6151d4fb4a",
+        "byte_count": 6251
       }
     ],
     "case_bank_and_findings": [
@@ -109,8 +114,8 @@
       },
       {
         "path": "facilities/source/nhf_provenance_v1.json",
-        "sha256": "93fdaaa99b9e98364865f5ee4c6ad2d719eb2db1d5e40cb0f2695779d90404ff",
-        "byte_count": 7538
+        "sha256": "69cf99c564cb3c980b4327f70a2477e03625a9ac9adf7b9a595d4c32c45ee1d0",
+        "byte_count": 8628
       }
     ],
     "im001_records": [
@@ -252,8 +257,8 @@
       },
       {
         "path": "schema/facilities.v2.schema.json",
-        "sha256": "7bf5b5c1cd34473940686690649f80b4c395f65720ac699fb8b45f92ff284768",
-        "byte_count": 9440
+        "sha256": "f716f184f6cb4f7ba3e28aba8598ea0bb883cd05c5805bdd5c6a714394f59837",
+        "byte_count": 15287
       },
       {
         "path": "schema/kb_schema_v1.0.json",

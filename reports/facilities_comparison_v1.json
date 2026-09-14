@@ -2,35 +2,35 @@
   "_metadata": {
     "report_id": "facilities_comparison",
     "version": "1",
-    "phase": "Nationwide Facilities / Step 1",
+    "phase": "Nationwide Facilities / Step 2",
     "generator": "tools/report_facilities_comparison.py",
-    "generator_version": "1.0.0",
+    "generator_version": "1.1.0",
     "note": "A comparison, not a merge. The two datasets have different provenance chains and are kept apart deliberately; the consolidation entries below are proposals for review."
   },
   "record_counts": {
     "facilities_1_1": 5344,
-    "candidate": 31274,
-    "change": 25930,
-    "multiplier": 5.85
+    "candidate": 20696,
+    "change": 15352,
+    "multiplier": 3.87
   },
   "file_size": {
     "facilities_1_1_bytes": 1695844,
-    "candidate_bytes": 30961471,
-    "multiplier": 18.3
+    "candidate_bytes": 23318064,
+    "multiplier": 13.8
   },
   "matching": {
     "method": "Positional: candidate records within 250 m of a 1.1 record, preferring an identical normalised name. Normalisation strips common facility words so 'X Hospital' and 'X' compare equal. Deterministic and order-independent.",
     "exact_name_and_location": 429,
-    "probable_location_only": 1187,
-    "only_in_facilities_1_1": 3728,
-    "only_in_candidate": 30312,
+    "probable_location_only": 1179,
+    "only_in_facilities_1_1": 3736,
+    "only_in_candidate": 19741,
     "conflicts": {
-      "city_area_differs": 143,
-      "coordinates_differ_over_50m": 725,
+      "city_area_differs": 135,
+      "coordinates_differ_over_50m": 717,
       "emergency_capable_present_in_1_1_absent_in_candidate": 305,
       "phone_differs": 9,
-      "state_differs": 9,
-      "type_present_in_1_1_absent_in_candidate": 1616
+      "state_differs": 1,
+      "type_present_in_1_1_absent_in_candidate": 1608
     }
   },
   "coverage_change_by_state": {
@@ -40,15 +40,15 @@
     },
     "Akwa Ibom": {
       "facilities_1_1": 0,
-      "candidate": 733
+      "candidate": 731
     },
     "Anambra": {
       "facilities_1_1": 0,
-      "candidate": 1352
+      "candidate": 1345
     },
     "Bauchi": {
       "facilities_1_1": 0,
-      "candidate": 689
+      "candidate": 627
     },
     "Bayelsa": {
       "facilities_1_1": 0,
@@ -56,11 +56,11 @@
     },
     "Benue": {
       "facilities_1_1": 0,
-      "candidate": 1670
+      "candidate": 269
     },
     "Borno": {
       "facilities_1_1": 0,
-      "candidate": 343
+      "candidate": 97
     },
     "Cross River": {
       "facilities_1_1": 0,
@@ -68,7 +68,7 @@
     },
     "Delta": {
       "facilities_1_1": 0,
-      "candidate": 861
+      "candidate": 858
     },
     "Ebonyi": {
       "facilities_1_1": 0,
@@ -76,7 +76,7 @@
     },
     "Edo": {
       "facilities_1_1": 0,
-      "candidate": 458
+      "candidate": 456
     },
     "Ekiti": {
       "facilities_1_1": 0,
@@ -88,87 +88,67 @@
     },
     "FCT": {
       "facilities_1_1": 614,
-      "candidate": 664
+      "candidate": 0
     },
     "Gombe": {
       "facilities_1_1": 0,
-      "candidate": 743
+      "candidate": 346
     },
     "Imo": {
       "facilities_1_1": 0,
-      "candidate": 1498
+      "candidate": 1497
     },
     "Jigawa": {
       "facilities_1_1": 0,
-      "candidate": 1053
+      "candidate": 5
     },
     "Kaduna": {
       "facilities_1_1": 0,
-      "candidate": 1113
+      "candidate": 10
     },
     "Kano": {
       "facilities_1_1": 2040,
-      "candidate": 1441
-    },
-    "Katsina": {
-      "facilities_1_1": 0,
-      "candidate": 425
+      "candidate": 0
     },
     "Kogi": {
       "facilities_1_1": 0,
-      "candidate": 1138
-    },
-    "Kwara": {
-      "facilities_1_1": 0,
-      "candidate": 847
+      "candidate": 557
     },
     "Lagos": {
       "facilities_1_1": 2690,
-      "candidate": 1521
+      "candidate": 1520
     },
     "Nasarawa": {
       "facilities_1_1": 0,
-      "candidate": 665
-    },
-    "Niger": {
-      "facilities_1_1": 0,
-      "candidate": 822
+      "candidate": 658
     },
     "Ogun": {
       "facilities_1_1": 0,
-      "candidate": 1081
+      "candidate": 902
     },
     "Ondo": {
       "facilities_1_1": 0,
-      "candidate": 861
+      "candidate": 860
     },
     "Osun": {
       "facilities_1_1": 0,
-      "candidate": 1676
+      "candidate": 1499
     },
     "Oyo": {
       "facilities_1_1": 0,
-      "candidate": 1593
+      "candidate": 1592
     },
     "Plateau": {
       "facilities_1_1": 0,
-      "candidate": 1591
+      "candidate": 1589
     },
     "Rivers": {
       "facilities_1_1": 0,
-      "candidate": 893
-    },
-    "Taraba": {
-      "facilities_1_1": 0,
-      "candidate": 948
+      "candidate": 892
     },
     "Yobe": {
       "facilities_1_1": 0,
-      "candidate": 498
-    },
-    "Zamfara": {
-      "facilities_1_1": 0,
-      "candidate": 182
+      "candidate": 471
     }
   },
   "states_gained": [
@@ -189,39 +169,25 @@
     "Imo",
     "Jigawa",
     "Kaduna",
-    "Katsina",
     "Kogi",
-    "Kwara",
     "Nasarawa",
-    "Niger",
     "Ogun",
     "Ondo",
     "Osun",
     "Oyo",
     "Plateau",
     "Rivers",
-    "Taraba",
-    "Yobe",
-    "Zamfara"
+    "Yobe"
   ],
-  "states_lost": [],
+  "states_lost": [
+    "FCT",
+    "Kano"
+  ],
   "duplicate_consolidation_proposals": {
-    "group_count": 1229,
-    "rows_involved": 2530,
+    "group_count": 587,
+    "rows_involved": 1214,
     "rule": "Same normalised name, state and LGA. NOT applied \u2014 two facilities may genuinely share a name within one LGA, and collapsing them would delete a real clinic from a user's results.",
     "largest_groups": [
-      {
-        "key": "okpoko primary healthcare | Anambra | Ogbaru",
-        "facility_ids": [
-          "ng_nhf_22920485",
-          "ng_nhf_36937632",
-          "ng_nhf_54585519",
-          "ng_nhf_70210679",
-          "ng_nhf_83092520",
-          "ng_nhf_85290291"
-        ],
-        "count": 6
-      },
       {
         "key": "essien udim | Akwa Ibom | Etim Ekpo",
         "facility_ids": [
@@ -232,16 +198,6 @@
           "ng_nhf_87373160"
         ],
         "count": 5
-      },
-      {
-        "key": "christ apostolic church | Ondo | Owo",
-        "facility_ids": [
-          "ng_nhf_23922185",
-          "ng_nhf_27258669",
-          "ng_nhf_69352948",
-          "ng_nhf_73017315"
-        ],
-        "count": 4
       },
       {
         "key": "cocin | Plateau | Mangu",
@@ -264,12 +220,12 @@
         "count": 4
       },
       {
-        "key": "first faith | Lagos | Surulere",
+        "key": "okpoko primary healthcare | Anambra | Ogbaru",
         "facility_ids": [
-          "ng_nhf_24131662",
-          "ng_nhf_75691143",
-          "ng_nhf_83557354",
-          "ng_nhf_86682504"
+          "ng_nhf_36937632",
+          "ng_nhf_54585519",
+          "ng_nhf_83092520",
+          "ng_nhf_85290291"
         ],
         "count": 4
       },
@@ -293,24 +249,6 @@
         "count": 3
       },
       {
-        "key": "achau primary | Jigawa | Jahun",
-        "facility_ids": [
-          "ng_nhf_26918394",
-          "ng_nhf_35137137",
-          "ng_nhf_74229111"
-        ],
-        "count": 3
-      },
-      {
-        "key": "albasu primary | Jigawa | Sule-Tankarkar",
-        "facility_ids": [
-          "ng_nhf_37053287",
-          "ng_nhf_42064458",
-          "ng_nhf_46270868"
-        ],
-        "count": 3
-      },
-      {
         "key": "alheri | Plateau | Mangu",
         "facility_ids": [
           "ng_nhf_33552875",
@@ -325,24 +263,6 @@
           "ng_nhf_42104353",
           "ng_nhf_58437750",
           "ng_nhf_65562629"
-        ],
-        "count": 3
-      },
-      {
-        "key": "ayegbogbo primary | Osun | Ejigbo",
-        "facility_ids": [
-          "ng_nhf_26494146",
-          "ng_nhf_34921579",
-          "ng_nhf_40134138"
-        ],
-        "count": 3
-      },
-      {
-        "key": "ayoola | Ogun | Ijebu Ode",
-        "facility_ids": [
-          "ng_nhf_15161289",
-          "ng_nhf_28653134",
-          "ng_nhf_35974367"
         ],
         "count": 3
       },
@@ -374,29 +294,20 @@
         "count": 3
       },
       {
+        "key": "christ apostolic church | Ondo | Owo",
+        "facility_ids": [
+          "ng_nhf_23922185",
+          "ng_nhf_69352948",
+          "ng_nhf_73017315"
+        ],
+        "count": 3
+      },
+      {
         "key": "cocin primary care | Plateau | Shendam",
         "facility_ids": [
           "ng_nhf_14617151",
           "ng_nhf_26020009",
           "ng_nhf_28559057"
-        ],
-        "count": 3
-      },
-      {
-        "key": "comprehensive ibokun | Osun | Obokun",
-        "facility_ids": [
-          "ng_nhf_34073307",
-          "ng_nhf_53694829",
-          "ng_nhf_72052799"
-        ],
-        "count": 3
-      },
-      {
-        "key": "dadin kowa nursing home | Kano | Doguwa",
-        "facility_ids": [
-          "ng_nhf_16995202",
-          "ng_nhf_57905432",
-          "ng_nhf_59555574"
         ],
         "count": 3
       },
@@ -428,20 +339,83 @@
         "count": 3
       },
       {
-        "key": "faith shield | Ogun | Obafemi Owode",
-        "facility_ids": [
-          "ng_nhf_40111926",
-          "ng_nhf_78750950",
-          "ng_nhf_84774680"
-        ],
-        "count": 3
-      },
-      {
         "key": "family | Lagos | Surulere",
         "facility_ids": [
           "ng_nhf_39816591",
           "ng_nhf_56963156",
           "ng_nhf_73976945"
+        ],
+        "count": 3
+      },
+      {
+        "key": "first faith | Lagos | Surulere",
+        "facility_ids": [
+          "ng_nhf_24131662",
+          "ng_nhf_83557354",
+          "ng_nhf_86682504"
+        ],
+        "count": 3
+      },
+      {
+        "key": "gadabuke primary care | Nasarawa | Toto",
+        "facility_ids": [
+          "ng_nhf_22434794",
+          "ng_nhf_48159358",
+          "ng_nhf_77301071"
+        ],
+        "count": 3
+      },
+      {
+        "key": "gbunchu primary care | Nasarawa | Akwanga",
+        "facility_ids": [
+          "ng_nhf_20393707",
+          "ng_nhf_22740929",
+          "ng_nhf_57370716"
+        ],
+        "count": 3
+      },
+      {
+        "key": "happiness | Oyo | Akinyele",
+        "facility_ids": [
+          "ng_nhf_25507338",
+          "ng_nhf_37292932",
+          "ng_nhf_76171790"
+        ],
+        "count": 3
+      },
+      {
+        "key": "iguobazuwa primary care | Edo | Ovia South-West",
+        "facility_ids": [
+          "ng_nhf_60340615",
+          "ng_nhf_69074295",
+          "ng_nhf_73427702"
+        ],
+        "count": 3
+      },
+      {
+        "key": "issele uku general | Delta | Aniocha North",
+        "facility_ids": [
+          "ng_nhf_15707991",
+          "ng_nhf_21213883",
+          "ng_nhf_77073881"
+        ],
+        "count": 3
+      },
+      {
+        "key": "kokona primary care | Nasarawa | Kokona",
+        "facility_ids": [
+          "ng_nhf_23054441",
+          "ng_nhf_52112906",
+          "ng_nhf_53877592"
+        ],
+        "count": 3
+      },
+      {
+        "key": "masaka primary care | Nasarawa | Karu",
+        "facility_ids": [
+          "ng_nhf_22209806",
+          "ng_nhf_53104157",
+          "ng_nhf_84603978"
         ],
         "count": 3
       }

@@ -12,6 +12,7 @@ Exit code 0 means all of the following hold:
     carries no contact detail into any record;
   * every source row is either emitted or quarantined with a reason code;
   * the comparison and Mobile-compatibility reports are current;
+  * the candidate manifest describes the bytes on disk;
   * facilities 1.0 and 1.1 are byte identical.
 
 Standard library only, no arguments, no network.
@@ -28,6 +29,8 @@ STEPS = [
      ["tools/build_facilities_candidate.py", "--check"]),
     ("comparison and Mobile reports are current",
      ["tools/report_facilities_comparison.py", "--check"]),
+    ("candidate manifest is current",
+     ["tools/build_facilities_manifest.py", "--check"]),
     ("candidate passes schema, safety and coverage validation",
      ["tools/validate_facilities_candidate.py"]),
     ("facilities test suite", ["testing/facilities/test_facilities.py"]),

@@ -30,6 +30,7 @@ from collections import Counter, defaultdict
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+from facilities import FACILITIES_TOOLING_VERSION
 from vocab.artifact_io import dump_report_bytes, load_json, repo_path, write_bytes
 
 CURRENT = repo_path("facilities.ng.v1.1.json")
@@ -37,7 +38,8 @@ CANDIDATE = repo_path("candidate", "facilities.ng.v2.0.json")
 COMPARISON = repo_path("reports", "facilities_comparison_v1.json")
 MOBILE = repo_path("reports", "facilities_mobile_compat_v1.json")
 
-GENERATOR_VERSION = "1.0.0"
+GENERATOR_VERSION = FACILITIES_TOOLING_VERSION
+PHASE = "Nationwide Facilities / Step 2"
 
 # --- an exact re-implementation of the Mobile locator -------------------------------------
 TYPE_CHAIN = {"pharmacy": "health_centre", "health_centre": "clinic", "clinic": "hospital"}
@@ -189,7 +191,7 @@ def compare(current, candidate):
         "_metadata": {
             "report_id": "facilities_comparison",
             "version": "1",
-            "phase": "Nationwide Facilities / Step 1",
+            "phase": PHASE,
             "generator": "tools/report_facilities_comparison.py",
             "generator_version": GENERATOR_VERSION,
             "note": "A comparison, not a merge. The two datasets have different provenance "
@@ -284,11 +286,32 @@ def mobile_compat(current, candidate):
             for u in urgencies
         }
 
+    # States the active artifact serves and the candidate does not. A regression against what
+    # users have today, so it is blocking whatever else is true.
+    lost = sorted({f["state"] for f in cur} - {f["state"] for f in new})
+    lost_findings = []
+    if lost:
+        lost_findings.append({
+            "finding": "%s — served by facilities 1.1 — have no records in the candidate"
+            % " and ".join(lost),
+            "severity": "blocking",
+            "evidence": "getFacilitiesByLocation returns nothing for any urgency in %s; "
+            "getNearbyFacilities still returns the nearest 30 records, which for a user "
+            "there are in a neighbouring state. Every source row for these states was "
+            "refused because its coordinates are written the wrong way round "
+            "(reports/facilities_quality_v1.json source_evidence.coordinate_consistency_by_state)."
+            % " and ".join(lost),
+            "resolution": "Source owner corrects the transposition, or a recorded decision "
+            "authorises applying it to the rows refused as "
+            "coordinates_swapped_suspected_by_state. The pipeline refuses; it does not "
+            "exchange.",
+        })
+
     return {
         "_metadata": {
             "report_id": "facilities_mobile_compat",
             "version": "1",
-            "phase": "Nationwide Facilities / Step 1",
+            "phase": PHASE,
             "generator": "tools/report_facilities_comparison.py",
             "generator_version": GENERATOR_VERSION,
             "harness": "An exact port of lib/features/locator/facility_locator_service.dart as "
@@ -308,13 +331,16 @@ def mobile_compat(current, candidate):
             "mobile_reads_latitude_longitude_as_nullable": True,
             "null_coordinates_sort_last": "distance becomes infinity; the record is retained, not dropped",
             "candidate_records_without_coordinates": sum(1 for r in new if r["latitude"] is None),
+            "candidate_coordinate_policy": "zero by construction — rows without a usable pair "
+            "are quarantined, so the consumer's null-coordinate path is never exercised by "
+            "this candidate",
             "mobile_emergency_test": "facility['emergency_capable'] == true; null is treated as false",
             "candidate_emergency_capable_true": sum(1 for r in new if r["emergency_capable"] is True),
             "mobile_type_filter": "non-emergency urgencies keep only {hospital, clinic, health_centre, pharmacy}",
             "candidate_records_with_a_matching_type": sum(
                 1 for r in new if r["type"] in {"hospital", "clinic", "health_centre", "pharmacy"}),
         },
-        "blocking_findings": [
+        "blocking_findings": lost_findings + [
             {
                 "finding": "type is null on every candidate record, so every non-emergency query "
                 "returns zero results",
@@ -342,9 +368,9 @@ def mobile_compat(current, candidate):
                 "evidence": "%d bytes against %d. Mobile decodes the artifact into a "
                 "List<Map<String, dynamic>> held in memory for the life of the locator."
                 % (os.path.getsize(CANDIDATE), os.path.getsize(CURRENT)),
-                "resolution": "Options, none chosen here: compact serialisation (~22.5 MB), a "
-                "distribution profile carrying only the ten fields Mobile reads (~10.3 MB), or "
-                "per-state partitioning. All three are distribution decisions.",
+                "resolution": "Options, none chosen here: compact serialisation, a "
+                "distribution profile carrying only the ten fields Mobile reads, or per-state "
+                "partitioning. All three are distribution decisions.",
             },
             {
                 "finding": "three states have no records at all",

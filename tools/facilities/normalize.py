@@ -6,6 +6,7 @@ value cannot be normalized safely the answer is None plus a reason code — neve
 substitute.
 """
 
+import math
 import re
 import unicodedata
 
@@ -130,6 +131,76 @@ def phone(raw):
     if digits in ("08000000000", "07000000000", "09000000000"):
         return None, "phone_placeholder"
     return "+234" + digits[1:], None
+
+
+#: The source's audit timestamps are 'YYYY-MM-DD HH:MM:SS' with no zone. They are carried in
+#: ISO 8601 form without inventing one: a 'Z' would claim UTC, which the source does not say.
+_SOURCE_TIMESTAMP = re.compile(r"^(\d{4}-\d{2}-\d{2}) (\d{2}:\d{2}:\d{2})$")
+
+
+def timestamp(raw):
+    """Return `(iso_8601_naive_or_None, reason_or_None)` for a source audit timestamp."""
+    value = (raw or "").strip()
+    if not value:
+        return None, "timestamp_absent"
+    match = _SOURCE_TIMESTAMP.match(value)
+    if not match:
+        return None, "timestamp_unparseable"
+    return "%sT%s" % (match.group(1), match.group(2)), None
+
+
+def haversine_km(lat1, lon1, lat2, lon2):
+    """Great-circle distance in kilometres."""
+    d_lat = math.radians(lat2 - lat1)
+    d_lon = math.radians(lon2 - lon1)
+    a = (math.sin(d_lat / 2) ** 2
+         + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(d_lon / 2) ** 2)
+    return 6371.0 * 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+
+def coordinate_vs_state(lon, lat, ref_lat, ref_lon, min_swap_km, swap_factor, not_in_state_km):
+    """Test an in-box pair against the reference point of the state the row claims.
+
+    Returns `(distance_as_given_km, distance_transposed_km, reason_or_None)`. A pair that is far
+    from the state as given and much closer with latitude and longitude exchanged is refused as
+    `coordinates_swapped_suspected_by_state` — the same refusal the bounding box makes for a
+    southern pair, extended to the north where a transposition stays inside the box. A pair far
+    from the state under both readings is refused as `coordinates_not_in_state`. Nothing is
+    ever exchanged: refusing is the whole of what this function does with its finding.
+    """
+    given = haversine_km(ref_lat, ref_lon, lat, lon)
+    transposed = haversine_km(ref_lat, ref_lon, lon, lat)
+    if given > min_swap_km and transposed * swap_factor <= given:
+        return given, transposed, "coordinates_swapped_suspected_by_state"
+    if given > not_in_state_km:
+        return given, transposed, "coordinates_not_in_state"
+    return given, transposed, None
+
+
+def duplicate_key(record):
+    """The exact-duplicate identity: name, state, LGA and the coordinate pair, all as emitted.
+
+    Deliberately strict. Same name in the same LGA at a *different* point is not a duplicate
+    under this rule (it may be two branches, or one wrong coordinate); same point with a
+    different name is not either (a hospital and its pharmacy share a gate). Only a record that
+    agrees on all four is collapsed, and the source rows behind such a pair agree on the phone
+    as well in 357 of the 383 groups the pinned source contains.
+    """
+    return (
+        record["name"].casefold(),
+        record["state"],
+        record["city_area"].casefold(),
+        record["longitude"],
+        record["latitude"],
+    )
+
+
+def survivor_key(record):
+    """Which member of a duplicate group is kept: the smallest registry unique_id, then the
+    smallest source id. The registry id is the source's own sequence within a ward, so the
+    survivor is the earlier registration. Total: no two source rows share both."""
+    source = record["source_record"]
+    return (source["source_unique_id"], int(source["source_id"]))
 
 
 def sort_key(record):

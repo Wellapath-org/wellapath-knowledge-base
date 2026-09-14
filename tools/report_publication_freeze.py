@@ -45,6 +45,7 @@ FROZEN = {
         "candidate/manifest.candidate.json",
         "candidate/CANDIDATE_STATUS.md",
         "candidate/facilities.ng.v2.0.json",
+        "candidate/facilities.manifest.candidate.json",
     ],
     "facilities_source": [
         "facilities/source/nigeria_health_facilities.csv",

@@ -59,6 +59,11 @@
     "data_dictionary_supplied": false,
     "readme_supplied": false,
     "mitigating_fact": "The file resolves its own lookup tables: every *_id column is accompanied by a *_name column, and each id maps to exactly one name across all 31,390 rows (verified for state, lga, ward, facility_level, ownership, ownership_type and operational_status). Mappings are therefore derivable from the data itself and are machine-checked, not guessed.",
+    "lga_id_scope": {
+      "found_in": "Nationwide Facilities / Step 2",
+      "finding": "lga_id is scoped to the LGA NAME, not to the state. Eleven ids appear under two states each. Six are homonymous LGA names that genuinely exist in both states (Nasarawa in Kano and Nasarawa; Obi in Benue and Nasarawa; Ifelodun and Irepodun in Kwara and Osun; Surulere in Lagos and Oyo; Bassa in Kogi and Plateau), with many rows and distinct coordinate clusters on each side. Five are single rows labelled Enugu that carry Abia LGA names and ids (Arochukwu, Isuikwuato, Ohafia, Umuahia North, Umuahia South); all five also carry 0,0 coordinates. The id->name direction stated above remains true; what does not hold is that an lga_id identifies one LGA.",
+      "consequence": "(state_name, lga_name) is the unambiguous LGA key in this source. The candidate carries lga_id as a source identifier and documents that it must not be used alone. The registry unique_id's leading segment follows the (name-scoped) LGA, so it is inconsistent for the same rows and is not treated as a state signal."
+    },
     "unresolved_columns": {
       "facility_type_id": "Three values (1, 2, 3) with NO accompanying name column, and its distribution does not match facility_level_id. Meaning unknown; carried to the unmapped report, not interpreted.",
       "facility_level_option_id": "No name column. Meaning unknown.",

@@ -2,9 +2,9 @@
   "_metadata": {
     "report_id": "facilities_mobile_compat",
     "version": "1",
-    "phase": "Nationwide Facilities / Step 1",
+    "phase": "Nationwide Facilities / Step 2",
     "generator": "tools/report_facilities_comparison.py",
-    "generator_version": "1.0.0",
+    "generator_version": "1.1.0",
     "harness": "An exact port of lib/features/locator/facility_locator_service.dart as of wellapath-mobile 13be0d49 \u2014 same type chain, urgency sets, 20 km / 3-result sparse-coverage rule, haversine and `== true` emergency test. Compatibility is measured by running both artifacts through it, not asserted.",
     "mobile_commit_inspected": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
     "mobile_repository_modified": false
@@ -35,29 +35,36 @@
       "emergency_capable": 5344
     },
     "candidate": {
-      "facility_id": 31274,
-      "name": 31274,
-      "type": 31274,
-      "state": 31274,
-      "city_area": 31274,
-      "latitude": 31274,
-      "longitude": 31274,
-      "phone": 31274,
-      "opening_hours": 31274,
-      "emergency_capable": 31274
+      "facility_id": 20696,
+      "name": 20696,
+      "type": 20696,
+      "state": 20696,
+      "city_area": 20696,
+      "latitude": 20696,
+      "longitude": 20696,
+      "phone": 20696,
+      "opening_hours": 20696,
+      "emergency_capable": 20696
     },
     "all_present_in_candidate": true
   },
   "type_and_null_handling": {
     "mobile_reads_latitude_longitude_as_nullable": true,
     "null_coordinates_sort_last": "distance becomes infinity; the record is retained, not dropped",
-    "candidate_records_without_coordinates": 524,
+    "candidate_records_without_coordinates": 0,
+    "candidate_coordinate_policy": "zero by construction \u2014 rows without a usable pair are quarantined, so the consumer's null-coordinate path is never exercised by this candidate",
     "mobile_emergency_test": "facility['emergency_capable'] == true; null is treated as false",
     "candidate_emergency_capable_true": 0,
     "mobile_type_filter": "non-emergency urgencies keep only {hospital, clinic, health_centre, pharmacy}",
     "candidate_records_with_a_matching_type": 0
   },
   "blocking_findings": [
+    {
+      "finding": "FCT and Kano \u2014 served by facilities 1.1 \u2014 have no records in the candidate",
+      "severity": "blocking",
+      "evidence": "getFacilitiesByLocation returns nothing for any urgency in FCT and Kano; getNearbyFacilities still returns the nearest 30 records, which for a user there are in a neighbouring state. Every source row for these states was refused because its coordinates are written the wrong way round (reports/facilities_quality_v1.json source_evidence.coordinate_consistency_by_state).",
+      "resolution": "Source owner corrects the transposition, or a recorded decision authorises applying it to the rows refused as coordinates_swapped_suspected_by_state. The pipeline refuses; it does not exchange."
+    },
     {
       "finding": "type is null on every candidate record, so every non-emergency query returns zero results",
       "severity": "blocking",
@@ -71,10 +78,10 @@
       "resolution": "Either an evidenced capability field from the source owner, or an explicit Product rule. facilities 1.1 used type == 'hospital', which this source cannot support."
     },
     {
-      "finding": "the candidate is 18\u00d7 the size of facilities 1.1",
+      "finding": "the candidate is 14\u00d7 the size of facilities 1.1",
       "severity": "material",
-      "evidence": "30961471 bytes against 1695844. Mobile decodes the artifact into a List<Map<String, dynamic>> held in memory for the life of the locator.",
-      "resolution": "Options, none chosen here: compact serialisation (~22.5 MB), a distribution profile carrying only the ten fields Mobile reads (~10.3 MB), or per-state partitioning. All three are distribution decisions."
+      "evidence": "23318064 bytes against 1695844. Mobile decodes the artifact into a List<Map<String, dynamic>> held in memory for the life of the locator.",
+      "resolution": "Options, none chosen here: compact serialisation, a distribution profile carrying only the ten fields Mobile reads, or per-state partitioning. All three are distribution decisions."
     },
     {
       "finding": "three states have no records at all",
@@ -217,7 +224,7 @@
     "Kano / Ajingi": {
       "emergency": {
         "facilities_1_1": 30,
-        "candidate": 29
+        "candidate": 0
       },
       "urgent": {
         "facilities_1_1": 0,
@@ -235,7 +242,7 @@
     "FCT / Abuja Municipal Area Council": {
       "emergency": {
         "facilities_1_1": 30,
-        "candidate": 30
+        "candidate": 0
       },
       "urgent": {
         "facilities_1_1": 10,
