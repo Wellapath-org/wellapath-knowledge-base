@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-09-14
 
 ## Merged
 
@@ -20,6 +20,8 @@ Last updated: 2026-08-24
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #40 | `feat/facilities-nhf-candidate` | Nationwide Facilities Step 1 (commit `4afffe1`): `candidate/facilities.ng.v2.0.json` from the supplied `nigeria_health_facilities.csv`, schema 2.0, generator, provenance record, quality/quarantine/comparison/Mobile-compat reports. `facilities.ng.v1.1.json` untouched. | Open, unmerged; superseded in content by #41 |
+| #41 | `feat/facilities-2-0-candidate-pipeline` (stacked on #40) | Steps 2–3 (commits `4bb8e26`, `55a4af6`): pipeline policies, coordinate-orientation remediation study, candidate manifest, coordinate audit, source-authorization checklist, Mobile handoff. Candidate 29,028 records, `8fb80d3d…6da2`, `candidate_unapproved` / `may_publish: false`. Sections "Nationwide Facilities — Step 2/3" below. | Open, unmerged; awaiting source authorization (9 items) and FAC-D001…D006 |
 
 | Issue | Title | Status |
 |---|---|---|
@@ -30,6 +32,7 @@ Last updated: 2026-08-24
 
 - **Decision (2026-07-26):** ship the 45 phone-matched Lagos facilities as `facilities.ng.v1.1.json` now; treat manual enrichment as the interim v1.x strategy, with a future NHFR API integration as the v2.0 rebuild path.
 - **NHFR in-portal API request (hfr.fmohconnect.gov.ng):** retry was **not submitted** — WellaPath's organization domain isn't verified yet and a personal email was not used as a substitute. Still outstanding; needs a proper org domain/email before resubmission.
+- **v2.0 rebuild status (2026-09-14):** a bulk registry export was supplied as a file instead of the API and built into an unapproved candidate on PRs #40/#41 (sections "Nationwide Facilities — Step 2/3" at the end of this log). Publication is blocked by the source-authorization checklist (`docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md`, nine items missing) and by the Product/Clinical decisions in `docs/FACILITIES_DECISIONS_REQUIRED.md`. **v1.1 remains the active artifact.**
 
 ## Known Issues
 
@@ -997,6 +1000,11 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
 
 ## Nationwide Facilities — Step 2: candidate pipeline, schema, manifest, handoff
 
+Commit `4bb8e26` on `feat/facilities-2-0-candidate-pipeline` (PR #41, stacked
+on #40). **The record counts, coverage and coordinate treatment in this section
+are superseded by Step 3 below**; the section is kept because Step 3's
+remediation is only intelligible against what Step 2 found and refused.
+
 Builds on the Step 1 candidate (commit `4afffe1`). Same source
 (`nigeria_health_facilities.csv`, `e598cecc…becb3`, 31,390 rows); the file
 the brief re-supplied at the repository root is byte identical to the
@@ -1062,8 +1070,11 @@ committed copy and was not committed twice.
 
 ## Nationwide Facilities — Step 3: coordinate-orientation remediation study
 
-Controlled remediation of the Step 2 finding, on PR #41. Nothing merged,
-published, uploaded, activated or handed to Backend/Mobile.
+Commit `55a4af6` on `feat/facilities-2-0-candidate-pipeline` (PR #41,
+https://github.com/Wellapath-org/wellapath-knowledge-base/pull/41, description
+updated in place — no new PR). Controlled remediation of the Step 2 finding.
+Nothing merged, published, uploaded, activated or handed to Backend/Mobile.
+Full study: `docs/FACILITIES_COORDINATE_REMEDIATION.md`.
 
 - **Boundary instrument:** the repository's own GRID3 facility points
   (51,022, all 37 states, CC BY 4.0, hash-pinned) as an empirical
@@ -1109,3 +1120,11 @@ published, uploaded, activated or handed to Backend/Mobile.
 
 - **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
   telemetry (none). **PR #40 and PR #41 remain unmerged.**
+
+- **What unblocks the next step, in order:** (1) the nine authorization
+  items recorded with evidence in
+  `facilities/source/nhf_authorization_checklist_v1.json`; (2) FAC-D004
+  (engineering lead accepts or rejects `coordinate_orientation_v1`);
+  (3) FAC-D001 (`type`) and FAC-D002 (`emergency_capable`, with Clinical);
+  then re-measure Mobile compatibility. Until (1) exists the candidate
+  cannot leave `candidate_unapproved` whatever (2)–(3) decide.
