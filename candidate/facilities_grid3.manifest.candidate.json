@@ -1,0 +1,75 @@
+{
+  "manifest_id": "facilities_grid3_v2_candidate",
+  "manifest_version": "1",
+  "generator": "tools/build_facilities_grid3_candidate.py",
+  "generator_version": "1.0.0",
+  "IS_LIVE_MANIFEST": false,
+  "WARNING": "This is a PROPOSED manifest block for a CANDIDATE artifact. It is not served by any endpoint. The live manifest is GET /config in wellapath-backend and is UNCHANGED. Source licensing is established for this lineage (CC BY 4.0, evidence in-repo), but licensing clearance is not Product, Clinical or Engineering approval. Do not wire this block.",
+  "artifact_roles": {
+    "source": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv \u2014 the licensed GRID3 CSV, hash-pinned, never served",
+    "master_audit_candidate": "candidate/facilities.ng.v2.0-grid3.json \u2014 full per-record provenance and traceability; internal only, NOT designated for mobile distribution",
+    "served_candidate": "candidate/facilities.ng.v2.0-grid3.served.json \u2014 the compact projection a manifest would point Mobile at, once (and only once) every approval exists"
+  },
+  "candidate_artifact": {
+    "path": "candidate/facilities.ng.v2.0-grid3.json",
+    "lineage": "grid3",
+    "role": "master_audit_candidate",
+    "sha256": "92300c1624668d1af77ddbb0d37f0104d08aa5484ec7af8e792234c912930d7a",
+    "bytes": 69535390,
+    "record_count": 51022,
+    "may_publish": false,
+    "release_status": "candidate_unapproved"
+  },
+  "served_artifact": {
+    "path": "candidate/facilities.ng.v2.0-grid3.served.json",
+    "lineage": "grid3",
+    "role": "served_candidate",
+    "sha256": "44eabf634dc8be93595e1c9627b25d6eeb71f4ad7e0897d1ac0e08194523086c",
+    "bytes": 9804802,
+    "gzip_bytes_level_9": 2256033,
+    "record_count": 51022,
+    "may_publish": false,
+    "release_status": "candidate_unapproved",
+    "consumer_verified_against": "wellapath-mobile 854377c0170836e98f418fb4805bdb18ae78845d (Mobile PR #79)",
+    "hash_contract": "sha256 over the raw compact JSON bytes, matching the PR #79 loader's raw-body verification; gzip is a measurement only"
+  },
+  "source_licensing": {
+    "licence": "CC BY 4.0",
+    "evidence": "facilities/source/grid3_licence_evidence_v1.json",
+    "attribution_notice": "facilities/ATTRIBUTION_GRID3.md",
+    "attribution_must_ship_with": "artifact metadata (present) and the consuming app UI (Mobile handoff requirement)"
+  },
+  "publication_gates": {
+    "source_licensing_established": true,
+    "fac_d001_type_mapping_approved": true,
+    "fac_d002_emergency_fallback_approved": false,
+    "fac_d003_absent_contact_fields_accepted": true,
+    "fac_d004_grid3_coordinates_accepted": true,
+    "fac_d005_quarantine_policy_accepted": true,
+    "fac_d006_duplicate_policy_accepted": true,
+    "nationwide_coverage_accepted": true,
+    "mobile_compatibility_remeasured": false,
+    "engineering_approval": false,
+    "product_approval": false,
+    "clinical_approval": false,
+    "may_publish": false
+  },
+  "gate_notes": {
+    "decisions": "Founder/Product decision record 2026-09-15; register at facilities/facilities_grid3_decision_register_v1.json.",
+    "fac_d002_emergency_fallback_approved": "False deliberately: the Product direction is approved, but FAC-D002 is blocked on exactly one thing \u2014 Clinical approval of the final user-facing wording \u2014 and must not read as fully approved until that lands. emergency_capable stays null.",
+    "product_approval": "The FAC gates above record scoped decisions; this gate is overall Product approval to publish, which has not been given."
+  },
+  "rollback": {
+    "target_file": "facilities.ng.v1.1.json",
+    "target_sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
+    "target_bytes": 1695844,
+    "note": "facilities 1.1 is the active artifact and remains so; activation of this candidate would carry this block as its rollback contract."
+  },
+  "reports": {
+    "quality": "reports/facilities_grid3_quality_v1.json",
+    "quarantine": "reports/facilities_grid3_quarantine_v1.json",
+    "comparison": "reports/facilities_grid3_comparison_v1.json",
+    "isolation": "reports/facilities_grid3_isolation_v1.json",
+    "type_mapping_proposal": "proposals/facilities_grid3/type_mapping_proposal_v1.json"
+  }
+}

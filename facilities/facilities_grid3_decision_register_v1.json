@@ -1,0 +1,93 @@
+{
+  "_metadata": {
+    "register_id": "facilities_grid3_decision_register",
+    "version": "1",
+    "authored": "2026-09-15",
+    "source_record": {
+      "path": "baseline/facilities_grid3_decisions_v1/FACILITIES_2_0_DECISION_RECORD_2026-09-15.vendored.md",
+      "received": "2026-09-15",
+      "note": "The decision text is vendored verbatim; this register is its operational interpretation. Where the prose and the referenced proposal file could be read differently, the reconciliation is recorded on the decision itself."
+    },
+    "decision_authority": {
+      "role": "Founder/Product",
+      "name": "Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath",
+      "name_basis": "The record was received role-attributed ('Founder/Product decision record'); the name follows the repository's recorded precedent for that authority (IM-001 verdicts 2026-08-24, IM-003 disposition 2026-08-22).",
+      "clinical_authority": "none — nothing in this register is clinical approval"
+    },
+    "governing_rule": "An approved decision authorizes exactly its recorded scope. It does not set may_publish true, does not change candidate_unapproved, and does not authorize publication, activation, R2 upload, /config change or any Backend/Mobile modification."
+  },
+  "decisions": [
+    {
+      "id": "FAC-D001",
+      "title": "Facility-type mapping",
+      "status": "approved",
+      "decided_on": "2026-09-15",
+      "scope": "Apply only the reviewed mapping in proposals/facilities_grid3/type_mapping_proposal_v1.json: General Hospital, Teaching/Tertiary Hospital and Specialized Hospital -> hospital; Primary Health Center, Primary Health Clinic and Health Post -> health_centre; unknown, missing or unsupported values -> null. No inference from facility names. No additional value may be mapped without a new Product decision. Null-type records remain visible and searchable.",
+      "reconciliation": "The record's prose says 'Primary Health Care Center' and 'Primary Health Care Clinic'; the referenced proposal file, which the record makes governing ('Apply only the reviewed GRID3 mapping already documented in ...'), spells the source values 'Primary Health Center' and 'Primary Health Clinic'. The proposal's exact source strings govern; the prose names the same two rows. The proposal's flagged choice for Primary Health Clinic (health_centre vs clinic) is resolved by this approval: health_centre.",
+      "implemented": true,
+      "implementation": "Master candidate records carry type computed from source_record.facility_level_option under the approved table; served records carry the same type, omitted when null (the verified PR #79 parser reads an absent key as null/unspecified). Schemas pin the populated values to exactly {hospital, health_centre}; any other value is schema-invalid until a new Product decision revises the schema.",
+      "counts": {"hospital": 1245, "health_centre": 44868, "null_unspecified": 4909}
+    },
+    {
+      "id": "FAC-D002",
+      "title": "Emergency fallback",
+      "status": "product_direction_approved_clinical_wording_pending",
+      "decided_on": "2026-09-15",
+      "scope": "Approved Product behaviour: the 112 action stays first and prominent; a facility is prioritized only when emergency_capable == true; null must never mean emergency-capable; with no verified emergency-capable facility, show nearby facilities by distance without claiming emergency capability; the interface must clearly state that emergency capability is not verified.",
+      "explicitly_not_approved": "Clinical approval of the final user-facing wording. FAC-D002 is NOT fully approved; emergency_capable is NOT populated — it stays null on every record and the schemas keep it structurally unpopulatable.",
+      "implemented": false,
+      "implementation": "Documentation only (handoff and decisions doc). The remaining blocker is exactly: Clinical approval of the final user-facing wording."
+    },
+    {
+      "id": "FAC-D003",
+      "title": "Phone and opening hours",
+      "status": "approved_as_unavailable",
+      "decided_on": "2026-09-15",
+      "scope": "No phone numbers, no opening hours in GRID3 v2 artifacts; no call or 'open now' actions for GRID3 v2 records. Reconsideration requires a separately authorized source approved through its own decision.",
+      "implemented": true,
+      "implementation": "Already structural: neither field exists in the served records and both are null in the master; schemas forbid population."
+    },
+    {
+      "id": "FAC-D004",
+      "title": "Coordinates",
+      "status": "approved",
+      "decided_on": "2026-09-15",
+      "scope": "GRID3 coordinates exactly as published. No swap, snap, move, enrichment or replacement from the unauthorized NHFR CSV or any other source.",
+      "implemented": true,
+      "implementation": "Already structural: coordinate_transformation is the schema constant 'none'; validators re-prove per-record byte equality with the GRID3 CSV on every run."
+    },
+    {
+      "id": "FAC-D005",
+      "title": "Invalid coordinates",
+      "status": "approved",
+      "decided_on": "2026-09-15",
+      "scope": "Quarantine invalid, missing, null-island, out-of-Nigeria or schema-invalid coordinates; never fabricate. The current zero-quarantine result is acceptable only while validation keeps proving it on every run.",
+      "implemented": true,
+      "implementation": "The quarantine categories are enforced in the generator and re-proved by validator accounting (source rows == emitted + quarantined) on every run."
+    },
+    {
+      "id": "FAC-D006",
+      "title": "Duplicate handling",
+      "status": "approved",
+      "decided_on": "2026-09-15",
+      "scope": "Remove only exact deterministic duplicates (this snapshot: 0). Preserve the 410 near-duplicate groups (827 rows) as separate facilities. No fuzzy merge without authoritative identity evidence. The near-duplicate listing stays in the quality report for later source-quality review.",
+      "implemented": true,
+      "implementation": "exact_match_v1 collapse rule (0 groups this snapshot); near-duplicate listing retained in reports/facilities_grid3_quality_v1.json."
+    },
+    {
+      "id": "FAC-COVERAGE",
+      "title": "Nationwide coverage",
+      "status": "approved",
+      "decided_on": "2026-09-15",
+      "scope": "The candidate's coverage of all 36 states and the FCT is accepted; Adamawa, Kebbi and Sokoto are no longer blockers. 'Nationwide' means geographic coverage across all states and the FCT and must not imply that every facility or service is listed (the source self-describes as non-exhaustive and non-validated).",
+      "implemented": true,
+      "implementation": "Coverage claim wording in the artifacts and handoff carries the approved meaning."
+    }
+  ],
+  "still_blocking_activation": [
+    "FAC-D002 Clinical approval of final user-facing emergency wording (the only open FAC item)",
+    "Mobile compatibility re-measurement against the PR #79 reader with the typed artifact",
+    "Engineering size/projection sign-off and the publication lifecycle itself",
+    "release_status/publication_status leaving candidate_unapproved through a recorded approval, never by regeneration"
+  ]
+}

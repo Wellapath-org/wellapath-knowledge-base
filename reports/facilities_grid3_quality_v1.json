@@ -1,0 +1,4641 @@
+{
+  "_metadata": {
+    "report_id": "facilities_grid3_quality",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0"
+  },
+  "coverage": {
+    "states_covered": 37,
+    "per_state_counts": {
+      "Abia": 1321,
+      "Adamawa": 1561,
+      "Akwa Ibom": 934,
+      "Anambra": 1867,
+      "Bauchi": 1468,
+      "Bayelsa": 422,
+      "Benue": 2284,
+      "Borno": 804,
+      "Cross River": 1522,
+      "Delta": 1059,
+      "Ebonyi": 1243,
+      "Edo": 1069,
+      "Ekiti": 772,
+      "Enugu": 1457,
+      "FCT": 652,
+      "Gombe": 897,
+      "Imo": 1779,
+      "Jigawa": 904,
+      "Kaduna": 1545,
+      "Kano": 1723,
+      "Katsina": 2296,
+      "Kebbi": 1207,
+      "Kogi": 1644,
+      "Kwara": 1097,
+      "Lagos": 2798,
+      "Nasarawa": 1207,
+      "Niger": 2201,
+      "Ogun": 1993,
+      "Ondo": 1096,
+      "Osun": 1729,
+      "Oyo": 2045,
+      "Plateau": 1643,
+      "Rivers": 791,
+      "Sokoto": 937,
+      "Taraba": 1464,
+      "Yobe": 663,
+      "Zamfara": 928
+    },
+    "distinct_state_lga_pairs": 844,
+    "note": "Nigeria has 774 LGAs; the source's LGA naming is not asserted to be the statutory list. (state, lga) is the search key, exactly as in the sibling lineage."
+  },
+  "identifiers": {
+    "facility_ids_distinct": 51022,
+    "source_objectids_distinct": 51022,
+    "source_globalids_distinct": 51022,
+    "nhfr_uid_present": 34541
+  },
+  "distributions": {
+    "type": {
+      "None": 4909,
+      "health_centre": 44868,
+      "hospital": 1245
+    },
+    "facility_level": {
+      "Primary": 44915,
+      "Secondary": 5267,
+      "Tertiary": 506,
+      "unknown": 334
+    },
+    "facility_level_option": {
+      "General Hospital": 1120,
+      "Health Post": 8726,
+      "Primary Health Center": 22239,
+      "Primary Health Clinic": 13903,
+      "Specialized Hospital": 38,
+      "Teaching/Tertiary Hospital": 87,
+      "unknown": 4909
+    },
+    "ownership": {
+      "Private": 11716,
+      "Public": 34680,
+      "unknown": 4626
+    },
+    "ownership_type": {
+      "federal_government": 202,
+      "for_profit": 6946,
+      "local_government": 21750,
+      "military_paramilitary": 104,
+      "not_for_profit": 249,
+      "state_government": 2248,
+      "unknown": 19523
+    },
+    "facility_name_source": {
+      "GRID3_2024": 295,
+      "GRID3_EHEALTH": 16186,
+      "NHFR_2024": 34541
+    },
+    "geocoordinates_source": {
+      "GRID3_2024": 1390,
+      "GRID3_EHEALTH": 41451,
+      "NHFR_2024": 8181
+    }
+  },
+  "snapshot_consistency": {
+    "last_updated_values": {
+      "2024-11-11": 51022
+    },
+    "expectation": "a single constant value, 2024-11-11"
+  },
+  "near_duplicates": {
+    "rule": "same normalized name, state and LGA with differing coordinates; proposed for review, never merged (FAC-D006)",
+    "groups": 410,
+    "rows_involved": 827,
+    "listing": [
+      {
+        "name_state_lga": [
+          "igbara odo primary health clinic",
+          "Ekiti",
+          "ekiti south west"
+        ],
+        "source_objectids": [
+          "10",
+          "44378"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iho basic health center",
+          "Imo",
+          "ikeduru"
+        ],
+        "source_objectids": [
+          "13",
+          "35268"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kabawa primary health center",
+          "Kogi",
+          "lokoja"
+        ],
+        "source_objectids": [
+          "99",
+          "27584"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mak mercy hospital",
+          "Ogun",
+          "imeko afon"
+        ],
+        "source_objectids": [
+          "353",
+          "36150"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umuorii health center",
+          "Imo",
+          "owerri north"
+        ],
+        "source_objectids": [
+          "365",
+          "42317"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okpo health center",
+          "Abia",
+          "arochukwu"
+        ],
+        "source_objectids": [
+          "662",
+          "28430"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amana health center",
+          "Ebonyi",
+          "ezza south"
+        ],
+        "source_objectids": [
+          "743",
+          "38343"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "abofia health center",
+          "Ebonyi",
+          "ebonyi"
+        ],
+        "source_objectids": [
+          "985",
+          "28365"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ido primary health center",
+          "Oyo",
+          "ido"
+        ],
+        "source_objectids": [
+          "997",
+          "35124"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugbenu primary health center",
+          "Anambra",
+          "awka north"
+        ],
+        "source_objectids": [
+          "1055",
+          "34615"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agboji health center",
+          "Abia",
+          "ohafia"
+        ],
+        "source_objectids": [
+          "1128",
+          "38736"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agboola hospital",
+          "Ogun",
+          "ifo"
+        ],
+        "source_objectids": [
+          "1177",
+          "37441"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "top care hospital",
+          "Lagos",
+          "ikorodu"
+        ],
+        "source_objectids": [
+          "1253",
+          "31193"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "doro primary health center",
+          "Katsina",
+          "bindawa"
+        ],
+        "source_objectids": [
+          "1257",
+          "32811"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bukata clinic",
+          "Plateau",
+          "barkin ladi"
+        ],
+        "source_objectids": [
+          "1289",
+          "27760"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yarsanta health clinic",
+          "Katsina",
+          "kankara"
+        ],
+        "source_objectids": [
+          "1314",
+          "21924"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tsabe health clinic",
+          "Katsina",
+          "musawa"
+        ],
+        "source_objectids": [
+          "1392",
+          "32892"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zakarek primary health center",
+          "Plateau",
+          "barkin ladi"
+        ],
+        "source_objectids": [
+          "1565",
+          "35560"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bokkos primary health center",
+          "Plateau",
+          "bokkos"
+        ],
+        "source_objectids": [
+          "1570",
+          "35556"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "reak primary health center",
+          "Plateau",
+          "langtang north"
+        ],
+        "source_objectids": [
+          "1643",
+          "30687"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "regal hospital",
+          "Delta",
+          "uvwie"
+        ],
+        "source_objectids": [
+          "2066",
+          "36668"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zurgwai primary health center",
+          "Bauchi",
+          "warji"
+        ],
+        "source_objectids": [
+          "2156",
+          "36745"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "takandan giwa health post",
+          "Bauchi",
+          "toro"
+        ],
+        "source_objectids": [
+          "2165",
+          "28698"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "orsu obodo primary health center",
+          "Imo",
+          "oguta"
+        ],
+        "source_objectids": [
+          "2318",
+          "9636"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "igbor primary health center",
+          "Benue",
+          "gwer east"
+        ],
+        "source_objectids": [
+          "2346",
+          "29835"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "elekenowasi health post",
+          "Imo",
+          "ahiazu-mbaise"
+        ],
+        "source_objectids": [
+          "2365",
+          "38590"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ahiaba health post",
+          "Abia",
+          "obi ngwa"
+        ],
+        "source_objectids": [
+          "2424",
+          "30213"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "achara health center",
+          "Abia",
+          "arochukwu"
+        ],
+        "source_objectids": [
+          "2427",
+          "35768"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umuzomgbo health center",
+          "Abia",
+          "arochukwu"
+        ],
+        "source_objectids": [
+          "2442",
+          "37616"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "isokan primary health center",
+          "Lagos",
+          "ifako/ijaye"
+        ],
+        "source_objectids": [
+          "2444",
+          "31595"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "st paul primary health center",
+          "Benue",
+          "vandeikya"
+        ],
+        "source_objectids": [
+          "2522",
+          "13649"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "alheri clinic",
+          "Plateau",
+          "bokkos"
+        ],
+        "source_objectids": [
+          "2602",
+          "47040"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jamda health post",
+          "Bauchi",
+          "alkaleri"
+        ],
+        "source_objectids": [
+          "2654",
+          "41832"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "baladde health post",
+          "Bauchi",
+          "alkaleri"
+        ],
+        "source_objectids": [
+          "2657",
+          "41833"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "limi health post",
+          "Bauchi",
+          "ningi"
+        ],
+        "source_objectids": [
+          "2815",
+          "36741"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ulayi primary health center",
+          "Benue",
+          "ado"
+        ],
+        "source_objectids": [
+          "2957",
+          "42277"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iguiye primary health center",
+          "Edo",
+          "ovia north-east"
+        ],
+        "source_objectids": [
+          "3004",
+          "34214"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tinda health post",
+          "Gombe",
+          "kwami"
+        ],
+        "source_objectids": [
+          "3039",
+          "38864"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umuagu health center",
+          "Imo",
+          "obowo"
+        ],
+        "source_objectids": [
+          "3179",
+          "45526"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "emerald clinic",
+          "Lagos",
+          "ifako/ijaye"
+        ],
+        "source_objectids": [
+          "3298",
+          "29350"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "arochukwu general hospital",
+          "Abia",
+          "arochukwu"
+        ],
+        "source_objectids": [
+          "3399",
+          "25602"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "adagi primary health center",
+          "Benue",
+          "kwande"
+        ],
+        "source_objectids": [
+          "3472",
+          "27539"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kilbori primary health center",
+          "Bauchi",
+          "shira"
+        ],
+        "source_objectids": [
+          "3536",
+          "27794"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "naraguta primary health center",
+          "Plateau",
+          "jos north"
+        ],
+        "source_objectids": [
+          "3568",
+          "38795"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "alajiri health post",
+          "Yobe",
+          "geidam"
+        ],
+        "source_objectids": [
+          "3642",
+          "29008"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ayobami nursing home",
+          "Lagos",
+          "ikorodu"
+        ],
+        "source_objectids": [
+          "3835",
+          "36955"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nissi hospital",
+          "Abia",
+          "aba north"
+        ],
+        "source_objectids": [
+          "3872",
+          "37290"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ak oyekan hospital",
+          "Lagos",
+          "mushin"
+        ],
+        "source_objectids": [
+          "3990",
+          "45668"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dagayari health post",
+          "Bauchi",
+          "katagum"
+        ],
+        "source_objectids": [
+          "4113",
+          "41807"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mary anne medical clinic",
+          "Lagos",
+          "mushin"
+        ],
+        "source_objectids": [
+          "4118",
+          "36894"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "marosen clinic",
+          "Lagos",
+          "kosofe"
+        ],
+        "source_objectids": [
+          "4161",
+          "29311"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogboji primary health center",
+          "Anambra",
+          "orumba south"
+        ],
+        "source_objectids": [
+          "4178",
+          "38748"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tyson lessel maternity clinic",
+          "Benue",
+          "ushongo"
+        ],
+        "source_objectids": [
+          "4248",
+          "42916"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tungar kafau health post",
+          "Zamfara",
+          "shinkafi"
+        ],
+        "source_objectids": [
+          "4403",
+          "37603"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "olachagbaha primary health center",
+          "Benue",
+          "ogbadibo"
+        ],
+        "source_objectids": [
+          "4419",
+          "29816"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okpoama cottage hospital",
+          "Bayelsa",
+          "brass"
+        ],
+        "source_objectids": [
+          "4464",
+          "33952"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "aherin primary health center",
+          "Kogi",
+          "kabba/bunu"
+        ],
+        "source_objectids": [
+          "4559",
+          "41455"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "abuni primary health center",
+          "Nasarawa",
+          "awe"
+        ],
+        "source_objectids": [
+          "4725",
+          "38413"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "aza primary health center",
+          "Abia",
+          "ugwunagbo"
+        ],
+        "source_objectids": [
+          "4752",
+          "31561"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "isiagu primary health center",
+          "Anambra",
+          "awka south"
+        ],
+        "source_objectids": [
+          "5002",
+          "35637"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ehor primary health center",
+          "Edo",
+          "uhunmwode"
+        ],
+        "source_objectids": [
+          "5135",
+          "35439",
+          "35440"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amachara health center",
+          "Ebonyi",
+          "izzi"
+        ],
+        "source_objectids": [
+          "5199",
+          "38338"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oke aree primary health center",
+          "Osun",
+          "boripe"
+        ],
+        "source_objectids": [
+          "5233",
+          "43026"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "konta primary health center",
+          "Osun",
+          "ife south"
+        ],
+        "source_objectids": [
+          "5235",
+          "38511"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "odesan primary health center",
+          "Osun",
+          "ife south"
+        ],
+        "source_objectids": [
+          "5247",
+          "38510"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogbotoukwu health center",
+          "Imo",
+          "obowo"
+        ],
+        "source_objectids": [
+          "5363",
+          "15775"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "isimija basic health center",
+          "Ondo",
+          "akure north"
+        ],
+        "source_objectids": [
+          "5511",
+          "34038"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ubiegbe primary health center",
+          "Kogi",
+          "idah"
+        ],
+        "source_objectids": [
+          "5611",
+          "41682"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kurba health clinic",
+          "Gombe",
+          "yamaltu/deba"
+        ],
+        "source_objectids": [
+          "5697",
+          "43122"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ancel hospital",
+          "Lagos",
+          "ojo"
+        ],
+        "source_objectids": [
+          "6031",
+          "37192"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ayetoro general hospital",
+          "Ogun",
+          "yewa north"
+        ],
+        "source_objectids": [
+          "6237",
+          "43214"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mbagen primary health center",
+          "Benue",
+          "buruku"
+        ],
+        "source_objectids": [
+          "6261",
+          "50297"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gwer city clinic and maternity",
+          "Benue",
+          "gwer east"
+        ],
+        "source_objectids": [
+          "6262",
+          "6265"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umueze amawbia health post",
+          "Anambra",
+          "awka south"
+        ],
+        "source_objectids": [
+          "6318",
+          "26765"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jarandi health post",
+          "Adamawa",
+          "jada"
+        ],
+        "source_objectids": [
+          "6764",
+          "32156"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gassol primary health center",
+          "Taraba",
+          "gassol"
+        ],
+        "source_objectids": [
+          "7049",
+          "33072"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "lagos buban health post",
+          "Taraba",
+          "donga"
+        ],
+        "source_objectids": [
+          "7052",
+          "31812"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okopedi use health center",
+          "Akwa Ibom",
+          "ibiono ibom"
+        ],
+        "source_objectids": [
+          "7304",
+          "40960"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "anyugbe primary health center",
+          "Cross River",
+          "yala"
+        ],
+        "source_objectids": [
+          "7498",
+          "33306"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "njemetop health post",
+          "Cross River",
+          "ikom"
+        ],
+        "source_objectids": [
+          "7660",
+          "42372"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikot okwo primary health center",
+          "Akwa Ibom",
+          "ikot abasi"
+        ],
+        "source_objectids": [
+          "7713",
+          "32569"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zabakau health clinic",
+          "Katsina",
+          "kaita"
+        ],
+        "source_objectids": [
+          "7886",
+          "27680"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "burma health clinic",
+          "Katsina",
+          "funtua"
+        ],
+        "source_objectids": [
+          "7985",
+          "27706"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "baban duhu primary health center",
+          "Katsina",
+          "safana"
+        ],
+        "source_objectids": [
+          "7997",
+          "32877"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nasarawa health clinic",
+          "Katsina",
+          "dutsi"
+        ],
+        "source_objectids": [
+          "8112",
+          "8561"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "buduma health clinic",
+          "Katsina",
+          "mai'adua"
+        ],
+        "source_objectids": [
+          "8150",
+          "43591"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dantankari primary health center",
+          "Katsina",
+          "dandume"
+        ],
+        "source_objectids": [
+          "8181",
+          "41328"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "katoge health clinic",
+          "Katsina",
+          "kankara"
+        ],
+        "source_objectids": [
+          "8416",
+          "32884"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tsawa tsawa health clinic",
+          "Katsina",
+          "dutsin-ma"
+        ],
+        "source_objectids": [
+          "8454",
+          "32860"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "almakiyayi health clinic",
+          "Katsina",
+          "malumfashi"
+        ],
+        "source_objectids": [
+          "8560",
+          "32786"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kartaka health clinic",
+          "Katsina",
+          "charanchi"
+        ],
+        "source_objectids": [
+          "8565",
+          "41480"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwandawa health clinic",
+          "Katsina",
+          "malumfashi"
+        ],
+        "source_objectids": [
+          "8569",
+          "41421"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mairana health clinic",
+          "Katsina",
+          "kusada"
+        ],
+        "source_objectids": [
+          "8570",
+          "32888"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "chonku primary health center",
+          "Taraba",
+          "wukari"
+        ],
+        "source_objectids": [
+          "8653",
+          "32330"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "toungo primary health care center",
+          "Adamawa",
+          "yola south"
+        ],
+        "source_objectids": [
+          "8687",
+          "39636"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "vakude primary health center",
+          "Taraba",
+          "sardauna"
+        ],
+        "source_objectids": [
+          "8712",
+          "31981"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rufu primary health center",
+          "Taraba",
+          "ussa"
+        ],
+        "source_objectids": [
+          "8791",
+          "33071"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jukun health post",
+          "Taraba",
+          "karim-lamido"
+        ],
+        "source_objectids": [
+          "8803",
+          "31800"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jen primary health center",
+          "Taraba",
+          "karim-lamido"
+        ],
+        "source_objectids": [
+          "8814",
+          "9467",
+          "31827"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "shagari primary health center",
+          "Zamfara",
+          "gusau"
+        ],
+        "source_objectids": [
+          "8832",
+          "36116"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akpap okoyong primary health center",
+          "Cross River",
+          "odukpani"
+        ],
+        "source_objectids": [
+          "9020",
+          "33395"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okochiri model primary health center",
+          "Rivers",
+          "okrika"
+        ],
+        "source_objectids": [
+          "9052",
+          "46693"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkek health post",
+          "Akwa Ibom",
+          "ukanafun"
+        ],
+        "source_objectids": [
+          "9070",
+          "40964"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kudan primary health center",
+          "Kaduna",
+          "kudan"
+        ],
+        "source_objectids": [
+          "9287",
+          "33436",
+          "41188"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ojokwe primary health center",
+          "Benue",
+          "oju"
+        ],
+        "source_objectids": [
+          "9388",
+          "37922"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "elele primary health center",
+          "Kogi",
+          "ibaji"
+        ],
+        "source_objectids": [
+          "9448",
+          "37845"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogwashi uku general hospital",
+          "Delta",
+          "aniocha south"
+        ],
+        "source_objectids": [
+          "9559",
+          "26039"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ekeaja health post",
+          "Ebonyi",
+          "ohaozara"
+        ],
+        "source_objectids": [
+          "9565",
+          "38460"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "abusoro basic health center",
+          "Ondo",
+          "ondo west"
+        ],
+        "source_objectids": [
+          "9780",
+          "34063"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okeluse basic health center",
+          "Ondo",
+          "ose"
+        ],
+        "source_objectids": [
+          "9819",
+          "34057"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "city specialist clinic",
+          "Bauchi",
+          "bauchi"
+        ],
+        "source_objectids": [
+          "9843",
+          "43753"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "honey gold clinic and maternity",
+          "Kogi",
+          "lokoja"
+        ],
+        "source_objectids": [
+          "9956",
+          "36625"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "isanlu model primary health center",
+          "Kwara",
+          "isin"
+        ],
+        "source_objectids": [
+          "10023",
+          "46860"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "husamawa health clinic",
+          "Katsina",
+          "baure"
+        ],
+        "source_objectids": [
+          "10085",
+          "41256"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ebiya primary health center",
+          "Kogi",
+          "ajaokuta"
+        ],
+        "source_objectids": [
+          "10114",
+          "41720"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugbolu primary health center",
+          "Delta",
+          "oshimili north"
+        ],
+        "source_objectids": [
+          "10237",
+          "30421"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agenebode general hospital",
+          "Edo",
+          "etsako east"
+        ],
+        "source_objectids": [
+          "10351",
+          "38325"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "araba primary health center",
+          "Sokoto",
+          "illela"
+        ],
+        "source_objectids": [
+          "10459",
+          "35555"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "uloano health center",
+          "Imo",
+          "isu"
+        ],
+        "source_objectids": [
+          "10653",
+          "38381"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "uchechi maternity",
+          "Imo",
+          "owerri north"
+        ],
+        "source_objectids": [
+          "10654",
+          "37050"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akwaorji health post",
+          "Imo",
+          "orsu"
+        ],
+        "source_objectids": [
+          "10705",
+          "34711"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ganuwar kuka health post",
+          "Jigawa",
+          "auyo"
+        ],
+        "source_objectids": [
+          "10718",
+          "43308"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "achiagu health center",
+          "Ebonyi",
+          "ezza north"
+        ],
+        "source_objectids": [
+          "10841",
+          "38342"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "afikpo medical center",
+          "Ebonyi",
+          "afikpo north"
+        ],
+        "source_objectids": [
+          "10859",
+          "31297"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "romon liman health post",
+          "Sokoto",
+          "tambuwal"
+        ],
+        "source_objectids": [
+          "10873",
+          "34790"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gidan tudu health post",
+          "Sokoto",
+          "wamako"
+        ],
+        "source_objectids": [
+          "10994",
+          "35584"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "meli primary health center",
+          "Sokoto",
+          "gwadabawa"
+        ],
+        "source_objectids": [
+          "11000",
+          "39799"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sakamaru health post",
+          "Sokoto",
+          "gwadabawa"
+        ],
+        "source_objectids": [
+          "11005",
+          "36762"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bamana health post",
+          "Sokoto",
+          "gwadabawa"
+        ],
+        "source_objectids": [
+          "11086",
+          "39812"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gidan albakari health post",
+          "Sokoto",
+          "gada"
+        ],
+        "source_objectids": [
+          "11110",
+          "28727"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dagiri primary health clinic",
+          "FCT",
+          "gwagwalada"
+        ],
+        "source_objectids": [
+          "11225",
+          "50326"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "daraye health post",
+          "Sokoto",
+          "wamako"
+        ],
+        "source_objectids": [
+          "11293",
+          "28731"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bafarawa primary health center",
+          "Sokoto",
+          "isa"
+        ],
+        "source_objectids": [
+          "11327",
+          "39795"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kaura kimba health post",
+          "Sokoto",
+          "wamako"
+        ],
+        "source_objectids": [
+          "11336",
+          "28730"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bakin kusu health post",
+          "Sokoto",
+          "wamako"
+        ],
+        "source_objectids": [
+          "11365",
+          "28733"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwankwanbilo health post",
+          "Sokoto",
+          "gwadabawa"
+        ],
+        "source_objectids": [
+          "11377",
+          "36752"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amaekpu health center",
+          "Abia",
+          "bende"
+        ],
+        "source_objectids": [
+          "11617",
+          "30604"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akili ogidi primary health center",
+          "Anambra",
+          "ogbaru"
+        ],
+        "source_objectids": [
+          "11703",
+          "41987"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "egbu health center",
+          "Imo",
+          "owerri north"
+        ],
+        "source_objectids": [
+          "11963",
+          "30636"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ngurunweke health center",
+          "Imo",
+          "aboh-mbaise"
+        ],
+        "source_objectids": [
+          "12031",
+          "34702"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogii primary health center",
+          "Imo",
+          "okigwe"
+        ],
+        "source_objectids": [
+          "12035",
+          "38115"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "eganakwu primary health center",
+          "Kogi",
+          "ibaji"
+        ],
+        "source_objectids": [
+          "12078",
+          "37838"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "onugwa primary health center",
+          "Kogi",
+          "ibaji"
+        ],
+        "source_objectids": [
+          "12081",
+          "30380"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dikenafai maternity and child health centre",
+          "Imo",
+          "ideato south"
+        ],
+        "source_objectids": [
+          "12541",
+          "35662"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jubilee christian hospital",
+          "Imo",
+          "ikeduru"
+        ],
+        "source_objectids": [
+          "12542",
+          "43799"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "orient hospital",
+          "Imo",
+          "aboh-mbaise"
+        ],
+        "source_objectids": [
+          "12553",
+          "35794"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okwunezigwe health center",
+          "Imo",
+          "obowo"
+        ],
+        "source_objectids": [
+          "12559",
+          "26410"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amaeze health center",
+          "Ebonyi",
+          "ivo"
+        ],
+        "source_objectids": [
+          "12622",
+          "35718"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umunze general hospital",
+          "Anambra",
+          "orumba south"
+        ],
+        "source_objectids": [
+          "12644",
+          "35737"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "otun primary health care center",
+          "Ekiti",
+          "moba"
+        ],
+        "source_objectids": [
+          "12665",
+          "14470",
+          "15339"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "land mark hospital",
+          "Abia",
+          "aba north"
+        ],
+        "source_objectids": [
+          "12673",
+          "30938"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yarkurya health post",
+          "Zamfara",
+          "anka"
+        ],
+        "source_objectids": [
+          "12996",
+          "35914"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "lango health post",
+          "Zamfara",
+          "bungudu"
+        ],
+        "source_objectids": [
+          "13142",
+          "29776"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kaida health post",
+          "Zamfara",
+          "bungudu"
+        ],
+        "source_objectids": [
+          "13152",
+          "36022"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "samawa primary health center",
+          "Zamfara",
+          "bungudu"
+        ],
+        "source_objectids": [
+          "13207",
+          "33217"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "koluwai health post",
+          "Zamfara",
+          "zurmi"
+        ],
+        "source_objectids": [
+          "13215",
+          "32393"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kohi health post",
+          "Zamfara",
+          "bungudu"
+        ],
+        "source_objectids": [
+          "13250",
+          "29750"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "shanawa primary health center",
+          "Zamfara",
+          "shinkafi"
+        ],
+        "source_objectids": [
+          "13368",
+          "33218"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "maje health post",
+          "Zamfara",
+          "bungudu"
+        ],
+        "source_objectids": [
+          "13423",
+          "45285"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gangara health post",
+          "Zamfara",
+          "shinkafi"
+        ],
+        "source_objectids": [
+          "13424",
+          "36127"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "fiyinfoluwa hospital",
+          "Ogun",
+          "obafemi owode"
+        ],
+        "source_objectids": [
+          "13438",
+          "27839"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kurya primary health center",
+          "Zamfara",
+          "shinkafi"
+        ],
+        "source_objectids": [
+          "13471",
+          "33223"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kartyo primary health center",
+          "Benue",
+          "ushongo"
+        ],
+        "source_objectids": [
+          "13505",
+          "42911"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ambighir primary health center",
+          "Benue",
+          "gboko"
+        ],
+        "source_objectids": [
+          "13632",
+          "41240"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amua primary health center",
+          "Benue",
+          "konshisha"
+        ],
+        "source_objectids": [
+          "13663",
+          "41245"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "obeleagu umana health center",
+          "Enugu",
+          "ezeagu"
+        ],
+        "source_objectids": [
+          "13704",
+          "16033"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugwuagba health center",
+          "Enugu",
+          "enugu south"
+        ],
+        "source_objectids": [
+          "13756",
+          "45484"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ovbioise hospital",
+          "Edo",
+          "ikpoba-okha"
+        ],
+        "source_objectids": [
+          "14021",
+          "34336"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "abuja clinic",
+          "FCT",
+          "abuja municipal area council"
+        ],
+        "source_objectids": [
+          "14149",
+          "34765"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ishiagu medical center",
+          "Ebonyi",
+          "ivo"
+        ],
+        "source_objectids": [
+          "14192",
+          "30572"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "manna medical center",
+          "Oyo",
+          "ibadan north east"
+        ],
+        "source_objectids": [
+          "14257",
+          "30984"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "syban medical center",
+          "Lagos",
+          "apapa"
+        ],
+        "source_objectids": [
+          "14400",
+          "25804"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gloria hospital",
+          "Lagos",
+          "kosofe"
+        ],
+        "source_objectids": [
+          "14439",
+          "27622"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tolulope maternity home",
+          "Ogun",
+          "ijebu north"
+        ],
+        "source_objectids": [
+          "14531",
+          "37446"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umuodo primary health center",
+          "Abia",
+          "ugwunagbo"
+        ],
+        "source_objectids": [
+          "14668",
+          "27411"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ode primary health care center",
+          "Ekiti",
+          "aiyekire (gbonyin)"
+        ],
+        "source_objectids": [
+          "14716",
+          "15333"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ndiagu amechi health center",
+          "Enugu",
+          "enugu south"
+        ],
+        "source_objectids": [
+          "14760",
+          "38775"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikole methodist primary health care center",
+          "Ekiti",
+          "ikole"
+        ],
+        "source_objectids": [
+          "14775",
+          "45472"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tanahu primary health center",
+          "Kogi",
+          "kogi"
+        ],
+        "source_objectids": [
+          "14993",
+          "27303"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "onicha igo primary health center",
+          "Kogi",
+          "ofu"
+        ],
+        "source_objectids": [
+          "15055",
+          "33922"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ofabo primary health center",
+          "Kogi",
+          "ofu"
+        ],
+        "source_objectids": [
+          "15057",
+          "29876"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "emodu primary health center",
+          "Kogi",
+          "olamaboro"
+        ],
+        "source_objectids": [
+          "15070",
+          "34144"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iju primary health center",
+          "Lagos",
+          "ifako/ijaye"
+        ],
+        "source_objectids": [
+          "15165",
+          "31596"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkwebi health post",
+          "Abia",
+          "ohafia"
+        ],
+        "source_objectids": [
+          "15334",
+          "35769"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "shonga comprehensive health center",
+          "Kwara",
+          "edu"
+        ],
+        "source_objectids": [
+          "15355",
+          "22417"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ibite olo health center",
+          "Enugu",
+          "ezeagu"
+        ],
+        "source_objectids": [
+          "15525",
+          "46047"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "isale asa primary health center",
+          "Osun",
+          "boripe"
+        ],
+        "source_objectids": [
+          "15567",
+          "39229"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kuta comprehensive health center",
+          "Osun",
+          "ayedire"
+        ],
+        "source_objectids": [
+          "15585",
+          "42623"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugiri development health post",
+          "Imo",
+          "isiala mbano"
+        ],
+        "source_objectids": [
+          "15614",
+          "39224"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ile ogo primary health center",
+          "Osun",
+          "ola-oluwa"
+        ],
+        "source_objectids": [
+          "15679",
+          "39233"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oke odo primary health center",
+          "Osun",
+          "ayedire"
+        ],
+        "source_objectids": [
+          "15716",
+          "38515"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amanator primary health center",
+          "Imo",
+          "orlu"
+        ],
+        "source_objectids": [
+          "15768",
+          "35845"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ubogwu health center",
+          "Imo",
+          "oru east"
+        ],
+        "source_objectids": [
+          "15829",
+          "35833"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogotun primary health clinic",
+          "Ekiti",
+          "ekiti south west"
+        ],
+        "source_objectids": [
+          "15868",
+          "45468"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ezimo agu health post",
+          "Enugu",
+          "udenu"
+        ],
+        "source_objectids": [
+          "15900",
+          "34169"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "adaka primary health center",
+          "Benue",
+          "makurdi"
+        ],
+        "source_objectids": [
+          "15980",
+          "27543"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umundu health center",
+          "Enugu",
+          "udenu"
+        ],
+        "source_objectids": [
+          "16016",
+          "42650"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oke iju basic health center",
+          "Ondo",
+          "akure north"
+        ],
+        "source_objectids": [
+          "16157",
+          "34065",
+          "34066"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oke aro basic health center",
+          "Ondo",
+          "akure south"
+        ],
+        "source_objectids": [
+          "16161",
+          "34061"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "osomegbe primary health center",
+          "Edo",
+          "etsako central"
+        ],
+        "source_objectids": [
+          "16247",
+          "34204"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "awo primary health center",
+          "Edo",
+          "esan north-east"
+        ],
+        "source_objectids": [
+          "16301",
+          "34202"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "olinlin primary health center",
+          "Edo",
+          "esan north-east"
+        ],
+        "source_objectids": [
+          "16304",
+          "41875"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugbuneke primary health center",
+          "Edo",
+          "owan east"
+        ],
+        "source_objectids": [
+          "16320",
+          "47303"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ebun primary health center",
+          "Edo",
+          "esan north-east"
+        ],
+        "source_objectids": [
+          "16328",
+          "41927"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ibhiolulu primary health center",
+          "Edo",
+          "esan central"
+        ],
+        "source_objectids": [
+          "16357",
+          "40634"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "abaji general hospital",
+          "FCT",
+          "abaji"
+        ],
+        "source_objectids": [
+          "16517",
+          "47330"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ogbakuba primary health center",
+          "Anambra",
+          "ogbaru"
+        ],
+        "source_objectids": [
+          "16540",
+          "34619"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "achina comprehensive health center",
+          "Anambra",
+          "aguata"
+        ],
+        "source_objectids": [
+          "16557",
+          "30603"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okuku general hospital",
+          "Osun",
+          "odo otin"
+        ],
+        "source_objectids": [
+          "16605",
+          "42903"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "wuraola basic health center",
+          "Ondo",
+          "ifedore"
+        ],
+        "source_objectids": [
+          "16648",
+          "35230"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ibuji comprehensive health center",
+          "Ondo",
+          "ifedore"
+        ],
+        "source_objectids": [
+          "16652",
+          "35218"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkume health post",
+          "Enugu",
+          "uzo-uwani"
+        ],
+        "source_objectids": [
+          "16685",
+          "37628"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ujiogba primary health center",
+          "Edo",
+          "esan west"
+        ],
+        "source_objectids": [
+          "16690",
+          "30424"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oloten primary health center",
+          "Edo",
+          "orhionmwon"
+        ],
+        "source_objectids": [
+          "16699",
+          "27320"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akwanga general hospital",
+          "Nasarawa",
+          "akwanga"
+        ],
+        "source_objectids": [
+          "16820",
+          "42724"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "calvary cottage hospital",
+          "Abia",
+          "osisioma ngwa"
+        ],
+        "source_objectids": [
+          "16844",
+          "31310"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "imezi olo health center",
+          "Enugu",
+          "ezeagu"
+        ],
+        "source_objectids": [
+          "16881",
+          "42616"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "galda health post",
+          "Bauchi",
+          "toro"
+        ],
+        "source_objectids": [
+          "17043",
+          "28233"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "densa hospital and maternity",
+          "Enugu",
+          "udi"
+        ],
+        "source_objectids": [
+          "17131",
+          "37136"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "cimac clinic",
+          "Enugu",
+          "enugu south"
+        ],
+        "source_objectids": [
+          "17221",
+          "45848"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rigana health post",
+          "Kano",
+          "kunchi"
+        ],
+        "source_objectids": [
+          "17322",
+          "31701"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kazode health post",
+          "Kano",
+          "kabo"
+        ],
+        "source_objectids": [
+          "17324",
+          "31734"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jemomi health post",
+          "Kano",
+          "dawakin tofa"
+        ],
+        "source_objectids": [
+          "17325",
+          "31741"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "faran health post",
+          "Kano",
+          "kibiya"
+        ],
+        "source_objectids": [
+          "17327",
+          "31673"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "chalbo health post",
+          "Kano",
+          "kibiya"
+        ],
+        "source_objectids": [
+          "17329",
+          "31674"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rurum primary health clinic",
+          "Kano",
+          "rano"
+        ],
+        "source_objectids": [
+          "17342",
+          "18135"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sabon fegi health post",
+          "Kano",
+          "karaye"
+        ],
+        "source_objectids": [
+          "17406",
+          "39377"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "baskore health post",
+          "Kano",
+          "kabo"
+        ],
+        "source_objectids": [
+          "17430",
+          "31754"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yan dutse health post",
+          "Kano",
+          "bichi"
+        ],
+        "source_objectids": [
+          "17489",
+          "39379"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tukuibi health post",
+          "Kano",
+          "bichi"
+        ],
+        "source_objectids": [
+          "17540",
+          "31752"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dan itace health post",
+          "Kano",
+          "dawakin tofa"
+        ],
+        "source_objectids": [
+          "17661",
+          "39265"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "haye health post",
+          "Kano",
+          "nasarawa"
+        ],
+        "source_objectids": [
+          "17738",
+          "31731"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "daura health post",
+          "Kano",
+          "karaye"
+        ],
+        "source_objectids": [
+          "17974",
+          "31670"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yola primary health center",
+          "Kano",
+          "karaye"
+        ],
+        "source_objectids": [
+          "18038",
+          "39430"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gude health post",
+          "Kano",
+          "kabo"
+        ],
+        "source_objectids": [
+          "18119",
+          "31723"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kibiya primary health center",
+          "Kano",
+          "kibiya"
+        ],
+        "source_objectids": [
+          "18311",
+          "39303"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwali basic health center",
+          "FCT",
+          "kwali"
+        ],
+        "source_objectids": [
+          "18373",
+          "38426"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "toungo nursing and maternity home",
+          "Adamawa",
+          "yola south"
+        ],
+        "source_objectids": [
+          "18490",
+          "32084"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tella primary health center",
+          "Taraba",
+          "gassol"
+        ],
+        "source_objectids": [
+          "18720",
+          "49381"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "wurode primary health center",
+          "Adamawa",
+          "song"
+        ],
+        "source_objectids": [
+          "18726",
+          "32285"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "redemption medical center",
+          "Akwa Ibom",
+          "eket"
+        ],
+        "source_objectids": [
+          "18800",
+          "32511"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tutare primary health center",
+          "Taraba",
+          "gassol"
+        ],
+        "source_objectids": [
+          "18959",
+          "39594"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "haske nursing home and maternity",
+          "Adamawa",
+          "yola north"
+        ],
+        "source_objectids": [
+          "18968",
+          "32078"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gwandu primary health center",
+          "Kebbi",
+          "gwandu"
+        ],
+        "source_objectids": [
+          "19115",
+          "32440",
+          "39876"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "garin tudu health post",
+          "Kebbi",
+          "fakai"
+        ],
+        "source_objectids": [
+          "19131",
+          "39959"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "shalwai health post",
+          "Kebbi",
+          "arewa"
+        ],
+        "source_objectids": [
+          "19214",
+          "40330"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "afaja health post",
+          "Kebbi",
+          "bunza"
+        ],
+        "source_objectids": [
+          "19234",
+          "32439"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akwara health post",
+          "Kebbi",
+          "birnin kebbi"
+        ],
+        "source_objectids": [
+          "19281",
+          "32435"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dugu tsoho primary health center",
+          "Kebbi",
+          "shanga"
+        ],
+        "source_objectids": [
+          "19395",
+          "32445"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "marafa primary health center",
+          "Kebbi",
+          "fakai"
+        ],
+        "source_objectids": [
+          "19447",
+          "40016"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tindifai health post",
+          "Kebbi",
+          "suru"
+        ],
+        "source_objectids": [
+          "19564",
+          "39859"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gelwasa primary health center",
+          "Kebbi",
+          "sakaba"
+        ],
+        "source_objectids": [
+          "19656",
+          "32444"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sharabi health post",
+          "Kebbi",
+          "bagudo"
+        ],
+        "source_objectids": [
+          "19686",
+          "40629"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gusase primary health center",
+          "Niger",
+          "bosso"
+        ],
+        "source_objectids": [
+          "19976",
+          "32421"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sakpe basic health center",
+          "Niger",
+          "edati"
+        ],
+        "source_objectids": [
+          "20278",
+          "40061"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bani health post",
+          "Kebbi",
+          "bagudo"
+        ],
+        "source_objectids": [
+          "20520",
+          "40318"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agoloma primary health center",
+          "Delta",
+          "patani"
+        ],
+        "source_objectids": [
+          "20558",
+          "34196"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okoroba health post",
+          "Cross River",
+          "akpabuyo"
+        ],
+        "source_objectids": [
+          "20635",
+          "40673"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "etakor health post",
+          "Cross River",
+          "ikom"
+        ],
+        "source_objectids": [
+          "20646",
+          "32662"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okorshie health post",
+          "Cross River",
+          "obudu"
+        ],
+        "source_objectids": [
+          "20661",
+          "42370"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "offi health center",
+          "Akwa Ibom",
+          "okobo"
+        ],
+        "source_objectids": [
+          "20815",
+          "32676"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kalio ama health center",
+          "Rivers",
+          "okrika"
+        ],
+        "source_objectids": [
+          "20896",
+          "46691"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "choba health post",
+          "Rivers",
+          "obio/akpor"
+        ],
+        "source_objectids": [
+          "20901",
+          "41032"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "buruku primary health center",
+          "Kaduna",
+          "chikun"
+        ],
+        "source_objectids": [
+          "21422",
+          "32725"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "limi hospital",
+          "Kaduna",
+          "sabon gari"
+        ],
+        "source_objectids": [
+          "21585",
+          "32746"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tudun wada health clinic",
+          "Katsina",
+          "bindawa"
+        ],
+        "source_objectids": [
+          "21813",
+          "41493"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bandaga health clinic",
+          "Katsina",
+          "sabuwa"
+        ],
+        "source_objectids": [
+          "21834",
+          "32912"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mazare health clinic",
+          "Katsina",
+          "sabuwa"
+        ],
+        "source_objectids": [
+          "21849",
+          "41527"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zandam health clinic",
+          "Katsina",
+          "jibia"
+        ],
+        "source_objectids": [
+          "21877",
+          "32924"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mammando health clinic",
+          "Katsina",
+          "safana"
+        ],
+        "source_objectids": [
+          "21919",
+          "41562"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amana clinic",
+          "Katsina",
+          "katsina"
+        ],
+        "source_objectids": [
+          "21973",
+          "32900"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "airport clinic",
+          "Katsina",
+          "katsina"
+        ],
+        "source_objectids": [
+          "21989",
+          "32905"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "koda primary health center",
+          "Katsina",
+          "charanchi"
+        ],
+        "source_objectids": [
+          "22010",
+          "41537"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dagarawa health clinic",
+          "Katsina",
+          "safana"
+        ],
+        "source_objectids": [
+          "22209",
+          "26703"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "korede hospital",
+          "Ogun",
+          "obafemi owode"
+        ],
+        "source_objectids": [
+          "22357",
+          "37417"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ishibori health post",
+          "Cross River",
+          "ogoja"
+        ],
+        "source_objectids": [
+          "22421",
+          "42467"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agbajogun primary health center",
+          "Kogi",
+          "mopa-muro"
+        ],
+        "source_objectids": [
+          "22465",
+          "27583"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ajaina primary health center",
+          "Kogi",
+          "idah"
+        ],
+        "source_objectids": [
+          "22601",
+          "27606"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sabo oke medical center",
+          "Kwara",
+          "ilorin east"
+        ],
+        "source_objectids": [
+          "22636",
+          "41789"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "aran orin comprehensive health center",
+          "Kwara",
+          "irepodun"
+        ],
+        "source_objectids": [
+          "22772",
+          "41746"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "awon primary health center",
+          "Kaduna",
+          "kachia"
+        ],
+        "source_objectids": [
+          "22860",
+          "33462"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "dutsen bako health clinic",
+          "Kaduna",
+          "zangon kataf"
+        ],
+        "source_objectids": [
+          "22869",
+          "41215"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amiyi primary health center",
+          "Anambra",
+          "ogbaru"
+        ],
+        "source_objectids": [
+          "22900",
+          "27712"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "eko ewu primary health center",
+          "Edo",
+          "esan central"
+        ],
+        "source_objectids": [
+          "22902",
+          "41876"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkpor uno health post",
+          "Anambra",
+          "idemili north"
+        ],
+        "source_objectids": [
+          "22986",
+          "33830"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikot osurua health post",
+          "Akwa Ibom",
+          "ikot ekpene"
+        ],
+        "source_objectids": [
+          "23020",
+          "42173"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ayekale primary health center",
+          "Osun",
+          "olorunda"
+        ],
+        "source_objectids": [
+          "23156",
+          "38544"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "omasiagu primary health center",
+          "Anambra",
+          "ayamelum"
+        ],
+        "source_objectids": [
+          "23161",
+          "39213"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okposhi health center",
+          "Ebonyi",
+          "ezza north"
+        ],
+        "source_objectids": [
+          "23250",
+          "42456"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "umuegara health center",
+          "Ebonyi",
+          "ohaukwu"
+        ],
+        "source_objectids": [
+          "23259",
+          "42474"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yaikyo primary health center",
+          "Benue",
+          "makurdi"
+        ],
+        "source_objectids": [
+          "23272",
+          "29814"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "utuhu primary health center",
+          "Cross River",
+          "obanliku"
+        ],
+        "source_objectids": [
+          "23296",
+          "33301"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "divine providence hospital",
+          "Enugu",
+          "enugu south"
+        ],
+        "source_objectids": [
+          "23326",
+          "48951"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "agubia cottage hospital",
+          "Ebonyi",
+          "ikwo"
+        ],
+        "source_objectids": [
+          "23347",
+          "42568"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "karu health post",
+          "Cross River",
+          "obudu"
+        ],
+        "source_objectids": [
+          "23402",
+          "32519"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "igwo health center",
+          "Cross River",
+          "obudu"
+        ],
+        "source_objectids": [
+          "23406",
+          "42854"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ozalla ezimo health center",
+          "Enugu",
+          "udenu"
+        ],
+        "source_objectids": [
+          "23470",
+          "38313"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zenith hospital and maternity",
+          "Enugu",
+          "nsukka"
+        ],
+        "source_objectids": [
+          "23550",
+          "42715"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oke ila comprehensive health center",
+          "Osun",
+          "ifedayo"
+        ],
+        "source_objectids": [
+          "23661",
+          "43070"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "achara ohodo health center",
+          "Enugu",
+          "igbo-etiti"
+        ],
+        "source_objectids": [
+          "23690",
+          "42530"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mokwa general hospital",
+          "Niger",
+          "mokwa"
+        ],
+        "source_objectids": [
+          "23823",
+          "23825"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "egoja health post",
+          "Cross River",
+          "ogoja"
+        ],
+        "source_objectids": [
+          "23882",
+          "41824"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkeleta health post",
+          "Cross River",
+          "ikom"
+        ],
+        "source_objectids": [
+          "23884",
+          "32616"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikot mbong health center",
+          "Akwa Ibom",
+          "onna"
+        ],
+        "source_objectids": [
+          "23904",
+          "41062"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "laro health post",
+          "Gombe",
+          "kwami"
+        ],
+        "source_objectids": [
+          "24194",
+          "41219"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "lakidir primary health center",
+          "Gombe",
+          "kaltungo"
+        ],
+        "source_objectids": [
+          "24246",
+          "38863"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "olosun health clinic",
+          "Ogun",
+          "obafemi owode"
+        ],
+        "source_objectids": [
+          "24442",
+          "38723"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oni health center",
+          "Ogun",
+          "ogun waterside"
+        ],
+        "source_objectids": [
+          "24469",
+          "46111"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ajegunle health center",
+          "Ogun",
+          "ado odo/ota"
+        ],
+        "source_objectids": [
+          "24499",
+          "29728"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "olose primary health center",
+          "Ogun",
+          "ifo"
+        ],
+        "source_objectids": [
+          "24501",
+          "27544"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "fagbenro health clinic",
+          "Ogun",
+          "abeokuta north"
+        ],
+        "source_objectids": [
+          "24583",
+          "38720"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "owowo health clinic",
+          "Ogun",
+          "ewekoro"
+        ],
+        "source_objectids": [
+          "24598",
+          "39261"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikenne health clinic",
+          "Ogun",
+          "ikenne"
+        ],
+        "source_objectids": [
+          "24605",
+          "38734"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sacred heart hospital",
+          "Ogun",
+          "abeokuta south"
+        ],
+        "source_objectids": [
+          "24667",
+          "39202"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "osunbudepo health center",
+          "Ogun",
+          "ijebu north"
+        ],
+        "source_objectids": [
+          "24675",
+          "38711"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bolorunduro health post",
+          "Ogun",
+          "ogun waterside"
+        ],
+        "source_objectids": [
+          "24682",
+          "29730"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "royal health post",
+          "Ogun",
+          "abeokuta south"
+        ],
+        "source_objectids": [
+          "24713",
+          "43269"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "otta primary health care center",
+          "Ogun",
+          "ado odo/ota"
+        ],
+        "source_objectids": [
+          "24718",
+          "36171"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "idode health center",
+          "Ogun",
+          "ijebu north east"
+        ],
+        "source_objectids": [
+          "24741",
+          "30236"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "atoyo health clinic",
+          "Ogun",
+          "ijebu east"
+        ],
+        "source_objectids": [
+          "24748",
+          "30663"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "owode primary health center",
+          "Ogun",
+          "imeko afon"
+        ],
+        "source_objectids": [
+          "24760",
+          "27398"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "yalwa health post",
+          "Jigawa",
+          "gwaram"
+        ],
+        "source_objectids": [
+          "24800",
+          "37601"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "malamawa health post",
+          "Jigawa",
+          "dutse"
+        ],
+        "source_objectids": [
+          "24936",
+          "43394"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwarin dogaji health post",
+          "Jigawa",
+          "ringim"
+        ],
+        "source_objectids": [
+          "25022",
+          "43402"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nsokkara health center",
+          "Ebonyi",
+          "ezza south"
+        ],
+        "source_objectids": [
+          "25567",
+          "38336"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mangu primary health center",
+          "Plateau",
+          "mangu"
+        ],
+        "source_objectids": [
+          "25585",
+          "29383"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikpayongo primary health center",
+          "Benue",
+          "gwer east"
+        ],
+        "source_objectids": [
+          "25692",
+          "29808"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "karshi health clinic",
+          "Kano",
+          "rogo"
+        ],
+        "source_objectids": [
+          "25828",
+          "39307"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugwuoba cottage hospital",
+          "Enugu",
+          "oji river"
+        ],
+        "source_objectids": [
+          "26252",
+          "38779"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "oboru primary health center",
+          "Benue",
+          "oju"
+        ],
+        "source_objectids": [
+          "26314",
+          "27540"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iragberi comprehensive health center",
+          "Osun",
+          "egbedore"
+        ],
+        "source_objectids": [
+          "26419",
+          "42921"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "onueke health center",
+          "Enugu",
+          "uzo-uwani"
+        ],
+        "source_objectids": [
+          "26442",
+          "31586"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "anguwan liman health clinic",
+          "Kaduna",
+          "zaria"
+        ],
+        "source_objectids": [
+          "26656",
+          "33444"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "j 4 inside health clinic",
+          "Ogun",
+          "ijebu east"
+        ],
+        "source_objectids": [
+          "26882",
+          "38701"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rumirgo model primary health center",
+          "Borno",
+          "askira/uba"
+        ],
+        "source_objectids": [
+          "27031",
+          "27352"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "fhi 360 clinic",
+          "Borno",
+          "maiduguri"
+        ],
+        "source_objectids": [
+          "27045",
+          "27046"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sanctuary clinic and maternity home",
+          "Ogun",
+          "sagamu"
+        ],
+        "source_objectids": [
+          "27316",
+          "37463"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "the premier specialist hospital",
+          "Lagos",
+          "eti-osa"
+        ],
+        "source_objectids": [
+          "28079",
+          "28110"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "victoria scan and diagnostics medical center",
+          "Ogun",
+          "ifo"
+        ],
+        "source_objectids": [
+          "28121",
+          "35926"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nkst clinic",
+          "Benue",
+          "makurdi"
+        ],
+        "source_objectids": [
+          "28124",
+          "30178"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bangire maternity",
+          "Bauchi",
+          "shira"
+        ],
+        "source_objectids": [
+          "28261",
+          "39782"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rahama primary health center",
+          "Niger",
+          "kontagora"
+        ],
+        "source_objectids": [
+          "28286",
+          "40125"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "onichangwa primary health center",
+          "Abia",
+          "obi ngwa"
+        ],
+        "source_objectids": [
+          "28524",
+          "35018"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "unguwar pampo health post",
+          "Bauchi",
+          "ganjuwa"
+        ],
+        "source_objectids": [
+          "28651",
+          "32387"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "gudduba health post",
+          "Bauchi",
+          "ningi"
+        ],
+        "source_objectids": [
+          "28673",
+          "36737"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bukop health care centre",
+          "Ogun",
+          "ijebu ode"
+        ],
+        "source_objectids": [
+          "28742",
+          "36084"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "diamond clinic",
+          "Lagos",
+          "mushin"
+        ],
+        "source_objectids": [
+          "29172",
+          "37098"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "embassy hospital",
+          "Abia",
+          "osisioma ngwa"
+        ],
+        "source_objectids": [
+          "29219",
+          "31116"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mobolaji hospital",
+          "Oyo",
+          "ibadan north east"
+        ],
+        "source_objectids": [
+          "29389",
+          "39189"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "lafiya medical center",
+          "Gombe",
+          "kaltungo"
+        ],
+        "source_objectids": [
+          "29453",
+          "29854"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "afaakaa primary health center",
+          "Benue",
+          "katsina-ala"
+        ],
+        "source_objectids": [
+          "29812",
+          "41250"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kenneth medical center",
+          "Ondo",
+          "akoko north east"
+        ],
+        "source_objectids": [
+          "29889",
+          "34029"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "st anthony eye clinic",
+          "Ebonyi",
+          "ebonyi"
+        ],
+        "source_objectids": [
+          "30108",
+          "30791"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "seta medical center",
+          "Benue",
+          "kwande"
+        ],
+        "source_objectids": [
+          "30182",
+          "31480"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "uchenna hospital and maternity",
+          "Anambra",
+          "anaocha"
+        ],
+        "source_objectids": [
+          "30291",
+          "34512"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ugom maternity",
+          "Abia",
+          "isiala-ngwa south"
+        ],
+        "source_objectids": [
+          "30344",
+          "34471"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "igbo olofin health post",
+          "Ekiti",
+          "efon"
+        ],
+        "source_objectids": [
+          "30353",
+          "34965"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "itaka community health center",
+          "Cross River",
+          "etung"
+        ],
+        "source_objectids": [
+          "30443",
+          "40667"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "mana health post",
+          "Sokoto",
+          "sokoto south"
+        ],
+        "source_objectids": [
+          "30596",
+          "35384"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "titilope clinic and maternity home",
+          "Oyo",
+          "ona ara"
+        ],
+        "source_objectids": [
+          "30832",
+          "34570"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "nosco eye hospital",
+          "Anambra",
+          "onitsha north"
+        ],
+        "source_objectids": [
+          "31001",
+          "42126"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ave dental clinic",
+          "Lagos",
+          "oshodi/isolo"
+        ],
+        "source_objectids": [
+          "31036",
+          "31044"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "royal hospital",
+          "Anambra",
+          "idemili north"
+        ],
+        "source_objectids": [
+          "31140",
+          "33723"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "alheri hospital",
+          "Ogun",
+          "ifo"
+        ],
+        "source_objectids": [
+          "31402",
+          "33668"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iwa bi olorun maternity home",
+          "Ogun",
+          "ipokia"
+        ],
+        "source_objectids": [
+          "31417",
+          "39111"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "legus specialist hospital",
+          "Lagos",
+          "mushin"
+        ],
+        "source_objectids": [
+          "31548",
+          "36801"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zango health post",
+          "Kano",
+          "dawakin tofa"
+        ],
+        "source_objectids": [
+          "31722",
+          "31725"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "jiragon makera health post",
+          "Kano",
+          "albasu"
+        ],
+        "source_objectids": [
+          "31742",
+          "39364"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "akesa health center",
+          "Taraba",
+          "takum"
+        ],
+        "source_objectids": [
+          "31889",
+          "32066"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwambula health post",
+          "Adamawa",
+          "madagali"
+        ],
+        "source_objectids": [
+          "31921",
+          "32269"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kusuku primary health center",
+          "Taraba",
+          "sardauna"
+        ],
+        "source_objectids": [
+          "32056",
+          "32237"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "meltara health post",
+          "Adamawa",
+          "yola south"
+        ],
+        "source_objectids": [
+          "32180",
+          "32379"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "maitumbi primary health center",
+          "Niger",
+          "chanchaga"
+        ],
+        "source_objectids": [
+          "32411",
+          "39819"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "obat iwango health post",
+          "Cross River",
+          "yala"
+        ],
+        "source_objectids": [
+          "32579",
+          "49960"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "okoyong comprehensive health center",
+          "Cross River",
+          "odukpani"
+        ],
+        "source_objectids": [
+          "32600",
+          "40636"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "edondon health post",
+          "Cross River",
+          "obubra"
+        ],
+        "source_objectids": [
+          "32613",
+          "40712"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ikot eyo health center",
+          "Akwa Ibom",
+          "nsit ubium"
+        ],
+        "source_objectids": [
+          "32675",
+          "50144"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "danmurabu health clinic",
+          "Katsina",
+          "kankara"
+        ],
+        "source_objectids": [
+          "32903",
+          "41352"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "kwatta maternity and child health clinic",
+          "Katsina",
+          "mani"
+        ],
+        "source_objectids": [
+          "32907",
+          "41490"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "zamava health center",
+          "Bauchi",
+          "bogoro"
+        ],
+        "source_objectids": [
+          "34370",
+          "38963"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "azuebonyi idembia health center",
+          "Ebonyi",
+          "ezza south"
+        ],
+        "source_objectids": [
+          "34541",
+          "43472"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "epe comprehensive health center",
+          "Ondo",
+          "ile-oluji/okeigbo"
+        ],
+        "source_objectids": [
+          "34621",
+          "35228"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "iloji health post",
+          "Sokoto",
+          "tambuwal"
+        ],
+        "source_objectids": [
+          "34789",
+          "36756"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "victory hospital",
+          "Osun",
+          "iwo"
+        ],
+        "source_objectids": [
+          "35090",
+          "42405"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "atamo basic health center",
+          "Ondo",
+          "ile-oluji/okeigbo"
+        ],
+        "source_objectids": [
+          "35229",
+          "38548"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "divine covenant hospital",
+          "Imo",
+          "aboh-mbaise"
+        ],
+        "source_objectids": [
+          "35847",
+          "38038"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "covenant trust clinic and maternity home",
+          "Ogun",
+          "ifo"
+        ],
+        "source_objectids": [
+          "35927",
+          "36156"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "restela hospital and maternity",
+          "Enugu",
+          "enugu north"
+        ],
+        "source_objectids": [
+          "36397",
+          "42705"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "rhema hospital",
+          "Ebonyi",
+          "ikwo"
+        ],
+        "source_objectids": [
+          "36880",
+          "36881"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "fajoike clinic and maternity home",
+          "Ogun",
+          "ado odo/ota"
+        ],
+        "source_objectids": [
+          "37424",
+          "39117"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "olikoye ransome kuti memorial hospital",
+          "Ogun",
+          "abeokuta south"
+        ],
+        "source_objectids": [
+          "37469",
+          "43260"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "st anthonys hospital",
+          "Abia",
+          "arochukwu"
+        ],
+        "source_objectids": [
+          "37605",
+          "42416"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "model health centre",
+          "Ekiti",
+          "ilejemeje"
+        ],
+        "source_objectids": [
+          "37821",
+          "37822",
+          "42614"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "first health specialist clinic",
+          "Lagos",
+          "lagos mainland"
+        ],
+        "source_objectids": [
+          "38366",
+          "38367"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "tiga general hospital",
+          "Kano",
+          "bebeji"
+        ],
+        "source_objectids": [
+          "39378",
+          "45556"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "lafiya primary health center",
+          "Niger",
+          "bosso"
+        ],
+        "source_objectids": [
+          "40269",
+          "40310"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "police health clinic",
+          "Katsina",
+          "funtua"
+        ],
+        "source_objectids": [
+          "41340",
+          "41342"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ahovo health center",
+          "Ogun",
+          "ipokia"
+        ],
+        "source_objectids": [
+          "41602",
+          "43166"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "osun eesa primary health center",
+          "Osun",
+          "irepodun"
+        ],
+        "source_objectids": [
+          "41935",
+          "42120"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "bedia health center",
+          "Cross River",
+          "obudu"
+        ],
+        "source_objectids": [
+          "42381",
+          "42853"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ijoda health post",
+          "Cross River",
+          "obubra"
+        ],
+        "source_objectids": [
+          "42386",
+          "43470"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "uwelle ukehe health post",
+          "Enugu",
+          "igbo-etiti"
+        ],
+        "source_objectids": [
+          "42525",
+          "43520"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "school clinic",
+          "Jigawa",
+          "malam madori"
+        ],
+        "source_objectids": [
+          "43295",
+          "43302"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "amadu musa health post",
+          "Jigawa",
+          "auyo"
+        ],
+        "source_objectids": [
+          "43309",
+          "43324"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "wangara primary health center",
+          "Jigawa",
+          "dutse"
+        ],
+        "source_objectids": [
+          "43313",
+          "43386"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "erinmope health center",
+          "Kwara",
+          "oke-ero"
+        ],
+        "source_objectids": [
+          "47597",
+          "47600"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "salama clinic",
+          "Plateau",
+          "bokkos"
+        ],
+        "source_objectids": [
+          "48384",
+          "48388"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "sauki clinic",
+          "Plateau",
+          "bokkos"
+        ],
+        "source_objectids": [
+          "48551",
+          "48554"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "ayis hospital",
+          "Lagos",
+          "alimosho"
+        ],
+        "source_objectids": [
+          "48638",
+          "48639"
+        ]
+      },
+      {
+        "name_state_lga": [
+          "fahbah aboki clinic and maternity",
+          "Kwara",
+          "kaiama"
+        ],
+        "source_objectids": [
+          "49852",
+          "49853"
+        ]
+      }
+    ]
+  },
+  "artifact_size": {
+    "bytes": 69535390,
+    "gzip_bytes": 3835281,
+    "records": 51022,
+    "facilities_1_1_bytes": 1695844,
+    "note": "Low-end mobile implication: the candidate is roughly an order of magnitude larger than 1.1. Mobile guidance in mobile_handoff/facilities_grid3_v2/README.md; gzip is the transfer bound, bytes the on-device bound."
+  }
+}

@@ -1,0 +1,194 @@
+{
+  "_metadata": {
+    "report_id": "facilities_grid3_size",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0",
+    "gzip_level": 9,
+    "note": "Every number here is computed at build time from the emitted bytes; the --check mode regenerates and byte-compares this report, so a hand-edited figure fails the run."
+  },
+  "artifacts": {
+    "source_csv": {
+      "path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+      "bytes": 13613859
+    },
+    "master_audit_candidate": {
+      "path": "candidate/facilities.ng.v2.0-grid3.json",
+      "bytes": 69535390,
+      "gzip_bytes": 3835281,
+      "role": "internal audit/master \u2014 NOT for mobile distribution"
+    },
+    "served_candidate": {
+      "path": "candidate/facilities.ng.v2.0-grid3.served.json",
+      "sha256": "44eabf634dc8be93595e1c9627b25d6eeb71f4ad7e0897d1ac0e08194523086c",
+      "bytes": 9804802,
+      "gzip_bytes": 2256033,
+      "records": 51022,
+      "role": "compact distribution shape (still candidate_unapproved)"
+    },
+    "facilities_1_1_active": {
+      "path": "facilities.ng.v1.1.json",
+      "bytes": 1695844
+    }
+  },
+  "served_measurements": {
+    "bytes_per_record": 192.2,
+    "reduction_vs_master_audit": "85.9%",
+    "size_vs_v1_1": "5.8x the active 1.1 artifact for 9.5x the records and 12.3x the states",
+    "targets": {
+      "raw_at_or_below_15mb": true,
+      "gzip_at_or_below_5mb": true
+    },
+    "parser_storage_implications": "The verified PR #79 parser materialises every record as a Dart object with no opaque leftovers (the projection carries only consumed keys), so in-memory cost tracks record count, not master size. The raw bytes are the parse/storage bound on device; gzip is the transfer bound."
+  },
+  "per_state_served_bytes": {
+    "Abia": {
+      "records": 1321,
+      "raw_bytes": 253554
+    },
+    "Adamawa": {
+      "records": 1561,
+      "raw_bytes": 300621
+    },
+    "Akwa Ibom": {
+      "records": 934,
+      "raw_bytes": 180285
+    },
+    "Anambra": {
+      "records": 1867,
+      "raw_bytes": 367359
+    },
+    "Bauchi": {
+      "records": 1468,
+      "raw_bytes": 281464
+    },
+    "Bayelsa": {
+      "records": 422,
+      "raw_bytes": 83176
+    },
+    "Benue": {
+      "records": 2284,
+      "raw_bytes": 433357
+    },
+    "Borno": {
+      "records": 804,
+      "raw_bytes": 153757
+    },
+    "Cross River": {
+      "records": 1522,
+      "raw_bytes": 296082
+    },
+    "Delta": {
+      "records": 1059,
+      "raw_bytes": 206603
+    },
+    "Ebonyi": {
+      "records": 1243,
+      "raw_bytes": 238115
+    },
+    "Edo": {
+      "records": 1069,
+      "raw_bytes": 203520
+    },
+    "Ekiti": {
+      "records": 772,
+      "raw_bytes": 149710
+    },
+    "Enugu": {
+      "records": 1457,
+      "raw_bytes": 279485
+    },
+    "FCT": {
+      "records": 652,
+      "raw_bytes": 126858
+    },
+    "Gombe": {
+      "records": 897,
+      "raw_bytes": 169837
+    },
+    "Imo": {
+      "records": 1779,
+      "raw_bytes": 342210
+    },
+    "Jigawa": {
+      "records": 904,
+      "raw_bytes": 170941
+    },
+    "Kaduna": {
+      "records": 1545,
+      "raw_bytes": 295201
+    },
+    "Kano": {
+      "records": 1723,
+      "raw_bytes": 330125
+    },
+    "Katsina": {
+      "records": 2296,
+      "raw_bytes": 447090
+    },
+    "Kebbi": {
+      "records": 1207,
+      "raw_bytes": 235160
+    },
+    "Kogi": {
+      "records": 1644,
+      "raw_bytes": 311551
+    },
+    "Kwara": {
+      "records": 1097,
+      "raw_bytes": 206406
+    },
+    "Lagos": {
+      "records": 2798,
+      "raw_bytes": 521056
+    },
+    "Nasarawa": {
+      "records": 1207,
+      "raw_bytes": 235384
+    },
+    "Niger": {
+      "records": 2201,
+      "raw_bytes": 421747
+    },
+    "Ogun": {
+      "records": 1993,
+      "raw_bytes": 374245
+    },
+    "Ondo": {
+      "records": 1096,
+      "raw_bytes": 211294
+    },
+    "Osun": {
+      "records": 1729,
+      "raw_bytes": 335358
+    },
+    "Oyo": {
+      "records": 2045,
+      "raw_bytes": 389620
+    },
+    "Plateau": {
+      "records": 1643,
+      "raw_bytes": 319322
+    },
+    "Rivers": {
+      "records": 791,
+      "raw_bytes": 154205
+    },
+    "Sokoto": {
+      "records": 937,
+      "raw_bytes": 182566
+    },
+    "Taraba": {
+      "records": 1464,
+      "raw_bytes": 281554
+    },
+    "Yobe": {
+      "records": 663,
+      "raw_bytes": 127522
+    },
+    "Zamfara": {
+      "records": 928,
+      "raw_bytes": 184644
+    }
+  }
+}

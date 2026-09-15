@@ -1,0 +1,14 @@
+{
+  "_metadata": {
+    "report_id": "facilities_grid3_quarantine",
+    "version": "1",
+    "generator": "tools/build_facilities_grid3_candidate.py",
+    "generator_version": "1.0.0",
+    "note": "Every source row not emitted, each with its reason. source_rows == emitted + quarantined, checked by the validator."
+  },
+  "source_rows": 51022,
+  "emitted": 51022,
+  "quarantined": 0,
+  "by_reason": {},
+  "rows": []
+}
