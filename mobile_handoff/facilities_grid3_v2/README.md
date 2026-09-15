@@ -8,19 +8,20 @@ Two candidates, one distribution target:
 
 - **Served candidate (what a manifest would point your loader at):**
   `candidate/facilities.ng.v2.0-grid3.served.json` —
-  `03a58e67d94bb1d7c88cc5e690472b167a82cc9f95d4f7afe937d8f5d1cebd75`,
-  51,022 records, **8,749,444 bytes raw (gzip-9 2,216,713)**, compact JSON.
+  `44eabf634dc8be93595e1c9627b25d6eeb71f4ad7e0897d1ac0e08194523086c`,
+  51,022 records, **9,804,802 bytes raw (gzip-9 2,256,033)**, compact JSON.
   Record shape verified against your PR #79 parser at `854377c0`:
-  `{id, name, state, city_area, latitude, longitude}` — every omitted optional
-  key (`type`, `emergency_capable`, `phone`, `opening_hours`, `lga`) parses as
-  null in your parser, which is the intended meaning. Top-level
+  `{id, name, state, city_area, latitude, longitude, type?}` — `type` is
+  present only with an FAC-D001-approved value; every omitted optional key
+  (`type` where unmapped, `emergency_capable`, `phone`, `opening_hours`,
+  `lga`) parses as null in your parser, which is the intended meaning. Top-level
   `schema_version: "2.0"`. The manifest sha256 is over these raw bytes,
   matching your loader's raw-body verification; gzip is a measurement only.
   Full contract evidence: `docs/FACILITIES_GRID3_SERVED.md`.
 - **Master/audit candidate (never for distribution):**
   `candidate/facilities.ng.v2.0-grid3.json` —
-  `03a5bf2d52759103ed08b34fd2f9d0934c85322317301582e9e61cbfa8abb14a`,
-  69,032,692 bytes, full per-record `source_record` provenance
+  `92300c1624668d1af77ddbb0d37f0104d08aa5484ec7af8e792234c912930d7a`,
+  69,535,390 bytes, full per-record `source_record` provenance
   (`schema/facilities_grid3.v2.schema.json`). Trace any served record to it
   (and to the licensed GRID3 source row) through `id` = `ng_g3_<globalid>`.
 
@@ -30,18 +31,39 @@ Two candidates, one distribution target:
    location search works nationwide: `state` is normalized to the canonical 37
    names, `(state, lga)` is the area key (844 pairs), and every record has
    in-state coordinates for distance ranking.
-2. **`type` is null on every record** until Product approves FAC-D001. A null
-   type is **not** a vocabulary member: never filter it out, never render an
-   empty result list because of it. Until FAC-D001, type-based filters
-   (self-care → pharmacies, urgent → hospitals/clinics) have nothing to match —
-   surface distance-ranked results instead. Note even after FAC-D001, this
-   source maps no record to `pharmacy`, `clinic` or `laboratory`.
-3. **`emergency_capable` is null on every record** (FAC-D002). Prioritisation
-   may only ever apply to `true`; there is none. Emergency flow: nearest
-   results, honest wording, never an empty list, never a capability badge.
-4. **`phone` and `opening_hours` are null on every record** (FAC-D003). Do not
-   render call buttons or hours chips for 2.0 records. 1.1's 45 verified Lagos
-   phones are not in this lineage.
+2. **`type` is populated under FAC-D001 (approved 2026-09-15).** The exact
+   source-value → type mapping, applied from `facility_level_option` only
+   (never the name):
+
+   | Source `facility_level_option` | Records | `type` on the wire |
+   |---|---|---|
+   | General Hospital | 1,120 | `hospital` |
+   | Teaching/Tertiary Hospital | 87 | `hospital` |
+   | Specialized Hospital | 38 | `hospital` |
+   | Primary Health Center | 22,239 | `health_centre` |
+   | Primary Health Clinic | 13,903 | `health_centre` |
+   | Health Post | 8,726 | `health_centre` |
+   | unknown | 4,909 | key omitted → parses as null/unspecified |
+
+   Totals on the wire: `hospital` 1,245 · `health_centre` 44,868 · omitted
+   4,909. A null/unspecified type is **not** a vocabulary member: never filter
+   it out, never render an empty result list because of it (your
+   `filterForUrgency` already guarantees this). This source maps **no** record
+   to `pharmacy`, `clinic`, `laboratory` or `other` — the self-care pharmacy
+   filter has nothing to match; surface distance-ranked results instead.
+   Mapping any further value requires a new Product decision.
+3. **`emergency_capable` stays absent/unknown** — FAC-D002's Product direction
+   is approved: keep the **112 action first and prominent**; prioritize a
+   facility **only when `emergency_capable == true`** (there are none); null
+   must **never** mean emergency-capable; with no verified emergency-capable
+   facility, show nearby facilities by distance **without claiming emergency
+   capability**; the interface must clearly state that emergency capability is
+   **not verified**. The final user-facing wording still requires Clinical
+   approval — FAC-D002 is not fully approved and the field is not populated.
+4. **`phone` and `opening_hours` are unavailable** (FAC-D003, approved as
+   unavailable). Render **no call buttons and no "open now" actions** for
+   GRID3 v2 records. 1.1's 45 verified Lagos phones are not in this lineage;
+   reconsideration requires a separately authorized source.
 5. **Identifiers changed:** `ng_g3_<globalid>`. Do not join 2.0 ids against
    1.1 ids or any NHFR id; there is no crosswalk.
 6. **`"unknown"` vs null:** the string `"unknown"` means the source explicitly
@@ -64,8 +86,8 @@ does not happen.
 
 ## Size and low-end devices (do not wire downloads yet)
 
-The served candidate is **8.7 MB raw / 2.2 MB gzip** (vs 1.1's 1.7 MB raw) —
-171.5 bytes/record, within reasonable low-end budgets; the 69 MB figure
+The served candidate is **9.8 MB raw / 2.3 MB gzip** (vs 1.1's 1.7 MB raw) —
+192.2 bytes/record, within reasonable low-end budgets; the 69 MB figure
 belongs to the internal master only and never reaches a device. One national
 artifact is the recommendation (sharding evaluated and set aside:
 `docs/FACILITIES_GRID3_SERVED.md`). Treat gzip as the transfer bound and raw

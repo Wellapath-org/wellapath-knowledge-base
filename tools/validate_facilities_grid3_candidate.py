@@ -137,8 +137,43 @@ def main():
           name_traced == len(records), name_traced)
 
     # --- C. honesty ------------------------------------------------------------------------
+    # The FAC-D001 mapping is checked against the GOVERNED documents — the
+    # approved proposal table and the decision register — not against the
+    # generator's own constant, so generator drift cannot validate itself.
+    proposal = load_json(PROPOSAL_PATH)
+    approved_map = {entry["source_value"]: entry["proposed_type"]
+                    for entry in proposal["mapping"]}
+    register = load_json(repo_path("facilities", "facilities_grid3_decision_register_v1.json"))
+    d001 = next(d for d in register["decisions"] if d["id"] == "FAC-D001")
+    d002 = next(d for d in register["decisions"] if d["id"] == "FAC-D002")
     all_null = lambda field: all(rec[field] is None for rec in records)  # noqa: E731
-    r.add("type is null on every record", all_null("type"))
+    r.add("every type equals the approved mapping of its own facility_level_option "
+          "(a function of the option alone — no name is ever read)",
+          all(rec["type"] == approved_map[rec["source_record"]["facility_level_option"]]
+              for rec in records))
+    type_counts = {"hospital": 0, "health_centre": 0, None: 0}
+    for rec in records:
+        type_counts[rec["type"]] += 1
+    r.add("populated types are exactly the approved values and unknown stays null",
+          set(type_counts) == {"hospital", "health_centre", None}
+          and type_counts[None] > 0
+          and type_counts[None] == sum(
+              1 for rec in records
+              if rec["source_record"]["facility_level_option"] == "unknown"))
+    r.add("the decision register records FAC-D001 approved with these exact counts",
+          d001["status"] == "approved" and d001["decided_on"] == "2026-09-15"
+          and d001["counts"] == {"hospital": type_counts["hospital"],
+                                 "health_centre": type_counts["health_centre"],
+                                 "null_unspecified": type_counts[None]})
+    r.add("the artifact's type_mapping_applied block agrees with the register",
+          meta["type_mapping_applied"]["counts"]
+          == {"hospital": type_counts["hospital"],
+              "health_centre": type_counts["health_centre"],
+              "null_unspecified": type_counts[None]}
+          and meta["type_mapping_applied"]["mapping"] == approved_map)
+    r.add("FAC-D002 remains blocked on Clinical wording and emergency_capable is not populated",
+          d002["status"] == "product_direction_approved_clinical_wording_pending"
+          and d002["implemented"] is False)
     r.add("phone is null on every record", all_null("phone"))
     r.add("opening_hours is null on every record", all_null("opening_hours"))
     r.add("emergency_capable is null on every record", all_null("emergency_capable"))
@@ -177,23 +212,31 @@ def main():
           and manifest["candidate_artifact"]["bytes"] == os.path.getsize(CANDIDATE_PATH)
           and manifest["candidate_artifact"]["record_count"] == len(records))
     gates = manifest["publication_gates"]
-    r.add("manifest is not live and every approval gate is false",
+    decided_true = {"source_licensing_established", "fac_d001_type_mapping_approved",
+                    "fac_d003_absent_contact_fields_accepted",
+                    "fac_d004_grid3_coordinates_accepted",
+                    "fac_d005_quarantine_policy_accepted",
+                    "fac_d006_duplicate_policy_accepted",
+                    "nationwide_coverage_accepted"}
+    r.add("manifest is not live; gates reflect the 2026-09-15 decisions exactly; "
+          "publication stays blocked",
           manifest["IS_LIVE_MANIFEST"] is False
-          and gates["source_licensing_established"] is True
-          and all(v is False for k, v in gates.items()
-                  if k != "source_licensing_established"))
+          and all(gates[k] is True for k in decided_true)
+          and all(v is False for k, v in gates.items() if k not in decided_true)
+          and gates["fac_d002_emergency_fallback_approved"] is False
+          and gates["may_publish"] is False)
     r.add("rollback binds to facilities 1.1 by hash, and 1.0/1.1 are byte-identical to their pins",
           manifest["rollback"]["target_sha256"] == S.CURRENT_ARTIFACT_SHA256
           and sha256_file(S.CURRENT_ARTIFACT_PATH) == S.CURRENT_ARTIFACT_SHA256
           and sha256_file(repo_path("facilities.ng.v1.0.json")) == V1_0_SHA256)
-    proposal = load_json(PROPOSAL_PATH)
     inventory = set(proposal["source_value_inventory"])
     mapped = {entry["source_value"] for entry in proposal["mapping"]}
-    r.add("type-mapping proposal is pending, unapplied, and covers the whole inventory",
-          proposal["_metadata"]["status"] == "PENDING_PRODUCT_REVIEW"
-          and proposal["_metadata"]["applied"] is False
-          and proposal["decision"]["status"] == "pending"
-          and proposal["decision"]["reviewer"] is None
+    r.add("type-mapping record is approved, applied, dated, and covers the whole inventory",
+          proposal["_metadata"]["status"] == "APPROVED"
+          and proposal["_metadata"]["applied"] is True
+          and proposal["decision"]["status"] == "approved"
+          and proposal["decision"]["reviewer"] is not None
+          and proposal["decision"]["decided_on"] == "2026-09-15"
           and inventory == mapped)
     r.add("no proposed type is outside the declared vocabulary",
           all(entry["proposed_type"] in (None, "hospital", "clinic", "health_centre",

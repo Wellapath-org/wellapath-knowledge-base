@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellapath.org/schema/facilities_grid3_served.v2.schema.json",
   "title": "WellaPath Nigeria facilities — served projection, schema 2.0, GRID3 lineage (candidate)",
-  "description": "The compact distribution shape of the GRID3-lineage candidate, projected from the internal audit/master candidate (candidate/facilities.ng.v2.0-grid3.json) with zero value changes. Every design fact below is VERIFIED against the Mobile PR #79 parser at wellapath-mobile 854377c0 (lib/core/facilities_v2/facilities_v2_parser.dart), not assumed:\n\n * The parser requires top-level schema_version (a string starting '2.') and a non-empty facilities list; _metadata is ignored by the parser and exists for governance.\n * A record is consumed through the keys {id, name, latitude, longitude, type, emergency_capable, state, lga, city_area, phone, opening_hours}; id, name and finite in-range coordinates are required or the record is rejected; every OPTIONAL key is read with raw[...] so an ABSENT key parses identically to an explicit null (type -> unspecified, emergency_capable -> unknown, phone/opening_hours -> null). type and emergency_capable therefore REMAIN NULL to the consumer while being absent from the bytes, and this schema forbids the keys outright (additionalProperties false), so populating either before its decision (FAC-D001 / FAC-D002) is schema-invalid, not merely discouraged.\n * Keys the parser does not consume are retained per record as an opaque provenance map in device memory — so the projection carries none: no source_record, no country (constant 'ng', stated once in _metadata), no lga (the master's lga always equals city_area, and search matches lga/city_area by equality but only city_area and name by containment, so city_area alone preserves the full search surface — verified in facilities_v2_search.dart).\n * Traceability needs no extra field: id IS the source reference — 'ng_g3_' + the GRID3 globalid (uuid: prefix stripped, lowercased), joining 1:1 to the master record and to the licensed GRID3 source row.\n\nThe artifact is serialized as compact canonical JSON (no whitespace, ensure_ascii, no trailing newline); the manifest sha256 is over exactly those raw bytes (the Mobile loader hash-verifies raw bytes; gzip is a measurement, not the delivery contract).",
+  "description": "The compact distribution shape of the GRID3-lineage candidate, projected from the internal audit/master candidate (candidate/facilities.ng.v2.0-grid3.json) with zero value changes. Every design fact below is VERIFIED against the Mobile PR #79 parser at wellapath-mobile 854377c0 (lib/core/facilities_v2/facilities_v2_parser.dart), not assumed:\n\n * The parser requires top-level schema_version (a string starting '2.') and a non-empty facilities list; _metadata is ignored by the parser and exists for governance.\n * A record is consumed through the keys {id, name, latitude, longitude, type, emergency_capable, state, lga, city_area, phone, opening_hours}; id, name and finite in-range coordinates are required or the record is rejected; every OPTIONAL key is read with raw[...] so an ABSENT key parses identically to an explicit null (type -> unspecified, emergency_capable -> unknown, phone/opening_hours -> null). type is populated under the approved FAC-D001 mapping (2026-09-15) with {hospital, health_centre} and omitted where the mapping yields null; emergency_capable REMAINS NULL to the consumer while absent from the bytes (FAC-D002's Product direction is approved but its Clinical wording is pending), and this schema forbids the emergency_capable, phone and opening_hours keys outright (additionalProperties false), so populating any of them before its decision is schema-invalid, not merely discouraged.\n * Keys the parser does not consume are retained per record as an opaque provenance map in device memory — so the projection carries none: no source_record, no country (constant 'ng', stated once in _metadata), no lga (the master's lga always equals city_area, and search matches lga/city_area by equality but only city_area and name by containment, so city_area alone preserves the full search surface — verified in facilities_v2_search.dart).\n * Traceability needs no extra field: id IS the source reference — 'ng_g3_' + the GRID3 globalid (uuid: prefix stripped, lowercased), joining 1:1 to the master record and to the licensed GRID3 source row.\n\nThe artifact is serialized as compact canonical JSON (no whitespace, ensure_ascii, no trailing newline); the manifest sha256 is over exactly those raw bytes (the Mobile loader hash-verifies raw bytes; gzip is a measurement, not the delivery contract).",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "_metadata", "facilities"],
@@ -18,7 +18,7 @@
         "artifact_id", "lineage", "role", "version", "schema_version", "country",
         "release_status", "publication_status", "release_date", "may_publish",
         "generated_at", "generator", "generator_version", "total_facilities",
-        "master_candidate", "source", "consumer_contract", "serialization"
+        "type_mapping", "master_candidate", "source", "consumer_contract", "serialization"
       ],
       "properties": {
         "artifact_id": { "const": "facilities" },
@@ -38,6 +38,38 @@
         "generator": { "type": "string", "minLength": 1 },
         "generator_version": { "type": "string" },
         "total_facilities": { "type": "integer", "minimum": 1 },
+        "type_mapping": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decision", "populated_values", "counts", "null_convention"],
+          "properties": {
+            "decision": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["decision_id", "status", "decided_on", "authority", "register", "record"],
+              "properties": {
+                "decision_id": { "const": "FAC-D001" },
+                "status": { "const": "approved" },
+                "decided_on": { "const": "2026-09-15" },
+                "authority": { "type": "string", "minLength": 1 },
+                "register": { "const": "facilities/facilities_grid3_decision_register_v1.json" },
+                "record": { "type": "string", "minLength": 1 }
+              }
+            },
+            "populated_values": { "const": ["hospital", "health_centre"] },
+            "counts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["hospital", "health_centre", "omitted_meaning_null_unspecified"],
+              "properties": {
+                "hospital": { "type": "integer", "minimum": 0 },
+                "health_centre": { "type": "integer", "minimum": 0 },
+                "omitted_meaning_null_unspecified": { "type": "integer", "minimum": 0 }
+              }
+            },
+            "null_convention": { "type": "string", "minLength": 1 }
+          }
+        },
         "master_candidate": {
           "type": "object",
           "additionalProperties": false,
@@ -92,13 +124,17 @@
           "pattern": "^ng_g3_[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$",
           "description": "The stable facility_id, under the key the verified parser consumes. Doubles as the record-level source reference: ng_g3_ + GRID3 globalid, joining 1:1 to the master record and the licensed source row."
         },
+        "type": {
+          "enum": ["hospital", "health_centre"],
+          "description": "Present only when FAC-D001 (approved 2026-09-15) maps the record's facility_level_option; OMITTED when the mapping yields null — the verified parser reads the absent key as null/unspecified and such records remain visible and searchable. null is deliberately not in this enum: an explicit null, like any unapproved value, is schema-invalid. Mapping further values requires a new Product decision and a schema revision."
+        },
         "name": { "type": "string", "minLength": 1 },
         "state": { "type": "string", "minLength": 1 },
         "city_area": { "type": "string", "minLength": 1 },
         "latitude": { "type": "number", "minimum": 4.0, "maximum": 14.0 },
         "longitude": { "type": "number", "minimum": 2.5, "maximum": 15.0 }
       },
-      "description": "type, emergency_capable, phone, opening_hours, lga, country and source_record are deliberately ABSENT: the verified parser reads an absent optional key as null (type unspecified, emergency unknown, phone/hours null), unconsumed keys would sit in device memory as opaque provenance, and additionalProperties:false makes premature population schema-invalid rather than a convention."
+      "description": "emergency_capable, phone, opening_hours, lga, country and source_record are deliberately ABSENT: the verified parser reads an absent optional key as null (emergency unknown, phone/hours null), unconsumed keys would sit in device memory as opaque provenance, and additionalProperties:false makes premature population schema-invalid rather than a convention. type appears only with an FAC-D001-approved value; a record without it is unspecified-type by omission."
     }
   }
 }

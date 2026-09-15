@@ -31,7 +31,7 @@
   ],
   "forbidden_source_policy": "None of these paths is opened by the pipeline; the whitelist refuses them structurally. None is committed on this branch.",
   "nhfr_marker_scan": {
-    "scanned_bytes": 69032692,
+    "scanned_bytes": 69535390,
     "markers": {
       "Auto-approved via bulk import": 0,
       "Auto-published via bulk import": 0,

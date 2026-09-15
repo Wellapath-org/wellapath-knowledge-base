@@ -34,9 +34,13 @@ V1_0_SHA256 = "1c7b939199ab4465156f4cb336910eea120fcaa70f8b1c0743fc9f7a7c03009e"
 #: Keys that must not exist on any served record. The schema's
 #: additionalProperties:false enforces this structurally; the byte scan below
 #: enforces it against the committed bytes without trusting a JSON round-trip.
-FORBIDDEN_RECORD_KEYS = ["phone", "opening_hours", "type", "emergency_capable",
+FORBIDDEN_RECORD_KEYS = ["phone", "opening_hours", "emergency_capable",
                          "source_record", "facility_id", "lga", "country", "ward",
                          "services", "beds", "address"]
+
+#: FAC-D001's approved wire values. An explicit null never ships — null is
+#: expressed by omitting the key (the verified parser reads absence as null).
+APPROVED_SERVED_TYPES = {"hospital", "health_centre"}
 
 #: The verified Mobile PR #79 parser's per-record acceptance rules
 #: (facilities_v2_parser.dart at wellapath-mobile 854377c0), transcribed.
@@ -57,8 +61,9 @@ def pr79_accepts(record):
 def reproject(master_record):
     """The validator's OWN projection of a master record — field selection
     only, values verbatim. Kept independent of the generator's function so a
-    generator defect cannot validate itself."""
-    return {
+    generator defect cannot validate itself. type is included only when the
+    master carries a (FAC-D001) value; a master null projects to key absence."""
+    projected = {
         "id": master_record["facility_id"],
         "name": master_record["name"],
         "state": master_record["state"],
@@ -66,6 +71,9 @@ def reproject(master_record):
         "latitude": master_record["latitude"],
         "longitude": master_record["longitude"],
     }
+    if master_record["type"] is not None:
+        projected["type"] = master_record["type"]
+    return projected
 
 
 class Results:
@@ -149,9 +157,23 @@ def main():
     # --- verified consumer contract ----------------------------------------------------------
     r.add("every record passes the verified PR #79 acceptance rules (0 would be rejected)",
           all(pr79_accepts(rec) for rec in records))
-    r.add("no record carries any unconsumed key",
-          all(set(rec) == {"id", "name", "state", "city_area", "latitude", "longitude"}
-              for rec in records))
+    base_keys = {"id", "name", "state", "city_area", "latitude", "longitude"}
+    r.add("no record carries any unconsumed key (type only where FAC-D001 populated it)",
+          all(set(rec) - {"type"} == base_keys for rec in records))
+    r.add("every present type is an FAC-D001-approved value; null is expressed by omission",
+          all(rec["type"] in APPROVED_SERVED_TYPES for rec in records if "type" in rec)
+          and not any(rec.get("type", "absent") is None for rec in records))
+    r.add("served type agrees with the master record by record: present iff non-null, equal in value",
+          all(("type" in rec) == (m["type"] is not None)
+              and rec.get("type") == m["type"]
+              for rec, m in zip(records, master_records)))
+    r.add("served metadata's FAC-D001 counts match the records",
+          meta["type_mapping"]["counts"]["hospital"]
+          == sum(1 for rec in records if rec.get("type") == "hospital")
+          and meta["type_mapping"]["counts"]["health_centre"]
+          == sum(1 for rec in records if rec.get("type") == "health_centre")
+          and meta["type_mapping"]["counts"]["omitted_meaning_null_unspecified"]
+          == sum(1 for rec in records if "type" not in rec))
     # Scoped to the records: the metadata legitimately states country ONCE at
     # artifact level, which is exactly the once-not-per-record design.
     facilities_bytes = json.dumps(records, separators=(",", ":"),

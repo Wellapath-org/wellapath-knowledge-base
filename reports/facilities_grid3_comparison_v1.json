@@ -26,10 +26,10 @@
   },
   "name_state_exact_overlap": 4332,
   "fields_1_1_has_that_candidate_lacks": {
-    "type": "1.1 carries a mapped type; the candidate's is null pending FAC-D001.",
-    "emergency_capable": "1.1 derives it from type; the candidate's is null (FAC-D002).",
-    "phone": "1.1 carries phones including 45 hand-verified Lagos numbers; the candidate carries none (FAC-D003) \u2014 GRID3 publishes no contact data, and this lineage adds nothing from any other source.",
-    "opening_hours": "1.1 carries opening hours for some records; the candidate carries none (FAC-D003)."
+    "type": "RESOLVED: both carry a mapped type since FAC-D001 (2026-09-15) \u2014 the same E5 mapping family 1.1 uses; 4,909 candidate records stay null where the source said Unknown.",
+    "emergency_capable": "1.1 derives it from type; the candidate's is null \u2014 FAC-D002's Product direction is approved but Clinical wording is pending, and derivation is not repeated.",
+    "phone": "1.1 carries phones including 45 hand-verified Lagos numbers; the candidate carries none (FAC-D003: approved as unavailable) \u2014 GRID3 publishes no contact data, and this lineage adds nothing from any other source.",
+    "opening_hours": "1.1 carries opening hours for some records; the candidate carries none (FAC-D003: approved as unavailable)."
   },
   "coverage_1_1_lacks": "34 of the candidate's 37 states have no 1.1 records at all; 1.1 covers Lagos, FCT and Kano only."
 }

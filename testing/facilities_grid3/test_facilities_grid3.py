@@ -121,10 +121,74 @@ class IsolationTests(unittest.TestCase):
                          "ng_g3_ab12cd34-0000-1111-2222-333344445555")
 
 
-class NothingInventedTests(unittest.TestCase):
-    def test_type_is_null_everywhere(self):
-        self.assertTrue(all(rec["type"] is None for rec in RECORDS))
+APPROVED_MAP = {"General Hospital": "hospital", "Teaching/Tertiary Hospital": "hospital",
+                "Specialized Hospital": "hospital", "Primary Health Center": "health_centre",
+                "Primary Health Clinic": "health_centre", "Health Post": "health_centre",
+                "unknown": None}
+REGISTER = load_json(repo("facilities", "facilities_grid3_decision_register_v1.json"))
 
+
+class TypeMappingTests(unittest.TestCase):
+    """FAC-D001 applied: every populated type comes from the approved table,
+    computed from facility_level_option alone — never the name."""
+
+    def test_every_type_is_the_approved_function_of_its_option(self):
+        for rec in RECORDS:
+            self.assertEqual(rec["type"],
+                             APPROVED_MAP[rec["source_record"]["facility_level_option"]])
+
+    def test_populated_types_are_only_the_approved_values(self):
+        self.assertEqual({rec["type"] for rec in RECORDS},
+                         {"hospital", "health_centre", None})
+
+    def test_unknown_source_values_remain_null_and_present(self):
+        nulls = [rec for rec in RECORDS if rec["type"] is None]
+        self.assertEqual(len(nulls), 4909)
+        self.assertTrue(all(rec["source_record"]["facility_level_option"] == "unknown"
+                            for rec in nulls))
+
+    def test_no_name_based_inference(self):
+        # Records whose NAME says hospital but whose option is a primary-care
+        # value must follow the option, not the name — and such records exist,
+        # so the assertion is exercised, not vacuous.
+        crossers = [rec for rec in RECORDS
+                    if "hospital" in rec["name"].lower()
+                    and rec["source_record"]["facility_level_option"]
+                    in ("Primary Health Center", "Primary Health Clinic", "Health Post")]
+        self.assertGreater(len(crossers), 0)
+        self.assertTrue(all(rec["type"] == "health_centre" for rec in crossers))
+        named_but_unknown = [rec for rec in RECORDS
+                             if "hospital" in rec["name"].lower()
+                             and rec["source_record"]["facility_level_option"] == "unknown"]
+        self.assertTrue(all(rec["type"] is None for rec in named_but_unknown))
+
+    def test_counts_match_the_decision_register(self):
+        d001 = next(d for d in REGISTER["decisions"] if d["id"] == "FAC-D001")
+        self.assertEqual(d001["status"], "approved")
+        self.assertEqual(d001["decided_on"], "2026-09-15")
+        counts = {"hospital": 0, "health_centre": 0, "null_unspecified": 0}
+        for rec in RECORDS:
+            counts["null_unspecified" if rec["type"] is None else rec["type"]] += 1
+        self.assertEqual(d001["counts"], counts)
+        self.assertEqual(META["type_mapping_applied"]["counts"], counts)
+
+    def test_the_mapping_record_is_approved_and_applied(self):
+        self.assertEqual(PROPOSAL["_metadata"]["status"], "APPROVED")
+        self.assertIs(PROPOSAL["_metadata"]["applied"], True)
+        self.assertEqual(PROPOSAL["decision"]["status"], "approved")
+        self.assertEqual(PROPOSAL["decision"]["decided_on"], "2026-09-15")
+        self.assertIsNotNone(PROPOSAL["decision"]["reviewer"])
+        self.assertEqual({e["source_value"]: e["proposed_type"] for e in PROPOSAL["mapping"]},
+                         APPROVED_MAP)
+
+    def test_fac_d002_is_recorded_as_blocked_on_clinical_wording_only(self):
+        d002 = next(d for d in REGISTER["decisions"] if d["id"] == "FAC-D002")
+        self.assertEqual(d002["status"], "product_direction_approved_clinical_wording_pending")
+        self.assertIn("Clinical approval of the final user-facing wording",
+                      d002["explicitly_not_approved"])
+
+
+class NothingInventedTests(unittest.TestCase):
     def test_phone_and_opening_hours_are_null_everywhere(self):
         self.assertTrue(all(rec["phone"] is None for rec in RECORDS))
         self.assertTrue(all(rec["opening_hours"] is None for rec in RECORDS))
@@ -165,6 +229,17 @@ class QuarantineTests(unittest.TestCase):
                          (None, "coordinate_unparseable"))
         self.assertEqual(S.parse_coordinates({"latitude": "9.05", "longitude": "7.49"}),
                          ((9.05, 7.49), None))
+
+    def test_near_duplicates_remain_distinct_facilities(self):
+        listing = QUALITY["near_duplicates"]["listing"]
+        self.assertEqual(len(listing), 410)
+        emitted = {rec["source_record"]["source_objectid"] for rec in RECORDS}
+        served_ids = {rec["id"] for rec in SERVED_RECORDS}
+        by_objectid = {rec["source_record"]["source_objectid"]: rec for rec in RECORDS}
+        for group in listing:
+            for objectid in group["source_objectids"]:
+                self.assertIn(objectid, emitted)
+                self.assertIn(by_objectid[objectid]["facility_id"], served_ids)
 
     def test_state_position_anomaly_would_be_quarantined(self):
         cluster = [(6.5 + i * 0.001, 3.3 + i * 0.001, "Lagos") for i in range(12)]
@@ -209,9 +284,13 @@ class SchemaGateTests(unittest.TestCase):
         mutate(clone)
         return schema_validate(clone, SCHEMA)
 
-    def test_schema_rejects_a_populated_type(self):
-        errors = self._mutated(lambda c: c["facilities"][0].__setitem__("type", "hospital"))
-        self.assertTrue(errors)
+    def test_schema_accepts_approved_types_and_rejects_everything_else(self):
+        for approved in ("hospital", "health_centre", None):
+            errors = self._mutated(lambda c, v=approved: c["facilities"][0].__setitem__("type", v))
+            self.assertEqual(errors, [], approved)
+        for unapproved in ("clinic", "pharmacy", "laboratory", "other", "Hospital", ""):
+            errors = self._mutated(lambda c, v=unapproved: c["facilities"][0].__setitem__("type", v))
+            self.assertTrue(errors, unapproved)
 
     def test_schema_rejects_a_populated_phone(self):
         errors = self._mutated(lambda c: c["facilities"][0].__setitem__("phone", "+2348031234567"))
@@ -246,9 +325,19 @@ class GovernanceTests(unittest.TestCase):
         self.assertIs(MANIFEST["IS_LIVE_MANIFEST"], False)
         self.assertIs(MANIFEST["candidate_artifact"]["may_publish"], False)
         gates = MANIFEST["publication_gates"]
-        self.assertTrue(all(v is False for k, v in gates.items()
-                            if k != "source_licensing_established"))
-        self.assertIs(gates["source_licensing_established"], True)
+        decided_true = {"source_licensing_established", "fac_d001_type_mapping_approved",
+                        "fac_d003_absent_contact_fields_accepted",
+                        "fac_d004_grid3_coordinates_accepted",
+                        "fac_d005_quarantine_policy_accepted",
+                        "fac_d006_duplicate_policy_accepted",
+                        "nationwide_coverage_accepted"}
+        for key in decided_true:
+            self.assertIs(gates[key], True, key)
+        for key, value in gates.items():
+            if key not in decided_true:
+                self.assertIs(value, False, key)
+        self.assertIs(gates["fac_d002_emergency_fallback_approved"], False)
+        self.assertIs(gates["may_publish"], False)
 
     def test_frozen_artifacts_are_byte_identical(self):
         self.assertEqual(sha256_file(repo("facilities.ng.v1.1.json")),
@@ -260,14 +349,6 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual(MANIFEST["rollback"]["target_file"], "facilities.ng.v1.1.json")
         self.assertEqual(MANIFEST["rollback"]["target_sha256"],
                          sha256_file(repo("facilities.ng.v1.1.json")))
-
-    def test_the_type_mapping_is_proposed_not_applied(self):
-        self.assertEqual(PROPOSAL["_metadata"]["status"], "PENDING_PRODUCT_REVIEW")
-        self.assertIs(PROPOSAL["_metadata"]["applied"], False)
-        self.assertEqual(PROPOSAL["decision"]["status"], "pending")
-        self.assertIsNone(PROPOSAL["decision"]["reviewer"])
-        self.assertEqual({entry["source_value"] for entry in TYPE_MAPPING_PROPOSAL},
-                         set(PROPOSAL["source_value_inventory"]))
 
     def test_no_type_is_proposed_for_the_sources_unknown(self):
         entry = next(e for e in PROPOSAL["mapping"] if e["source_value"] == "unknown")
@@ -299,16 +380,26 @@ class ServedProjectionTests(unittest.TestCase):
             self.assertEqual(rec["city_area"], m["city_area"])
             self.assertEqual(rec["latitude"], m["latitude"])
             self.assertEqual(rec["longitude"], m["longitude"])
+            self.assertEqual(rec.get("type"), m["type"])
+            self.assertEqual("type" in rec, m["type"] is not None)
 
     def test_served_records_carry_only_the_consumed_keys(self):
-        wanted = {"id", "name", "state", "city_area", "latitude", "longitude"}
+        base = {"id", "name", "state", "city_area", "latitude", "longitude"}
         for rec in SERVED_RECORDS[:: 500]:
-            self.assertEqual(set(rec), wanted)
+            self.assertEqual(set(rec) - {"type"}, base)
+            if "type" in rec:
+                self.assertIn(rec["type"], ("hospital", "health_centre"))
+
+    def test_served_type_counts_match_the_decision(self):
+        self.assertEqual(sum(1 for r in SERVED_RECORDS if r.get("type") == "hospital"), 1245)
+        self.assertEqual(sum(1 for r in SERVED_RECORDS if r.get("type") == "health_centre"), 44868)
+        self.assertEqual(sum(1 for r in SERVED_RECORDS if "type" not in r), 4909)
+        self.assertNotIn(None, {r.get("type", "absent") for r in SERVED_RECORDS})
 
     def test_no_source_record_or_forbidden_field_reaches_the_wire(self):
         facilities_bytes = json.dumps(SERVED_RECORDS, separators=(",", ":"),
                                       ensure_ascii=True).encode("utf-8")
-        for key in ("source_record", "phone", "opening_hours", "type",
+        for key in ("source_record", "phone", "opening_hours",
                     "emergency_capable", "facility_id", "nhfr_uid", "ward"):
             self.assertEqual(facilities_bytes.count(b'"%s":' % key.encode()), 0, key)
 
@@ -340,12 +431,17 @@ class ServedProjectionTests(unittest.TestCase):
         return schema_validate(clone, SERVED_SCHEMA)
 
     def test_served_schema_rejects_the_decision_gated_fields_even_as_null(self):
-        for key, value in (("type", None), ("type", "hospital"),
+        for key, value in (("type", None), ("type", "clinic"), ("type", "other"),
                            ("emergency_capable", None), ("emergency_capable", True),
                            ("phone", "+2348031234567"), ("opening_hours", "24_hours"),
                            ("source_record", {})):
             errors = self._mutated(lambda c, k=key, v=value: c["facilities"][0].__setitem__(k, v))
             self.assertTrue(errors, key)
+
+    def test_served_schema_accepts_the_approved_type_values(self):
+        for value in ("hospital", "health_centre"):
+            errors = self._mutated(lambda c, v=value: c["facilities"][0].__setitem__("type", v))
+            self.assertEqual(errors, [], value)
 
     def test_served_schema_rejects_publication_and_role_drift(self):
         self.assertTrue(self._mutated(lambda c: c["_metadata"].__setitem__("may_publish", True)))

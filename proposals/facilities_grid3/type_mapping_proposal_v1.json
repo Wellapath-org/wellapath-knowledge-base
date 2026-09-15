@@ -4,9 +4,9 @@
     "version": "1",
     "generator": "tools/build_facilities_grid3_candidate.py",
     "generator_version": "1.0.0",
-    "status": "PENDING_PRODUCT_REVIEW",
-    "applied": false,
-    "note": "Deterministic mapping table for FAC-D001. NOT applied: every candidate record's type is null, enforced by schema const and validators. Approval means regenerating the candidate with the approved table, never editing the artifact."
+    "status": "APPROVED",
+    "applied": true,
+    "note": "Deterministic mapping table for FAC-D001 \u2014 proposed 2026-09-14, approved by the Founder/Product decision record of 2026-09-15 and applied by regenerating both candidates, never by editing an artifact. The approval covers exactly these rows; mapping any additional value requires a new Product decision. The flagged Primary Health Clinic choice is resolved: health_centre."
   },
   "target_vocabulary": [
     "hospital",
@@ -63,15 +63,15 @@
       "basis": "The source explicitly recorded Unknown. No mapping is proposed; the record's type stays null."
     }
   ],
-  "coverage_if_approved": {
+  "coverage_as_applied": {
     "records_mapped": 46113,
     "records_left_null": 4909
   },
   "decision": {
-    "status": "pending",
+    "status": "approved",
     "reviewer_role": "Product",
-    "reviewer": null,
-    "decided_on": null,
-    "rationale": null
+    "reviewer": "Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath (Founder/Product)",
+    "decided_on": "2026-09-15",
+    "rationale": "Founder/Product decision record of 2026-09-15 (vendored at baseline/facilities_grid3_decisions_v1/, register at facilities/facilities_grid3_decision_register_v1.json): apply only this reviewed mapping; unknown/missing/unsupported stay null; no name-based inference; null-type records remain visible and searchable."
   }
 }

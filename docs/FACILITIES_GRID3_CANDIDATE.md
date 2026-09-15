@@ -9,10 +9,10 @@ kept open as research/audit evidence, source authorization incomplete) to the
 source — the same source facilities 1.0/1.1 were built from, already committed
 and hash-pinned in this repository.
 
-> **Served projection:** this 69 MB artifact is the INTERNAL AUDIT/MASTER
+> **Served projection:** this 69.5 MB artifact is the INTERNAL AUDIT/MASTER
 > candidate and is not designated for mobile distribution. The compact
 > distribution shape is `candidate/facilities.ng.v2.0-grid3.served.json`
-> (8.7 MB raw / 2.2 MB gzip, 51,022 records, equally unapproved) —
+> (9.8 MB raw / 2.3 MB gzip, 51,022 records, equally unapproved) —
 > `docs/FACILITIES_GRID3_SERVED.md`.
 
 | Fact | Value |
@@ -20,8 +20,8 @@ and hash-pinned in this repository.
 | Candidate (master/audit) | `candidate/facilities.ng.v2.0-grid3.json` |
 | Lineage / version / schema | `grid3` / 2.0 / 2.0 (`schema/facilities_grid3.v2.schema.json`) |
 | Records | **51,022** — every source row emitted, 0 quarantined |
-| Size | 69,032,692 bytes (gzip 3,810,741) |
-| SHA-256 | `03a5bf2d52759103ed08b34fd2f9d0934c85322317301582e9e61cbfa8abb14a` |
+| Size | 69,535,390 bytes (gzip 3,835,281) |
+| SHA-256 | `92300c1624668d1af77ddbb0d37f0104d08aa5484ec7af8e792234c912930d7a` |
 | Coverage | **All 36 states + FCT**, including Adamawa (1,561), Kebbi (1,207), Sokoto (937) |
 | Source | `facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv`, `154f3c9b…f180`, 13,613,859 bytes, 51,022 rows |
 | Licence | **CC BY 4.0**, verified at the publisher and preserved: `facilities/source/grid3_licence_evidence_v1.json` |
@@ -68,9 +68,12 @@ lineages (1.x, NHFR, GRID3) can never be confused. Only GRID3-supported values
 are populated: name, state, LGA (`city_area`/`lga`), ward, coordinates,
 `facility_level`, ownership fields, record-level provenance
 (`source_record.*` with objectid, globalid, name/coordinate source and the
-constant snapshot date). **Null on every record, deliberately:** `type` (mapping
-proposed, not applied — FAC-D001), `phone`, `opening_hours`,
-`emergency_capable`, `address`, the three status fields, `beds`, and every
+constant snapshot date). **`type` is populated under the approved FAC-D001
+mapping (2026-09-15)** — hospital 1,245 · health_centre 44,868, computed from
+`facility_level_option` alone, with the source's explicit Unknown staying null
+on 4,909 records that remain visible and searchable. **Null on every record,
+deliberately:** `phone`, `opening_hours`, `emergency_capable` (FAC-D002 wording
+pending Clinical), `address`, the three status fields, `beds`, and every
 service flag. The source's explicit `Unknown` is carried as the string
 `"unknown"`, which is a different statement from null. Nothing is inferred from
 facility names.
@@ -94,25 +97,34 @@ facility names.
   review, not merged** (FAC-D006).
 - **844 distinct (state, LGA) pairs**; identifiers unique on all three axes
   (facility_id, OBJECTID, globalid); snapshot constant verified on all rows.
-- **Size:** ~69 MB raw / ~3.8 MB gzip vs 1.1's 1.7 MB — the Mobile handoff
-  carries the low-end-device guidance and this is an open engineering item
-  before any activation.
+- **Size:** master ~69.5 MB raw (internal only); the distribution shape is the
+  9.8 MB served projection (`docs/FACILITIES_GRID3_SERVED.md`), which the
+  Mobile handoff's low-end-device guidance covers.
 - **Against 1.1** (`reports/facilities_grid3_comparison_v1.json`): 5,344 → 51,022
   records; 1.1 states Lagos 2,690 / Kano 2,040 / FCT 614 vs candidate 2,798 /
-  1,723 / 652; 4,332 exact name+state overlaps; 1.1 keeps four populated fields
-  the candidate holds null (type, emergency_capable, phone, opening_hours).
+  1,723 / 652; 4,332 exact name+state overlaps; 1.1 keeps three populated
+  fields the candidate holds null (emergency_capable, phone, opening_hours —
+  the type gap closed with FAC-D001).
 
 ## Verification
 
-`python3 tools/run_facilities_grid3_checks.py` — generator determinism (7
-outputs byte-reproducible), 41 fail-closed validator checks, 33-test suite with
-schema-mutation proofs. All green, alongside W2 23/23, W3 30/30, IM-003 27/27,
-publication 9/9.
+`python3 tools/run_facilities_grid3_checks.py` — generator determinism (9
+outputs byte-reproducible), 45 master validator checks, 21 served-projection
+checks, 63-test suite with schema-mutation proofs. All green, alongside W2
+23/23, W3 30/30, IM-003 27/27, publication 9/9.
 
-## What publication still requires
+## Decisions and what publication still requires
 
-FAC-D001…D006 (`docs/FACILITIES_GRID3_DECISIONS.md`) with Product/Clinical/
-Engineering sign-off as marked; re-measured Mobile compatibility; the artifact
-size decision; and the publication lifecycle itself. The manifest
-(`candidate/facilities_grid3.manifest.candidate.json`) carries every gate
-`false` except the licensing fact, and rollback bound to 1.1 by hash.
+The Founder/Product decision record of **2026-09-15**
+(`facilities/facilities_grid3_decision_register_v1.json`, vendored verbatim in
+`baseline/facilities_grid3_decisions_v1/`) approved FAC-D001 (type mapping —
+applied), FAC-D003 (phones/hours unavailable), FAC-D004 (GRID3 coordinates
+as published), FAC-D005 (quarantine policy), FAC-D006 (conservative
+duplicates) and nationwide coverage ("nationwide" = geographic state coverage,
+not completeness). **Still required:** FAC-D002's Clinical approval of the
+final user-facing emergency wording (the Product direction is approved;
+`emergency_capable` stays null); re-measured Mobile compatibility; Engineering
+sign-off; and the publication lifecycle itself. The manifest
+(`candidate/facilities_grid3.manifest.candidate.json`) records the decided
+gates true, everything else — including `may_publish` — false, and rollback
+bound to 1.1 by hash.

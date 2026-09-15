@@ -1,8 +1,21 @@
 # Facilities 2.0 (GRID3) — decisions required before activation
 
-Concise recommendations from Engineering. **None of these is decided here; no
-Product or Clinical approval is claimed.** Each names its decider. The candidate
-cannot leave `candidate_unapproved` until every item carries a recorded decision.
+> **DECIDED 2026-09-15 (Founder/Product decision record).** Formal register:
+> `facilities/facilities_grid3_decision_register_v1.json`; verbatim record:
+> `baseline/facilities_grid3_decisions_v1/FACILITIES_2_0_DECISION_RECORD_2026-09-15.vendored.md`.
+> Outcomes: **FAC-D001 approved and applied** (hospital 1,245 · health_centre
+> 44,868 · null 4,909) · **FAC-D002 Product direction approved, Clinical
+> wording pending — the only open FAC item; `emergency_capable` stays null** ·
+> **FAC-D003 approved as unavailable** · **FAC-D004, FAC-D005, FAC-D006
+> approved** · **nationwide coverage accepted** ("nationwide" = geographic
+> state coverage, not completeness). Nothing below is clinical approval, and
+> publication remains blocked (`candidate_unapproved` / `may_publish: false`).
+> The text below is retained as the original Engineering recommendations the
+> decisions ruled on.
+
+Concise recommendations from Engineering, as put to Product. Each names its
+decider. The candidate cannot leave `candidate_unapproved` until every item
+carries a recorded decision — see the register for what is now recorded.
 
 ## FAC-D001 — safe facility-type mapping (Product)
 

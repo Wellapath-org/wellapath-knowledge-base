@@ -17,6 +17,8 @@ by GRID3 is preserved verbatim in
 schema-2.0 consumer contract; text normalization (NFC, control characters removed,
 whitespace collapsed); state-name normalization ('Fct' → 'FCT'); ownership_type
 token normalization; explicit source 'Unknown' carried as the string 'unknown';
+a normalized facility type derived from the source's `facility_level_option`
+under the FAC-D001-approved mapping of 2026-09-15 (unknown stays null);
 exact-duplicate policy and quarantine policy as recorded in the artifact's
 `_metadata`. No coordinate was moved, swapped, snapped or invented; no value was
 added from any other source. The full change record is

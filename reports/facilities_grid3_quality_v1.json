@@ -56,6 +56,11 @@
     "nhfr_uid_present": 34541
   },
   "distributions": {
+    "type": {
+      "None": 4909,
+      "health_centre": 44868,
+      "hospital": 1245
+    },
     "facility_level": {
       "Primary": 44915,
       "Secondary": 5267,
@@ -4627,8 +4632,8 @@
     ]
   },
   "artifact_size": {
-    "bytes": 69032692,
-    "gzip_bytes": 3810741,
+    "bytes": 69535390,
+    "gzip_bytes": 3835281,
     "records": 51022,
     "facilities_1_1_bytes": 1695844,
     "note": "Low-end mobile implication: the candidate is roughly an order of magnitude larger than 1.1. Mobile guidance in mobile_handoff/facilities_grid3_v2/README.md; gzip is the transfer bound, bytes the on-device bound."

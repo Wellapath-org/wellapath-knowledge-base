@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://wellapath.org/schema/facilities_grid3.v2.schema.json",
   "title": "WellaPath Nigeria facilities artifact — schema 2.0, GRID3 lineage (candidate)",
-  "description": "Schema for the GRID3-only nationwide facilities candidate. The RECORD shape is the schema-2.0 consumer contract: every field name and type a schema-2.0 reader (Mobile PR #79, Backend PR #36) accesses is present under the same name, so the reader needs no code change between the two 2.0 lineages. What differs is the truth the _metadata tells: this source has an established licence (CC BY 4.0, evidence vendored in-repo), a declared version and snapshot date, a named publisher, an attribution obligation — and no coordinate remediation, because its coordinates are accepted exactly as published or the row is quarantined; there is no swap rule and no corrected pair anywhere in this lineage.\n\nAbsence convention, unchanged from the sibling schema: null means NOT PROVIDED (the source has no such column, or the field was blank). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value. type, phone, opening_hours, emergency_capable, address, operational_status, registration_status, license_status, beds and every service flag are null on every record: GRID3 evidences none of them, and the type mapping is a Product decision (FAC-D001) that is proposed, not applied.",
+  "description": "Schema for the GRID3-only nationwide facilities candidate. The RECORD shape is the schema-2.0 consumer contract: every field name and type a schema-2.0 reader (Mobile PR #79, Backend PR #36) accesses is present under the same name, so the reader needs no code change between the two 2.0 lineages. What differs is the truth the _metadata tells: this source has an established licence (CC BY 4.0, evidence vendored in-repo), a declared version and snapshot date, a named publisher, an attribution obligation — and no coordinate remediation, because its coordinates are accepted exactly as published or the row is quarantined; there is no swap rule and no corrected pair anywhere in this lineage.\n\nAbsence convention, unchanged from the sibling schema: null means NOT PROVIDED (the source has no such column, or the field was blank). The literal string \"unknown\" means the source explicitly recorded Unknown, which is a different statement. No absent value is ever represented as false, zero or an invented value. phone, opening_hours, emergency_capable, address, operational_status, registration_status, license_status, beds and every service flag are null on every record: GRID3 evidences none of them (emergency_capable additionally awaits FAC-D002's pending Clinical wording and is never populated). type is populated under the approved FAC-D001 mapping (2026-09-15) from facility_level_option only — {hospital, health_centre}, with the source's explicit Unknown staying null.",
   "type": "object",
   "additionalProperties": false,
   "required": ["_metadata", "facilities"],
@@ -15,8 +15,9 @@
         "publication_status", "release_date", "may_publish", "generated_at", "generator",
         "generator_version", "total_facilities", "states_covered", "states_absent",
         "states_with_no_emitted_records", "coverage_claim", "source", "source_isolation",
-        "deduplication", "coordinate_policy", "unresolved_fields", "absence_convention",
-        "not_carried_from_source", "absence_counts", "unmapped_source_values"
+        "deduplication", "coordinate_policy", "type_mapping_applied", "unresolved_fields",
+        "absence_convention", "not_carried_from_source", "absence_counts",
+        "unmapped_source_values"
       ],
       "properties": {
         "artifact_id": { "const": "facilities" },
@@ -145,6 +146,42 @@
             "quarantine_report": { "const": "reports/facilities_grid3_quarantine_v1.json" }
           }
         },
+        "type_mapping_applied": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["decision", "input", "mapping", "counts", "boundary"],
+          "properties": {
+            "decision": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["decision_id", "status", "decided_on", "authority", "register", "record"],
+              "properties": {
+                "decision_id": { "const": "FAC-D001" },
+                "status": { "const": "approved" },
+                "decided_on": { "const": "2026-09-15" },
+                "authority": { "type": "string", "minLength": 1 },
+                "register": { "const": "facilities/facilities_grid3_decision_register_v1.json" },
+                "record": { "type": "string", "minLength": 1 }
+              }
+            },
+            "input": { "type": "string", "minLength": 1 },
+            "mapping": {
+              "type": "object",
+              "additionalProperties": { "enum": ["hospital", "health_centre", null] }
+            },
+            "counts": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["hospital", "health_centre", "null_unspecified"],
+              "properties": {
+                "hospital": { "type": "integer", "minimum": 0 },
+                "health_centre": { "type": "integer", "minimum": 0 },
+                "null_unspecified": { "type": "integer", "minimum": 0 }
+              }
+            },
+            "boundary": { "type": "string", "minLength": 1 }
+          }
+        },
         "unresolved_fields": {
           "type": "object",
           "required": ["type", "emergency_capable", "type_vocabulary", "type_mapping_proposal", "consumer_contract"],
@@ -193,8 +230,8 @@
         },
         "name": { "type": "string", "minLength": 1 },
         "type": {
-          "type": "null",
-          "description": "Null on every record. The facility_level_option -> type mapping is proposed for Product review (FAC-D001) and NOT applied. A null type is not a member of the declared vocabulary and must never be filtered out or treated as one."
+          "enum": ["hospital", "health_centre", null],
+          "description": "Populated under FAC-D001 (approved 2026-09-15) from source_record.facility_level_option ONLY — never from the facility name: the three Hospital source values -> hospital; Primary Health Center, Primary Health Clinic and Health Post -> health_centre; the source's explicit Unknown -> null. The enum pins the populated values to exactly what the decision approved; mapping any additional value requires a new Product decision AND a schema revision. A null type is not a vocabulary member and must never be filtered out or treated as one — null-type records remain visible and searchable."
         },
         "state": { "type": "string", "minLength": 1 },
         "city_area": { "type": "string", "minLength": 1, "description": "The LGA name, as in the sibling lineage." },

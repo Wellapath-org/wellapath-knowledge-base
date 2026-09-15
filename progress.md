@@ -1128,3 +1128,51 @@ designated for mobile distribution**) · the **served candidate**
   the served `_metadata` (schema consts) and app display remains a
   first-publication requirement in the handoff. Mobile repo read, never
   written; PRs #40/#41 untouched; **PR #42 updated in place, unmerged.**
+
+### Facilities 2.0 (GRID3) — 2026-09-15 Founder/Product decisions recorded and applied
+
+Decision record vendored verbatim at
+`baseline/facilities_grid3_decisions_v1/FACILITIES_2_0_DECISION_RECORD_2026-09-15.vendored.md`;
+formal register `facilities/facilities_grid3_decision_register_v1.json`
+(authority: Founder/Product — Ayodele John Oluwaseyi, Co-Founder & CEO; per-item
+scope, dates, reconciliations). **Nothing here is clinical approval; both
+candidates stay `candidate_unapproved` / `may_publish: false`.**
+
+- **FAC-D001 APPROVED and applied by regeneration** (never by editing): `type`
+  computed from `facility_level_option` alone — never the name — under the
+  reviewed table (3 hospital values → `hospital`; PHC Center/Clinic + Health
+  Post → `health_centre`; unknown → null). **hospital 1,245 · health_centre
+  44,868 · null 4,909**; null-type records stay visible and searchable. The
+  master schema pins populated types to exactly {hospital, health_centre};
+  the served schema adds optional `type` with the same enum and NO null — a
+  null is expressed by omission (the verified PR #79 parser reads absence as
+  unspecified), so an explicit null or unapproved value is schema-invalid.
+  The proposal's flagged PHClinic choice is resolved: health_centre.
+- **FAC-D002: Product direction approved, Clinical wording PENDING — the only
+  open FAC item.** 112 first; prioritize only `emergency_capable == true`;
+  null never means capable; distance fallback without capability claims;
+  interface must state capability is not verified. `emergency_capable`
+  remains null/absent and structurally unpopulatable.
+- **FAC-D003 approved as unavailable** (no phones, no hours, no call/"open
+  now" actions) · **FAC-D004/D005/D006 approved** (coordinates as published;
+  standing quarantine policy re-proved each run; exact-dup-only removal, 410
+  near-dup groups preserved — now covered by a dedicated test) · **coverage
+  accepted** ("nationwide" = geographic state coverage, not completeness).
+- **Regenerated:** master `92300c16…30d7a` (69,535,390 B) · served
+  `44eabf63…086c` (**9,804,802 B raw / 2,256,033 gzip-9**, 192.2 B/record,
+  −85.9% vs master, targets still met) · manifest gates now record the six
+  decided items true with `gate_notes` explaining why
+  `fac_d002_emergency_fallback_approved` stays false · CC BY modification
+  disclosure now names the type derivation (attribution notice updated) ·
+  handoff carries the exact mapping table with counts and the FAC-D002
+  direction · comparison/changelog/served/candidate/decisions docs updated.
+- **Checks:** GRID3 suite 4/4 — determinism over 9 outputs · **45** master
+  checks (mapping verified against the governed proposal + register, not the
+  generator's constant) · **21** served checks (byte-identical independent
+  reprojection incl. type; present-iff-non-null) · **63 tests** (name-based
+  inference disproved on real crossers: records named "…Hospital…" with a
+  PHC option map to health_centre; named-but-unknown stay null). W2 23/23 ·
+  W3 30/30 · IM-003 27/27 · publication 9/9 · content safety 138 files,
+  0 hits. `facilities.ng.v1.0/1.1` byte-identical; v1.1 active; Mobile and
+  Backend untouched; **PR #42 updated in place, unmerged; PRs #40/#41
+  untouched.**

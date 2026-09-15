@@ -71,15 +71,22 @@ MODIFICATIONS_DISCLOSED = (
     "Modifications by WellaPath: field projection into the schema-2.0 consumer contract; "
     "text normalization (NFC, control characters removed, whitespace collapsed); state-name "
     "normalization ('Fct' -> 'FCT'); ownership_type token normalization; explicit source "
-    "'Unknown' carried as the string 'unknown'; exact-duplicate policy and quarantine policy "
-    "as recorded in _metadata. No coordinate was moved, swapped, snapped or invented; no "
-    "value was added from any other source."
+    "'Unknown' carried as the string 'unknown'; a normalized facility type derived from the "
+    "source's facility_level_option under the FAC-D001-approved mapping (unknown stays "
+    "null); exact-duplicate policy and quarantine policy as recorded in _metadata. No "
+    "coordinate was moved, swapped, snapped or invented; no value was added from any other "
+    "source."
 )
 
-#: FAC-D001 input. Deterministic, reviewable, NOT applied: every emitted record
-#: has type null regardless of this table. Prior art: the same mapping shipped
-#: inside facilities 1.0/1.1 via facilities/source/build_e5.py (GRID3_TYPE_MAP),
-#: so approving it would make 2.0 consistent with what 1.1 already does.
+#: The FAC-D001 mapping table — proposed 2026-09-14, APPROVED by the
+#: Founder/Product decision record of 2026-09-15
+#: (facilities/facilities_grid3_decision_register_v1.json) and applied since.
+#: The approval covers exactly these rows: mapping any additional value
+#: requires a new Product decision, and the schemas pin populated types to
+#: {hospital, health_centre} so an unapproved value cannot ship by accident.
+#: Input is source_record.facility_level_option ONLY — never the facility
+#: name. Prior art: the same mapping shipped inside facilities 1.0/1.1 via
+#: facilities/source/build_e5.py (GRID3_TYPE_MAP).
 TYPE_MAPPING_PROPOSAL = [
     {"source_value": "General Hospital", "proposed_type": "hospital",
      "basis": "The source value names a hospital. E5 precedent: mapped to hospital in facilities 1.0/1.1."},
@@ -98,6 +105,21 @@ TYPE_MAPPING_PROPOSAL = [
     {"source_value": "unknown", "proposed_type": None,
      "basis": "The source explicitly recorded Unknown. No mapping is proposed; the record's type stays null."},
 ]
+
+#: source facility_level_option -> approved type (None = stays null). Derived
+#: from the approved table so there is exactly one place the mapping lives.
+APPROVED_TYPE_MAP = {entry["source_value"]: entry["proposed_type"]
+                     for entry in TYPE_MAPPING_PROPOSAL}
+
+FAC_D001 = {
+    "decision_id": "FAC-D001",
+    "status": "approved",
+    "decided_on": "2026-09-15",
+    "authority": "Founder/Product — Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath",
+    "register": "facilities/facilities_grid3_decision_register_v1.json",
+    "record": "baseline/facilities_grid3_decisions_v1/"
+              "FACILITIES_2_0_DECISION_RECORD_2026-09-15.vendored.md",
+}
 
 
 def dump_compact_bytes(obj):
@@ -119,7 +141,7 @@ def project_served_record(record):
     other key would ride along as opaque per-record memory. Values are carried
     verbatim — this function may select fields, never change one.
     """
-    return {
+    served = {
         "id": record["facility_id"],
         "name": record["name"],
         "state": record["state"],
@@ -127,6 +149,13 @@ def project_served_record(record):
         "latitude": record["latitude"],
         "longitude": record["longitude"],
     }
+    if record["type"] is not None:
+        # FAC-D001 approved values only. A null type is expressed by OMISSION:
+        # the verified parser reads an absent key as null/unspecified, and the
+        # served schema has no null in the type enum, so an explicit null (or
+        # any unapproved value) is schema-invalid rather than a convention.
+        served["type"] = record["type"]
+    return served
 
 
 def canonical_state(raw):
@@ -220,10 +249,11 @@ def build():
         level = S.clean_text(row["facility_level"])
         ownership = S.clean_text(row["ownership"])
         option = S.clean_text(row["facility_level_option"])
+        option_value = "unknown" if option == "Unknown" else option
         records.append({
             "facility_id": facility_id(row["globalid"].strip()),
             "name": name,
-            "type": None,
+            "type": APPROVED_TYPE_MAP[option_value],
             "state": state,
             "city_area": lga,
             "latitude": coords[0],
@@ -248,7 +278,7 @@ def build():
                 "source_globalid": row["globalid"].strip(),
                 "nhfr_uid": row["nhfr_uid"].strip() or None,
                 "nhfr_facility_code": row["nhfr_facility_code"].strip() or None,
-                "facility_level_option": "unknown" if option == "Unknown" else option,
+                "facility_level_option": option_value,
                 "facility_name_source": row["facility_name_source"].strip(),
                 "geocoordinates_source": row["geocoordinates_source"].strip(),
                 "lga_name_disagreement": row["lga_name_disagreement"].strip() == "1",
@@ -273,8 +303,12 @@ def build():
             counts[str(value)] = counts.get(str(value), 0) + 1
         return {k: counts[k] for k in sorted(counts)}
 
+    type_counts = {"hospital": 0, "health_centre": 0, "null": 0}
+    for record in records:
+        type_counts["null" if record["type"] is None else record["type"]] += 1
+
     absence_counts = {
-        "type_null": len(records),
+        "type_null": type_counts["null"],
         "phone_null": len(records),
         "opening_hours_null": len(records),
         "emergency_capable_null": len(records),
@@ -365,12 +399,31 @@ def build():
                                        % S.StateConsistency.RULE_ID,
             "quarantine_report": "reports/facilities_grid3_quarantine_v1.json",
         },
+        "type_mapping_applied": {
+            "decision": FAC_D001,
+            "input": "source_record.facility_level_option only — the facility name is "
+                     "never read for type",
+            "mapping": {entry["source_value"]: entry["proposed_type"]
+                        for entry in TYPE_MAPPING_PROPOSAL},
+            "counts": {"hospital": type_counts["hospital"],
+                       "health_centre": type_counts["health_centre"],
+                       "null_unspecified": type_counts["null"]},
+            "boundary": "The approval covers exactly these rows. Any additional value "
+                        "requires a new Product decision and a schema revision; the schema "
+                        "pins populated types to {hospital, health_centre}.",
+        },
         "unresolved_fields": {
-            "type": "Null on every record. The facility_level_option -> type mapping is "
-                    "proposed in the FAC-D001 package and is NOT applied without Product "
-                    "approval.",
-            "emergency_capable": "Null on every record. GRID3 records no emergency "
-                                 "capability and none is inferred (FAC-D002).",
+            "type": "RESOLVED by FAC-D001 (2026-09-15): populated from "
+                    "facility_level_option under the approved mapping; the source's "
+                    "explicit Unknown stays null. Null-type records remain visible and "
+                    "searchable — a null is not a vocabulary member and must never be "
+                    "filtered out.",
+            "emergency_capable": "Null on every record and STILL UNRESOLVED. FAC-D002's "
+                                 "Product direction is approved (112 first; prioritize "
+                                 "only true; null never means capable; distance fallback "
+                                 "without capability claims; unverified-capability notice) "
+                                 "but Clinical approval of the final user-facing wording "
+                                 "is pending, and the field is not populated.",
             "type_vocabulary": ["hospital", "clinic", "health_centre", "pharmacy",
                                 "laboratory", "other"],
             "type_mapping_proposal": "proposals/facilities_grid3/type_mapping_proposal_v1.json",
@@ -488,6 +541,7 @@ def build():
                                     if r["source_record"]["nhfr_uid"] is not None),
         },
         "distributions": {
+            "type": distribution("type"),
             "facility_level": distribution("facility_level"),
             "facility_level_option": distribution("facility_level_option", True),
             "ownership": distribution("ownership"),
@@ -545,13 +599,18 @@ def build():
             k: state_counts.get(k, 0) for k in sorted(current_by_state)},
         "name_state_exact_overlap": len(current_names & candidate_names),
         "fields_1_1_has_that_candidate_lacks": {
-            "type": "1.1 carries a mapped type; the candidate's is null pending FAC-D001.",
-            "emergency_capable": "1.1 derives it from type; the candidate's is null (FAC-D002).",
+            "type": "RESOLVED: both carry a mapped type since FAC-D001 (2026-09-15) — the "
+                    "same E5 mapping family 1.1 uses; 4,909 candidate records stay null "
+                    "where the source said Unknown.",
+            "emergency_capable": "1.1 derives it from type; the candidate's is null — "
+                                 "FAC-D002's Product direction is approved but Clinical "
+                                 "wording is pending, and derivation is not repeated.",
             "phone": "1.1 carries phones including 45 hand-verified Lagos numbers; the "
-                     "candidate carries none (FAC-D003) — GRID3 publishes no contact data, "
-                     "and this lineage adds nothing from any other source.",
+                     "candidate carries none (FAC-D003: approved as unavailable) — GRID3 "
+                     "publishes no contact data, and this lineage adds nothing from any "
+                     "other source.",
             "opening_hours": "1.1 carries opening hours for some records; the candidate "
-                             "carries none (FAC-D003).",
+                             "carries none (FAC-D003: approved as unavailable).",
         },
         "coverage_1_1_lacks": "34 of the candidate's 37 states have no 1.1 records at all; "
                               "1.1 covers Lagos, FCT and Kano only.",
@@ -565,24 +624,36 @@ def build():
             "version": "1",
             "generator": "tools/build_facilities_grid3_candidate.py",
             "generator_version": FACILITIES_GRID3_TOOLING_VERSION,
-            "status": "PENDING_PRODUCT_REVIEW",
-            "applied": False,
-            "note": "Deterministic mapping table for FAC-D001. NOT applied: every candidate "
-                    "record's type is null, enforced by schema const and validators. "
-                    "Approval means regenerating the candidate with the approved table, "
-                    "never editing the artifact.",
+            "status": "APPROVED",
+            "applied": True,
+            "note": "Deterministic mapping table for FAC-D001 — proposed 2026-09-14, "
+                    "approved by the Founder/Product decision record of 2026-09-15 and "
+                    "applied by regenerating both candidates, never by editing an "
+                    "artifact. The approval covers exactly these rows; mapping any "
+                    "additional value requires a new Product decision. The flagged "
+                    "Primary Health Clinic choice is resolved: health_centre.",
         },
         "target_vocabulary": ["hospital", "clinic", "health_centre", "pharmacy",
                               "laboratory", "other"],
         "source_value_inventory": option_counts,
         "mapping": TYPE_MAPPING_PROPOSAL,
-        "coverage_if_approved": {
+        "coverage_as_applied": {
             "records_mapped": sum(count for value, count in option_counts.items()
                                   if value != "unknown"),
             "records_left_null": option_counts.get("unknown", 0),
         },
-        "decision": {"status": "pending", "reviewer_role": "Product", "reviewer": None,
-                     "decided_on": None, "rationale": None},
+        "decision": {
+            "status": "approved",
+            "reviewer_role": "Product",
+            "reviewer": "Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath (Founder/Product)",
+            "decided_on": "2026-09-15",
+            "rationale": "Founder/Product decision record of 2026-09-15 (vendored at "
+                         "baseline/facilities_grid3_decisions_v1/, register at "
+                         "facilities/facilities_grid3_decision_register_v1.json): apply "
+                         "only this reviewed mapping; unknown/missing/unsupported stay "
+                         "null; no name-based inference; null-type records remain visible "
+                         "and searchable.",
+        },
     }
 
     # ---- served projection ----------------------------------------------------------------
@@ -627,15 +698,30 @@ def build():
                 "doi": "https://doi.org/10.7916/kv1n-0743",
                 "snapshot_last_updated_at": "2024-11-11",
             },
+            "type_mapping": {
+                "decision": FAC_D001,
+                "populated_values": ["hospital", "health_centre"],
+                "counts": {"hospital": type_counts["hospital"],
+                           "health_centre": type_counts["health_centre"],
+                           "omitted_meaning_null_unspecified": type_counts["null"]},
+                "null_convention": "A record whose source value is unknown carries NO "
+                                   "type key; the verified parser reads the absent key "
+                                   "as null/unspecified and such records remain visible "
+                                   "and searchable (never filtered out).",
+            },
             "consumer_contract": "Verified against Mobile PR #79 at wellapath-mobile %s "
                                  "(facilities_v2_parser.dart): records are consumed via "
                                  "{id, name, latitude, longitude, type, emergency_capable, "
                                  "state, lga, city_area, phone, opening_hours}; an ABSENT "
-                                 "optional key parses identically to null, so type stays "
-                                 "unspecified (never filtered out), emergency_capable stays "
-                                 "unknown (never true), and phone/opening_hours stay null. "
-                                 "Unconsumed keys are retained per record in memory, which "
-                                 "is why this projection carries none." % MOBILE_PR79_COMMIT,
+                                 "optional key parses identically to null. type is now "
+                                 "populated under FAC-D001 with {hospital, health_centre} "
+                                 "and OMITTED where null (unspecified — never filtered "
+                                 "out); emergency_capable stays unknown (never true; "
+                                 "FAC-D002 wording pending Clinical), and phone/"
+                                 "opening_hours stay null (FAC-D003: unavailable). "
+                                 "Unconsumed keys are retained per record in memory, "
+                                 "which is why this projection carries none."
+                                 % MOBILE_PR79_COMMIT,
             "serialization": "Compact canonical JSON (json.dumps separators=(',',':'), "
                              "ensure_ascii, UTF-8, no trailing newline). A manifest pins "
                              "sha256 over exactly these raw bytes; gzip level %d is a "
@@ -757,17 +843,28 @@ def build():
         },
         "publication_gates": {
             "source_licensing_established": True,
-            "fac_d001_type_mapping_approved": False,
+            "fac_d001_type_mapping_approved": True,
             "fac_d002_emergency_fallback_approved": False,
-            "fac_d003_absent_contact_fields_accepted": False,
-            "fac_d004_grid3_coordinates_accepted": False,
-            "fac_d005_quarantine_policy_accepted": False,
-            "fac_d006_duplicate_policy_accepted": False,
+            "fac_d003_absent_contact_fields_accepted": True,
+            "fac_d004_grid3_coordinates_accepted": True,
+            "fac_d005_quarantine_policy_accepted": True,
+            "fac_d006_duplicate_policy_accepted": True,
+            "nationwide_coverage_accepted": True,
             "mobile_compatibility_remeasured": False,
             "engineering_approval": False,
             "product_approval": False,
             "clinical_approval": False,
             "may_publish": False,
+        },
+        "gate_notes": {
+            "decisions": "Founder/Product decision record 2026-09-15; register at "
+                         "facilities/facilities_grid3_decision_register_v1.json.",
+            "fac_d002_emergency_fallback_approved": "False deliberately: the Product "
+                "direction is approved, but FAC-D002 is blocked on exactly one thing — "
+                "Clinical approval of the final user-facing wording — and must not read "
+                "as fully approved until that lands. emergency_capable stays null.",
+            "product_approval": "The FAC gates above record scoped decisions; this gate "
+                "is overall Product approval to publish, which has not been given.",
         },
         "rollback": {
             "target_file": "facilities.ng.v1.1.json",
