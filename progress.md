@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-09-14
+Last updated: 2026-09-15
 
 ## Merged
 
@@ -20,16 +20,20 @@ Last updated: 2026-09-14
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #40 | `feat/facilities-nhf-candidate` | Nationwide Facilities Step 1 from the supplied NHFR internal export: `candidate/facilities.ng.v2.0.json`, generator, provenance record, quality/quarantine/comparison reports. | Open, unmerged; **retained as research/audit evidence only** — the NHFR path was abandoned (source authorization incomplete); superseded by PR #42 |
+| #41 | `feat/facilities-2-0-candidate-pipeline` (stacked on #40) | Steps 2–4 on the NHFR export: pipeline policies, coordinate-orientation remediation, manifest, source-authorization checklist (nine items, all `missing`), provenance investigation (source identified as NHFR/FMOH by evidence; unsent authorization request drafted for the founder). | Open, unmerged; **retained as research/audit evidence only**; no NHFR data may be used in any release artifact |
+| #42 | `feat/facilities-2-0-grid3-candidate` (off `develop`, independent of #40/#41) | Facilities 2.0 GRID3 lineage: CC BY 4.0 licence verified and vendored; master/audit candidate (51,022 records, all 36 states + FCT) + compact served projection (9.8 MB raw / 2.3 MB gzip) verified against Mobile PR #79's parser; 2026-09-15 decisions recorded and FAC-D001 type mapping applied. `candidate_unapproved` / `may_publish: false`. | Open, unmerged; blocked on FAC-D002 Clinical wording, Mobile-compat re-measurement, Engineering sign-off and the publication lifecycle |
 
 | Issue | Title | Status |
 |---|---|---|
 | #8 | `chore(kb): resolve headache condition token reachability gap` | Open, `task` label. Found by medical reviewer during E7 verification: `headache` condition has no literal `"headache"` symptom token, so it's rarely reached (users match `hypertension`/`malaria` instead). Decision needed at E8 calibration: add the literal token (Option A) vs. document as intentional (Option B). |
 | #25 | E9 symptom picker — 11% token coverage, 19 conditions unreachable | Blocking E9 beta. Data engineer part delivered via PR #9. Mobile engineer part (`symptom_display_map.dart` expansion, prioritizing the 19 unreachable conditions) still pending. |
 
-## Facility Data (v1.x manual enrichment vs. v2.0 NHFR rebuild)
+## Facility Data (v1.x manual enrichment vs. the 2.0 rebuild)
 
-- **Decision (2026-07-26):** ship the 45 phone-matched Lagos facilities as `facilities.ng.v1.1.json` now; treat manual enrichment as the interim v1.x strategy, with a future NHFR API integration as the v2.0 rebuild path.
-- **NHFR in-portal API request (hfr.fmohconnect.gov.ng):** retry was **not submitted** — WellaPath's organization domain isn't verified yet and a personal email was not used as a substitute. Still outstanding; needs a proper org domain/email before resubmission.
+- **Decision (2026-07-26):** ship the 45 phone-matched Lagos facilities as `facilities.ng.v1.1.json` now; treat manual enrichment as the interim v1.x strategy, with a future registry integration as the v2.0 rebuild path. **v1.1 remains the active artifact today.**
+- **NHFR path abandoned for release use (2026-09-14/15).** A supplied 31,390-row registry export was built into a candidate on PRs #40/#41, but its source authorization is incomplete: the provenance investigation identified the source system as the NHFR (Federal Ministry of Health) by reproducible evidence, found the registry publishes no licence ("All Rights Reserved"), and left all nine `AUTH` items `missing`. A fingerprint report and an **unsent** authorization request to `hfr@health.gov.ng` await the founder (`facilities/source/nhf_authorization_request_draft_v1.md` on the PR #41 branch — sending still requires the verified org domain that also stalled the earlier in-portal API request). The PRs stay open as audit evidence; **no NHFR row or field may enter a release artifact.**
+- **Facilities 2.0 rebuilt on GRID3 instead (PR #42):** the licence-documented GRID3 NGA Health Facilities v2.0 source (CC BY 4.0, verified at the publisher and vendored) — nationwide (all 36 states + FCT, including Adamawa/Kebbi/Sokoto, which the NHFR export lacked), with a compact served projection contract-verified against Mobile PR #79. The 2026-09-15 Founder/Product decisions are recorded and applied (FAC-D001 type mapping live; FAC-D003–D006 and coverage approved). Remaining before activation: **FAC-D002 Clinical wording, Mobile-compat re-measurement, Engineering sign-off, publication lifecycle** — sections "Facilities 2.0 — pivot to the GRID3 lineage" onward at the end of this log.
 
 ## Known Issues
 
