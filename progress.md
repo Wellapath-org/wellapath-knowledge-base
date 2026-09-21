@@ -1005,11 +1005,20 @@ vendored with extracted text at `baseline/launch_metrics_proposal_v1/`, sha256
 infrastructure change; no collection endpoint created; no analytics enabled.**
 
 - **Every proposed metric audited against the verified product state**
-  (`docs/LAUNCH_SCORECARD_GAP_ANALYSIS.md`) and placed in one of four buckets:
-  measurable now / controlled testing / requires approved telemetry /
-  unsupported. Headline: **0 of the 10 proposed metrics are measurable in
-  production today** — telemetry is off by design and no store track is live —
-  but the launch gate does not need them.
+  (`docs/LAUNCH_SCORECARD_GAP_ANALYSIS.md`) and placed in one of five buckets:
+  populated now / console-measurable, awaiting data / controlled testing /
+  requires approved telemetry / prohibited-not-approved. Every dashboard
+  reading additionally carries an observation state (`ZERO_OBSERVED` /
+  `INSUFFICIENT_DATA` / `REPORTING_DELAY` / `UNMEASURABLE`) so a blank is
+  never rendered as a zero. Headline (rev. 2): **1 of the 10 proposed metrics
+  — crash-free sessions — is console-measurable today without any WellaPath
+  telemetry** (TestFlight per-build sessions/crashes live for iOS 211; Android
+  vitals awaiting a sufficient cohort), the low-end half of that slide is
+  populated now, and the consoles newly populate distribution evidence the
+  proposal never enumerated (installs, tester participation, release adoption,
+  device/OS distribution). The other proposed metrics remain
+  controlled-testing / approved-telemetry / blocked / prohibited; the launch
+  gate needs none of the blocked ones.
 - **All eight instructed corrections applied**: no verified-availability/
   doctors/services/opening-status/universal-matching claims (replaced by
   artifact identity + scripted dead-end rate + tester judgment); "immune to
@@ -1021,22 +1030,39 @@ infrastructure change; no collection endpoint created; no analytics enabled.**
   ships); crash-free sessions split from low-end performance (Play vitals vs
   physical-device gate); retention blocked pending an approved privacy-safe
   method.
-- **KPI register** (`docs/LAUNCH_KPI_REGISTER.md`): 15 Tier-1 KPIs measurable
-  now (P0/P1/P2), 4 Tier-2 controlled-testing KPIs (staging, fictional
-  scenarios), 4 Tier-3 production KPIs **fully specified but dormant** pending
-  the phase-2 approval, and 5 PX items listed to say no. Every KPI carries
-  definition, numerator, denominator, source, collection method, target,
-  warning, failure, owner, cadence, privacy class and action-on-failure.
-  Thresholds are proposed, pending Product adoption.
+- **KPI register** (`docs/LAUNCH_KPI_REGISTER.md`): 18 Tier-1 KPIs (P0/P1/P2 —
+  15 populated-now evidence KPIs plus 3 store-console KPIs: LS-24 internal-track
+  adoption/tester participation, LS-25 store crash & session evidence, LS-26
+  tester device/OS distribution), 4 Tier-2 controlled-testing KPIs (staging,
+  fictional scenarios, with the standing rule that **telemetry is never
+  activated merely to populate the dashboard**), 4 Tier-3 production KPIs
+  **fully specified but dormant** pending the phase-2 approval, and 5 PX items
+  listed to say no. Every KPI carries definition, numerator, denominator,
+  source, collection method, target, warning, failure, owner, cadence, privacy
+  class and action-on-failure. Thresholds are proposed, pending Product
+  adoption. Store readiness (LS-13) is split three ways: **13a internal
+  distribution COMPLETE · 13b public-listing requirements INCOMPLETE ·
+  13c public review/submission NOT STARTED.**
 - **Dashboard MVP** (`docs/LAUNCH_DASHBOARD_MVP.md`): a weekly evidence
   snapshot committed to `reports/launch_scorecard/` by PR — 9 panels running
-  entirely on GitHub CI/release evidence, Render `/health`//`/version`//`/config`,
-  artifact identity, Play Console/ASC manual exports, sanitized tester records,
-  device testing and the blocker register. Includes the data-source & privacy
-  matrix (P0–P3 + PX) and the **Launch Decision Scorecard** (gates G1–G7 with
-  current honest status: G1 HOLD on console items + founder's support
-  email/privacy URL; G3 HOLD on CB_211 and clinical sign-off; Facilities 2.0
-  activation explicitly not a launch dependency — v1.1 active).
+  entirely on GitHub CI/release evidence, the **live production endpoints**
+  (`api.wellapath.org` — verified 2026-09-21: `/health` ok, `/version`
+  0.3.0/production matching build 211, `/config` with **4/4 artifact hashes
+  byte-matching the committed KB artifacts**, facilities 1.1
+  `25684c71…2398` active, raw-body fingerprint `183a15bd…d3b` recorded),
+  artifact identity, manual Play Console/TestFlight console capture (§3.1
+  states which values are manual now and which would need a future
+  Play-Reporting/ASC API integration, explicitly not built), sanitized tester
+  records, device testing and the blocker register. Includes the data-source &
+  privacy matrix (P0–P3 + PX) and the **Launch Decision Scorecard**: **G1
+  internal testing GO/LIVE** (build 0.3.0+211, merge `9269a87`, on the Play
+  internal track with 5 testers and TestFlight internal; founder install +
+  launch on a physical iPhone 15 recorded; Android low-end matrix for 211
+  still OPEN), G2 unblocked/not started, G3 HOLD on CB_211 and clinical
+  sign-off, G4 HOLD on 13b/13c (RC-BLK-005 closed — production endpoint
+  live), G5 HOLD with backend conditions already met; Facilities 2.0
+  activation explicitly not a launch dependency — v1.1 active and
+  production-verified.
 - **Tester scorecard** (`docs/LAUNCH_TESTER_SCORECARD.md` +
   `schema/tester_feedback.v1.schema.json`): 8 fictional scenario cards,
   pseudonymous testers, `contains_no_real_health_data` attestation required by
@@ -1050,5 +1076,14 @@ infrastructure change; no collection endpoint created; no analytics enabled.**
   Sentry-enable path kept separate from analytics, permanent exclusions
   restated.
 - **Recommendation to Product recorded** (dashboard doc §6): adopt panels
-  1–6/8–9 immediately; panel 7 activates at the first tester round; production
-  behaviour metrics wait on the approval Product itself controls.
+  1–6/8–9 immediately; **G2 is unblocked, so scheduling the first structured
+  tester round is the highest-leverage next step**; panel 7 activates when it
+  completes; production in-app behaviour metrics wait on the approval Product
+  itself controls. Sentry's status is preserved unchanged: engineering
+  diagnostics only, never product analytics.
+- **Rev. 2 (same day):** distribution baseline updated after founder
+  verification — production backend live and probed from this repo, build 211
+  on both internal tracks, iPhone 15 observation recorded, store readiness
+  split 13a/13b/13c, five-bucket disposition vocabulary + observation states
+  introduced, LS-24/25/26 added. Telemetry and Sentry state unchanged
+  (production collection off; no DSN). Still documentation/schema only.

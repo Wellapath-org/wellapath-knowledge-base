@@ -1,6 +1,11 @@
 # WellaPath Launch KPI Register v1
 
-**Date:** 2026-09-21 · **Author:** Knowledge Base / Data Engineering
+**Date:** 2026-09-21 (rev. 2 — build 211 live on both internal tracks; production backend verified) · **Author:** Knowledge Base / Data Engineering
+
+Disposition buckets and the four **observation states** (`ZERO_OBSERVED` /
+`INSUFFICIENT_DATA` / `REPORTING_DELAY` / `UNMEASURABLE`) are defined in
+`LAUNCH_SCORECARD_GAP_ANALYSIS.md` §2. Every dashboard reading of every KPI
+below carries one; **a blank is never rendered as a zero.**
 **Companion documents:** `LAUNCH_SCORECARD_GAP_ANALYSIS.md` (why each KPI exists),
 `LAUNCH_DASHBOARD_MVP.md` (where each KPI is displayed), `LAUNCH_TESTER_SCORECARD.md`
 (how tester-derived KPIs are collected), `LAUNCH_PHASE2_ANALYTICS.md` (what Tier 3 unlocks).
@@ -22,7 +27,12 @@ hold several today.
 
 ---
 
-## Tier 1 — MEASURABLE NOW (dashboard MVP; all P0/P1/P2)
+## Tier 1 — POPULATED NOW or CONSOLE-MEASURABLE (dashboard MVP; all P0/P1/P2)
+
+LS-01…LS-15 are populated-now evidence KPIs; LS-24 and LS-26 are
+console-populated now; LS-25 is console-measurable, awaiting data (readings
+carry `INSUFFICIENT_DATA`/`REPORTING_DELAY` until the cohort accrues
+observations — never a silent zero).
 
 ### LS-01 · CI green rate on integration branches
 - **Definition:** share of CI runs on `develop`/`main` (mobile + KB repos) that succeed.
@@ -41,15 +51,15 @@ hold several today.
 - **On failure:** artifact quarantined, not uploaded; rebuild from clean worktree and diff.
 
 ### LS-03 · Backend availability (`/health`)
-- **Definition:** share of scripted probes of `/health` returning 200 within 30 s (tolerating Render cold starts; staging today, production URL when it exists).
+- **Definition:** share of scripted probes of `/health` returning 200 within 30 s (tolerating Render cold starts), on **production `https://api.wellapath.org` (primary — live, verified 2026-09-21: 200, `status: ok`)** and staging (`wellapath-backend-staging.onrender.com`, secondary).
 - **Numerator:** successful probes. **Denominator:** all probes in window.
-- **Source:** Render-hosted endpoint. **Collection:** manual or scheduled `curl` probe log kept in the dashboard workbook — **no new backend code**.
+- **Source:** Render-hosted endpoints. **Collection:** manual or scheduled `curl` probe log kept in the dashboard workbook — **no new backend code**.
 - **Target:** ≥ 99% over 7 days. **Warning:** < 99%. **Failure:** < 95% or any outage > 1 h unexplained.
 - **Owner:** Engineering Lead. **Cadence:** probes ≥ daily; reviewed weekly. **Privacy:** P0.
 - **On failure:** incident review of Render service before launch decisions proceed; launch gate holds while red.
 
 ### LS-04 · Version parity (`/version` ↔ release)
-- **Definition:** deployed backend `/version` matches the release tag the launch gate is evaluating, and the mobile build's pinned config matches.
+- **Definition:** deployed backend `/version` matches the release under gate evaluation, and the mobile build's pinned config matches. **Current reading (2026-09-21): production `/version` = `0.3.0` / `environment: production`, matching mobile 0.3.0+211 (merge `9269a87`) — PARITY.**
 - **Numerator/Denominator:** binary (match / no match).
 - **Source:** `/version` endpoint + git tags. **Collection:** `curl` + `git describe` at refresh.
 - **Target:** exact match. **Failure:** any mismatch.
@@ -60,6 +70,7 @@ hold several today.
 - **Definition:** every artifact named in the `/config` manifest hash-matches its committed KB source of truth, and the **active** facilities artifact is the approved one (today: v1.1; never an unapproved candidate).
 - **Numerator:** manifest entries whose sha256 matches the KB pin. **Denominator:** all manifest entries.
 - **Source:** `/config` + KB pinned hashes. **Collection:** `curl /config` + hash comparison script at refresh.
+- **Current reading (production, verified 2026-09-21):** `https://api.wellapath.org/config` serves `token_dictionary 1.1 · knowledge_base 2.4 · rules 2.2 · facilities 1.1`, **4/4 manifest sha256 values byte-match the committed KB artifacts** (facilities 1.1 = `25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398`); no `facilities_v2` key. Raw `/config` body fingerprint of this probe: sha256 `183a15bda78f7ccb3b3954e829e7228b1154a17f200c609bff7a0b73cdf45d3b` (raw bytes; mobile separately records a canonical-JSON hash `3b2bbb1c…` of the same manifest). **GREEN.**
 - **Target:** 100%; active facilities = `facilities.ng.v1.1.json`. **Failure:** any mismatch, or any `candidate_unapproved` artifact found live.
 - **Owner:** Data Engineer. **Cadence:** weekly + per publication event. **Privacy:** P0.
 - **On failure:** treat as a publication-lifecycle breach: freeze publication, identify who/what changed the manifest, restore last-known-good per rollback binding.
@@ -88,6 +99,7 @@ hold several today.
 - **Target:** 100% of P0 scenarios; timing budgets met (e.g. offline screen ≤ 33 s worst case as measured for 210). **Warning:** any P1 scenario failing. **Failure:** any P0 scenario failing on any matrix device.
 - **Owner:** Mobile Engineer + QA Coordinator. **Cadence:** per release candidate. **Privacy:** P0.
 - **On failure:** release candidate rejected; defect filed; re-run after fix.
+- **Build-211 status:** iOS — the founder installed and launched 211 on a **physical iPhone 15** via TestFlight (recorded as the first 211 device observation: install + cold launch pass). Android — **the low-end physical-device matrix pass for 211 remains OPEN until recorded**; the gate is not green on the iPhone 15 observation alone (it is neither Android nor low-end).
 
 ### LS-09 · Tester assessment completion rate (fictional scenarios)
 - **Definition:** share of scripted tester sessions (fictional scenario cards only) in which the tester completes the assessment journey to a result screen without assistance.
@@ -121,13 +133,40 @@ hold several today.
 - **Owner:** Product. **Cadence:** per round. **Privacy:** P2.
 - **On failure:** result-screen copy review; red-flag comprehension failures escalate to Clinical wording review before launch.
 
-### LS-13 · Store readiness & distribution health
-- **Definition:** completion of the console-gated checklist (`docs/store/CONSOLE_RUNBOOK.md`): listing assets, data-safety declarations consistent with the actual (off) telemetry state, support email + privacy-policy URL, Play App Signing enrolment; once tracks are live, Play Console / App Store Connect installs and **Android vitals crash rate** (the MVP's designated crash source — see gap analysis §3 Slide 7) via manual export.
-- **Numerator:** checklist items complete. **Denominator:** all checklist items.
-- **Target:** 100% before submission; post-live vitals crash rate per Play's "bad behaviour" threshold (warning at approach, failure at breach).
-- **Source:** Play Console / ASC. **Collection:** manual export dropped into the dashboard workbook — no SDK, no new telemetry.
-- **Owner:** Founder/Product (declarations, listing) + Mobile Engineer (technical items). **Cadence:** weekly until live, then per report. **Privacy:** P1.
+### LS-13 · Store readiness (three separated stages)
+- **Definition:** the console-gated checklist (`docs/store/CONSOLE_RUNBOOK.md`) tracked as **three distinct stages that must never be conflated**:
+  - **13a · Internal distribution — COMPLETE.** Build 0.3.0+211 live on the Play internal-testing track (Play App Signing enrolled at first upload) and on TestFlight internal testing. Founder-verified 2026-09-21.
+  - **13b · Public listing requirements — INCOMPLETE.** Store listing assets, data-safety / privacy-label declarations (must match the actual off state of telemetry and Sentry, LS-14), support email and public privacy-policy URL, content rating, health-app reviewer package.
+  - **13c · Public review / submission — NOT STARTED.** Submission for public release review on either store; gated on 13b plus G3/G4 of the decision scorecard (CB_211, RC-BLK-006).
+- **Numerator/Denominator:** per stage, checklist items complete / total.
+- **Target:** 13a done (met) · 13b 100% before submission · 13c only after G4 GO.
+- **Source:** Play Console / App Store Connect. **Collection:** manual console capture into the dashboard workbook — no SDK, no new telemetry.
+- **Owner:** Founder/Product (declarations, listing) + Mobile Engineer (technical items). **Cadence:** weekly. **Privacy:** P1 (13a/13c status is P0 fact).
 - **On failure:** submission blocked; item owner and date assigned on the blocker register.
+
+### LS-24 · Internal-track adoption & tester participation — **console-populated now**
+- **Definition:** per store: testers on the internal list vs testers who accepted/installed, and installs of the **latest** internal build (release adoption).
+- **Numerator:** testers with 211 installed (per store). **Denominator:** testers invited (Play list currently 5; TestFlight list per console).
+- **Source:** Play Console internal-testing page + release dashboard ("installs on active devices" per release); TestFlight build page (installs per build) and tester list. **Collection:** manual console capture at refresh (screenshot/CSV where offered). Values may read `REPORTING_DELAY` (Play statistics lag ≈ 24–48 h) — never rendered as 0.
+- **Target:** ≥ 80% of invited testers on the latest build within 7 days of rollout. **Warning:** < 80%. **Failure:** < 50% (the round's evidence is then unrepresentative of the shipped build).
+- **Owner:** QA Coordinator. **Cadence:** weekly + per rollout. **Privacy:** P1 (aggregate counts; individual tester rows stay in the console, never in the repo).
+- **On failure:** chase testers / re-invite before treating any tester-round KPI as valid for the gate.
+
+### LS-25 · Store crash & session evidence — **console-measurable, awaiting data**
+- **Definition:** iOS: TestFlight per-build **sessions** and **crashes** (crash-free ≈ 1 − crashes/sessions, small-n caveat always printed). Android: **Android vitals crash rate / ANR** from diagnostics-sharing devices (no session denominator exists on Play without app telemetry — reported as crash *rate*, never "crash-free sessions").
+- **Numerator/Denominator:** as defined per store above; every reading carries its observation state — with a 5-tester Android cohort, `INSUFFICIENT_DATA` is the expected honest reading, and TestFlight metrics may sit at `REPORTING_DELAY` (up to ~24 h).
+- **Source:** TestFlight build metrics; Play Console Android vitals. **Collection:** manual console capture at refresh.
+- **Target:** 0 crashes observed in internal testing (`ZERO_OBSERVED`, not blank). **Warning:** any crash (internal cohort). **Failure:** ≥ 2 distinct crash clusters on 211, or any crash in a red-flag/emergency path.
+- **Owner:** Mobile Engineer. **Cadence:** weekly. **Privacy:** P1.
+- **On failure:** stack/cluster triage from the console; fix before wider distribution. **Sentry remains inactive and is never a source for this KPI — it is engineering diagnostics only, not product analytics** (gap analysis §3 Slide 7).
+
+### LS-26 · Tester device & OS distribution — **console-populated now**
+- **Definition:** distribution of device models / OS versions across internal testers, checked against the low-end target profile (are we actually testing on the devices we claim to serve?).
+- **Numerator:** testers on devices at or below the low-end target profile. **Denominator:** all active testers.
+- **Source:** TestFlight tester/build device info; Play statistics device/OS breakdown once above threshold (small cohorts may read `INSUFFICIENT_DATA` — Play thresholds low-count rows). **Collection:** manual console capture.
+- **Target:** ≥ 1 active low-end Android device in the cohort before G2 closes. **Warning:** 0 low-end devices (currently the likely reading — the recorded 211 device is an iPhone 15, a high-end iOS device). **Failure:** G2 asserted green with 0 low-end devices in the cohort.
+- **Owner:** QA Coordinator. **Cadence:** per round. **Privacy:** P1.
+- **On failure:** recruit/allocate a low-end device before the tester round is accepted as gate evidence.
 
 ### LS-14 · Privacy-control evidence gate
 - **Definition:** all of — content-safety scan 0 hits with all positive/negative controls passing; telemetry master gate default-off and production double-gate present (pinned tests green); Sentry structurally off (no DSN in binary); store data-safety declarations consistent with all of the above.
@@ -138,7 +177,7 @@ hold several today.
 - **On failure:** hard stop; treated as a privacy incident candidate, not a bug.
 
 ### LS-15 · Launch-blocker burn-down
-- **Definition:** count of open launch-gating blockers, each with owner + target date (seeded from: CB_211 adjudication [external-beta gate], RC-BLK-005/006 [submission], support email + privacy URL, Play App Signing enrolment, case-bank clinical sign-off, IM-002 implementation status confirmation; FAC-D002 joins only if Facilities 2.0 activation enters launch scope).
+- **Definition:** count of open launch-gating blockers, each with owner + target date. Seed register (2026-09-21): **open** — CB_211 adjudication [external-beta gate], RC-BLK-006 [public submission], public listing items incl. support email + privacy-policy URL [13b], case-bank clinical sign-off, IM-002 implementation status confirmation, Android 211 low-end matrix pass [LS-08]; **closed** — RC-BLK-005 (production endpoint live), Play App Signing (enrolled at first upload); FAC-D002 joins only if Facilities 2.0 activation enters launch scope — **Facilities 2.0 is not a launch dependency; 1.1 is active and production-verified.**
 - **Numerator:** blockers closed. **Denominator:** blockers opened (report both + trend).
 - **Source:** blocker register (dashboard panel 9). **Collection:** standing register updated at refresh.
 - **Target:** 0 open gating blockers at the gate under evaluation. **Warning:** any blocker without owner or date. **Failure:** attempting a gate with an open blocker scoped to that gate.
@@ -152,6 +191,13 @@ hold several today.
 Staging telemetry is already permitted (internal builds, `--dart-define`,
 documented in `TELEMETRY_MOBILE.md` §2) and is internal-only. These KPIs read
 the **staging** ingest only; they never touch production users.
+
+**Standing rule: telemetry is never activated — on staging or anywhere else —
+merely to populate this dashboard.** A Tier-2 run happens because a testing
+round needs it, on internal builds, for the round's duration; an empty Tier-2
+panel is a correct reading (`UNMEASURABLE` outside rounds), not a problem to
+fix by switching collection on. The production 211 build ships with telemetry
+doubly off and stays that way (LS-14 verifies it per release).
 
 ### LS-16 · Staging funnel completion rate
 - **Definition:** `assessment_complete` ÷ `assessment_start` over internal-tester staging sessions in a testing round.

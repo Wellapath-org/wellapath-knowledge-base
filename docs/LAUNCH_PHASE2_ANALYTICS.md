@@ -7,7 +7,10 @@ decision is a recorded approval against a fixed plan — not an improvised
 enablement. Until the approval record in §2 exists: `TELEMETRY_ENABLED` stays
 default-off, `TELEMETRY_PRODUCTION_APPROVED` stays unset, Sentry stays DSN-less,
 store data-safety declarations stay as they are, and no collection endpoint is
-created or modified.
+created or modified. The build now distributed on both internal tracks
+(0.3.0+211) ships with telemetry doubly off — **live tracks change
+distribution, not collection** — and no telemetry, staging or otherwise, is
+ever activated merely to populate the launch dashboard.
 
 ## 1. What already exists (and stays dormant)
 
@@ -62,9 +65,12 @@ and store-declaration update. **None is endorsed here; all are unimplemented.**
 
 Two paths, decided independently of product analytics:
 
-- **Default path (no decision needed):** Play Console **Android vitals** once a
-  store track is live — platform-provided crash/ANR aggregates, manual export
-  into the dashboard. This is the MVP's designated crash source.
+- **Default path (no decision needed, already in effect):** the internal
+  tracks are live, so the console sources are active now — **TestFlight
+  per-build sessions/crashes** (iOS) and **Play Console Android vitals**
+  (crash/ANR; `INSUFFICIENT_DATA` at the current 5-tester cohort), manually
+  captured into the dashboard (LS-25). This is the MVP's designated crash
+  source.
 - **Optional path (decision needed):** enable Sentry as a **crash sink only** —
   provision a DSN, review `sentry_event_sanitiser` output on real crashes in
   staging, update the privacy policy's data-processor disclosure and store
