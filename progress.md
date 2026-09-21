@@ -1087,3 +1087,14 @@ infrastructure change; no collection endpoint created; no analytics enabled.**
   split 13a/13b/13c, five-bucket disposition vocabulary + observation states
   introduced, LS-24/25/26 added. Telemetry and Sentry state unchanged
   (production collection off; no DSN). Still documentation/schema only.
+- **Review checks closed (PR #43):** (1) full JSON Schema validation executed
+  with the real `jsonschema` library (Draft 2020-12 `check_schema` pass;
+  positive sample validates; **10/10 negative controls rejected by the intended
+  constraint**, incl. attestation false/missing, real-name pseudonym, and
+  undeclared fields at two depths). (2) Both `/config` fingerprints re-derived
+  in full from a live fetch and recorded unabbreviated with their methods:
+  raw-body `183a15bd…f45d3b` vs canonical key-sorted-compact
+  `3b2bbb1c…8578ed` — the canonical value reproduced independently by method
+  and matching Mobile's declared baseline (`RC_FROZEN_INPUTS.json` @
+  `9269a87`) exactly; docs and runbook now require every snapshot to label
+  which fingerprint it records.

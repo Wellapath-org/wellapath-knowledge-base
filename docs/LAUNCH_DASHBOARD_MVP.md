@@ -106,7 +106,7 @@ decision on panel 9, in the style of the existing decision registers.
 ## 5. Refresh procedure (runbook, ~30 min/week)
 
 1. `gh run list` / `gh release view` on both repos → panel 2 (+ LS-01 window stats).
-2. `curl` **production** `https://api.wellapath.org/health|version|config` (log line with timestamp, latency, raw-body sha256 for `/config`), then staging; run the hash-comparison script against KB pins → panels 3–4.
+2. `curl` **production** `https://api.wellapath.org/health|version|config` (log line with timestamp and latency), then staging; for `/config` record **both fingerprints, labelled**: raw-body sha256 of the bytes as served, and canonical sha256 of the key-sorted compact JSON re-serialization (Mobile's baseline method) — never compare one kind against the other; run the hash-comparison script against KB pins → panels 3–4.
 3. Pull latest CI results for the regression + suites → panel 5.
 4. If a release candidate was cut: file the device-matrix checklist and binary-verification results → panels 2, 6.
 5. If a tester round closed: validate records against the schema, confirm the sanitization sign-off, compute LS-09…LS-12 → panel 7.
