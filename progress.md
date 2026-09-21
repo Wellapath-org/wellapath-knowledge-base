@@ -994,3 +994,61 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
   and unmerged; this PR is left unmerged for review.**
+
+## Launch Scorecard — operational conversion of the Pre-Launch Success Metrics proposal
+
+Branch `docs/launch-scorecard-spec` (off `develop` `1f1b8dd`). Converts the
+Product proposal `Pre Launch success metric.pptx` (7 slides, 10 metrics —
+vendored with extracted text at `baseline/launch_metrics_proposal_v1/`, sha256
+`27a5d06a…`) into an operational launch scorecard and dashboard specification.
+**Documentation and schema only: no Mobile, Backend, telemetry, Sentry, store or
+infrastructure change; no collection endpoint created; no analytics enabled.**
+
+- **Every proposed metric audited against the verified product state**
+  (`docs/LAUNCH_SCORECARD_GAP_ANALYSIS.md`) and placed in one of four buckets:
+  measurable now / controlled testing / requires approved telemetry /
+  unsupported. Headline: **0 of the 10 proposed metrics are measurable in
+  production today** — telemetry is off by design and no store track is live —
+  but the launch gate does not need them.
+- **All eight instructed corrections applied**: no verified-availability/
+  doctors/services/opening-status/universal-matching claims (replaced by
+  artifact identity + scripted dead-end rate + tester judgment); "immune to
+  leaks" removed (replaced by verifiable privacy-control evidence); Sentry is
+  crash-only, never analytics; LGA excluded under the state-only boundary (the
+  contract's only geography field is state-level and the client sends nothing);
+  no free-text health feedback in analytics (`feedback_submit` = rating 1–5 +
+  enum, structurally); health-library engagement marked unavailable (no library
+  ships); crash-free sessions split from low-end performance (Play vitals vs
+  physical-device gate); retention blocked pending an approved privacy-safe
+  method.
+- **KPI register** (`docs/LAUNCH_KPI_REGISTER.md`): 15 Tier-1 KPIs measurable
+  now (P0/P1/P2), 4 Tier-2 controlled-testing KPIs (staging, fictional
+  scenarios), 4 Tier-3 production KPIs **fully specified but dormant** pending
+  the phase-2 approval, and 5 PX items listed to say no. Every KPI carries
+  definition, numerator, denominator, source, collection method, target,
+  warning, failure, owner, cadence, privacy class and action-on-failure.
+  Thresholds are proposed, pending Product adoption.
+- **Dashboard MVP** (`docs/LAUNCH_DASHBOARD_MVP.md`): a weekly evidence
+  snapshot committed to `reports/launch_scorecard/` by PR — 9 panels running
+  entirely on GitHub CI/release evidence, Render `/health`//`/version`//`/config`,
+  artifact identity, Play Console/ASC manual exports, sanitized tester records,
+  device testing and the blocker register. Includes the data-source & privacy
+  matrix (P0–P3 + PX) and the **Launch Decision Scorecard** (gates G1–G7 with
+  current honest status: G1 HOLD on console items + founder's support
+  email/privacy URL; G3 HOLD on CB_211 and clinical sign-off; Facilities 2.0
+  activation explicitly not a launch dependency — v1.1 active).
+- **Tester scorecard** (`docs/LAUNCH_TESTER_SCORECARD.md` +
+  `schema/tester_feedback.v1.schema.json`): 8 fictional scenario cards,
+  pseudonymous testers, `contains_no_real_health_data` attestation required by
+  schema (`const true`), named-sanitizer block required, free text confined to
+  app behaviour. No real symptoms or personal medical information anywhere.
+- **Phase-2 analytics plan** (`docs/LAUNCH_PHASE2_ANALYTICS.md`) — explicitly
+  **unimplemented pending approval**: five-step activation pipeline (Product
+  decision record → privacy review → store declarations updated *before*
+  enablement → engineering activation plan → LS-14 re-run), state-code mapping
+  prerequisite for LS-23, three retention options catalogued on paper only,
+  Sentry-enable path kept separate from analytics, permanent exclusions
+  restated.
+- **Recommendation to Product recorded** (dashboard doc §6): adopt panels
+  1–6/8–9 immediately; panel 7 activates at the first tester round; production
+  behaviour metrics wait on the approval Product itself controls.
