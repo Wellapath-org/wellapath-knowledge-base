@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "wellapath://schema/tester_feedback.v1.schema.json",
+  "title": "WellaPath launch tester feedback record v1",
+  "description": "One sanitized tester session record for the launch scorecard (docs/LAUNCH_TESTER_SCORECARD.md). Fictional scenarios only: records MUST NOT contain real symptoms, real health situations, or any personal medical information. Free text describes app behaviour only. Records failing the contains_no_real_health_data attestation or missing the sanitization block are invalid by construction.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "round_id",
+    "collected_date",
+    "tester_pseudonym",
+    "contains_no_real_health_data",
+    "build",
+    "device",
+    "scenario_card_id",
+    "tasks",
+    "ratings",
+    "issues",
+    "sanitization"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "record_id": {
+      "type": "string",
+      "pattern": "^TFR-[0-9]{4}-[0-9]{2}-[0-9]{2}-[A-Za-z0-9_-]{1,32}$",
+      "description": "Unique per record, date-prefixed."
+    },
+    "round_id": {
+      "type": "string",
+      "pattern": "^ROUND-[0-9]{4}-[0-9]{2}-[0-9]{2}(-[A-Za-z0-9_-]{1,16})?$"
+    },
+    "collected_date": { "type": "string", "format": "date" },
+    "tester_pseudonym": {
+      "type": "string",
+      "pattern": "^T[0-9]{2,3}$",
+      "description": "Round-scoped pseudonym only. Never a name, email, phone number or any real-world identifier."
+    },
+    "contains_no_real_health_data": {
+      "const": true,
+      "description": "Attestation that the session used only the provided fictional scenario card and the record contains no real symptom, diagnosis, or personal medical information. A record cannot be valid without it."
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["app_version", "build_number"],
+      "properties": {
+        "app_version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "build_number": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model", "os", "network_condition"],
+      "properties": {
+        "model": { "type": "string", "maxLength": 80 },
+        "os": { "type": "string", "maxLength": 40, "description": "e.g. 'Android 10 / API 29'." },
+        "ram_gb": { "type": "number", "minimum": 0.5, "maximum": 64 },
+        "network_condition": {
+          "enum": ["wifi", "mobile_data_good", "mobile_data_limited", "offline", "intermittent"]
+        }
+      }
+    },
+    "scenario_card_id": {
+      "type": "string",
+      "pattern": "^SC-[0-9]{2}(-v[0-9]+)?$",
+      "description": "The fictional scenario card exercised, from testing/launch_scenarios/ pinned for the round."
+    },
+    "tasks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["task_id", "outcome"],
+        "properties": {
+          "task_id": { "type": "string", "pattern": "^SC-[0-9]{2}-T[0-9]{1,2}$" },
+          "outcome": { "enum": ["completed", "abandoned", "blocked", "error"] },
+          "duration_seconds": { "type": "integer", "minimum": 0, "maximum": 7200 },
+          "dead_end": {
+            "type": "boolean",
+            "description": "Locator tasks only: true when the search ended with no results AND no graceful empty state offering a usable next step."
+          },
+          "note_sanitized": {
+            "type": "string",
+            "maxLength": 500,
+            "description": "App-behaviour observations only. No symptoms, no health content, no personal information. Passes through the named sanitizer."
+          }
+        }
+      }
+    },
+    "ratings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["helpfulness", "clarity", "confidence_next_step", "performance"],
+      "properties": {
+        "helpfulness": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "clarity": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "confidence_next_step": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "performance": { "type": "integer", "minimum": 1, "maximum": 5 },
+        "understood_urgency": {
+          "type": "boolean",
+          "description": "Required in practice for red-flag cards (SC-03 family): did the tester understand the urgency guidance? Validated by process for those cards."
+        }
+      }
+    },
+    "issues": {
+      "type": "array",
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["issue_code", "severity", "description_sanitized"],
+        "properties": {
+          "issue_code": {
+            "enum": ["ISS-CRASH", "ISS-FREEZE", "ISS-UI", "ISS-COPY", "ISS-NAV", "ISS-DATA", "ISS-OFFLINE", "ISS-OTHER"]
+          },
+          "severity": { "enum": ["blocker", "major", "minor"] },
+          "description_sanitized": { "type": "string", "maxLength": 500 }
+        }
+      }
+    },
+    "sanitization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sanitized_by_role", "sanitized_date", "personal_content_found_and_removed"],
+      "properties": {
+        "sanitized_by_role": {
+          "type": "string",
+          "maxLength": 60,
+          "description": "Role of the sanitizer (e.g. 'QA Coordinator'), not a personal identifier beyond what the team already publishes."
+        },
+        "sanitized_date": { "type": "string", "format": "date" },
+        "personal_content_found_and_removed": {
+          "type": "boolean",
+          "description": "True when anything personal or health-real was removed during sanitization. A record that would be gutted by removal is rejected, not published."
+        }
+      }
+    }
+  }
+}

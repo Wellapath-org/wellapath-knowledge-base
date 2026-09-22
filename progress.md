@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-09-22
 
 ## Merged
 
@@ -20,6 +20,7 @@ Last updated: 2026-08-24
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #43 | `docs/launch-scorecard-spec` | Launch Scorecard: operational conversion of the Product "Pre-Launch Success Metrics" proposal — gap analysis, KPI register, dashboard MVP spec, tester scorecard + feedback schema, phase-2 analytics plan (unimplemented pending approval). Documentation/schema only. Section "Launch Scorecard" below. | Open, unmerged **by request** — both Product review checks closed and accepted 2026-09-21; awaiting the independent reviewer's verdict |
 
 | Issue | Title | Status |
 |---|---|---|
@@ -994,3 +995,115 @@ now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
   behaviour, publication state, R2/config, IM-003 records (blocker open,
   D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
   and unmerged; this PR is left unmerged for review.**
+
+## Launch Scorecard — operational conversion of the Pre-Launch Success Metrics proposal
+
+Branch `docs/launch-scorecard-spec` (off `develop` `1f1b8dd`). Converts the
+Product proposal `Pre Launch success metric.pptx` (7 slides, 10 metrics —
+vendored with extracted text at `baseline/launch_metrics_proposal_v1/`, sha256
+`27a5d06a…`) into an operational launch scorecard and dashboard specification.
+**Documentation and schema only: no Mobile, Backend, telemetry, Sentry, store or
+infrastructure change; no collection endpoint created; no analytics enabled.**
+
+- **Every proposed metric audited against the verified product state**
+  (`docs/LAUNCH_SCORECARD_GAP_ANALYSIS.md`) and placed in one of five buckets:
+  populated now / console-measurable, awaiting data / controlled testing /
+  requires approved telemetry / prohibited-not-approved. Every dashboard
+  reading additionally carries an observation state (`ZERO_OBSERVED` /
+  `INSUFFICIENT_DATA` / `REPORTING_DELAY` / `UNMEASURABLE`) so a blank is
+  never rendered as a zero. Headline (rev. 2): **1 of the 10 proposed metrics
+  — crash-free sessions — is console-measurable today without any WellaPath
+  telemetry** (TestFlight per-build sessions/crashes live for iOS 211; Android
+  vitals awaiting a sufficient cohort), the low-end half of that slide is
+  populated now, and the consoles newly populate distribution evidence the
+  proposal never enumerated (installs, tester participation, release adoption,
+  device/OS distribution). The other proposed metrics remain
+  controlled-testing / approved-telemetry / blocked / prohibited; the launch
+  gate needs none of the blocked ones.
+- **All eight instructed corrections applied**: no verified-availability/
+  doctors/services/opening-status/universal-matching claims (replaced by
+  artifact identity + scripted dead-end rate + tester judgment); "immune to
+  leaks" removed (replaced by verifiable privacy-control evidence); Sentry is
+  crash-only, never analytics; LGA excluded under the state-only boundary (the
+  contract's only geography field is state-level and the client sends nothing);
+  no free-text health feedback in analytics (`feedback_submit` = rating 1–5 +
+  enum, structurally); health-library engagement marked unavailable (no library
+  ships); crash-free sessions split from low-end performance (Play vitals vs
+  physical-device gate); retention blocked pending an approved privacy-safe
+  method.
+- **KPI register** (`docs/LAUNCH_KPI_REGISTER.md`): 18 Tier-1 KPIs (P0/P1/P2 —
+  15 populated-now evidence KPIs plus 3 store-console KPIs: LS-24 internal-track
+  adoption/tester participation, LS-25 store crash & session evidence, LS-26
+  tester device/OS distribution), 4 Tier-2 controlled-testing KPIs (staging,
+  fictional scenarios, with the standing rule that **telemetry is never
+  activated merely to populate the dashboard**), 4 Tier-3 production KPIs
+  **fully specified but dormant** pending the phase-2 approval, and 5 PX items
+  listed to say no. Every KPI carries definition, numerator, denominator,
+  source, collection method, target, warning, failure, owner, cadence, privacy
+  class and action-on-failure. Thresholds are proposed, pending Product
+  adoption. Store readiness (LS-13) is split three ways: **13a internal
+  distribution COMPLETE · 13b public-listing requirements INCOMPLETE ·
+  13c public review/submission NOT STARTED.**
+- **Dashboard MVP** (`docs/LAUNCH_DASHBOARD_MVP.md`): a weekly evidence
+  snapshot committed to `reports/launch_scorecard/` by PR — 9 panels running
+  entirely on GitHub CI/release evidence, the **live production endpoints**
+  (`api.wellapath.org` — verified 2026-09-21: `/health` ok, `/version`
+  0.3.0/production matching build 211, `/config` with **4/4 artifact hashes
+  byte-matching the committed KB artifacts**, facilities 1.1
+  `25684c71…2398` active, raw-body fingerprint `183a15bd…d3b` recorded),
+  artifact identity, manual Play Console/TestFlight console capture (§3.1
+  states which values are manual now and which would need a future
+  Play-Reporting/ASC API integration, explicitly not built), sanitized tester
+  records, device testing and the blocker register. Includes the data-source &
+  privacy matrix (P0–P3 + PX) and the **Launch Decision Scorecard**: **G1
+  internal testing GO/LIVE** (build 0.3.0+211, merge `9269a87`, on the Play
+  internal track with 5 testers and TestFlight internal; founder install +
+  launch on a physical iPhone 15 recorded; Android low-end matrix for 211
+  still OPEN), G2 unblocked/not started, G3 HOLD on CB_211 and clinical
+  sign-off, G4 HOLD on 13b/13c (RC-BLK-005 closed — production endpoint
+  live), G5 HOLD with backend conditions already met; Facilities 2.0
+  activation explicitly not a launch dependency — v1.1 active and
+  production-verified.
+- **Tester scorecard** (`docs/LAUNCH_TESTER_SCORECARD.md` +
+  `schema/tester_feedback.v1.schema.json`): 8 fictional scenario cards,
+  pseudonymous testers, `contains_no_real_health_data` attestation required by
+  schema (`const true`), named-sanitizer block required, free text confined to
+  app behaviour. No real symptoms or personal medical information anywhere.
+- **Phase-2 analytics plan** (`docs/LAUNCH_PHASE2_ANALYTICS.md`) — explicitly
+  **unimplemented pending approval**: five-step activation pipeline (Product
+  decision record → privacy review → store declarations updated *before*
+  enablement → engineering activation plan → LS-14 re-run), state-code mapping
+  prerequisite for LS-23, three retention options catalogued on paper only,
+  Sentry-enable path kept separate from analytics, permanent exclusions
+  restated.
+- **Recommendation to Product recorded** (dashboard doc §6): adopt panels
+  1–6/8–9 immediately; **G2 is unblocked, so scheduling the first structured
+  tester round is the highest-leverage next step**; panel 7 activates when it
+  completes; production in-app behaviour metrics wait on the approval Product
+  itself controls. Sentry's status is preserved unchanged: engineering
+  diagnostics only, never product analytics.
+- **Rev. 2 (same day):** distribution baseline updated after founder
+  verification — production backend live and probed from this repo, build 211
+  on both internal tracks, iPhone 15 observation recorded, store readiness
+  split 13a/13b/13c, five-bucket disposition vocabulary + observation states
+  introduced, LS-24/25/26 added. Telemetry and Sentry state unchanged
+  (production collection off; no DSN). Still documentation/schema only.
+- **Review checks closed (PR #43):** (1) full JSON Schema validation executed
+  with the real `jsonschema` library (Draft 2020-12 `check_schema` pass;
+  positive sample validates; **10/10 negative controls rejected by the intended
+  constraint**, incl. attestation false/missing, real-name pseudonym, and
+  undeclared fields at two depths). (2) Both `/config` fingerprints re-derived
+  in full from a live fetch and recorded unabbreviated with their methods:
+  raw-body `183a15bd…f45d3b` vs canonical key-sorted-compact
+  `3b2bbb1c…8578ed` — the canonical value reproduced independently by method
+  and matching Mobile's declared baseline (`RC_FROZEN_INPUTS.json` @
+  `9269a87`) exactly; docs and runbook now require every snapshot to label
+  which fingerprint it records.
+- **Status (2026-09-22): PR #43 open, unmerged by request.** Product accepted
+  both review-check closures on 2026-09-21 and requested no further Data
+  Engineering changes; the PR is held open for an independent reviewer, whose
+  verdict is still pending (no review returned as of this update). Next
+  report on this workstream: verdict triage — findings, fixes, final reviewed
+  commit, merge/no-merge recommendation. Scope constraints stand: this PR
+  changes no telemetry, Sentry, Mobile, Backend, store configuration or
+  infrastructure, and it does not block the separate Sentry-readiness review.
