@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-08-24
+Last updated: 2026-09-22
 
 ## Merged
 
@@ -20,6 +20,7 @@ Last updated: 2026-08-24
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #43 | `docs/launch-scorecard-spec` | Launch Scorecard: operational conversion of the Product "Pre-Launch Success Metrics" proposal — gap analysis, KPI register, dashboard MVP spec, tester scorecard + feedback schema, phase-2 analytics plan (unimplemented pending approval). Documentation/schema only. Section "Launch Scorecard" below. | Open, unmerged **by request** — both Product review checks closed and accepted 2026-09-21; awaiting the independent reviewer's verdict |
 
 | Issue | Title | Status |
 |---|---|---|
@@ -1098,3 +1099,11 @@ infrastructure change; no collection endpoint created; no analytics enabled.**
   and matching Mobile's declared baseline (`RC_FROZEN_INPUTS.json` @
   `9269a87`) exactly; docs and runbook now require every snapshot to label
   which fingerprint it records.
+- **Status (2026-09-22): PR #43 open, unmerged by request.** Product accepted
+  both review-check closures on 2026-09-21 and requested no further Data
+  Engineering changes; the PR is held open for an independent reviewer, whose
+  verdict is still pending (no review returned as of this update). Next
+  report on this workstream: verdict triage — findings, fixes, final reviewed
+  commit, merge/no-merge recommendation. Scope constraints stand: this PR
+  changes no telemetry, Sentry, Mobile, Backend, store configuration or
+  infrastructure, and it does not block the separate Sentry-readiness review.
