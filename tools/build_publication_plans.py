@@ -45,6 +45,7 @@ REGISTER = repo_path("publication", "governance", "decision_register_v1.json")
 COMMITTED_PLAN_TARGETS = (
     ("token_dictionary", "2.0"),
     ("question_flow", "1.1"),
+    ("facilities", "2.0"),
 )
 
 

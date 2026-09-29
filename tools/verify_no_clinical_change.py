@@ -78,8 +78,15 @@ SCANNED_TREES = [
 #: rather than rewarded with a green run.
 PHI_PATTERNS = [
     ("email address", re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")),
+    # A third narrowing, for the same reason as the first two. The pattern's `\d{2,4}[ .-]`
+    # group happily matches the integer part of a decimal, so a geographic coordinate like
+    # 10.272931 read as a phone number: the nationwide facilities candidate produced 7,998
+    # such hits and not one real number among them. A negative lookahead rejects a match that
+    # is a bare decimal — one dot, a short integer part, a long fractional part — which no
+    # phone number in any format looks like. Real numbers are unaffected: they carry a leading
+    # +, several separators, or no dot at all, and the positive controls below still catch them.
     ("phone number", re.compile(
-        r"(?<![\dA-Fa-f])(?:\+\d{1,3}[ .-]?)?"
+        r"(?<![\dA-Fa-f])(?!\d{1,4}\.\d{4,}(?!\d))(?:\+\d{1,3}[ .-]?)?"
         r"(?:\(\d{2,4}\)[ .-]?|\d{2,4}[ .-])(?:\d[ .-]?){5,11}\d(?![\dA-Fa-f])")),
     ("date of birth", re.compile(
         r"(?:\bdate[_ ]of[_ ]birth\b|[\"\']dob[\"\']\s*[:=]|\bdob\s*[:=])", re.I)),
@@ -101,7 +108,18 @@ IM003_REPORTS_SCANNED_ELSEWHERE = frozenset({
 #: Strings that would otherwise trip a pattern, each with the reason. Empty is
 #: the correct state: an entry here is an admission the scan is imprecise, so it
 #: has to be written down rather than folded silently into a regex.
-PHI_ALLOWLIST = {}
+#: Exact matched strings that are deliberately published, with the reason each one is not
+#: personal data. Exact strings only, never patterns: an allowlisted VALUE cannot widen a
+#: pattern, and anything that is not byte-identical to an entry still fails the scan.
+PHI_ALLOWLIST = {
+    "hfr@health.gov.ng": (
+        "Institutional contact of the Nigeria Health Facility Registry, published by the "
+        "Federal Ministry of Health on https://hfr.fmohconnect.gov.ng/ and recorded by the "
+        "facilities provenance investigation as the authorization addressee "
+        "(docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md). An organisational mailbox, "
+        "not a person's."
+    ),
+}
 
 #: Positive controls. Every one MUST be caught, or the scan is decorative.
 PHI_SELF_TEST = [
@@ -123,6 +141,11 @@ PHI_NEGATIVE_CONTROLS = [
     "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
     "657739cc1745104dd1194a57ef14cc9793c9b98e",
     "No PHI fields \u2014 no name, dob, phone, email, address, no free text",
+    # Geographic coordinates. Facility latitudes and longitudes are not contact details, and
+    # a two-digit integer part is what made them look like one.
+    "10.272931",
+    "13.005900",
+    '"latitude": 12.358056, "longitude": 8.731447',
 ]
 
 
