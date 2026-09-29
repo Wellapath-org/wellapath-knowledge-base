@@ -75,7 +75,7 @@ CANDIDATE = repo_path("candidate", "facilities.ng.v2.0.json")
 QUALITY = repo_path("reports", "facilities_quality_v1.json")
 QUARANTINE = repo_path("reports", "facilities_quarantine_v1.json")
 AUDIT = repo_path("reports", "facilities_coordinate_audit_v1.json")
-CURRENT = repo_path("facilities.ng.v1.1.json")
+CURRENT = repo_path("facilities.ng.v1.2.json")
 
 ARTIFACT_ID = "facilities"
 CANDIDATE_VERSION = "2.0"

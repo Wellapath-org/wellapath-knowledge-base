@@ -1,14 +1,14 @@
 # Facilities 2.0 candidate — changelog against facilities 1.1
 
 > **Candidate only.** `candidate/facilities.ng.v2.0.json` is `candidate_unapproved`,
-> `may_publish: false`. `facilities.ng.v1.1.json` is the active artifact, is byte identical
-> (`25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398`) and is the rollback
+> `may_publish: false`. `facilities.ng.v1.2.json` is the active artifact, is byte identical
+> (`94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788`) and is the rollback
 > target. Nothing was uploaded, published, activated or wired into `/config`.
 
 | | facilities 1.1 (active) | facilities 2.0 (candidate, Step 3) |
 |---|---|---|
-| File | `facilities.ng.v1.1.json` | `candidate/facilities.ng.v2.0.json` |
-| SHA-256 | `25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398` | `8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2` |
+| File | `facilities.ng.v1.2.json` | `candidate/facilities.ng.v2.0.json` |
+| SHA-256 | `94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788` | `8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2` |
 | Bytes | 1,695,844 | 36,077,142 (×21.3) |
 | Records | 5,344 | **29,028** (×5.43) |
 | Schema | 1.0 (`facilities/facility_schema_v1.0.md`) | 2.0 (`schema/facilities.v2.schema.json`, `fc96d9142c9e669af6c02d6bb4e186fef025aa5a841fc65da4da2aff394c2e24`) |
@@ -116,7 +116,7 @@ Per state, including FCT (632 vs 614) and Kano (1,293 vs 2,040): `docs/FACILITIE
 ## 7. Rollback
 
 The candidate has never been active, so there is nothing to roll back *from*. If it is ever
-activated and withdrawn, the consumer returns to `facilities.ng.v1.1.json` at the hash above;
+activated and withdrawn, the consumer returns to `facilities.ng.v1.2.json` at the hash above;
 the manifest entry binds that target by version, hash and byte count. Because 2.0 nulls two
 fields 1.1 populates, a consumer that has adapted to 2.0 must still read 1.1 correctly —
 `mobile_handoff/facilities_v2/README.md` §8 states the requirement.

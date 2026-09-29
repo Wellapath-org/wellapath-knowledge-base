@@ -37,7 +37,7 @@ FROZEN = [
     ("token_dictionary", "1.1", "token_dictionary.ng.v1.1.json"),
     ("knowledge_base", "2.4", "kb.ng.v2.4.json"),
     ("rules", "2.2", "rules.ng.v2.2.json"),
-    ("facilities", "1.1", "facilities.ng.v1.1.json"),
+    ("facilities", "1.2", "facilities.ng.v1.2.json"),
 ]
 
 CATEGORIES = [
