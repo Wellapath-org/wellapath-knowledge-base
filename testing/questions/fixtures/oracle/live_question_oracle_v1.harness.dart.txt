@@ -1,0 +1,194 @@
+// REPRODUCTION HARNESS for testing/questions/fixtures/oracle/live_question_oracle_v1.json
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// READ THIS FIRST — what this file is, and what it is not
+//
+// The oracle fixture was captured by placing a TEMPORARY test in a wellapath-
+// mobile checkout at commit 657739cc1745104dd1194a57ef14cc9793c9b98e, running
+// it, and DELETING it. That temporary test is not committed in wellapath-mobile
+// and does not exist in any repository.
+//
+// This file is the reproduction harness: it performs the same capture and is
+// recorded here so the fixture is reproducible. It is NOT claimed to be
+// byte-identical to the deleted temporary test, and nothing depends on it being
+// so — the fixture's authenticity rests on the two independent facts below, not
+// on trusting this source.
+//
+// Stored as `.dart.txt` so the Dart analyzer does not compile a reference
+// artifact as project source. Same convention as
+// mobile_handoff/question_flow_v1/question_flow_types.dart.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// WHY THE FIXTURE IS TRUSTWORTHY WITHOUT TRUSTING THIS FILE
+//
+//  1. STRUCTURAL. tools/validate_oracle_provenance.py re-derives the bounded
+//     path enumeration, the input ordering and the output field set from first
+//     principles and checks the fixture against them. A fixture assembled by
+//     hand would have to satisfy all of it.
+//
+//  2. INDEPENDENT. reports/question_grouping_coverage_v1_1.json stage 1
+//     reproduces all 4,625 cases from a Python transcription of
+//     question_engine.dart written separately from this capture, with 0
+//     mismatches. Content invented rather than captured would not survive that.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// CAPTURE PROCEDURE
+//
+//   git -C wellapath-mobile checkout 657739cc1745104dd1194a57ef14cc9793c9b98e
+//   # write this file to test/question_flow/tmp_oracle_export_test.dart
+//   flutter test test/question_flow/tmp_oracle_export_test.dart
+//   # -> prints: EXPORTED cases=2325 reversed=2300 tokens=24
+//   # -> writes: build/live_question_oracle_v1.json
+//   rm test/question_flow/tmp_oracle_export_test.dart
+//   git -C wellapath-mobile status --porcelain   # MUST be clean of this file
+//
+// The capture is READ-ONLY with respect to the app: it imports the production
+// QuestionEngine and calls it. It changes no source, no asset and no artifact.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// WHAT IS CAPTURED, AND WHAT IS DELIBERATELY NOT
+//
+// Captured per case: input_tokens, and for each returned FollowupQuestion its
+// role, questionText, options and redFlagToken.
+//
+// NOT captured, because generateQuestions does not read them: sex, age,
+// pregnancy, medical conditions, body area. The function's entire input is the
+// selected symptom token list. No demographic value participates, so none is
+// recorded — and there is therefore no PHI in the fixture, only question
+// definitions and token identifiers already published in token_dictionary 1.1.
+//
+// The 24 driving tokens are every token that reaches a follow-up entry or a
+// clarifier trigger. The other 97 picker tokens exercise only the default
+// duration fallback and are covered by the path fixtures instead.
+
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wellapath_mobile/core/engine/question_engine.dart';
+import 'package:wellapath_mobile/core/engine/models/followup_question.dart';
+
+/// Every token that reaches a follow-up entry or a clarifier trigger.
+/// Sorted, so the enumeration below is a property of this list and not of the
+/// order anyone typed it in.
+const List<String> kDrivingTokens = <String>[
+  'abdominal_cramps',
+  'bleeding',
+  'body_pain',
+  'chest_indrawing_severe',
+  'chills',
+  'cough',
+  'dark_urine',
+  'difficulty_breathing',
+  'dizziness',
+  'fast_breathing_child',
+  'fatigue',
+  'fever',
+  'headache',
+  'nausea',
+  'nosebleed',
+  'pain',
+  'poor_appetite',
+  'poor_feeding',
+  'shortness_of_breath',
+  'sweating',
+  'swelling',
+  'vomiting',
+  'watery_stool',
+  'weakness',
+];
+
+/// Every subset of size 0..3, in a fixed order: the empty set, then singletons,
+/// pairs and triples by ascending index. 1 + 24 + 276 + 2024 = 2,325.
+List<List<String>> boundedSubsets(List<String> tokens) {
+  final List<List<String>> out = <List<String>>[<String>[]];
+  for (int i = 0; i < tokens.length; i++) {
+    out.add(<String>[tokens[i]]);
+    for (int j = i + 1; j < tokens.length; j++) {
+      out.add(<String>[tokens[i], tokens[j]]);
+      for (int k = j + 1; k < tokens.length; k++) {
+        out.add(<String>[tokens[i], tokens[j], tokens[k]]);
+      }
+    }
+  }
+  return out;
+}
+
+String _role(QuestionType type) {
+  switch (type) {
+    case QuestionType.severity:
+      return 'severity';
+    case QuestionType.duration:
+      return 'duration';
+    case QuestionType.redFlagClarifier:
+      return 'red_flag_clarifier';
+    case QuestionType.additionalSymptoms:
+      return 'additional_symptoms';
+  }
+}
+
+Map<String, Object?> _encode(FollowupQuestion question) => <String, Object?>{
+      'role': _role(question.type),
+      'question_text': question.questionText,
+      'options': question.options,
+      'red_flag_token': question.redFlagToken,
+    };
+
+/// One case: the input, and exactly what the production engine returned.
+Map<String, Object?> _capture(List<String> tokens) => <String, Object?>{
+      'input_tokens': tokens,
+      'questions': QuestionEngine.generateQuestions(tokens)
+          .map(_encode)
+          .toList(growable: false),
+    };
+
+void main() {
+  test('export live question oracle', () {
+    final List<List<String>> subsets = boundedSubsets(kDrivingTokens);
+
+    // Forward: tokens in ascending sorted order.
+    final List<Map<String, Object?>> forward =
+        subsets.map(_capture).toList(growable: false);
+
+    // Reversed: the same subsets, selection order reversed. Subsets of size 0
+    // and 1 are their own reverse and would duplicate a forward case, so they
+    // are skipped — 2,325 - 25 = 2,300. Reversing is what exposes the engine's
+    // dependence on selection order.
+    final List<Map<String, Object?>> reversed = <Map<String, Object?>>[
+      for (final List<String> subset in subsets)
+        if (subset.length > 1) _capture(subset.reversed.toList(growable: false)),
+    ];
+
+    final Map<String, Object?> fixture = <String, Object?>{
+      '_metadata': <String, Object?>{
+        'fixture_id': 'question_flow_live_oracle',
+        'fixture_version': '1',
+        'description':
+            'Actual output of the live Dart QuestionEngine over the bounded path '
+            'set. Produced by running the real implementation, not a '
+            'reimplementation.',
+        'source_repository': 'Wellapath-org/wellapath-mobile',
+        'source_commit': '657739cc1745104dd1194a57ef14cc9793c9b98e',
+        'source_symbol': 'QuestionEngine.generateQuestions',
+        'driving_tokens': kDrivingTokens,
+        'max_tokens_per_combination': 3,
+        'forward_cases': forward.length,
+        'reversed_cases': reversed.length,
+      },
+      'forward': forward,
+      'reversed': reversed,
+    };
+
+    File('build/live_question_oracle_v1.json')
+      ..createSync(recursive: true)
+      ..writeAsStringSync(const JsonEncoder.withIndent('  ').convert(fixture));
+
+    // ignore: avoid_print — this harness is a capture tool, not app code, and
+    // its whole purpose is to report the counts to the operator running it.
+    print('EXPORTED cases=${forward.length} reversed=${reversed.length} '
+        'tokens=${kDrivingTokens.length}');
+
+    expect(forward.length, 2325);
+    expect(reversed.length, 2300);
+  });
+}

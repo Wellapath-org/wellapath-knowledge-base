@@ -2,3 +2,6 @@
 Thumbs.db
 *.tmp
 ~$*.xlsx
+
+# Publication tooling staging area — disposable, never committed.
+.publication-staging/

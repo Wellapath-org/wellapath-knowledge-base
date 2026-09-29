@@ -1,0 +1,54 @@
+{
+  "_metadata": {
+    "report_id": "question_grouping_coverage",
+    "version": "1.1",
+    "generator": "tools/report_grouping_coverage.py",
+    "description": "Two-stage coverage extension. Stage 1 validates the Python transcription of the live engine against every real captured case. Stage 2 uses it \u2014 and only if stage 1 is clean \u2014 to reach subset sizes the oracle does not contain.",
+    "candidate_sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "oracle_sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+    "evidence_strength": {
+      "stage_1": "REAL. Output of the live Dart implementation.",
+      "stage_2": "MODEL-DERIVED. A transcription validated on 4625 real cases, applied to subsets the oracle does not contain. Weaker evidence than stage 1 and labelled as such wherever it is cited."
+    }
+  },
+  "stage_1_transcription_validation": {
+    "real_cases_compared": 4625,
+    "mismatches": 0,
+    "faithful": true,
+    "mismatch_sample": [],
+    "note": "Compares role, red-flag token, question text and option list, positionally, in both selection directions. A single mismatch blocks stage 2 entirely."
+  },
+  "stage_2_extended_sizes": {
+    "size_4": {
+      "paths_compared": 10626,
+      "question_set_differences": 0,
+      "option_set_differences": 0,
+      "red_flag_effect_differences": 0,
+      "truncation_count_differences": 0,
+      "red_flag_questions_dropped": 0,
+      "path_limit_exceeded": 0,
+      "live_order_sensitive": 10251,
+      "candidate_order_independent": true,
+      "failing_paths": []
+    },
+    "size_5": {
+      "paths_compared": 42504,
+      "question_set_differences": 0,
+      "option_set_differences": 0,
+      "red_flag_effect_differences": 0,
+      "truncation_count_differences": 0,
+      "red_flag_questions_dropped": 0,
+      "path_limit_exceeded": 0,
+      "live_order_sensitive": 42092,
+      "candidate_order_independent": true,
+      "failing_paths": []
+    }
+  },
+  "stage_2_ran": true,
+  "all_clean": true,
+  "residual_risk": [
+    "Stage 2 is not live output. A transcription that matches 4,625 real cases can still diverge on behaviour none of them exercises.",
+    "Subsets above size 5 are not covered at either stage.",
+    "The 24 driving tokens are those reaching a follow-up or clarifier trigger; combinations mixing them with the other 97 picker tokens are covered only at sizes <= 3, via the oracle."
+  ]
+}

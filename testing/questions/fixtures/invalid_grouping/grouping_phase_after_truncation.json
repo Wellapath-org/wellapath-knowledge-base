@@ -1,0 +1,4425 @@
+{
+  "_metadata": {
+    "artifact_id": "question_flow",
+    "version": "1.1",
+    "schema_version": "1.1",
+    "country": "ng",
+    "release_status": "candidate_unapproved",
+    "release_date": null,
+    "may_publish": false,
+    "generated_at": "2026-08-17T00:00:00Z",
+    "generator": "tools/build_question_candidate_v11.py",
+    "generator_version": "1.1.0",
+    "tooling_version": "1.0.0",
+    "description": "WellaPath Adaptive Question Flow CANDIDATE 1.1 \u2014 candidate 1.0 corrected to model the live engine's question grouping and de-duplication. Not published, not clinically approved, not consumed by any build.",
+    "source": {
+      "repository": "Wellapath-org/wellapath-mobile",
+      "commit": "a269168e2ed9b3b1c0453797dce5c9f303366854",
+      "vendored_files": [
+        {
+          "file": "baseline/questions_v1/followup_question_map.vendored.dart",
+          "sha256": "074b5374b5729e613ab55490d1e483191fc1cf54823fae3d5cc008ba0710047d"
+        },
+        {
+          "file": "baseline/questions_v1/red_flag_clarifiers.vendored.dart",
+          "sha256": "f8050551af886ea98f6376052a5a53fcdaa0fb8ccbeec19f3ab0440dd17e922c"
+        },
+        {
+          "file": "baseline/questions_v1/symptom_display_map.vendored.dart",
+          "sha256": "95197adc3a9ff6c03c3e64e9c3acd6fe5e93541802acee77e5fce971a84acd8b"
+        },
+        {
+          "file": "baseline/questions_v1/question_engine.vendored.dart",
+          "sha256": "83e954acec978a15c390ae5e92704c6cbcdcc1ff173238c840053cafe834fdd5"
+        },
+        {
+          "file": "baseline/questions_v1/assessment_controller.vendored.dart",
+          "sha256": "19dd1208a6efaf83b43545f7cadf904492c78a3ce30707938ecce35ddc493a0c"
+        },
+        {
+          "file": "baseline/questions_v1/followup_screen.vendored.dart",
+          "sha256": "7805228d29b544ce42638c4ebf18a17b4dc4a7d092dfbe6a19b77625c6ffba4c"
+        },
+        {
+          "file": "baseline/questions_v1/followup_question.vendored.dart",
+          "sha256": "d81f19adf6bbedae4d74175d6f5ba08ca6ef48374ae4646b8d6853c732f63ae0"
+        }
+      ]
+    },
+    "frozen_clinical_inputs": {
+      "token_dictionary_v1_1": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
+      "kb_v2_4": "6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b",
+      "rules_v2_2": "1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4"
+    },
+    "vocabulary_2_0": {
+      "used": false,
+      "note": "W3 branching resolves canonical token IDs from token_dictionary 1.1 only. No alias, association or other Vocabulary 2.0 metadata participates in question eligibility."
+    },
+    "clinical_review": {
+      "status": "not_reviewed",
+      "reviewer": null,
+      "review_date": null,
+      "evidence": null
+    },
+    "impedance_mismatches": [
+      {
+        "id": "IM-001",
+        "area": "question selection and ordering",
+        "baseline_behaviour": "Severity and duration questions are chosen by `severityQuestion ??= question` / `durationQuestion ??= question` while iterating the SELECTED symptom tokens, so which wording is asked depends on the order the user tapped symptoms.",
+        "candidate_behaviour": "Questions are grouped exactly as the engine groups them. Within a group, the wording comes from the triggered source with the lowest source_order_index \u2014 a property of the artifact, not of the user's tap order. The same symptom SET always yields the same questions, the same options and the same wording.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/question_engine.vendored.dart:15 (for (final token in symptomTokens))",
+            "baseline/questions_v1/question_engine.vendored.dart:24,26 (??= first-wins)"
+          ],
+          "candidate": [
+            "questions[].priority",
+            "questions[].tie_break_key"
+          ]
+        },
+        "why_it_exists": "The current code has no tie-break at all; first-wins over an unordered user selection is the de-facto rule. W3 forbids ordering that depends on unstable iteration, and a tie with no declared resolution is a validation failure under this contract.",
+        "classification": {
+          "deterministic_only": true,
+          "safety_affecting": false,
+          "clinical_content_affecting": false,
+          "path_affecting": false,
+          "state_model_affecting": false,
+          "artifact_model_only": false
+        },
+        "affected_existing_paths": "Wording only, and only where the baseline has no stable answer to preserve. Measured over 2,325 real captured paths: 0 question-set, 0 option-set, 0 token-effect, 0 red-flag and 0 truncation differences; the candidate matches live forward-order output on all 2,325. The live engine disagrees with ITSELF on 1,680 of 2,300 reversed-order paths, which is the defect IM-001 removes.",
+        "changes_production_behaviour": true,
+        "changes_token_output": false,
+        "status": "adopted_for_candidate",
+        "required_mobile_tests": [
+          "same symptom set selected in different orders yields an identical question sequence",
+          "order key is used for sorting; no reliance on List.sort stability or map iteration",
+          "regression evidence enumerating every path whose asked wording changes"
+        ],
+        "required_review": "product \u2014 confirm the representative wording on paths where the baseline was order-dependent. Content is unchanged; only WHICH existing wording is shown can differ from a given tap order.",
+        "activation_blocker": true,
+        "activation_blocker_reason": "No longer blocked on path-content evidence \u2014 that evidence now shows zero question-set change. It remains blocked on PRODUCT sign-off that the deterministically chosen wording is the right one on the paths where the baseline was unstable, and on the unrelated blockers (content unapproved, no clinical review, unpublished).",
+        "superseded_statement_from_1_0": {
+          "candidate_behaviour": "Selection is by the declared order key (priority, tie_break_key, question_id), with tie_break_key = the trigger token id. The same symptom set always yields the same question regardless of selection order.",
+          "classification": {
+            "deterministic_only": true,
+            "safety_affecting": false,
+            "clinical_content_affecting": false,
+            "path_affecting": false,
+            "state_model_affecting": false,
+            "artifact_model_only": false
+          },
+          "affected_existing_paths": "Only paths where two or more selected tokens each offer the same question type. The competing questions differ ONLY in wording (e.g. 'How severe is your headache?' vs 'How severe is this pain?'); the question type, answer options and produced tokens are identical.",
+          "why_it_was_wrong": "It attributed the difference to the tie-break key. The measured cause was the per-token question model: 1.0 planned one question per token per role where the engine asks one, changing the question SET on 1,930 of 2,325 bounded paths, 1,192 with different truncation. The tie-break was never the mechanism."
+        },
+        "measured_in": [
+          "reports/question_grouping_parity_v1_1.json",
+          "reports/question_grouping_coverage_v1_1.json"
+        ]
+      },
+      {
+        "id": "IM-002",
+        "area": "red-flag evaluation timing",
+        "baseline_behaviour": "Answers accumulate in a local map and `_commitAnswers()` runs only when the LAST follow-up question is answered, immediately before navigating to LoadingScreen. A red-flag clarifier 'yes' does not interrupt; the red flag is evaluated once, in the engine, after every follow-up question has been presented.",
+        "candidate_behaviour": "Every red-flag-affecting question declares evaluate_after_answer=true and blocks_next_question=true, requiring evaluation immediately after that answer and before the next ordinary question or scoring.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/followup_screen.vendored.dart:69-80 (_onNext)",
+            "baseline/questions_v1/followup_screen.vendored.dart:90 (_commitAnswers)",
+            "wellapath-mobile lib/core/engine/red_flag_evaluator.dart (only evaluation site)"
+          ],
+          "candidate": [
+            "questions[].red_flag_evaluation.evaluate_after_answer",
+            "questions[].red_flag_evaluation.blocks_next_question"
+          ]
+        },
+        "why_it_exists": "The locked architecture states red flags run before scoring and override it. The current implementation satisfies that for the ENGINE but not for the QUESTION FLOW: the user keeps answering ordinary questions after declaring a danger sign. Recorded as defect QB-002.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": true,
+          "clinical_content_affecting": false,
+          "path_affecting": true,
+          "state_model_affecting": true,
+          "artifact_model_only": false
+        },
+        "affected_existing_paths": "Any path where a red-flag clarifier is raised and answered 'Yes' while further follow-up questions remain. With 3 clarifiers and a 5-question limit, up to 4 further questions can be presented after the danger sign is declared.",
+        "changes_production_behaviour": true,
+        "changes_token_output": false,
+        "safety_direction": "STRICTLY EARLIER, NEVER LATER. It cannot suppress a red flag that fires today; it fires the same red flag sooner. No red-flag token, rule or trigger is added or changed.",
+        "status": "adopted_required_safety_correction",
+        "required_mobile_tests": [
+          "clarifier answered Yes mid-sequence interrupts immediately; no further ordinary question is presented",
+          "scoring never runs before red-flag evaluation on that path",
+          "an ordinary (no red flag) path presents exactly the same questions as today",
+          "evaluation also runs after an edit and after restored state",
+          "telemetry cannot distinguish a red-flag path from an ordinary one"
+        ],
+        "required_review": "engineering lead + clinical \u2014 behaviour change, clinically safe direction",
+        "activation_blocker": false,
+        "activation_blocker_reason": "Adopted as a required safety correction and sequenced FIRST, ahead of the rest of the adaptive engine."
+      },
+      {
+        "id": "IM-003",
+        "area": "adaptive re-branching on newly derived tokens",
+        "baseline_behaviour": "`_questions` is computed once in initState from the symptom set selected before the screen opened. A token added by an additionalSymptoms answer generates no further questions in the same assessment.",
+        "candidate_behaviour": "trigger_condition is re-evaluated against current state, so a token derived from an answer can make a further question eligible.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/followup_screen.vendored.dart:40-44 (initState computes the list once)"
+          ],
+          "candidate": [
+            "questions[].trigger_condition evaluated against live state"
+          ]
+        },
+        "why_it_exists": "A flow that cannot react to its own answers is not adaptive. W3 requires conditional follow-up questions.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": false,
+          "clinical_content_affecting": false,
+          "path_affecting": true,
+          "state_model_affecting": true,
+          "artifact_model_only": false
+        },
+        "affected_existing_paths": "56 (source-token, option-token) pairs where an additionalSymptoms option is itself a key in kFollowupQuestionMap. Newly triggerable: 11 severity, 54 duration and 56 additionalSymptoms questions. Bounded by the 5-question limit.",
+        "changes_production_behaviour": true,
+        "changes_token_output": "INDIRECTLY YES \u2014 measured, not assumed. Newly triggerable severity and duration questions produce tokens that carry NO kb scoring weight and are NOT red-flag relevant (verified: mild/moderate/severe/very_severe and days_1_3/days_3_7/days_7_plus/weeks_2_plus appear in neither kb symptoms nor rules). But newly triggerable additionalSymptoms questions DO affect scoring: they give the user further opportunities to declare symptoms, which can change the final token set and therefore the score and top condition.",
+        "changes_red_flag_content": "NO \u2014 verified: not one additionalSymptoms option anywhere in the map is a red-flag clarifier trigger token, so re-branching cannot raise a clarifier that does not fire today.",
+        "status": "deferred_pending_product_and_clinical_review",
+        "required_mobile_tests": [
+          "re-branching is bounded by the path limit and cannot loop",
+          "a newly derived token never raises a red-flag clarifier that the baseline would not have raised",
+          "an assessment with no additionalSymptoms answer presents exactly the baseline questions"
+        ],
+        "required_review": "product + clinical \u2014 this can change which symptoms a user ends up declaring, and therefore the score and top condition. It is a path change, not a content change: no question, answer meaning or token effect differs.",
+        "activation_blocker": true,
+        "activation_blocker_reason": "Can change scoring inputs. Not required for the IM-002 safety correction and must not ship with it."
+      },
+      {
+        "id": "IM-004",
+        "area": "answer identity and storage",
+        "baseline_behaviour": "Answers are held in `Map<int, dynamic> _answers` keyed by the question's index in the list built at initState, and are meaningful only against that exact list.",
+        "candidate_behaviour": "Answers are keyed by stable question_id and answer_option_id.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/followup_screen.vendored.dart:30 (final Map<int, dynamic> _answers = {})"
+          ],
+          "candidate": [
+            "questions[].question_id",
+            "answer_options[].answer_option_id"
+          ]
+        },
+        "why_it_exists": "Dependency-based invalidation, restoration and editing all require an answer to be identifiable independently of list position. An index cannot survive a list that changes.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": false,
+          "clinical_content_affecting": false,
+          "path_affecting": false,
+          "state_model_affecting": true,
+          "artifact_model_only": false
+        },
+        "affected_existing_paths": "None observable. Every path presents the same questions with the same answers; only the internal key changes.",
+        "changes_production_behaviour": false,
+        "changes_token_output": false,
+        "status": "adopted_for_candidate",
+        "required_mobile_tests": [
+          "an answer survives a change to the question list without being reattributed to a different question",
+          "restoring state rebuilds answers by id, not by position"
+        ],
+        "required_review": "none \u2014 representation only",
+        "activation_blocker": false,
+        "activation_blocker_reason": "Prerequisite for IM-002 edit/restore handling; no user-visible effect."
+      },
+      {
+        "id": "IM-005",
+        "area": "truncation safety",
+        "baseline_behaviour": "`result.length > 5 ? result.sublist(0, 5) : result` truncates the whole list after clarifiers are prepended. No clarifier is dropped today ONLY because there are 3 of them and they sort first.",
+        "candidate_behaviour": "red_flag_questions_exempt_from_truncation is a schema constant `true`. A red-flag-affecting question is never dropped to satisfy a length limit; if red-flag questions alone exceed the limit, the limit yields.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/question_engine.vendored.dart:75 (sublist truncation)"
+          ],
+          "candidate": [
+            "path_controls.red_flag_questions_exempt_from_truncation",
+            "path_controls.truncation_rule"
+          ]
+        },
+        "why_it_exists": "An incidental safety property is not a safety property. A fourth clarifier firing alongside others could push a red-flag question out of the list under the baseline rule.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": true,
+          "clinical_content_affecting": false,
+          "path_affecting": false,
+          "state_model_affecting": false,
+          "artifact_model_only": true
+        },
+        "affected_existing_paths": "None on today's data \u2014 with 3 clarifiers and a limit of 5 the two rules produce identical output on every one of the 2,325 explored paths. The difference is latent, not observable now.",
+        "changes_production_behaviour": false,
+        "changes_token_output": false,
+        "status": "adopted_for_candidate",
+        "required_mobile_tests": [
+          "a synthetic set of 6 red-flag questions is presented in full rather than truncated to the limit",
+          "ordinary questions are the only ones dropped when the limit binds"
+        ],
+        "required_review": "none \u2014 makes an existing incidental property structural",
+        "activation_blocker": false,
+        "activation_blocker_reason": "Same observable behaviour on current data."
+      },
+      {
+        "id": "IM-006",
+        "area": "demographic questions as graph nodes",
+        "baseline_behaviour": "Sex, age, pregnancy, medical conditions and body area are separate Flutter screens with hardcoded navigation, not entries in any question list. The pregnancy gate is the getter `shouldShowPregnancyScreen => _sex == 'female'`.",
+        "candidate_behaviour": "Each is a question with a trigger_condition and a priority, so the whole flow is one ordered graph. The pregnancy gate is projected as {\"sex\": \"female\"} \u2014 the same predicate.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/assessment_controller.vendored.dart:47 (shouldShowPregnancyScreen)",
+            "baseline/questions_v1/assessment_controller.vendored.dart (_ageTokenMap, _medicalConditionTokenMap)"
+          ],
+          "candidate": [
+            "Q-demo-sex",
+            "Q-demo-age",
+            "Q-demo-pregnancy",
+            "Q-demo-medical-conditions",
+            "Q-demo-body-area",
+            "Q-symptom-selection"
+          ]
+        },
+        "why_it_exists": "Path-length control, editing and invalidation cannot reason about a flow that is half data and half hardcoded navigation.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": false,
+          "clinical_content_affecting": false,
+          "path_affecting": false,
+          "state_model_affecting": true,
+          "artifact_model_only": true
+        },
+        "affected_existing_paths": "None. Verified: the pregnancy gate is true for female, false for male, and false for unknown \u2014 exactly the getter. Age and medical-condition token mappings are copied verbatim; body area produces no token, as today.",
+        "changes_production_behaviour": false,
+        "changes_token_output": false,
+        "status": "adopted_for_candidate",
+        "required_mobile_tests": [
+          "pregnancy is presented for female only and never for male or unknown",
+          "age and medical-condition answers produce exactly the baseline tokens",
+          "body area produces no token and only filters the picker"
+        ],
+        "required_review": "none \u2014 the predicate and token mappings are byte-identical",
+        "activation_blocker": false,
+        "activation_blocker_reason": "Representation only."
+      },
+      {
+        "id": "IM-007",
+        "area": "skip capability",
+        "baseline_behaviour": "No skip mechanism exists anywhere in the follow-up flow. Every presented question must be answered; the only other exit is cancelling the assessment.",
+        "candidate_behaviour": "The schema supports `skippable` and a skip sentinel, but every projected question is skippable:false and no skip sentinel exists. The projection introduces no skip.",
+        "source": {
+          "baseline": [
+            "baseline/questions_v1/followup_screen.vendored.dart (no skip control; zero occurrences of 'skip')"
+          ],
+          "candidate": [
+            "questions[].skippable (false on all 50)",
+            "answer_options[].is_skip_sentinel (false on all 300)"
+          ]
+        },
+        "why_it_exists": "W3 requires optional skip logic to be expressible. Expressing it is not the same as using it, and using it on a clinical question is a decision no one has taken.",
+        "classification": {
+          "deterministic_only": false,
+          "safety_affecting": false,
+          "clinical_content_affecting": false,
+          "path_affecting": false,
+          "state_model_affecting": false,
+          "artifact_model_only": true
+        },
+        "affected_existing_paths": "None. Capability without use.",
+        "changes_production_behaviour": false,
+        "changes_token_output": false,
+        "status": "capability_present_activation_deferred",
+        "required_mobile_tests": [
+          "no question is skippable in the shipped candidate",
+          "a required question can never be skipped",
+          "a skip sentinel, if ever added, produces no clinical token"
+        ],
+        "required_review": "product + clinical, per question, before ANY question is marked skippable",
+        "activation_blocker": false,
+        "activation_blocker_reason": "Nothing to activate: the projection contains zero skips."
+      }
+    ],
+    "impedance_mismatch_count": 7,
+    "engineering_dispositions": {
+      "recorded_at_step": "I2 / W3 Step 1A",
+      "decided_by": "engineering lead",
+      "authority": "engineering",
+      "is_clinical_approval": false,
+      "is_product_approval": false,
+      "decisions": {
+        "im_001_deterministic_ordering": {
+          "status": "adopted_for_candidate_and_internal_implementation",
+          "ordering": [
+            "priority",
+            "tie_break_key",
+            "question_id"
+          ],
+          "requires": "regression evidence showing every changed tie path before production activation",
+          "does_not_authorize": [
+            "activating the candidate",
+            "changing any question wording",
+            "production or external-beta use"
+          ]
+        },
+        "im_002_immediate_red_flag_evaluation": {
+          "status": "adopted_required_safety_correction",
+          "requires_evaluation": [
+            "after every red-flag-affecting answer",
+            "after an edited answer",
+            "after restored state",
+            "before the next ordinary question",
+            "before scoring"
+          ],
+          "implements": "the existing locked architecture \u2014 red flags interrupt immediately and override scoring",
+          "does_not_authorize": [
+            "adding or changing any red-flag token, rule or trigger",
+            "changing urgency or scoring",
+            "the rest of the adaptive engine"
+          ]
+        },
+        "path_length_limit": {
+          "status": "fixed_at_5_pending_product_review",
+          "value": 5,
+          "red_flag_questions_exempt": true,
+          "does_not_authorize": [
+            "raising or lowering the limit",
+            "truncating a required red-flag question for convenience"
+          ]
+        },
+        "skip_behaviour": {
+          "status": "activation_deferred",
+          "optional_skips_in_candidate": 0,
+          "does_not_authorize": [
+            "marking any clinical question skippable",
+            "skipping a required question"
+          ]
+        },
+        "distribution_model": {
+          "status": "compiled_in_default_off_internal_engineering_evaluation",
+          "backend_distribution": false,
+          "config_entry": false,
+          "r2_upload": false,
+          "live_manifest_entry": false,
+          "served_distribution_deferred_to": "I3 Clinical Content Release Pipeline",
+          "does_not_authorize": [
+            "any Backend work",
+            "publication of the question artifact",
+            "production activation"
+          ]
+        },
+        "question_wording": {
+          "status": "existing_wording_preserved_byte_for_byte",
+          "content_approved": false,
+          "note": "Preserving shipped wording is not an approval of it.",
+          "does_not_authorize": [
+            "treating preserved wording as reviewed",
+            "adding, removing or rewording any question"
+          ]
+        },
+        "im_003_adaptive_re_branching": {
+          "status": "deferred_pending_product_and_clinical_review",
+          "reason": "Can change which symptoms a user declares, and therefore scoring inputs and the top condition. Not required for the IM-002 safety correction.",
+          "does_not_authorize": [
+            "shipping re-branching alongside the IM-002 fix"
+          ]
+        }
+      },
+      "activation": {
+        "production": false,
+        "public_beta": false,
+        "external_beta": false,
+        "internal_engineering_evaluation": true,
+        "clinical_approval": false,
+        "product_approval": false
+      }
+    },
+    "parity_claim": "Question CONTENT, answer meanings, produced tokens, red-flag rules and red-flag timing are unchanged from 1.0. The EFFECTIVE QUESTION SET now matches the live engine on every representable bounded path \u2014 measured against real Dart output, not against a reimplementation. The remaining declared differences are IM-001 (representative wording on paths where the baseline is order-dependent), IM-002 (red-flag timing, merged and live) and IM-003 (not implemented).",
+    "changelog": [
+      "Grouping semantics added: group_key, merge strategy, representative selection, option union rule, sources (schema 1.1).",
+      "40 per-token follow-up questions collapsed into 3 grouped questions with 40 declared sources (6 severity, 16 duration, 18 additional-symptoms).",
+      "Default-duration trigger corrected \u2014 1.0 fired it on the empty selection and missed it for duration-less mapped tokens (GF-006).",
+      "IM-001 narrowed to representative wording only; it no longer changes which questions are asked.",
+      "No question added, removed or reworded; no answer meaning, produced token or red-flag rule changed.",
+      "Path limit unchanged at 5; red-flag questions remain undroppable; grouping happens before truncation.",
+      "Not published; may_publish is false and no clinical review is recorded."
+    ],
+    "provenance": [
+      "Projected from wellapath-mobile a269168e2ed9b3b1c0453797dce5c9f303366854 by tools/build_question_candidate_v11.py.",
+      "Questions outside the grouped roles are copied verbatim from candidate 1.0 and asserted byte-identical.",
+      "Grouping semantics were derived by tracing QuestionEngine.generateQuestions and then MEASURED against real Dart output captured in testing/questions/fixtures/oracle/.",
+      "No PHI and no real-user assessment data."
+    ],
+    "supersedes": {
+      "version": "1.0",
+      "artifact": "candidate/question_flow.ng.v1.0.json",
+      "sha256": "c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998",
+      "status": "superseded_retained",
+      "reason": "1.0 modelled one question per token per role. The live engine de-duplicates, so 1.0 planned a different question SET on 1,930 of 2,325 bounded paths. 1.0 is retained unmodified as the record of what was measured, and must not be published or consumed.",
+      "migration": "The 40 per-token follow-up questions of 1.0 become the 40 SOURCES of 3 grouped questions in 1.1; the default-duration fallback remains a separate question. A 1.0 consumer reading 1.1 sees 3 follow-up questions and no grouping block, and would ask the lowest-indexed wording with the FULL option union rather than the triggered union \u2014 so a 1.0 consumer MUST refuse schema_version 1.1 rather than best-effort parse it. Answer option IDs changed for grouped questions (from Q-followup-<token>-<role>::x to Q-followup-<role>::x); no answer LABEL, produced token or value changed. Question IDs outside the grouped roles are byte-identical."
+    },
+    "grouping_semantics": {
+      "enabled": true,
+      "groupable_roles": [
+        "severity",
+        "duration",
+        "additional_symptoms"
+      ],
+      "non_groupable_roles": [
+        "red_flag_clarifier"
+      ],
+      "grouping_phase": "after_truncation",
+      "one_question_per_group_key": true
+    },
+    "grouping_findings": [
+      {
+        "id": "GF-001",
+        "behaviour": "single severity question",
+        "baseline": "`severityQuestion ??= question` \u2014 the first severity entry met while iterating the selected tokens wins, and no later one is asked.",
+        "candidate_1_0": "One severity question per token with a severity entry. Selecting two such tokens planned two severity questions.",
+        "candidate_1_1": "One grouped question, group_key `severity`, with 6 sources. The representative is the triggered source with the lowest source_order_index.",
+        "affects_question_set": true,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "Representative selection replaces tap order. Baseline is unstable here, so there is no stable behaviour to preserve."
+      },
+      {
+        "id": "GF-002",
+        "behaviour": "single duration question",
+        "baseline": "`durationQuestion ??= question` \u2014 same first-wins rule over duration entries.",
+        "candidate_1_0": "One duration question per token with a duration entry (16 of them).",
+        "candidate_1_1": "One grouped question, group_key `duration`, with 16 sources.",
+        "affects_question_set": true,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "As GF-001."
+      },
+      {
+        "id": "GF-003",
+        "behaviour": "merged additional-symptoms question with unioned options",
+        "baseline": "The question TEXT is first-wins (`additionalQuestionText ??=`), but the OPTIONS accumulate: every triggered token's options are appended in visit order, de-duplicated by exact string. The presented option set is therefore path-dependent.",
+        "candidate_1_0": "One question per token, each carrying only that token's options. No union existed.",
+        "candidate_1_1": "One grouped question, group_key `additional_symptoms`, 18 sources, option_union_rule `union_of_triggered_sources`.",
+        "affects_question_set": true,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "Option ORDER becomes (source_order_index, declared order) instead of tap order. The option SET on any path is unchanged."
+      },
+      {
+        "id": "GF-004",
+        "behaviour": "red-flag clarifiers are never grouped",
+        "baseline": "Clarifiers are built by a separate comprehension over `kRedFlagClarifiers` in declaration order, with no `??=` anywhere. Every triggered clarifier is emitted.",
+        "candidate_1_0": "One question per clarifier. Correct.",
+        "candidate_1_1": "Unchanged, and now explicitly prohibited from grouping via `grouping_semantics.non_groupable_roles`.",
+        "affects_question_set": false,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "None. Declaration order and tie_break_key order agree; verified against the oracle."
+      },
+      {
+        "id": "GF-005",
+        "behaviour": "clarifier emission is order-INsensitive, follow-up selection is order-SENSITIVE",
+        "baseline": "Clarifiers read `selected` as a Set; the follow-up loop reads `symptomTokens` as a List.",
+        "candidate_1_0": "Did not distinguish the two.",
+        "candidate_1_1": "Distinguished structurally: `plan_grouped` takes a SET, so no ordering dependence can be reintroduced by accident.",
+        "affects_question_set": false,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "None for clarifiers."
+      },
+      {
+        "id": "GF-006",
+        "behaviour": "default duration fallback trigger",
+        "baseline": "`needsDefaultDuration` is set when a selected token has NO map entry; the default is then applied only if `durationQuestion` is still null.",
+        "candidate_1_0": "Trigger was `all tokens absent` over the 18 mapped tokens. That is wrong in two directions: it fired on the EMPTY selection (baseline asks nothing), and it failed to fire for a mapped-but-duration-less token combined with an unmapped one \u2014 `chest_indrawing_severe` and `fast_breathing_child` have no duration entry, so `{chest_indrawing_severe, abdominal_pain}` gets a default duration live and got none in 1.0.",
+        "candidate_1_1": "Trigger is the conjunction the baseline actually computes: at least one unmapped selectable token present, AND every duration-bearing token absent.",
+        "affects_question_set": true,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "None \u2014 this is a correctness fix, not a determinism choice. Found by comparing against the real Dart oracle, not by inspection."
+      },
+      {
+        "id": "GF-008",
+        "behaviour": "clarifier emission order is declaration order, not alphabetical",
+        "baseline": "`for (final clarifier in kRedFlagClarifiers)` \u2014 a fixed const list ordered breathlessness_at_rest, inability_to_drink, abnormal_bleeding.",
+        "candidate_1_0": "Every clarifier had priority 0, so ordering fell to tie_break_key = the red-flag token, i.e. alphabetical. That reversed the first and third clarifier on every path presenting both.",
+        "candidate_1_1": "Clarifier priority is 0 + declaration index. tie_break_key still identifies the clarifier and is NOT used as a grouping key.",
+        "affects_question_set": false,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "None \u2014 declaration order is already stable. This is a correctness fix; eliminating nondeterminism is not a licence to reorder deterministic output. Found by the oracle comparison on 168 paths, not by inspection."
+      },
+      {
+        "id": "GF-007",
+        "behaviour": "truncation drops from the tail",
+        "baseline": "`result.sublist(0, 5)` over `[clarifiers\u2026, severity?, duration?, additional?]`. Clarifiers lead, so they are structurally undroppable; at most 3 exist, so the limit never has to yield.",
+        "candidate_1_0": "Modelled correctly, but on inflated question counts, so it dropped questions the baseline asks.",
+        "candidate_1_1": "Unchanged rule, applied AFTER grouping (`grouping_phase: before_truncation`). With grouping the follow-up count never exceeds 3 clarifiers + 3 grouped = 6, and the observed maximum is 5.",
+        "affects_question_set": true,
+        "affects_content": false,
+        "affects_tokens": false,
+        "deterministic_change": "None."
+      }
+    ],
+    "grouping_finding_count": 8,
+    "fixture": {
+      "fixture_id": "grouping_phase_after_truncation",
+      "expected_check": "G01",
+      "must_be_rejected": true,
+      "defect": "Merging after truncation lets un-merged questions consume the follow-up budget and drops questions the live engine asks.",
+      "base": "candidate/question_flow.ng.v1.1.json",
+      "generator": "tools/build_grouping_invalid_fixtures.py",
+      "note": "INVALID BY CONSTRUCTION. Never publish, never consume, never treat as a candidate."
+    }
+  },
+  "condition_language": {
+    "version": "1.0.0",
+    "operators": [
+      "age_range",
+      "all",
+      "always",
+      "any",
+      "equals",
+      "never",
+      "not",
+      "one_of",
+      "pregnancy",
+      "prior_answer_equals",
+      "sex",
+      "token_absent",
+      "token_present"
+    ],
+    "fields": [
+      "age_token",
+      "assessment_phase",
+      "body_area",
+      "sex"
+    ]
+  },
+  "path_controls": {
+    "max_questions_per_assessment": 11,
+    "max_followup_questions": 5,
+    "max_questions_per_complaint_path": null,
+    "red_flag_questions_exempt_from_truncation": true,
+    "truncation_allowed": true,
+    "truncation_rule": "Group first, then order, then drop the lowest-priority PRESENTED questions until the follow-up count fits max_followup_questions. A question whose red_flag_evaluation.can_affect_red_flag is true is never dropped; if red-flag questions alone exceed the limit, the limit yields and all of them are asked. Grouping strictly precedes truncation: counting un-merged questions against the limit would drop questions the live engine asks.",
+    "cycle_detection": "required",
+    "repeated_question_prevention": "required",
+    "thresholds_status": "measured_from_implementation",
+    "proposed_options": [
+      {
+        "option": "keep_5",
+        "max_followup_questions": 5,
+        "rationale": "Exactly today's implemented limit. Zero change."
+      },
+      {
+        "option": "raise_to_7",
+        "max_followup_questions": 7,
+        "rationale": "Absorbs IM-003 adaptive re-branching without truncating; 3 clarifiers + severity + duration + additional + 1 headroom."
+      },
+      {
+        "option": "red_flag_exempt_only",
+        "max_followup_questions": 5,
+        "rationale": "Keep 5 for ordinary questions, exempt red-flag questions entirely (already the schema constant)."
+      }
+    ],
+    "final_threshold_status": "PENDING product and clinical approval \u2014 the values above are measured or proposed, not approved.",
+    "grouping_phase": "after_truncation"
+  },
+  "questions": [
+    {
+      "question_id": "Q-demo-sex",
+      "question_type": "single_select",
+      "clinical_role": "demographic",
+      "content_ref": {
+        "content_id": "sex_screen.title",
+        "source_text": "Sex",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-demo-sex::male",
+          "label": "male",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "male"
+        },
+        {
+          "answer_option_id": "Q-demo-sex::female",
+          "label": "female",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "female"
+        }
+      ],
+      "trigger_condition": {
+        "always": true
+      },
+      "priority": 100,
+      "tie_break_key": "Q-demo-sex",
+      "path_length_contribution": 1,
+      "invalidates_on_change": [
+        "Q-demo-pregnancy"
+      ],
+      "provenance": "assessment_controller.dart setSex / sex_screen.dart",
+      "effects": {
+        "produces_tokens": [],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-demo-age",
+      "question_type": "single_select",
+      "clinical_role": "demographic",
+      "content_ref": {
+        "content_id": "age_screen.title",
+        "source_text": "Age range",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-demo-age::children_under_5",
+          "label": "0\u201312",
+          "produces_tokens": [
+            "children_under_5"
+          ],
+          "is_skip_sentinel": false,
+          "value": "0\u201312"
+        },
+        {
+          "answer_option_id": "Q-demo-age::children_school_age",
+          "label": "13\u201317",
+          "produces_tokens": [
+            "children_school_age"
+          ],
+          "is_skip_sentinel": false,
+          "value": "13\u201317"
+        },
+        {
+          "answer_option_id": "Q-demo-age::adults",
+          "label": "18\u201340",
+          "produces_tokens": [
+            "adults"
+          ],
+          "is_skip_sentinel": false,
+          "value": "18\u201340"
+        },
+        {
+          "answer_option_id": "Q-demo-age::over_40",
+          "label": "41\u201360",
+          "produces_tokens": [
+            "over_40"
+          ],
+          "is_skip_sentinel": false,
+          "value": "41\u201360"
+        },
+        {
+          "answer_option_id": "Q-demo-age::elderly",
+          "label": "60+",
+          "produces_tokens": [
+            "elderly"
+          ],
+          "is_skip_sentinel": false,
+          "value": "60+"
+        }
+      ],
+      "trigger_condition": {
+        "always": true
+      },
+      "priority": 110,
+      "tie_break_key": "Q-demo-age",
+      "path_length_contribution": 1,
+      "provenance": "assessment_controller.dart _ageTokenMap / age_screen.dart",
+      "effects": {
+        "produces_tokens": [
+          "adults",
+          "children_school_age",
+          "children_under_5",
+          "elderly",
+          "over_40"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-demo-pregnancy",
+      "question_type": "yes_no",
+      "clinical_role": "demographic",
+      "content_ref": {
+        "content_id": "pregnancy_screen.title",
+        "source_text": "Are you pregnant?",
+        "content_approved": false
+      },
+      "answer_value_type": "boolean",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-demo-pregnancy::yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "pregnancy"
+          ],
+          "is_skip_sentinel": false,
+          "value": true
+        },
+        {
+          "answer_option_id": "Q-demo-pregnancy::no",
+          "label": "No",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": false
+        }
+      ],
+      "trigger_condition": {
+        "sex": "female"
+      },
+      "priority": 120,
+      "tie_break_key": "Q-demo-pregnancy",
+      "path_length_contribution": 1,
+      "provenance": "assessment_controller.dart shouldShowPregnancyScreen / pregnancy_screen.dart",
+      "effects": {
+        "produces_tokens": [
+          "pregnancy"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-demo-medical-conditions",
+      "question_type": "multi_select",
+      "clinical_role": "demographic",
+      "content_ref": {
+        "content_id": "medical_conditions_screen.title",
+        "source_text": "Do you have any of these conditions?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id_set",
+      "required": false,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-demo-medical-conditions::diabetes_known",
+          "label": "Diabetes",
+          "produces_tokens": [
+            "diabetes_known"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Diabetes"
+        },
+        {
+          "answer_option_id": "Q-demo-medical-conditions::smoker",
+          "label": "Smoking",
+          "produces_tokens": [
+            "smoker"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Smoking"
+        },
+        {
+          "answer_option_id": "Q-demo-medical-conditions::hypertension_known",
+          "label": "Hypertension",
+          "produces_tokens": [
+            "hypertension_known"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Hypertension"
+        },
+        {
+          "answer_option_id": "Q-demo-medical-conditions::known_allergy",
+          "label": "Allergy history",
+          "produces_tokens": [
+            "known_allergy"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Allergy history"
+        }
+      ],
+      "trigger_condition": {
+        "always": true
+      },
+      "priority": 130,
+      "tie_break_key": "Q-demo-medical-conditions",
+      "path_length_contribution": 1,
+      "provenance": "assessment_controller.dart _medicalConditionTokenMap / medical_conditions_screen.dart",
+      "effects": {
+        "produces_tokens": [
+          "diabetes_known",
+          "hypertension_known",
+          "known_allergy",
+          "smoker"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-demo-body-area",
+      "question_type": "single_select",
+      "clinical_role": "body_area",
+      "content_ref": {
+        "content_id": "body_area_screen.title",
+        "source_text": "Where is the problem?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-demo-body-area::area_0",
+          "label": "General",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "General"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_1",
+          "label": "Head",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Head"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_2",
+          "label": "Neck",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Neck"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_3",
+          "label": "Chest",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Chest"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_4",
+          "label": "Abdomen",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Abdomen"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_5",
+          "label": "Legs",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Legs"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_6",
+          "label": "Back",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Back"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_7",
+          "label": "Pelvis",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Pelvis"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_8",
+          "label": "Buttocks",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Buttocks"
+        },
+        {
+          "answer_option_id": "Q-demo-body-area::area_9",
+          "label": "Skin symptoms",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "Skin symptoms"
+        }
+      ],
+      "trigger_condition": {
+        "always": true
+      },
+      "priority": 140,
+      "tie_break_key": "Q-demo-body-area",
+      "path_length_contribution": 1,
+      "invalidates_on_change": [
+        "Q-symptom-selection"
+      ],
+      "provenance": "symptom_display_map.dart kBodyAreaSymptoms / body_area_screen.dart \u2014 filters the picker only, produces no token",
+      "effects": {
+        "produces_tokens": [],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-symptom-selection",
+      "question_type": "multi_select",
+      "clinical_role": "symptom_picker",
+      "content_ref": {
+        "content_id": "symptom_selection_screen.title",
+        "source_text": "Select your symptoms",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id_set",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-symptom-selection::opt_000",
+          "label": "Headache",
+          "produces_tokens": [
+            "headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "headache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_001",
+          "label": "Fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fever"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_002",
+          "label": "Chills",
+          "produces_tokens": [
+            "chills"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chills"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_003",
+          "label": "Body pain",
+          "produces_tokens": [
+            "body_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "body_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_004",
+          "label": "Weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "weakness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_005",
+          "label": "Nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "is_skip_sentinel": false,
+          "value": "nausea"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_006",
+          "label": "Sweating",
+          "produces_tokens": [
+            "sweating"
+          ],
+          "is_skip_sentinel": false,
+          "value": "sweating"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_007",
+          "label": "Cough",
+          "produces_tokens": [
+            "cough"
+          ],
+          "is_skip_sentinel": false,
+          "value": "cough"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_008",
+          "label": "Fast breathing",
+          "produces_tokens": [
+            "fast_breathing_child"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fast_breathing_child"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_009",
+          "label": "Watery stool",
+          "produces_tokens": [
+            "watery_stool"
+          ],
+          "is_skip_sentinel": false,
+          "value": "watery_stool"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_010",
+          "label": "Vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "is_skip_sentinel": false,
+          "value": "vomiting"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_011",
+          "label": "Abdominal cramps",
+          "produces_tokens": [
+            "abdominal_cramps"
+          ],
+          "is_skip_sentinel": false,
+          "value": "abdominal_cramps"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_012",
+          "label": "Dizziness",
+          "produces_tokens": [
+            "dizziness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "dizziness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_013",
+          "label": "Fatigue",
+          "produces_tokens": [
+            "fatigue"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fatigue"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_014",
+          "label": "Wrist pain",
+          "produces_tokens": [
+            "pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_015",
+          "label": "Swollen hands",
+          "produces_tokens": [
+            "swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_016",
+          "label": "Dark urine",
+          "produces_tokens": [
+            "dark_urine"
+          ],
+          "is_skip_sentinel": false,
+          "value": "dark_urine"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_017",
+          "label": "Feeling sick or queasy",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "is_skip_sentinel": false,
+          "value": "nausea"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_018",
+          "label": "Muscle pain",
+          "produces_tokens": [
+            "body_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "body_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_019",
+          "label": "Seizures",
+          "produces_tokens": [
+            "seizures"
+          ],
+          "is_skip_sentinel": false,
+          "value": "seizures"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_020",
+          "label": "Stomach pain",
+          "produces_tokens": [
+            "abdominal_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "abdominal_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_021",
+          "label": "Bitten by an animal",
+          "produces_tokens": [
+            "animal_bite"
+          ],
+          "is_skip_sentinel": false,
+          "value": "animal_bite"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_022",
+          "label": "Back pain",
+          "produces_tokens": [
+            "back_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "back_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_023",
+          "label": "Bad breath",
+          "produces_tokens": [
+            "bad_breath"
+          ],
+          "is_skip_sentinel": false,
+          "value": "bad_breath"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_024",
+          "label": "Swelling in both feet/legs",
+          "produces_tokens": [
+            "bilateral_oedema"
+          ],
+          "is_skip_sentinel": false,
+          "value": "bilateral_oedema"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_025",
+          "label": "Mark left by a bite",
+          "produces_tokens": [
+            "bite_mark"
+          ],
+          "is_skip_sentinel": false,
+          "value": "bite_mark"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_026",
+          "label": "Bleeding",
+          "produces_tokens": [
+            "bleeding"
+          ],
+          "is_skip_sentinel": false,
+          "value": "bleeding"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_027",
+          "label": "Blisters on the skin",
+          "produces_tokens": [
+            "blistering"
+          ],
+          "is_skip_sentinel": false,
+          "value": "blistering"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_028",
+          "label": "Blood in urine",
+          "produces_tokens": [
+            "blood_in_urine"
+          ],
+          "is_skip_sentinel": false,
+          "value": "blood_in_urine"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_029",
+          "label": "Blurry vision",
+          "produces_tokens": [
+            "blurred_vision"
+          ],
+          "is_skip_sentinel": false,
+          "value": "blurred_vision"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_030",
+          "label": "Boils on the skin",
+          "produces_tokens": [
+            "boils"
+          ],
+          "is_skip_sentinel": false,
+          "value": "boils"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_031",
+          "label": "Burnt / charred skin",
+          "produces_tokens": [
+            "charred_skin"
+          ],
+          "is_skip_sentinel": false,
+          "value": "charred_skin"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_032",
+          "label": "Chest pain",
+          "produces_tokens": [
+            "chest_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chest_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_033",
+          "label": "Tightness in the chest",
+          "produces_tokens": [
+            "chest_tightness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chest_tightness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_034",
+          "label": "Cough lasting more than 2-3 weeks",
+          "produces_tokens": [
+            "chronic_cough"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chronic_cough"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_035",
+          "label": "Diarrhoea lasting more than 2 weeks",
+          "produces_tokens": [
+            "chronic_diarrhoea"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chronic_diarrhoea"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_036",
+          "label": "Confusion / not thinking clearly",
+          "produces_tokens": [
+            "confusion"
+          ],
+          "is_skip_sentinel": false,
+          "value": "confusion"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_037",
+          "label": "Diarrhoea / watery stool",
+          "produces_tokens": [
+            "diarrhoea"
+          ],
+          "is_skip_sentinel": false,
+          "value": "diarrhoea"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_038",
+          "label": "Difficulty breathing",
+          "produces_tokens": [
+            "difficulty_breathing"
+          ],
+          "is_skip_sentinel": false,
+          "value": "difficulty_breathing"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_039",
+          "label": "Difficulty swallowing",
+          "produces_tokens": [
+            "difficulty_swallowing"
+          ],
+          "is_skip_sentinel": false,
+          "value": "difficulty_swallowing"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_040",
+          "label": "Unusually thirsty",
+          "produces_tokens": [
+            "excessive_thirst"
+          ],
+          "is_skip_sentinel": false,
+          "value": "excessive_thirst"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_041",
+          "label": "Breathless with activity or exercise",
+          "produces_tokens": [
+            "exertional_breathlessness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "exertional_breathlessness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_042",
+          "label": "Discharge from the eye",
+          "produces_tokens": [
+            "eye_discharge"
+          ],
+          "is_skip_sentinel": false,
+          "value": "eye_discharge"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_043",
+          "label": "Itchy, irritated eyes",
+          "produces_tokens": [
+            "eye_itchiness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "eye_itchiness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_044",
+          "label": "Eye pain",
+          "produces_tokens": [
+            "eye_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "eye_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_045",
+          "label": "Red eyes",
+          "produces_tokens": [
+            "eye_redness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "eye_redness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_046",
+          "label": "Rapid breathing (adult)",
+          "produces_tokens": [
+            "fast_breathing"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fast_breathing"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_047",
+          "label": "Fast breathing (in a newborn baby)",
+          "produces_tokens": [
+            "fast_breathing_neonate"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fast_breathing_neonate"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_048",
+          "label": "Fear of water / can't swallow liquids",
+          "produces_tokens": [
+            "fear_of_water"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fear_of_water"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_049",
+          "label": "Urinating more often than usual",
+          "produces_tokens": [
+            "frequent_urination"
+          ],
+          "is_skip_sentinel": false,
+          "value": "frequent_urination"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_050",
+          "label": "General weakness",
+          "produces_tokens": [
+            "general_weakness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "general_weakness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_051",
+          "label": "Head pain",
+          "produces_tokens": [
+            "head_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "head_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_052",
+          "label": "Itchy raised bumps on the skin (hives)",
+          "produces_tokens": [
+            "hives"
+          ],
+          "is_skip_sentinel": false,
+          "value": "hives"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_053",
+          "label": "Hoarse or rough voice",
+          "produces_tokens": [
+            "hoarse_voice"
+          ],
+          "is_skip_sentinel": false,
+          "value": "hoarse_voice"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_054",
+          "label": "Unusually irritable or fussy",
+          "produces_tokens": [
+            "irritability"
+          ],
+          "is_skip_sentinel": false,
+          "value": "irritability"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_055",
+          "label": "Itchy eyes",
+          "produces_tokens": [
+            "itchy_eyes"
+          ],
+          "is_skip_sentinel": false,
+          "value": "itchy_eyes"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_056",
+          "label": "Itchy rash",
+          "produces_tokens": [
+            "itchy_rash"
+          ],
+          "is_skip_sentinel": false,
+          "value": "itchy_rash"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_057",
+          "label": "Joint pain",
+          "produces_tokens": [
+            "joint_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "joint_pain"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_058",
+          "label": "Swelling in the leg",
+          "produces_tokens": [
+            "leg_swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "leg_swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_059",
+          "label": "Unusually sleepy or low energy",
+          "produces_tokens": [
+            "lethargy"
+          ],
+          "is_skip_sentinel": false,
+          "value": "lethargy"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_060",
+          "label": "Feeling light-headed",
+          "produces_tokens": [
+            "light_headedness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "light_headedness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_061",
+          "label": "Weakness in an arm or leg",
+          "produces_tokens": [
+            "limb_weakness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "limb_weakness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_062",
+          "label": "Difficulty moving normally",
+          "produces_tokens": [
+            "limited_movement"
+          ],
+          "is_skip_sentinel": false,
+          "value": "limited_movement"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_063",
+          "label": "Swelling in one spot",
+          "produces_tokens": [
+            "local_swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "local_swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_064",
+          "label": "Low energy",
+          "produces_tokens": [
+            "low_energy"
+          ],
+          "is_skip_sentinel": false,
+          "value": "low_energy"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_065",
+          "label": "Mild cough",
+          "produces_tokens": [
+            "mild_cough"
+          ],
+          "is_skip_sentinel": false,
+          "value": "mild_cough"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_066",
+          "label": "Mild headache",
+          "produces_tokens": [
+            "mild_headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "mild_headache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_067",
+          "label": "Mild sore throat",
+          "produces_tokens": [
+            "mild_sore_throat"
+          ],
+          "is_skip_sentinel": false,
+          "value": "mild_sore_throat"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_068",
+          "label": "Mild swelling",
+          "produces_tokens": [
+            "mild_swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "mild_swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_069",
+          "label": "Sores in the mouth",
+          "produces_tokens": [
+            "mouth_sores"
+          ],
+          "is_skip_sentinel": false,
+          "value": "mouth_sores"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_070",
+          "label": "Stiff muscles",
+          "produces_tokens": [
+            "muscle_stiffness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "muscle_stiffness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_071",
+          "label": "Feeling like you might faint",
+          "produces_tokens": [
+            "near_fainting"
+          ],
+          "is_skip_sentinel": false,
+          "value": "near_fainting"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_072",
+          "label": "Fever in a newborn baby",
+          "produces_tokens": [
+            "neonatal_fever"
+          ],
+          "is_skip_sentinel": false,
+          "value": "neonatal_fever"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_073",
+          "label": "Sweating heavily at night",
+          "produces_tokens": [
+            "night_sweats"
+          ],
+          "is_skip_sentinel": false,
+          "value": "night_sweats"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_074",
+          "label": "Cough that's worse at night",
+          "produces_tokens": [
+            "nocturnal_cough"
+          ],
+          "is_skip_sentinel": false,
+          "value": "nocturnal_cough"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_075",
+          "label": "Nosebleed",
+          "produces_tokens": [
+            "nosebleed"
+          ],
+          "is_skip_sentinel": false,
+          "value": "nosebleed"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_076",
+          "label": "Headache on one side of the head",
+          "produces_tokens": [
+            "one_sided_headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "one_sided_headache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_077",
+          "label": "White patches in the mouth (thrush)",
+          "produces_tokens": [
+            "oral_thrush"
+          ],
+          "is_skip_sentinel": false,
+          "value": "oral_thrush"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_078",
+          "label": "Pain at the burn site",
+          "produces_tokens": [
+            "pain_at_burn"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pain_at_burn"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_079",
+          "label": "Pain when chewing",
+          "produces_tokens": [
+            "pain_on_chewing"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pain_on_chewing"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_080",
+          "label": "Fast or pounding heartbeat (palpitations)",
+          "produces_tokens": [
+            "palpitations"
+          ],
+          "is_skip_sentinel": false,
+          "value": "palpitations"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_081",
+          "label": "Ongoing tiredness that doesn't go away",
+          "produces_tokens": [
+            "persistent_fatigue"
+          ],
+          "is_skip_sentinel": false,
+          "value": "persistent_fatigue"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_082",
+          "label": "Fever that doesn't go away",
+          "produces_tokens": [
+            "persistent_fever"
+          ],
+          "is_skip_sentinel": false,
+          "value": "persistent_fever"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_083",
+          "label": "Poor appetite",
+          "produces_tokens": [
+            "poor_appetite"
+          ],
+          "is_skip_sentinel": false,
+          "value": "poor_appetite"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_084",
+          "label": "Feeding poorly (baby or young child)",
+          "produces_tokens": [
+            "poor_feeding"
+          ],
+          "is_skip_sentinel": false,
+          "value": "poor_feeding"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_085",
+          "label": "Poor growth (not gaining weight/height)",
+          "produces_tokens": [
+            "poor_growth"
+          ],
+          "is_skip_sentinel": false,
+          "value": "poor_growth"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_086",
+          "label": "Headache that feels like pressure",
+          "produces_tokens": [
+            "pressure_headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pressure_headache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_087",
+          "label": "Drooping eyelid",
+          "produces_tokens": [
+            "ptosis"
+          ],
+          "is_skip_sentinel": false,
+          "value": "ptosis"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_088",
+          "label": "Pus coming from the skin",
+          "produces_tokens": [
+            "pus_discharge"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pus_discharge"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_089",
+          "label": "Getting infections again and again",
+          "produces_tokens": [
+            "recurrent_infections"
+          ],
+          "is_skip_sentinel": false,
+          "value": "recurrent_infections"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_090",
+          "label": "Struggling with everyday activities",
+          "produces_tokens": [
+            "reduced_daily_function"
+          ],
+          "is_skip_sentinel": false,
+          "value": "reduced_daily_function"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_091",
+          "label": "Repeated infections",
+          "produces_tokens": [
+            "repeated_infections"
+          ],
+          "is_skip_sentinel": false,
+          "value": "repeated_infections"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_092",
+          "label": "Runny nose",
+          "produces_tokens": [
+            "runny_nose"
+          ],
+          "is_skip_sentinel": false,
+          "value": "runny_nose"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_093",
+          "label": "Shortness of breath",
+          "produces_tokens": [
+            "shortness_of_breath"
+          ],
+          "is_skip_sentinel": false,
+          "value": "shortness_of_breath"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_094",
+          "label": "Redness of the skin",
+          "produces_tokens": [
+            "skin_redness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "skin_redness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_095",
+          "label": "Swelling of the skin",
+          "produces_tokens": [
+            "skin_swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "skin_swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_096",
+          "label": "Sneezing",
+          "produces_tokens": [
+            "sneezing"
+          ],
+          "is_skip_sentinel": false,
+          "value": "sneezing"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_097",
+          "label": "Feeling like the room is spinning",
+          "produces_tokens": [
+            "spinning_sensation"
+          ],
+          "is_skip_sentinel": false,
+          "value": "spinning_sensation"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_098",
+          "label": "Swelling that is spreading",
+          "produces_tokens": [
+            "spreading_swelling"
+          ],
+          "is_skip_sentinel": false,
+          "value": "spreading_swelling"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_099",
+          "label": "Noisy, harsh sound when breathing in",
+          "produces_tokens": [
+            "stridor"
+          ],
+          "is_skip_sentinel": false,
+          "value": "stridor"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_100",
+          "label": "Swollen eyelids",
+          "produces_tokens": [
+            "swollen_eyelids"
+          ],
+          "is_skip_sentinel": false,
+          "value": "swollen_eyelids"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_101",
+          "label": "Swollen gums",
+          "produces_tokens": [
+            "swollen_gums"
+          ],
+          "is_skip_sentinel": false,
+          "value": "swollen_gums"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_102",
+          "label": "Swollen neck",
+          "produces_tokens": [
+            "swollen_neck"
+          ],
+          "is_skip_sentinel": false,
+          "value": "swollen_neck"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_103",
+          "label": "A grey-white coating in the throat",
+          "produces_tokens": [
+            "throat_membrane"
+          ],
+          "is_skip_sentinel": false,
+          "value": "throat_membrane"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_104",
+          "label": "Throbbing headache",
+          "produces_tokens": [
+            "throbbing_headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "throbbing_headache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_105",
+          "label": "Tiredness",
+          "produces_tokens": [
+            "tiredness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "tiredness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_106",
+          "label": "Toothache",
+          "produces_tokens": [
+            "toothache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "toothache"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_107",
+          "label": "Feeling unsteady on your feet",
+          "produces_tokens": [
+            "unsteadiness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "unsteadiness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_108",
+          "label": "Losing weight without trying",
+          "produces_tokens": [
+            "weight_loss"
+          ],
+          "is_skip_sentinel": false,
+          "value": "weight_loss"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_109",
+          "label": "Wheeze / whistling sound when breathing",
+          "produces_tokens": [
+            "wheeze"
+          ],
+          "is_skip_sentinel": false,
+          "value": "wheeze"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_110",
+          "label": "Wound where the bite happened",
+          "produces_tokens": [
+            "wound_at_bite"
+          ],
+          "is_skip_sentinel": false,
+          "value": "wound_at_bite"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_111",
+          "label": "Not able to drink or feed at all",
+          "produces_tokens": [
+            "inability_to_drink"
+          ],
+          "is_skip_sentinel": false,
+          "value": "inability_to_drink"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_112",
+          "label": "Confusion or unresponsiveness (not their normal self)",
+          "produces_tokens": [
+            "altered_consciousness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "altered_consciousness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_113",
+          "label": "Struggling to breathe even while sitting still / at rest",
+          "produces_tokens": [
+            "breathlessness_at_rest"
+          ],
+          "is_skip_sentinel": false,
+          "value": "breathlessness_at_rest"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_114",
+          "label": "Collapsed \u2014 cold, clammy skin, very weak or fainting",
+          "produces_tokens": [
+            "circulatory_collapse"
+          ],
+          "is_skip_sentinel": false,
+          "value": "circulatory_collapse"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_115",
+          "label": "Too weak to stand, sit up, or feed without help",
+          "produces_tokens": [
+            "prostration"
+          ],
+          "is_skip_sentinel": false,
+          "value": "prostration"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_116",
+          "label": "Heavy or uncontrolled bleeding",
+          "produces_tokens": [
+            "abnormal_bleeding"
+          ],
+          "is_skip_sentinel": false,
+          "value": "abnormal_bleeding"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_117",
+          "label": "Blue or grey lips, tongue, or face",
+          "produces_tokens": [
+            "blue_lips_face"
+          ],
+          "is_skip_sentinel": false,
+          "value": "blue_lips_face"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_118",
+          "label": "Severe dehydration \u2014 sunken eyes, no tears, not passing urine, very drowsy",
+          "produces_tokens": [
+            "severe_dehydration"
+          ],
+          "is_skip_sentinel": false,
+          "value": "severe_dehydration"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_119",
+          "label": "Hard to wake, very drowsy, or not responding normally",
+          "produces_tokens": [
+            "impaired_consciousness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "impaired_consciousness"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_120",
+          "label": "Working very hard to breathe \u2014 nostrils flaring, chest pulling in, or can't speak a full sentence",
+          "produces_tokens": [
+            "respiratory_distress"
+          ],
+          "is_skip_sentinel": false,
+          "value": "respiratory_distress"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_121",
+          "label": "Cold hands and feet, fast weak pulse, very drowsy or fainting",
+          "produces_tokens": [
+            "shock"
+          ],
+          "is_skip_sentinel": false,
+          "value": "shock"
+        },
+        {
+          "answer_option_id": "Q-symptom-selection::opt_122",
+          "label": "Severe allergic reaction \u2014 face/throat swelling, widespread hives, and trouble breathing together",
+          "produces_tokens": [
+            "anaphylaxis_signs"
+          ],
+          "is_skip_sentinel": false,
+          "value": "anaphylaxis_signs"
+        }
+      ],
+      "trigger_condition": {
+        "always": true
+      },
+      "priority": 150,
+      "tie_break_key": "Q-symptom-selection",
+      "path_length_contribution": 1,
+      "invalidates_on_change": [
+        "<all follow-up questions>"
+      ],
+      "provenance": "symptom_display_map.dart kSymptomDisplayMap / symptom_selection_screen.dart",
+      "effects": {
+        "produces_tokens": [
+          "abdominal_cramps",
+          "abdominal_pain",
+          "abnormal_bleeding",
+          "altered_consciousness",
+          "anaphylaxis_signs",
+          "animal_bite",
+          "back_pain",
+          "bad_breath",
+          "bilateral_oedema",
+          "bite_mark",
+          "bleeding",
+          "blistering",
+          "blood_in_urine",
+          "blue_lips_face",
+          "blurred_vision",
+          "body_pain",
+          "boils",
+          "breathlessness_at_rest",
+          "charred_skin",
+          "chest_pain",
+          "chest_tightness",
+          "chills",
+          "chronic_cough",
+          "chronic_diarrhoea",
+          "circulatory_collapse",
+          "confusion",
+          "cough",
+          "dark_urine",
+          "diarrhoea",
+          "difficulty_breathing",
+          "difficulty_swallowing",
+          "dizziness",
+          "excessive_thirst",
+          "exertional_breathlessness",
+          "eye_discharge",
+          "eye_itchiness",
+          "eye_pain",
+          "eye_redness",
+          "fast_breathing",
+          "fast_breathing_child",
+          "fast_breathing_neonate",
+          "fatigue",
+          "fear_of_water",
+          "fever",
+          "frequent_urination",
+          "general_weakness",
+          "head_pain",
+          "headache",
+          "hives",
+          "hoarse_voice",
+          "impaired_consciousness",
+          "inability_to_drink",
+          "irritability",
+          "itchy_eyes",
+          "itchy_rash",
+          "joint_pain",
+          "leg_swelling",
+          "lethargy",
+          "light_headedness",
+          "limb_weakness",
+          "limited_movement",
+          "local_swelling",
+          "low_energy",
+          "mild_cough",
+          "mild_headache",
+          "mild_sore_throat",
+          "mild_swelling",
+          "mouth_sores",
+          "muscle_stiffness",
+          "nausea",
+          "near_fainting",
+          "neonatal_fever",
+          "night_sweats",
+          "nocturnal_cough",
+          "nosebleed",
+          "one_sided_headache",
+          "oral_thrush",
+          "pain",
+          "pain_at_burn",
+          "pain_on_chewing",
+          "palpitations",
+          "persistent_fatigue",
+          "persistent_fever",
+          "poor_appetite",
+          "poor_feeding",
+          "poor_growth",
+          "pressure_headache",
+          "prostration",
+          "ptosis",
+          "pus_discharge",
+          "recurrent_infections",
+          "reduced_daily_function",
+          "repeated_infections",
+          "respiratory_distress",
+          "runny_nose",
+          "seizures",
+          "severe_dehydration",
+          "shock",
+          "shortness_of_breath",
+          "skin_redness",
+          "skin_swelling",
+          "sneezing",
+          "spinning_sensation",
+          "spreading_swelling",
+          "stridor",
+          "sweating",
+          "swelling",
+          "swollen_eyelids",
+          "swollen_gums",
+          "swollen_neck",
+          "throat_membrane",
+          "throbbing_headache",
+          "tiredness",
+          "toothache",
+          "unsteadiness",
+          "vomiting",
+          "watery_stool",
+          "weakness",
+          "weight_loss",
+          "wheeze",
+          "wound_at_bite"
+        ],
+        "affects_scoring": true,
+        "affects_red_flags": true
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": true,
+        "evaluate_after_answer": true,
+        "blocks_next_question": true
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-clarifier-abnormal_bleeding",
+      "question_type": "yes_no",
+      "clinical_role": "red_flag_clarifier",
+      "content_ref": {
+        "content_id": "red_flag_clarifiers.abnormal_bleeding",
+        "source_text": "Is the bleeding heavy, or does it not stop?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-abnormal_bleeding::yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "abnormal_bleeding"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Yes"
+        },
+        {
+          "answer_option_id": "Q-clarifier-abnormal_bleeding::no",
+          "label": "No",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "No"
+        }
+      ],
+      "trigger_condition": {
+        "all": [
+          {
+            "any": [
+              {
+                "token_present": "bleeding"
+              },
+              {
+                "token_present": "nosebleed"
+              }
+            ]
+          },
+          {
+            "token_absent": "abnormal_bleeding"
+          }
+        ]
+      },
+      "priority": 2,
+      "tie_break_key": "abnormal_bleeding",
+      "path_length_contribution": 1,
+      "provenance": "red_flag_clarifiers.dart kRedFlagClarifiers[2] \u2014 priority encodes declaration order, which is the emission order of the live engine",
+      "effects": {
+        "produces_tokens": [
+          "abnormal_bleeding"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": true
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": true,
+        "evaluate_after_answer": true,
+        "blocks_next_question": true
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-clarifier-breathlessness_at_rest",
+      "question_type": "yes_no",
+      "clinical_role": "red_flag_clarifier",
+      "content_ref": {
+        "content_id": "red_flag_clarifiers.breathlessness_at_rest",
+        "source_text": "Is it hard to breathe even when resting, not just on activity?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-breathlessness_at_rest::yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "breathlessness_at_rest"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Yes"
+        },
+        {
+          "answer_option_id": "Q-clarifier-breathlessness_at_rest::no",
+          "label": "No",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "No"
+        }
+      ],
+      "trigger_condition": {
+        "all": [
+          {
+            "any": [
+              {
+                "token_present": "difficulty_breathing"
+              },
+              {
+                "token_present": "shortness_of_breath"
+              }
+            ]
+          },
+          {
+            "token_absent": "breathlessness_at_rest"
+          }
+        ]
+      },
+      "priority": 0,
+      "tie_break_key": "breathlessness_at_rest",
+      "path_length_contribution": 1,
+      "provenance": "red_flag_clarifiers.dart kRedFlagClarifiers[0] \u2014 priority encodes declaration order, which is the emission order of the live engine",
+      "effects": {
+        "produces_tokens": [
+          "breathlessness_at_rest"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": true
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": true,
+        "evaluate_after_answer": true,
+        "blocks_next_question": true
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-clarifier-inability_to_drink",
+      "question_type": "yes_no",
+      "clinical_role": "red_flag_clarifier",
+      "content_ref": {
+        "content_id": "red_flag_clarifiers.inability_to_drink",
+        "source_text": "Is the person completely unable to drink or feed anything?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-clarifier-inability_to_drink::yes",
+          "label": "Yes",
+          "produces_tokens": [
+            "inability_to_drink"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Yes"
+        },
+        {
+          "answer_option_id": "Q-clarifier-inability_to_drink::no",
+          "label": "No",
+          "produces_tokens": [],
+          "is_skip_sentinel": false,
+          "value": "No"
+        }
+      ],
+      "trigger_condition": {
+        "all": [
+          {
+            "any": [
+              {
+                "token_present": "poor_feeding"
+              },
+              {
+                "token_present": "poor_appetite"
+              }
+            ]
+          },
+          {
+            "token_absent": "inability_to_drink"
+          }
+        ]
+      },
+      "priority": 1,
+      "tie_break_key": "inability_to_drink",
+      "path_length_contribution": 1,
+      "provenance": "red_flag_clarifiers.dart kRedFlagClarifiers[1] \u2014 priority encodes declaration order, which is the emission order of the live engine",
+      "effects": {
+        "produces_tokens": [
+          "inability_to_drink"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": true
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": true,
+        "evaluate_after_answer": true,
+        "blocks_next_question": true
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-followup-severity",
+      "question_type": "scale_select",
+      "clinical_role": "severity",
+      "content_ref": {
+        "content_id": "followup_question_map.group.severity",
+        "source_text": "How severe are your abdominal cramps?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-followup-severity::mild",
+          "label": "mild",
+          "produces_tokens": [
+            "mild"
+          ],
+          "is_skip_sentinel": false,
+          "value": 0.25
+        },
+        {
+          "answer_option_id": "Q-followup-severity::moderate",
+          "label": "moderate",
+          "produces_tokens": [
+            "moderate"
+          ],
+          "is_skip_sentinel": false,
+          "value": 0.5
+        },
+        {
+          "answer_option_id": "Q-followup-severity::severe",
+          "label": "severe",
+          "produces_tokens": [
+            "severe"
+          ],
+          "is_skip_sentinel": false,
+          "value": 0.75
+        },
+        {
+          "answer_option_id": "Q-followup-severity::very_severe",
+          "label": "very_severe",
+          "produces_tokens": [
+            "very_severe"
+          ],
+          "is_skip_sentinel": false,
+          "value": 1.0
+        }
+      ],
+      "trigger_condition": {
+        "any": [
+          {
+            "token_present": "abdominal_cramps"
+          },
+          {
+            "token_present": "body_pain"
+          },
+          {
+            "token_present": "cough"
+          },
+          {
+            "token_present": "fast_breathing_child"
+          },
+          {
+            "token_present": "headache"
+          },
+          {
+            "token_present": "pain"
+          }
+        ]
+      },
+      "priority": 10,
+      "tie_break_key": "severity",
+      "path_length_contribution": 1,
+      "grouping": {
+        "group_key": "severity",
+        "merge_strategy": "single_representative",
+        "representative_selection": "lowest_source_order_index",
+        "option_union_rule": "static",
+        "option_order": "source_order_then_declared_order",
+        "conflict_resolution": {
+          "on_text_conflict": "representative_wins",
+          "on_option_conflict": "reject",
+          "on_value_type_conflict": "reject"
+        },
+        "sources": [
+          {
+            "source_id": "followup_question_map.abdominal_cramps.severity",
+            "source_token": "abdominal_cramps",
+            "source_order_index": 0,
+            "trigger_condition": {
+              "token_present": "abdominal_cramps"
+            },
+            "source_text": "How severe are your abdominal cramps?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['abdominal_cramps']"
+          },
+          {
+            "source_id": "followup_question_map.body_pain.severity",
+            "source_token": "body_pain",
+            "source_order_index": 1,
+            "trigger_condition": {
+              "token_present": "body_pain"
+            },
+            "source_text": "How severe is your body pain?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['body_pain']"
+          },
+          {
+            "source_id": "followup_question_map.cough.severity",
+            "source_token": "cough",
+            "source_order_index": 4,
+            "trigger_condition": {
+              "token_present": "cough"
+            },
+            "source_text": "How severe is your cough?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['cough']"
+          },
+          {
+            "source_id": "followup_question_map.fast_breathing_child.severity",
+            "source_token": "fast_breathing_child",
+            "source_order_index": 7,
+            "trigger_condition": {
+              "token_present": "fast_breathing_child"
+            },
+            "source_text": "How severe is the fast breathing?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fast_breathing_child']"
+          },
+          {
+            "source_id": "followup_question_map.headache.severity",
+            "source_token": "headache",
+            "source_order_index": 10,
+            "trigger_condition": {
+              "token_present": "headache"
+            },
+            "source_text": "How severe is your headache?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['headache']"
+          },
+          {
+            "source_id": "followup_question_map.pain.severity",
+            "source_token": "pain",
+            "source_order_index": 12,
+            "trigger_condition": {
+              "token_present": "pain"
+            },
+            "source_text": "How severe is this pain?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['pain']"
+          }
+        ]
+      },
+      "provenance": "question_engine.dart generateQuestions \u2014 severity de-duplication over kFollowupQuestionMap (6 sources)",
+      "effects": {
+        "produces_tokens": [
+          "mild",
+          "moderate",
+          "severe",
+          "very_severe"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-followup-duration",
+      "question_type": "single_select",
+      "clinical_role": "duration",
+      "content_ref": {
+        "content_id": "followup_question_map.group.duration",
+        "source_text": "How long have you had these abdominal cramps?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-followup-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Less than 3 days"
+        },
+        {
+          "answer_option_id": "Q-followup-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ],
+          "is_skip_sentinel": false,
+          "value": "3 to 7 days"
+        },
+        {
+          "answer_option_id": "Q-followup-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ],
+          "is_skip_sentinel": false,
+          "value": "8 to 14 days"
+        },
+        {
+          "answer_option_id": "Q-followup-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ],
+          "is_skip_sentinel": false,
+          "value": "More than 14 days"
+        }
+      ],
+      "trigger_condition": {
+        "any": [
+          {
+            "token_present": "abdominal_cramps"
+          },
+          {
+            "token_present": "body_pain"
+          },
+          {
+            "token_present": "chills"
+          },
+          {
+            "token_present": "cough"
+          },
+          {
+            "token_present": "dark_urine"
+          },
+          {
+            "token_present": "dizziness"
+          },
+          {
+            "token_present": "fatigue"
+          },
+          {
+            "token_present": "fever"
+          },
+          {
+            "token_present": "headache"
+          },
+          {
+            "token_present": "nausea"
+          },
+          {
+            "token_present": "pain"
+          },
+          {
+            "token_present": "sweating"
+          },
+          {
+            "token_present": "swelling"
+          },
+          {
+            "token_present": "vomiting"
+          },
+          {
+            "token_present": "watery_stool"
+          },
+          {
+            "token_present": "weakness"
+          }
+        ]
+      },
+      "priority": 20,
+      "tie_break_key": "duration",
+      "path_length_contribution": 1,
+      "grouping": {
+        "group_key": "duration",
+        "merge_strategy": "single_representative",
+        "representative_selection": "lowest_source_order_index",
+        "option_union_rule": "static",
+        "option_order": "source_order_then_declared_order",
+        "conflict_resolution": {
+          "on_text_conflict": "representative_wins",
+          "on_option_conflict": "reject",
+          "on_value_type_conflict": "reject"
+        },
+        "sources": [
+          {
+            "source_id": "followup_question_map.abdominal_cramps.duration",
+            "source_token": "abdominal_cramps",
+            "source_order_index": 0,
+            "trigger_condition": {
+              "token_present": "abdominal_cramps"
+            },
+            "source_text": "How long have you had these abdominal cramps?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['abdominal_cramps']"
+          },
+          {
+            "source_id": "followup_question_map.body_pain.duration",
+            "source_token": "body_pain",
+            "source_order_index": 1,
+            "trigger_condition": {
+              "token_present": "body_pain"
+            },
+            "source_text": "How long have you had this body pain?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['body_pain']"
+          },
+          {
+            "source_id": "followup_question_map.chills.duration",
+            "source_token": "chills",
+            "source_order_index": 3,
+            "trigger_condition": {
+              "token_present": "chills"
+            },
+            "source_text": "How long have you had chills?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['chills']"
+          },
+          {
+            "source_id": "followup_question_map.cough.duration",
+            "source_token": "cough",
+            "source_order_index": 4,
+            "trigger_condition": {
+              "token_present": "cough"
+            },
+            "source_text": "How long have you had this cough?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['cough']"
+          },
+          {
+            "source_id": "followup_question_map.dark_urine.duration",
+            "source_token": "dark_urine",
+            "source_order_index": 5,
+            "trigger_condition": {
+              "token_present": "dark_urine"
+            },
+            "source_text": "How long have you noticed dark urine?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['dark_urine']"
+          },
+          {
+            "source_id": "followup_question_map.dizziness.duration",
+            "source_token": "dizziness",
+            "source_order_index": 6,
+            "trigger_condition": {
+              "token_present": "dizziness"
+            },
+            "source_text": "How long have you felt dizzy?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['dizziness']"
+          },
+          {
+            "source_id": "followup_question_map.fatigue.duration",
+            "source_token": "fatigue",
+            "source_order_index": 8,
+            "trigger_condition": {
+              "token_present": "fatigue"
+            },
+            "source_text": "How long have you felt this fatigue?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fatigue']"
+          },
+          {
+            "source_id": "followup_question_map.fever.duration",
+            "source_token": "fever",
+            "source_order_index": 9,
+            "trigger_condition": {
+              "token_present": "fever"
+            },
+            "source_text": "How long have you had this fever?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fever']"
+          },
+          {
+            "source_id": "followup_question_map.headache.duration",
+            "source_token": "headache",
+            "source_order_index": 10,
+            "trigger_condition": {
+              "token_present": "headache"
+            },
+            "source_text": "How long have you had this headache?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['headache']"
+          },
+          {
+            "source_id": "followup_question_map.nausea.duration",
+            "source_token": "nausea",
+            "source_order_index": 11,
+            "trigger_condition": {
+              "token_present": "nausea"
+            },
+            "source_text": "How long have you had nausea?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['nausea']"
+          },
+          {
+            "source_id": "followup_question_map.pain.duration",
+            "source_token": "pain",
+            "source_order_index": 12,
+            "trigger_condition": {
+              "token_present": "pain"
+            },
+            "source_text": "How long have you had this pain?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['pain']"
+          },
+          {
+            "source_id": "followup_question_map.sweating.duration",
+            "source_token": "sweating",
+            "source_order_index": 13,
+            "trigger_condition": {
+              "token_present": "sweating"
+            },
+            "source_text": "How long have you had excessive sweating?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['sweating']"
+          },
+          {
+            "source_id": "followup_question_map.swelling.duration",
+            "source_token": "swelling",
+            "source_order_index": 14,
+            "trigger_condition": {
+              "token_present": "swelling"
+            },
+            "source_text": "How long have you had this swelling?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['swelling']"
+          },
+          {
+            "source_id": "followup_question_map.vomiting.duration",
+            "source_token": "vomiting",
+            "source_order_index": 15,
+            "trigger_condition": {
+              "token_present": "vomiting"
+            },
+            "source_text": "How long have you been vomiting?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['vomiting']"
+          },
+          {
+            "source_id": "followup_question_map.watery_stool.duration",
+            "source_token": "watery_stool",
+            "source_order_index": 16,
+            "trigger_condition": {
+              "token_present": "watery_stool"
+            },
+            "source_text": "How long have you had watery stool?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['watery_stool']"
+          },
+          {
+            "source_id": "followup_question_map.weakness.duration",
+            "source_token": "weakness",
+            "source_order_index": 17,
+            "trigger_condition": {
+              "token_present": "weakness"
+            },
+            "source_text": "How long have you felt this weakness?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['weakness']"
+          }
+        ]
+      },
+      "provenance": "question_engine.dart generateQuestions \u2014 duration de-duplication over kFollowupQuestionMap (16 sources)",
+      "effects": {
+        "produces_tokens": [
+          "days_1_3",
+          "days_3_7",
+          "days_7_plus",
+          "weeks_2_plus"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-followup-additional-symptoms",
+      "question_type": "multi_select",
+      "clinical_role": "additional_symptoms",
+      "content_ref": {
+        "content_id": "followup_question_map.group.additional_symptoms",
+        "source_text": "Do you have any of these symptoms too?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id_set",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::vomiting",
+          "label": "vomiting",
+          "produces_tokens": [
+            "vomiting"
+          ],
+          "is_skip_sentinel": false,
+          "value": "vomiting"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::nausea",
+          "label": "nausea",
+          "produces_tokens": [
+            "nausea"
+          ],
+          "is_skip_sentinel": false,
+          "value": "nausea"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::watery_stool",
+          "label": "watery_stool",
+          "produces_tokens": [
+            "watery_stool"
+          ],
+          "is_skip_sentinel": false,
+          "value": "watery_stool"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::fever",
+          "label": "fever",
+          "produces_tokens": [
+            "fever"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fever"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::weakness",
+          "label": "weakness",
+          "produces_tokens": [
+            "weakness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "weakness"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::fatigue",
+          "label": "fatigue",
+          "produces_tokens": [
+            "fatigue"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fatigue"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::cough",
+          "label": "cough",
+          "produces_tokens": [
+            "cough"
+          ],
+          "is_skip_sentinel": false,
+          "value": "cough"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::fast_breathing_child",
+          "label": "fast_breathing_child",
+          "produces_tokens": [
+            "fast_breathing_child"
+          ],
+          "is_skip_sentinel": false,
+          "value": "fast_breathing_child"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::sweating",
+          "label": "sweating",
+          "produces_tokens": [
+            "sweating"
+          ],
+          "is_skip_sentinel": false,
+          "value": "sweating"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::headache",
+          "label": "headache",
+          "produces_tokens": [
+            "headache"
+          ],
+          "is_skip_sentinel": false,
+          "value": "headache"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::body_pain",
+          "label": "body_pain",
+          "produces_tokens": [
+            "body_pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "body_pain"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::chills",
+          "label": "chills",
+          "produces_tokens": [
+            "chills"
+          ],
+          "is_skip_sentinel": false,
+          "value": "chills"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::dizziness",
+          "label": "dizziness",
+          "produces_tokens": [
+            "dizziness"
+          ],
+          "is_skip_sentinel": false,
+          "value": "dizziness"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::abdominal_cramps",
+          "label": "abdominal_cramps",
+          "produces_tokens": [
+            "abdominal_cramps"
+          ],
+          "is_skip_sentinel": false,
+          "value": "abdominal_cramps"
+        },
+        {
+          "answer_option_id": "Q-followup-additional-symptoms::pain",
+          "label": "pain",
+          "produces_tokens": [
+            "pain"
+          ],
+          "is_skip_sentinel": false,
+          "value": "pain"
+        }
+      ],
+      "trigger_condition": {
+        "any": [
+          {
+            "token_present": "abdominal_cramps"
+          },
+          {
+            "token_present": "body_pain"
+          },
+          {
+            "token_present": "chest_indrawing_severe"
+          },
+          {
+            "token_present": "chills"
+          },
+          {
+            "token_present": "cough"
+          },
+          {
+            "token_present": "dark_urine"
+          },
+          {
+            "token_present": "dizziness"
+          },
+          {
+            "token_present": "fast_breathing_child"
+          },
+          {
+            "token_present": "fatigue"
+          },
+          {
+            "token_present": "fever"
+          },
+          {
+            "token_present": "headache"
+          },
+          {
+            "token_present": "nausea"
+          },
+          {
+            "token_present": "pain"
+          },
+          {
+            "token_present": "sweating"
+          },
+          {
+            "token_present": "swelling"
+          },
+          {
+            "token_present": "vomiting"
+          },
+          {
+            "token_present": "watery_stool"
+          },
+          {
+            "token_present": "weakness"
+          }
+        ]
+      },
+      "priority": 30,
+      "tie_break_key": "additional_symptoms",
+      "path_length_contribution": 1,
+      "grouping": {
+        "group_key": "additional_symptoms",
+        "merge_strategy": "single_representative",
+        "representative_selection": "lowest_source_order_index",
+        "option_union_rule": "union_of_triggered_sources",
+        "option_order": "source_order_then_declared_order",
+        "conflict_resolution": {
+          "on_text_conflict": "representative_wins",
+          "on_option_conflict": "union_preserving_all_sources",
+          "on_value_type_conflict": "reject"
+        },
+        "sources": [
+          {
+            "source_id": "followup_question_map.abdominal_cramps.additional_symptoms",
+            "source_token": "abdominal_cramps",
+            "source_order_index": 0,
+            "trigger_condition": {
+              "token_present": "abdominal_cramps"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['abdominal_cramps']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::vomiting",
+                "label": "vomiting",
+                "produces_tokens": [
+                  "vomiting"
+                ],
+                "is_skip_sentinel": false,
+                "value": "vomiting"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::watery_stool",
+                "label": "watery_stool",
+                "produces_tokens": [
+                  "watery_stool"
+                ],
+                "is_skip_sentinel": false,
+                "value": "watery_stool"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.body_pain.additional_symptoms",
+            "source_token": "body_pain",
+            "source_order_index": 1,
+            "trigger_condition": {
+              "token_present": "body_pain"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['body_pain']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fatigue",
+                "label": "fatigue",
+                "produces_tokens": [
+                  "fatigue"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fatigue"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.chest_indrawing_severe.additional_symptoms",
+            "source_token": "chest_indrawing_severe",
+            "source_order_index": 2,
+            "trigger_condition": {
+              "token_present": "chest_indrawing_severe"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['chest_indrawing_severe']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::cough",
+                "label": "cough",
+                "produces_tokens": [
+                  "cough"
+                ],
+                "is_skip_sentinel": false,
+                "value": "cough"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fast_breathing_child",
+                "label": "fast_breathing_child",
+                "produces_tokens": [
+                  "fast_breathing_child"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fast_breathing_child"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.chills.additional_symptoms",
+            "source_token": "chills",
+            "source_order_index": 3,
+            "trigger_condition": {
+              "token_present": "chills"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['chills']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::sweating",
+                "label": "sweating",
+                "produces_tokens": [
+                  "sweating"
+                ],
+                "is_skip_sentinel": false,
+                "value": "sweating"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.cough.additional_symptoms",
+            "source_token": "cough",
+            "source_order_index": 4,
+            "trigger_condition": {
+              "token_present": "cough"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['cough']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fast_breathing_child",
+                "label": "fast_breathing_child",
+                "produces_tokens": [
+                  "fast_breathing_child"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fast_breathing_child"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.dark_urine.additional_symptoms",
+            "source_token": "dark_urine",
+            "source_order_index": 5,
+            "trigger_condition": {
+              "token_present": "dark_urine"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['dark_urine']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.dizziness.additional_symptoms",
+            "source_token": "dizziness",
+            "source_order_index": 6,
+            "trigger_condition": {
+              "token_present": "dizziness"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['dizziness']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fatigue",
+                "label": "fatigue",
+                "produces_tokens": [
+                  "fatigue"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fatigue"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::headache",
+                "label": "headache",
+                "produces_tokens": [
+                  "headache"
+                ],
+                "is_skip_sentinel": false,
+                "value": "headache"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.fast_breathing_child.additional_symptoms",
+            "source_token": "fast_breathing_child",
+            "source_order_index": 7,
+            "trigger_condition": {
+              "token_present": "fast_breathing_child"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fast_breathing_child']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::cough",
+                "label": "cough",
+                "produces_tokens": [
+                  "cough"
+                ],
+                "is_skip_sentinel": false,
+                "value": "cough"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.fatigue.additional_symptoms",
+            "source_token": "fatigue",
+            "source_order_index": 8,
+            "trigger_condition": {
+              "token_present": "fatigue"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fatigue']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::body_pain",
+                "label": "body_pain",
+                "produces_tokens": [
+                  "body_pain"
+                ],
+                "is_skip_sentinel": false,
+                "value": "body_pain"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.fever.additional_symptoms",
+            "source_token": "fever",
+            "source_order_index": 9,
+            "trigger_condition": {
+              "token_present": "fever"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['fever']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::chills",
+                "label": "chills",
+                "produces_tokens": [
+                  "chills"
+                ],
+                "is_skip_sentinel": false,
+                "value": "chills"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::sweating",
+                "label": "sweating",
+                "produces_tokens": [
+                  "sweating"
+                ],
+                "is_skip_sentinel": false,
+                "value": "sweating"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::body_pain",
+                "label": "body_pain",
+                "produces_tokens": [
+                  "body_pain"
+                ],
+                "is_skip_sentinel": false,
+                "value": "body_pain"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.headache.additional_symptoms",
+            "source_token": "headache",
+            "source_order_index": 10,
+            "trigger_condition": {
+              "token_present": "headache"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['headache']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::vomiting",
+                "label": "vomiting",
+                "produces_tokens": [
+                  "vomiting"
+                ],
+                "is_skip_sentinel": false,
+                "value": "vomiting"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::dizziness",
+                "label": "dizziness",
+                "produces_tokens": [
+                  "dizziness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "dizziness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.nausea.additional_symptoms",
+            "source_token": "nausea",
+            "source_order_index": 11,
+            "trigger_condition": {
+              "token_present": "nausea"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['nausea']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::vomiting",
+                "label": "vomiting",
+                "produces_tokens": [
+                  "vomiting"
+                ],
+                "is_skip_sentinel": false,
+                "value": "vomiting"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::abdominal_cramps",
+                "label": "abdominal_cramps",
+                "produces_tokens": [
+                  "abdominal_cramps"
+                ],
+                "is_skip_sentinel": false,
+                "value": "abdominal_cramps"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.pain.additional_symptoms",
+            "source_token": "pain",
+            "source_order_index": 12,
+            "trigger_condition": {
+              "token_present": "pain"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['pain']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.sweating.additional_symptoms",
+            "source_token": "sweating",
+            "source_order_index": 13,
+            "trigger_condition": {
+              "token_present": "sweating"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['sweating']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::chills",
+                "label": "chills",
+                "produces_tokens": [
+                  "chills"
+                ],
+                "is_skip_sentinel": false,
+                "value": "chills"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.swelling.additional_symptoms",
+            "source_token": "swelling",
+            "source_order_index": 14,
+            "trigger_condition": {
+              "token_present": "swelling"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['swelling']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::pain",
+                "label": "pain",
+                "produces_tokens": [
+                  "pain"
+                ],
+                "is_skip_sentinel": false,
+                "value": "pain"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::weakness",
+                "label": "weakness",
+                "produces_tokens": [
+                  "weakness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "weakness"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.vomiting.additional_symptoms",
+            "source_token": "vomiting",
+            "source_order_index": 15,
+            "trigger_condition": {
+              "token_present": "vomiting"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['vomiting']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::abdominal_cramps",
+                "label": "abdominal_cramps",
+                "produces_tokens": [
+                  "abdominal_cramps"
+                ],
+                "is_skip_sentinel": false,
+                "value": "abdominal_cramps"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.watery_stool.additional_symptoms",
+            "source_token": "watery_stool",
+            "source_order_index": 16,
+            "trigger_condition": {
+              "token_present": "watery_stool"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['watery_stool']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::vomiting",
+                "label": "vomiting",
+                "produces_tokens": [
+                  "vomiting"
+                ],
+                "is_skip_sentinel": false,
+                "value": "vomiting"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::nausea",
+                "label": "nausea",
+                "produces_tokens": [
+                  "nausea"
+                ],
+                "is_skip_sentinel": false,
+                "value": "nausea"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::abdominal_cramps",
+                "label": "abdominal_cramps",
+                "produces_tokens": [
+                  "abdominal_cramps"
+                ],
+                "is_skip_sentinel": false,
+                "value": "abdominal_cramps"
+              }
+            ]
+          },
+          {
+            "source_id": "followup_question_map.weakness.additional_symptoms",
+            "source_token": "weakness",
+            "source_order_index": 17,
+            "trigger_condition": {
+              "token_present": "weakness"
+            },
+            "source_text": "Do you have any of these symptoms too?",
+            "provenance": "followup_question_map.dart kFollowupQuestionMap['weakness']",
+            "answer_options": [
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fever",
+                "label": "fever",
+                "produces_tokens": [
+                  "fever"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fever"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::fatigue",
+                "label": "fatigue",
+                "produces_tokens": [
+                  "fatigue"
+                ],
+                "is_skip_sentinel": false,
+                "value": "fatigue"
+              },
+              {
+                "answer_option_id": "Q-followup-additional-symptoms::dizziness",
+                "label": "dizziness",
+                "produces_tokens": [
+                  "dizziness"
+                ],
+                "is_skip_sentinel": false,
+                "value": "dizziness"
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": "question_engine.dart generateQuestions \u2014 additional_symptoms de-duplication over kFollowupQuestionMap (18 sources)",
+      "effects": {
+        "produces_tokens": [
+          "abdominal_cramps",
+          "body_pain",
+          "chills",
+          "cough",
+          "dizziness",
+          "fast_breathing_child",
+          "fatigue",
+          "fever",
+          "headache",
+          "nausea",
+          "pain",
+          "sweating",
+          "vomiting",
+          "watery_stool",
+          "weakness"
+        ],
+        "affects_scoring": true,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "terminal": false,
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    },
+    {
+      "question_id": "Q-followup-default-duration",
+      "question_type": "single_select",
+      "clinical_role": "duration",
+      "content_ref": {
+        "content_id": "followup_question_map.default.duration",
+        "source_text": "How long have you had this symptom?",
+        "content_approved": false
+      },
+      "answer_value_type": "option_id",
+      "required": true,
+      "skippable": false,
+      "answer_options": [
+        {
+          "answer_option_id": "Q-followup-default-duration::days_1_3",
+          "label": "Less than 3 days",
+          "produces_tokens": [
+            "days_1_3"
+          ],
+          "is_skip_sentinel": false,
+          "value": "Less than 3 days"
+        },
+        {
+          "answer_option_id": "Q-followup-default-duration::days_3_7",
+          "label": "3 to 7 days",
+          "produces_tokens": [
+            "days_3_7"
+          ],
+          "is_skip_sentinel": false,
+          "value": "3 to 7 days"
+        },
+        {
+          "answer_option_id": "Q-followup-default-duration::days_7_plus",
+          "label": "8 to 14 days",
+          "produces_tokens": [
+            "days_7_plus"
+          ],
+          "is_skip_sentinel": false,
+          "value": "8 to 14 days"
+        },
+        {
+          "answer_option_id": "Q-followup-default-duration::weeks_2_plus",
+          "label": "More than 14 days",
+          "produces_tokens": [
+            "weeks_2_plus"
+          ],
+          "is_skip_sentinel": false,
+          "value": "More than 14 days"
+        }
+      ],
+      "trigger_condition": {
+        "all": [
+          {
+            "any": [
+              {
+                "token_present": "abdominal_pain"
+              },
+              {
+                "token_present": "abnormal_bleeding"
+              },
+              {
+                "token_present": "altered_consciousness"
+              },
+              {
+                "token_present": "anaphylaxis_signs"
+              },
+              {
+                "token_present": "animal_bite"
+              },
+              {
+                "token_present": "back_pain"
+              },
+              {
+                "token_present": "bad_breath"
+              },
+              {
+                "token_present": "bilateral_oedema"
+              },
+              {
+                "token_present": "bite_mark"
+              },
+              {
+                "token_present": "bleeding"
+              },
+              {
+                "token_present": "blistering"
+              },
+              {
+                "token_present": "blood_in_urine"
+              },
+              {
+                "token_present": "blue_lips_face"
+              },
+              {
+                "token_present": "blurred_vision"
+              },
+              {
+                "token_present": "boils"
+              },
+              {
+                "token_present": "breathlessness_at_rest"
+              },
+              {
+                "token_present": "charred_skin"
+              },
+              {
+                "token_present": "chest_pain"
+              },
+              {
+                "token_present": "chest_tightness"
+              },
+              {
+                "token_present": "chronic_cough"
+              },
+              {
+                "token_present": "chronic_diarrhoea"
+              },
+              {
+                "token_present": "circulatory_collapse"
+              },
+              {
+                "token_present": "confusion"
+              },
+              {
+                "token_present": "diarrhoea"
+              },
+              {
+                "token_present": "difficulty_breathing"
+              },
+              {
+                "token_present": "difficulty_swallowing"
+              },
+              {
+                "token_present": "excessive_thirst"
+              },
+              {
+                "token_present": "exertional_breathlessness"
+              },
+              {
+                "token_present": "eye_discharge"
+              },
+              {
+                "token_present": "eye_itchiness"
+              },
+              {
+                "token_present": "eye_pain"
+              },
+              {
+                "token_present": "eye_redness"
+              },
+              {
+                "token_present": "fast_breathing"
+              },
+              {
+                "token_present": "fast_breathing_neonate"
+              },
+              {
+                "token_present": "fear_of_water"
+              },
+              {
+                "token_present": "frequent_urination"
+              },
+              {
+                "token_present": "general_weakness"
+              },
+              {
+                "token_present": "head_pain"
+              },
+              {
+                "token_present": "hives"
+              },
+              {
+                "token_present": "hoarse_voice"
+              },
+              {
+                "token_present": "impaired_consciousness"
+              },
+              {
+                "token_present": "inability_to_drink"
+              },
+              {
+                "token_present": "irritability"
+              },
+              {
+                "token_present": "itchy_eyes"
+              },
+              {
+                "token_present": "itchy_rash"
+              },
+              {
+                "token_present": "joint_pain"
+              },
+              {
+                "token_present": "leg_swelling"
+              },
+              {
+                "token_present": "lethargy"
+              },
+              {
+                "token_present": "light_headedness"
+              },
+              {
+                "token_present": "limb_weakness"
+              },
+              {
+                "token_present": "limited_movement"
+              },
+              {
+                "token_present": "local_swelling"
+              },
+              {
+                "token_present": "low_energy"
+              },
+              {
+                "token_present": "mild_cough"
+              },
+              {
+                "token_present": "mild_headache"
+              },
+              {
+                "token_present": "mild_sore_throat"
+              },
+              {
+                "token_present": "mild_swelling"
+              },
+              {
+                "token_present": "mouth_sores"
+              },
+              {
+                "token_present": "muscle_stiffness"
+              },
+              {
+                "token_present": "near_fainting"
+              },
+              {
+                "token_present": "neonatal_fever"
+              },
+              {
+                "token_present": "night_sweats"
+              },
+              {
+                "token_present": "nocturnal_cough"
+              },
+              {
+                "token_present": "nosebleed"
+              },
+              {
+                "token_present": "one_sided_headache"
+              },
+              {
+                "token_present": "oral_thrush"
+              },
+              {
+                "token_present": "pain_at_burn"
+              },
+              {
+                "token_present": "pain_on_chewing"
+              },
+              {
+                "token_present": "palpitations"
+              },
+              {
+                "token_present": "persistent_fatigue"
+              },
+              {
+                "token_present": "persistent_fever"
+              },
+              {
+                "token_present": "poor_appetite"
+              },
+              {
+                "token_present": "poor_feeding"
+              },
+              {
+                "token_present": "poor_growth"
+              },
+              {
+                "token_present": "pressure_headache"
+              },
+              {
+                "token_present": "prostration"
+              },
+              {
+                "token_present": "ptosis"
+              },
+              {
+                "token_present": "pus_discharge"
+              },
+              {
+                "token_present": "recurrent_infections"
+              },
+              {
+                "token_present": "reduced_daily_function"
+              },
+              {
+                "token_present": "repeated_infections"
+              },
+              {
+                "token_present": "respiratory_distress"
+              },
+              {
+                "token_present": "runny_nose"
+              },
+              {
+                "token_present": "seizures"
+              },
+              {
+                "token_present": "severe_dehydration"
+              },
+              {
+                "token_present": "shock"
+              },
+              {
+                "token_present": "shortness_of_breath"
+              },
+              {
+                "token_present": "skin_redness"
+              },
+              {
+                "token_present": "skin_swelling"
+              },
+              {
+                "token_present": "sneezing"
+              },
+              {
+                "token_present": "spinning_sensation"
+              },
+              {
+                "token_present": "spreading_swelling"
+              },
+              {
+                "token_present": "stridor"
+              },
+              {
+                "token_present": "swollen_eyelids"
+              },
+              {
+                "token_present": "swollen_gums"
+              },
+              {
+                "token_present": "swollen_neck"
+              },
+              {
+                "token_present": "throat_membrane"
+              },
+              {
+                "token_present": "throbbing_headache"
+              },
+              {
+                "token_present": "tiredness"
+              },
+              {
+                "token_present": "toothache"
+              },
+              {
+                "token_present": "unsteadiness"
+              },
+              {
+                "token_present": "weight_loss"
+              },
+              {
+                "token_present": "wheeze"
+              },
+              {
+                "token_present": "wound_at_bite"
+              }
+            ]
+          },
+          {
+            "all": [
+              {
+                "token_absent": "abdominal_cramps"
+              },
+              {
+                "token_absent": "body_pain"
+              },
+              {
+                "token_absent": "chills"
+              },
+              {
+                "token_absent": "cough"
+              },
+              {
+                "token_absent": "dark_urine"
+              },
+              {
+                "token_absent": "dizziness"
+              },
+              {
+                "token_absent": "fatigue"
+              },
+              {
+                "token_absent": "fever"
+              },
+              {
+                "token_absent": "headache"
+              },
+              {
+                "token_absent": "nausea"
+              },
+              {
+                "token_absent": "pain"
+              },
+              {
+                "token_absent": "sweating"
+              },
+              {
+                "token_absent": "swelling"
+              },
+              {
+                "token_absent": "vomiting"
+              },
+              {
+                "token_absent": "watery_stool"
+              },
+              {
+                "token_absent": "weakness"
+              }
+            ]
+          }
+        ]
+      },
+      "priority": 21,
+      "tie_break_key": "zzz-default",
+      "path_length_contribution": 1,
+      "terminal": false,
+      "provenance": "followup_question_map.dart kDefaultFollowupQuestion \u2014 fires only when no grouped duration source triggers",
+      "effects": {
+        "produces_tokens": [
+          "days_1_3",
+          "days_3_7",
+          "days_7_plus",
+          "weeks_2_plus"
+        ],
+        "affects_scoring": false,
+        "affects_red_flags": false
+      },
+      "red_flag_evaluation": {
+        "can_affect_red_flag": false,
+        "evaluate_after_answer": false,
+        "blocks_next_question": false
+      },
+      "branch_conditions": [],
+      "invalidates_on_change": [],
+      "review": {
+        "review_status": "not_reviewed",
+        "clinical_reviewer": null,
+        "review_date": null
+      }
+    }
+  ]
+}

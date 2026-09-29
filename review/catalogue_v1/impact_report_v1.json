@@ -1,0 +1,235 @@
+{
+  "_metadata": {
+    "artifact_id": "vocabulary_catalogue_impact",
+    "version": "1.0",
+    "generated_by": "tools/build_catalogue_review.py",
+    "search_hit_rate_claim": "NONE. No approved catalogue content exists yet, so no search hit-rate improvement is claimed or measurable."
+  },
+  "totals": {
+    "total_proposals": 25,
+    "display_label_review_rows": 295,
+    "publication_eligible": 0,
+    "publication_blocked": 25
+  },
+  "by_primary_class": {
+    "clinical_token_identity": 1,
+    "display_label_only": 8,
+    "insufficient_evidence_do_not_propose": 4,
+    "red_flag_affecting_association": 12
+  },
+  "by_complaint_section": {
+    "breathing": 4,
+    "digestive": 1,
+    "general_system": 9,
+    "maternal": 1,
+    "neurological": 5,
+    "skin": 1,
+    "unassigned": 4
+  },
+  "by_batch": {
+    "BATCH-01-display-labels": 8,
+    "BATCH-02-search-aliases": 0,
+    "BATCH-03-ambiguity": 0,
+    "BATCH-04-metadata": 0,
+    "BATCH-05-scoring-affecting": 0,
+    "BATCH-06-red-flag-affecting": 12,
+    "BATCH-07-token-identity": 1,
+    "BATCH-08-evidence-gaps": 4
+  },
+  "by_approval_state": {
+    "clinical_pending": 25,
+    "product_pending": 25
+  },
+  "affecting_scoring": 21,
+  "affecting_red_flags": 12,
+  "normalization_collisions": {},
+  "normalization_collision_count": 0,
+  "ambiguity_sets": [
+    {
+      "proposal_id": "VC1-0010",
+      "phrase": "Not able to drink or feed at all",
+      "members": [
+        "inability_to_drink",
+        "poor_appetite",
+        "poor_feeding"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0011",
+      "phrase": "Confusion or unresponsiveness (not their normal self)",
+      "members": [
+        "altered_consciousness",
+        "confusion",
+        "lethargy"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0012",
+      "phrase": "Struggling to breathe even while sitting still / at rest",
+      "members": [
+        "breathlessness",
+        "breathlessness_at_rest",
+        "difficulty_breathing",
+        "shortness_of_breath"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0013",
+      "phrase": "Collapsed \u2014 cold, clammy skin, very weak or fainting",
+      "members": [
+        "circulatory_collapse",
+        "near_fainting",
+        "pallor",
+        "severe_weakness"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0014",
+      "phrase": "Too weak to stand, sit up, or feed without help",
+      "members": [
+        "lethargy",
+        "prostration",
+        "severe_weakness",
+        "weakness"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0015",
+      "phrase": "Heavy or uncontrolled bleeding",
+      "members": [
+        "abnormal_bleeding",
+        "bleeding",
+        "bleeding_gums",
+        "blood_in_stool",
+        "nosebleed",
+        "vaginal_bleeding"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0016",
+      "phrase": "Blue or grey lips, tongue, or face",
+      "members": [
+        "blue_lips_face",
+        "difficulty_breathing",
+        "pallor"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0017",
+      "phrase": "Severe dehydration \u2014 sunken eyes, no tears, not passing urine, very drowsy",
+      "members": [
+        "dehydration",
+        "severe_dehydration"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0018",
+      "phrase": "Hard to wake, very drowsy, or not responding normally",
+      "members": [
+        "confusion",
+        "impaired_consciousness",
+        "lethargy"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0019",
+      "phrase": "Working very hard to breathe \u2014 nostrils flaring, chest pulling in, or can't speak a full sentence",
+      "members": [
+        "chest_indrawing",
+        "difficulty_breathing",
+        "fast_breathing",
+        "fast_breathing_child",
+        "respiratory_distress"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0020",
+      "phrase": "Cold hands and feet, fast weak pulse, very drowsy or fainting",
+      "members": [
+        "lethargy",
+        "near_fainting",
+        "pallor",
+        "severe_weakness",
+        "shock"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0021",
+      "phrase": "Severe allergic reaction \u2014 face/throat swelling, widespread hives, and trouble breathing together",
+      "members": [
+        "anaphylaxis_signs",
+        "difficulty_breathing",
+        "facial_swelling",
+        "hives",
+        "wheeze"
+      ]
+    },
+    {
+      "proposal_id": "VC1-0009",
+      "phrase": "Shortness of breath",
+      "members": [
+        "breathlessness",
+        "shortness_of_breath"
+      ]
+    }
+  ],
+  "ambiguity_set_count": 13,
+  "display_safe_candidates": 0,
+  "display_safe_current_true": 0,
+  "tokens_shipped_in_mobile_today": 117,
+  "tokens_with_no_mobile_label": 178,
+  "unresolved_evidence_gaps": [
+    "VC1-0022",
+    "VC1-0023",
+    "VC1-0024",
+    "VC1-0025"
+  ],
+  "local_language_evidence_gap": {
+    "status": "OPEN",
+    "detail": "No authoritative local-language (Hausa, Yoruba, Igbo, Nigerian Pidgin) vocabulary source exists in this repository. No local term has been generated, translated or inferred. A sourced catalogue is required before any non-English search content can be proposed."
+  },
+  "safe_for_engineering_after_approval": [
+    "VC1-0001",
+    "VC1-0002",
+    "VC1-0003",
+    "VC1-0004",
+    "VC1-0005",
+    "VC1-0006",
+    "VC1-0007",
+    "VC1-0008"
+  ],
+  "requires_clinical_artifact_change": [
+    "VC1-0010",
+    "VC1-0011",
+    "VC1-0012",
+    "VC1-0013",
+    "VC1-0014",
+    "VC1-0015",
+    "VC1-0016",
+    "VC1-0017",
+    "VC1-0018",
+    "VC1-0019",
+    "VC1-0020",
+    "VC1-0021",
+    "VC1-0009"
+  ],
+  "prohibited_from_automatic_mapping": [
+    "VC1-0010",
+    "VC1-0011",
+    "VC1-0012",
+    "VC1-0013",
+    "VC1-0014",
+    "VC1-0015",
+    "VC1-0016",
+    "VC1-0017",
+    "VC1-0018",
+    "VC1-0019",
+    "VC1-0020",
+    "VC1-0021",
+    "VC1-0009",
+    "VC1-0022",
+    "VC1-0023",
+    "VC1-0024",
+    "VC1-0025"
+  ]
+}

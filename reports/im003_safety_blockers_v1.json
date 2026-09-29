@@ -1,0 +1,102 @@
+{
+  "_metadata": {
+    "report_id": "im003_safety_blockers",
+    "version": "1",
+    "phase": "I2 / W3 Step 8",
+    "generator": "tools/report_im003_mobile_measurement.py",
+    "generator_version": "1.0.0",
+    "note": "Potential safety blockers arising from IM-003 measurement. A record here is engineering evidence awaiting clinical and product adjudication. It is not a clinical finding, and it does not say the behaviour is acceptable or unacceptable."
+  },
+  "blockers": [
+    {
+      "blocker_id": "IM003-SB-001",
+      "title": "Additive re-branching de-escalated urgency from emergency to urgent with no red-flag change",
+      "status": "open_awaiting_clinical_and_product_adjudication",
+      "classification_authority": "engineering evidence",
+      "potential_safety_blocker": true,
+      "clinical_approval": false,
+      "product_approval": false,
+      "external_beta_approval": false,
+      "production_approval": false,
+      "im003_activation_authorized": false,
+      "mobile_pr_76_merge_authorized_by_this_record": false,
+      "affected_decision": "D004",
+      "expiry_or_review_milestone": "before any IM-003 internal activation",
+      "scenario_id": "S10_path_limit_pressure",
+      "before_after_matrix": {
+        "baseline": {
+          "tokens": [
+            "bleeding",
+            "difficulty_breathing",
+            "fever",
+            "headache",
+            "poor_feeding"
+          ],
+          "top_condition": "lassa_fever",
+          "lassa_fever_score": 26,
+          "malaria_score": 25,
+          "urgency": "emergency",
+          "urgency_source": "urgency_default",
+          "red_flag_triggered": false
+        },
+        "expanded": {
+          "tokens": [
+            "abdominal_cramps",
+            "bleeding",
+            "body_pain",
+            "chills",
+            "difficulty_breathing",
+            "dizziness",
+            "fatigue",
+            "fever",
+            "headache",
+            "nausea",
+            "poor_feeding",
+            "sweating",
+            "vomiting",
+            "watery_stool",
+            "weakness"
+          ],
+          "top_condition": "malaria",
+          "lassa_fever_score": 26,
+          "malaria_score": 52,
+          "urgency": "urgent",
+          "urgency_source": "urgency_default",
+          "red_flag_triggered": false
+        }
+      },
+      "mechanism_summary": "Additive tokens raised malaria from 25 to 52 while lassa_fever stayed at 26. The leading condition flipped, and urgency follows the top condition's urgency_default, so emergency became urgent. No red flag fired on either side.",
+      "independently_grounded_in_kb_2_4": true,
+      "evidence_binding": {
+        "repository": "Wellapath-org/wellapath-mobile",
+        "pull_request": 76,
+        "pull_request_state_at_incorporation": "OPEN_UNMERGED",
+        "head": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091",
+        "path": "docs/evidence/im003_mobile_scoring_measurement_v1.json",
+        "sha256": "fb5aefab9915957f327b70de73e21f02ce0f574163d3b6c9dafa2e43c1f027c5",
+        "bytes": 176163,
+        "ci": {
+          "check": "Flutter Lint & Build Check",
+          "conclusion": "success",
+          "checked_head_sha": "13be0d4937b1c49d6a49ddf096c5d5b6a47c2091"
+        },
+        "mobile_base_commit": "d820d6cfc3b96cbbba9d434ef4684b9a36140991",
+        "knowledge_base_commit": "5a8563bf8702bd506a7b67ccc6c9a8faef8ef574",
+        "generator": "test/im003/im003_measurement_test.dart",
+        "authoritative_for_clinical_values": true,
+        "authoritative_for_decisions": false
+      },
+      "not_asserted": [
+        "that this behaviour is clinically safe",
+        "that this behaviour is clinically unsafe",
+        "that emergency was the correct baseline urgency",
+        "that urgent is an acceptable expanded urgency"
+      ],
+      "resolution_requires": [
+        "named clinical reviewer, role, date and rationale",
+        "named product reviewer, role, date and rationale",
+        "a recorded decision on whether urgency must be monotone under additive evidence"
+      ]
+    }
+  ]
+}

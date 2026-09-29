@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/token_dictionary.v2.schema.json",
+  "title": "WellaPath Symptom Vocabulary (token_dictionary) — schema 2.0",
+  "description": "Machine-validatable schema for token_dictionary artifacts at schema_version 2.0. Backward compatible with schema 1.0 consumers: the six legacy token arrays are still present and still required, with unchanged member type and ordering. Everything schema 2.0 adds lives under new top-level keys that a schema 1.0 consumer simply never reads. Prose field semantics live in schema/token_dictionary_schema_v2.0.json.",
+  "type": "object",
+  "required": [
+    "_metadata",
+    "symptom_tokens",
+    "red_flag_tokens",
+    "duration_tokens",
+    "body_area_tokens",
+    "demographic_tokens",
+    "severity_tokens",
+    "body_areas",
+    "complaint_groups",
+    "tokens",
+    "search_index"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "_metadata": { "$ref": "#/$defs/metadata" },
+
+    "symptom_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+    "red_flag_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+    "duration_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+    "body_area_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+    "demographic_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+    "severity_tokens": { "$ref": "#/$defs/legacyTokenArray" },
+
+    "body_areas": {
+      "description": "Controlled vocabulary of body areas that token entries may associate to. Every body_area_id must also appear in body_area_tokens.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/bodyArea" }
+    },
+    "complaint_groups": {
+      "description": "Controlled vocabulary of complaint groups. Search/input grouping only — a complaint group is never a scoring input and is never referenced by rules.",
+      "type": "array",
+      "items": { "$ref": "#/$defs/complaintGroup" }
+    },
+    "tokens": {
+      "description": "One entry per stable token ID. The union of token_id values must be exactly the union of the six legacy arrays, with each entry's `category` naming the array it came from.",
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/tokenEntry" }
+    },
+    "search_index": { "$ref": "#/$defs/searchIndex" }
+  },
+
+  "$defs": {
+    "tokenId": {
+      "description": "Stable clinical identifier. lowercase_snake_case, ASCII only. Immutable once published — a token is deprecated and replaced, never renamed.",
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9]*(_[a-z0-9]+)*$"
+    },
+    "artifactVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "nullableDate": {
+      "type": ["string", "null"],
+      "format": "date"
+    },
+    "category": {
+      "description": "The legacy array this token belongs to. Fixed set — schema 2.0 adds no categories.",
+      "type": "string",
+      "enum": [
+        "symptom_tokens",
+        "red_flag_tokens",
+        "duration_tokens",
+        "body_area_tokens",
+        "demographic_tokens",
+        "severity_tokens"
+      ]
+    },
+    "legacyTokenArray": {
+      "description": "Schema 1.0 compatibility surface. Array of stable token IDs, unique, order-significant: a schema 1.0 consumer reads these and nothing else.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/tokenId" }
+    },
+
+    "metadata": {
+      "type": "object",
+      "required": [
+        "artifact_id",
+        "version",
+        "schema_version",
+        "country",
+        "release_status",
+        "release_date",
+        "generated_at",
+        "generator",
+        "generator_version",
+        "source_artifact",
+        "rollback_target",
+        "compatible_consumers",
+        "clinical_review",
+        "total_tokens",
+        "changelog",
+        "provenance"
+      ],
+      "additionalProperties": true,
+      "properties": {
+        "artifact_id": { "const": "token_dictionary" },
+        "version": { "$ref": "#/$defs/artifactVersion" },
+        "schema_version": { "const": "2.0" },
+        "country": { "type": "string", "pattern": "^[a-z]{2}$" },
+        "release_status": {
+          "description": "candidate_unapproved -> approved_unpublished -> published. Only `published` may appear in a live /config manifest entry.",
+          "type": "string",
+          "enum": ["candidate_unapproved", "approved_unpublished", "published"]
+        },
+        "release_date": { "$ref": "#/$defs/nullableDate" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "generator": { "type": "string", "minLength": 1 },
+        "generator_version": { "type": "string", "minLength": 1 },
+        "source_artifact": { "$ref": "#/$defs/artifactRef" },
+        "rollback_target": { "$ref": "#/$defs/artifactRef" },
+        "compatible_consumers": {
+          "description": "Consumer artifact versions this vocabulary has been reference-checked against by tools/check_compatibility.py.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": { "$ref": "#/$defs/artifactVersion" }
+          }
+        },
+        "legacy_metadata": {
+          "description": "Verbatim copy of the source artifact's _metadata block. Carried so the downgrade projection can reproduce the source file byte for byte. Never edited by hand.",
+          "type": "object",
+          "additionalProperties": true
+        },
+        "clinical_review": { "$ref": "#/$defs/clinicalReview" },
+        "total_tokens": { "type": "integer", "minimum": 1 },
+        "changelog": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "provenance": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "artifactRef": {
+      "type": "object",
+      "required": ["artifact_id", "version", "file", "sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "artifact_id": { "type": "string", "minLength": 1 },
+        "version": { "$ref": "#/$defs/artifactVersion" },
+        "file": { "type": "string", "minLength": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+
+    "clinicalReview": {
+      "description": "Review state. `status` may only be `reviewed` when reviewer, review_date and evidence are all non-null — enforced by tools/validate_vocabulary.py, which refuses to certify a review claim without evidence.",
+      "type": "object",
+      "required": ["status", "reviewer", "review_date", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["not_reviewed", "in_review", "reviewed"]
+        },
+        "reviewer": { "type": ["string", "null"], "minLength": 1 },
+        "review_date": { "$ref": "#/$defs/nullableDate" },
+        "evidence": {
+          "description": "Pointer to the approval record (PR URL, issue URL, signed document reference). Null until one exists.",
+          "type": ["string", "null"],
+          "minLength": 1
+        }
+      }
+    },
+
+    "bodyArea": {
+      "type": "object",
+      "required": ["body_area_id", "canonical_label", "display_safe"],
+      "additionalProperties": false,
+      "properties": {
+        "body_area_id": { "$ref": "#/$defs/tokenId" },
+        "canonical_label": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "label_source": {
+          "type": "string",
+          "enum": ["derived_from_token_id", "clinically_approved"]
+        },
+        "display_safe": { "type": "boolean" }
+      }
+    },
+
+    "complaintGroup": {
+      "type": "object",
+      "required": ["complaint_group_id", "canonical_label", "display_safe"],
+      "additionalProperties": false,
+      "properties": {
+        "complaint_group_id": { "$ref": "#/$defs/tokenId" },
+        "canonical_label": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "label_source": {
+          "type": "string",
+          "enum": ["derived_from_token_id", "clinically_approved"]
+        },
+        "display_safe": { "type": "boolean" },
+        "provenance": { "type": ["string", "null"], "minLength": 1 }
+      }
+    },
+
+    "tokenEntry": {
+      "type": "object",
+      "required": [
+        "token_id",
+        "category",
+        "clinical_identity",
+        "display",
+        "search",
+        "associations",
+        "review"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "token_id": { "$ref": "#/$defs/tokenId" },
+        "category": { "$ref": "#/$defs/category" },
+        "clinical_identity": { "$ref": "#/$defs/clinicalIdentity" },
+        "display": { "$ref": "#/$defs/displayBlock" },
+        "search": { "$ref": "#/$defs/searchBlock" },
+        "associations": { "$ref": "#/$defs/associationsBlock" },
+        "review": { "$ref": "#/$defs/reviewBlock" }
+      }
+    },
+
+    "clinicalIdentity": {
+      "description": "CLINICAL. Everything a rule, a red flag or the scoring engine is permitted to depend on. Changing any field here is a clinical-token-identity change and blocks publication pending clinical review.",
+      "type": "object",
+      "required": [
+        "canonical_token_id",
+        "status",
+        "replaced_by",
+        "scoring_eligible",
+        "introduced_in_artifact_version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_token_id": { "$ref": "#/$defs/tokenId" },
+        "status": {
+          "type": "string",
+          "enum": ["active", "deprecated"]
+        },
+        "replaced_by": {
+          "description": "Successor token ID. Required non-null when status is `deprecated`, must be null when status is `active`. Replacement chains must be acyclic.",
+          "anyOf": [{ "$ref": "#/$defs/tokenId" }, { "type": "null" }]
+        },
+        "scoring_eligible": {
+          "description": "Whether this token ID may be referenced by kb/rules and contribute to scoring. Aliases are not tokens and can never be scoring-eligible — they have no entry of their own.",
+          "type": "boolean"
+        },
+        "introduced_in_artifact_version": { "$ref": "#/$defs/artifactVersion" }
+      }
+    },
+
+    "displayBlock": {
+      "description": "DISPLAY-ONLY. Never read by rules or scoring. Mobile may display `canonical_label` only when `display_safe` is true.",
+      "type": "object",
+      "required": [
+        "canonical_label",
+        "label_source",
+        "label_review_status",
+        "display_safe",
+        "locale"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_label": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "label_source": {
+          "type": "string",
+          "enum": ["derived_from_token_id", "clinically_approved"]
+        },
+        "label_review_status": {
+          "type": "string",
+          "enum": ["unreviewed", "approved"]
+        },
+        "display_safe": { "type": "boolean" },
+        "locale": {
+          "description": "BCP 47 tag for canonical_label and aliases. Only en-NG is defined at schema 2.0; additional locales require a schema bump so a consumer cannot silently receive text it cannot render.",
+          "type": "string",
+          "enum": ["en-NG"]
+        }
+      }
+    },
+
+    "searchBlock": {
+      "description": "SEARCH-ONLY. Never read by rules or scoring. `search_only: true` is a constant at schema 2.0 and is asserted by the validator.",
+      "type": "object",
+      "required": ["normalized_form", "aliases", "search_only"],
+      "additionalProperties": false,
+      "properties": {
+        "normalized_form": {
+          "description": "normalize(token_id with underscores replaced by spaces), per docs/VOCABULARY_NORMALIZATION_SPEC.md. Generated, never authored.",
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "aliases": {
+          "description": "Authored search phrases. Sorted by normalized form then by raw string, unique after normalization within the entry, and never equal to the entry's own canonical label after normalization.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/alias" }
+        },
+        "search_only": { "const": true }
+      }
+    },
+
+    "alias": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 96
+    },
+
+    "associationsBlock": {
+      "description": "SEARCH/INPUT metadata. Filtering, grouping and picker routing only. No field here may affect scoring, red-flag evaluation or urgency at schema 2.0.",
+      "type": "object",
+      "required": [
+        "body_areas",
+        "complaint_groups",
+        "severity_descriptors",
+        "duration_descriptors"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "body_areas": {
+          "description": "Body area IDs from the top-level body_areas vocabulary.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/tokenId" }
+        },
+        "complaint_groups": {
+          "description": "Complaint group IDs from the top-level complaint_groups vocabulary.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/tokenId" }
+        },
+        "severity_descriptors": {
+          "description": "Severity descriptors this token may be qualified by, drawn from severity_tokens. Descriptive only: attaching a descriptor here does not change any weight, rule or urgency tier.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/tokenId" }
+        },
+        "duration_descriptors": {
+          "description": "Duration descriptors this token may be qualified by, drawn from duration_tokens. Descriptive only, same constraint as severity_descriptors.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/tokenId" }
+        }
+      }
+    },
+
+    "reviewBlock": {
+      "type": "object",
+      "required": ["review_status", "clinical_reviewer", "review_date", "provenance"],
+      "additionalProperties": false,
+      "properties": {
+        "review_status": {
+          "type": "string",
+          "enum": ["not_reviewed", "in_review", "reviewed"]
+        },
+        "clinical_reviewer": { "type": ["string", "null"], "minLength": 1 },
+        "review_date": { "$ref": "#/$defs/nullableDate" },
+        "provenance": {
+          "description": "Where this entry's content came from. Free text, but must be non-empty: an entry with no provenance cannot be published.",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+
+    "searchIndex": {
+      "description": "Generated inverted index. Fully derivable from `tokens` — tools/validate_vocabulary.py regenerates it and requires an exact match, so a hand-edited index is a validation failure rather than a silent behaviour change.",
+      "type": "object",
+      "required": ["normalization_version", "resolver_version", "normalized_forms"],
+      "additionalProperties": false,
+      "properties": {
+        "normalization_version": { "type": "string", "minLength": 1 },
+        "resolver_version": { "type": "string", "minLength": 1 },
+        "normalized_forms": {
+          "description": "normalized form -> candidate token IDs, in resolver order. More than one ID means the form is ambiguous and must not auto-resolve.",
+          "type": "object",
+          "propertyNames": { "type": "string", "minLength": 1 },
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "$ref": "#/$defs/tokenId" }
+          }
+        }
+      }
+    }
+  }
+}

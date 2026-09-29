@@ -1,0 +1,98 @@
+{
+  "generator": "tools/classify_vocabulary_diff.py",
+  "generator_version": "1.0.0",
+  "phase": "I2 / W2 Step 1",
+  "from": {
+    "file": "token_dictionary.ng.v1.1.json",
+    "version": "1.1",
+    "schema_version": "1.0",
+    "sha256": "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019"
+  },
+  "to": {
+    "file": "candidate/token_dictionary.ng.v2.0.json",
+    "version": "2.0",
+    "schema_version": "2.0",
+    "sha256": "07f935967acb1d5515cb53ffd1c8e39b59b8daf85c67cf36fa3e25094e34cd2d",
+    "release_status": "candidate_unapproved"
+  },
+  "report_id": "baseline_diff",
+  "report_version": "1",
+  "publication_decision": {
+    "classification_gate_passed": true,
+    "other_gates": {
+      "clinical_review_of_schema_2_0": false,
+      "engineering_lead_approval": false,
+      "release_status_is_approved": false,
+      "top50_regression_executed_against_kb_2_4": false
+    },
+    "may_publish": false,
+    "why_not": [
+      "The classification gate passing means only that this diff contains no change requiring clinical review. It is not an approval to publish.",
+      "release_status is candidate_unapproved and clinical_review.status is not_reviewed.",
+      "No engineering-lead approval is recorded.",
+      "The 239-case Top-50 regression has not been re-run against kb 2.4 \u2014 see reports/case_bank_status_v1.json.",
+      "W2 Step 1 explicitly does not publish. The live /config manifest is unchanged."
+    ]
+  },
+  "classification_scheme": {
+    "search_only_metadata": {
+      "blocks_publication": false,
+      "required_approval": "data engineering merge"
+    },
+    "display_only_metadata": {
+      "blocks_publication": false,
+      "required_approval": "product review"
+    },
+    "clinical_token_identity": {
+      "blocks_publication": true,
+      "required_approval": "clinical review + engineering lead"
+    },
+    "red_flag_affecting": {
+      "blocks_publication": true,
+      "required_approval": "clinical review + engineering lead"
+    },
+    "scoring_rule_affecting": {
+      "blocks_publication": true,
+      "required_approval": "clinical review + engineering lead"
+    },
+    "question_flow_affecting": {
+      "blocks_publication": true,
+      "required_approval": "clinical review + product review"
+    },
+    "deprecation_removal": {
+      "blocks_publication": true,
+      "required_approval": "clinical review + engineering lead"
+    }
+  },
+  "result": {
+    "classifications_present": [
+      "search_only_metadata"
+    ],
+    "blocking_classifications": [],
+    "publication_eligible": true,
+    "findings": [
+      {
+        "classification": "search_only_metadata",
+        "blocks_publication": false,
+        "required_approval": "data engineering merge",
+        "description": "New top-level keys added. Schema 1.0 consumers never read them.",
+        "tokens": [],
+        "detail": {
+          "keys": [
+            "body_areas",
+            "complaint_groups",
+            "search_index",
+            "tokens"
+          ]
+        }
+      }
+    ],
+    "token_counts": {
+      "old": 295,
+      "new": 295,
+      "added": 0,
+      "removed": 0,
+      "unchanged": 295
+    }
+  }
+}

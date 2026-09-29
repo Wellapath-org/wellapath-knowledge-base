@@ -1,0 +1,55 @@
+{
+  "receipt_type": "publication_decision",
+  "receipt_id": "EXAMPLE-PUBLICATION-0001",
+  "receipt_schema_version": "1.0.0",
+  "operative": false,
+  "non_operative_declaration": "DRY-RUN EXAMPLE \u2014 NOT A RECORD OF ANY OPERATION. No upload, publication, activation or rollback has occurred. This document exists to define the shape a future authorized operation would record.",
+  "actor": {
+    "identity": null,
+    "title": null,
+    "role": "unassigned",
+    "authority_type": "none"
+  },
+  "occurred_at": null,
+  "environment": "staging",
+  "artifact": {
+    "artifact_id": "question_flow",
+    "artifact_version": "1.1",
+    "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "byte_count": 155532,
+    "object_key": "question_flow.ng.v1.1.json",
+    "country": "ng"
+  },
+  "decision_references": [
+    "publication/governance/decision_register_v1.json",
+    "IM001-ORD-GLOBAL-001 (Product authority over option ordering only)",
+    "IM001-DECISION-SET-COMPLETE (a completed decision set, not an authorization)",
+    "IM003-DISPOSITION-001 (Product disposition; clinical approval false)"
+  ],
+  "signing": {
+    "signed": false,
+    "mechanism": null,
+    "gap": "Contract 1.0.0 defines no receipt or manifest signing. This repository holds no signing key, no key custody procedure and no verification path, and invents none: an unsigned receipt is a statement by whoever wrote the file, and a home-made signature would look like assurance without being any. Establishing a trust mechanism is new infrastructure and needs its own decision."
+  },
+  "publication_performed": false,
+  "decision": "refused",
+  "predecessor": {
+    "artifact_version": "1.0",
+    "sha256": "sha256:c403648f8d4d80184879f4d467d4ae74e63df5be77c461298754b82737024998"
+  },
+  "approvals_at_decision": {
+    "product": "pending",
+    "clinical": "pending"
+  },
+  "blockers_at_decision": [
+    {
+      "id": "IM001-CLIN-FLAG-001",
+      "status": "open"
+    },
+    {
+      "id": "IM003-SB-001",
+      "status": "open"
+    }
+  ],
+  "note": "Refused. Clinical approval is not granted, no Clinical reviewer is assigned, two safety blockers are open, and no publication authorization record exists. The decision is recorded as refused rather than omitted: a refusal that leaves no trace is indistinguishable from a question nobody asked."
+}

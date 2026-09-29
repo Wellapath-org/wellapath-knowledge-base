@@ -1,0 +1,92 @@
+{
+  "fixture_id": "vocabulary_invalid_fixtures",
+  "fixture_version": "1",
+  "synthetic": true,
+  "WARNING": "SYNTHETIC NON-CLINICAL FIXTURES. Each file is the synthetic vocabulary with exactly one defect. None may be published or used as a source of vocabulary.",
+  "fixtures": [
+    {
+      "file": "duplicate_token_id.json",
+      "expected_failing_check": "B.identity:token_ids_are_unique"
+    },
+    {
+      "file": "malformed_token_id.json",
+      "expected_failing_check": "A.schema:conforms_to_token_dictionary_v2_schema"
+    },
+    {
+      "file": "missing_canonical_label.json",
+      "expected_failing_check": "A.schema:conforms_to_token_dictionary_v2_schema"
+    },
+    {
+      "file": "alias_equals_own_canonical.json",
+      "expected_failing_check": "C.metadata:no_alias_equal_to_its_own_canonical_form"
+    },
+    {
+      "file": "duplicate_alias_within_entry.json",
+      "expected_failing_check": "C.metadata:no_duplicate_alias_within_an_entry_after_normalization"
+    },
+    {
+      "file": "alias_shadows_another_canonical.json",
+      "expected_failing_check": "C.metadata:no_alias_shadows_another_tokens_canonical_form"
+    },
+    {
+      "file": "unresolvable_body_area.json",
+      "expected_failing_check": "D.references:valid_body_area_references"
+    },
+    {
+      "file": "unresolvable_complaint_group.json",
+      "expected_failing_check": "D.references:valid_complaint_group_references"
+    },
+    {
+      "file": "deprecated_without_replacement.json",
+      "expected_failing_check": "D.references:deprecated_tokens_name_a_replacement"
+    },
+    {
+      "file": "replacement_cycle.json",
+      "expected_failing_check": "D.references:no_replacement_cycles"
+    },
+    {
+      "file": "unresolvable_replacement.json",
+      "expected_failing_check": "D.references:replacement_links_resolve"
+    },
+    {
+      "file": "stale_search_index.json",
+      "expected_failing_check": "E.generation:search_index_is_reproducible_from_tokens"
+    },
+    {
+      "file": "tokens_disagree_with_legacy_arrays.json",
+      "expected_failing_check": "B.identity:tokens_and_legacy_arrays_describe_the_same_set"
+    },
+    {
+      "file": "legacy_order_changed.json",
+      "expected_failing_check": "B.identity:entry_order_reproduces_legacy_array_order"
+    },
+    {
+      "file": "display_safe_without_approval.json",
+      "expected_failing_check": "C.metadata:display_safe_requires_an_approved_label"
+    },
+    {
+      "file": "review_claim_without_evidence.json",
+      "expected_failing_check": "G.provenance:artifact_review_claim_is_backed_by_evidence"
+    },
+    {
+      "file": "published_without_review.json",
+      "expected_failing_check": "G.provenance:publication_requires_a_completed_clinical_review"
+    },
+    {
+      "file": "missing_provenance.json",
+      "expected_failing_check": "G.provenance:every_entry_has_provenance"
+    },
+    {
+      "file": "unknown_top_level_key.json",
+      "expected_failing_check": "A.schema:conforms_to_token_dictionary_v2_schema"
+    },
+    {
+      "file": "wrong_schema_version.json",
+      "expected_failing_check": "A.schema:conforms_to_token_dictionary_v2_schema"
+    },
+    {
+      "file": "search_not_marked_search_only.json",
+      "expected_failing_check": "A.schema:conforms_to_token_dictionary_v2_schema"
+    }
+  ]
+}

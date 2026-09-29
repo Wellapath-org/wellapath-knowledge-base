@@ -1,0 +1,203 @@
+{
+  "_metadata": {
+    "record_id": "approval_scope_reconciliation",
+    "version": "1",
+    "phase": "I3 / Step 2A",
+    "generator": "tools/build_publication_fixtures.py",
+    "generator_version": "1.0.0",
+    "evaluated_at": "2026-08-28T00:00:00Z",
+    "evaluator": "tools/pubkit/eligibility.py \u2014 a port of the Backend's src/manifest/eligibility.ts at fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+    "note": "Every claim below is COMPUTED by running the contract's own eligibility semantics over both encodings, not asserted in prose."
+  },
+  "ruling": {
+    "product_display_decision": {
+      "status": "complete",
+      "scope": "display_wording_and_ordering_only"
+    },
+    "artifact_publication_product_approval": {
+      "status": "pending"
+    },
+    "clinical_approval": {
+      "status": "pending"
+    },
+    "publication_authorization": false,
+    "activation_authorization": false,
+    "source": "The recorded IM-001 decision explicitly excludes publication and activation. Decision-set completion is not artifact approval."
+  },
+  "contract_can_express_the_distinction": true,
+  "contract_representation": {
+    "artifact_publication_product_approval": "approvals.product.status \u2014 the only input to the product half of `approved`",
+    "clinical_approval": "approvals.clinical.status",
+    "product_display_decision": "a blocker_record with status 'resolved' (IM001-PRODUCT-DISPLAY-DECISIONS)",
+    "why_a_resolved_blocker": "evaluateDescriptor computes `approved` exclusively from `approvals`, and reads `blockers` in a loop whose only effect is to set blockersResolved = false. A resolved blocker is therefore structurally incapable of granting approval \u2014 the safety is in the contract's shape, not in a convention anyone has to remember.",
+    "publication_authorization": "publication_decision_ref",
+    "activation_authorization": "activation_authorized + activation_decision_ref"
+  },
+  "encodings_compared": {
+    "knowledge_base": {
+      "approvals_product": {
+        "required": true,
+        "status": "pending",
+        "decision_ref": null,
+        "approved_at": null
+      },
+      "display_decision_gate": {
+        "id": "IM001-PRODUCT-DISPLAY-DECISIONS",
+        "status": "resolved",
+        "reference": "COMPLETED GATE, NOT AN APPROVAL. Product display decisions are complete (136 of 136 recorded; IM001-DECISION-SET-COMPLETE). Scope: display wording and ordering only. This does NOT grant artifact-publication Product approval, which remains pending in approvals.product, and it does not grant clinical approval, publication authorization or activation authorization. It is recorded as a resolved blocker precisely because a resolved blocker contributes nothing to `approved` \u2014 the contract computes approval only from `approvals`."
+      },
+      "as_shipped": {
+        "development": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        }
+      },
+      "with_unrelated_conditions_lifted": {
+        "development": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "APPROVAL_NOT_GRANTED",
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        }
+      }
+    },
+    "backend_fixture": {
+      "source": "wellapath-backend tests/fixtures/manifest/blocked-candidates.manifest.json @ fc40ac3e7d59cfed8e2584b78136c9704f7ab8cd",
+      "approvals_product": {
+        "required": true,
+        "status": "granted",
+        "decision_ref": "IM-001 \u2014 Product decisions complete; activation remains unauthorized",
+        "approved_at": null
+      },
+      "display_decision_gate": null,
+      "as_shipped": {
+        "development": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "staging": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "NOT_PUBLISHED"
+          ]
+        },
+        "production": {
+          "approved": false,
+          "active": false,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ACTIVATION_NOT_AUTHORIZED",
+            "APPROVAL_NOT_GRANTED",
+            "BLOCKER_UNRESOLVED",
+            "ENVIRONMENT_NOT_AUTHORIZED",
+            "NOT_PUBLISHED"
+          ]
+        }
+      },
+      "with_unrelated_conditions_lifted": {
+        "development": {
+          "approved": true,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        },
+        "staging": {
+          "approved": true,
+          "active": true,
+          "eligible_for_environment": true,
+          "reason_codes": []
+        },
+        "production": {
+          "approved": true,
+          "active": true,
+          "eligible_for_environment": false,
+          "reason_codes": [
+            "ENVIRONMENT_NOT_AUTHORIZED"
+          ]
+        }
+      }
+    }
+  },
+  "claims": {
+    "im_001_display_decision_completion_remains_true": true,
+    "artifact_publication_product_approval_remains_pending": true,
+    "clinical_approval_remains_pending": true,
+    "both_representations_are_ineligible_in_every_environment": true,
+    "no_evaluator_can_substitute_completion_for_approval": true,
+    "backend_encoding_substitutes_completion_for_approval": true
+  },
+  "verdict": {
+    "backend_granted_product_is": "fixture_defect",
+    "reasoning": "The decision_ref text describes decision-set completion \u2014 the scoped IM-001 display decision \u2014 but it is placed in approvals.product, which contract 1.0.0 defines as artifact-level Product approval and which evaluateDescriptor reads to compute `approved`. As shipped the descriptor is ineligible, but only because clinical approval is pending and two blockers are open. Lift those unrelated conditions and it becomes approved and eligible on the strength of a display-wording decision. A field that is safe only while something else happens to be blocking is not scoped correctly; it is a latent defect.",
+    "knowledge_base_action": "None. The KB does not weaken to match. It keeps approvals.product pending and carries the completed display decision as a resolved gate.",
+    "backend_follow_up_required": "The Backend fixture should set approvals.product.status to 'pending' and, if it wishes to record the IM-001 display-decision completion, carry it as a resolved blocker_record. This task does not modify the Backend repository.",
+    "blocking_this_merge": false,
+    "why_not_blocking": "The defect is in a Backend test fixture, not in the contract and not in the KB tooling. The contract can express the distinction, the KB descriptor validates against contract 1.0.0, and both encodings are ineligible as shipped."
+  }
+}

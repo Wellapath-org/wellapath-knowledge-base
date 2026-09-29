@@ -1,0 +1,119 @@
+{
+  "_metadata": {
+    "count": 18,
+    "description": "One fixture per way the IM-003 evidence or decision package could mislead a reviewer. Each names the check that must reject it; rejection by a different check counts as a failure.",
+    "fixture_set_id": "im003_invalid",
+    "generator": "tools/validate_im003.py",
+    "version": "1"
+  },
+  "fixtures": [
+    {
+      "defect": "The 56-pair count drifts without review, invalidating every decision bound to it.",
+      "expected_check": "I1",
+      "file": "im003_pair_count_drift.json",
+      "fixture_id": "im003_pair_count_drift"
+    },
+    {
+      "defect": "A token with KB scoring weight is classified clinically inert.",
+      "expected_check": "I2",
+      "file": "im003_scoring_token_called_inert.json",
+      "fixture_id": "im003_scoring_token_called_inert"
+    },
+    {
+      "defect": "A red-flag reference is dropped from the cross-reference.",
+      "expected_check": "I3",
+      "file": "im003_red_flag_reference_missed.json",
+      "fixture_id": "im003_red_flag_reference_missed"
+    },
+    {
+      "defect": "Only clarifier-trigger membership is checked — the weaker test the earlier note relied on.",
+      "expected_check": "I3",
+      "file": "im003_clarifier_membership_only.json",
+      "fixture_id": "im003_clarifier_membership_only"
+    },
+    {
+      "defect": "A decision names no reviewer.",
+      "expected_check": "I4",
+      "file": "im003_decision_without_reviewer.json",
+      "fixture_id": "im003_decision_without_reviewer"
+    },
+    {
+      "defect": "A decision carries no evidence.",
+      "expected_check": "I4",
+      "file": "im003_decision_without_evidence.json",
+      "fixture_id": "im003_decision_without_evidence"
+    },
+    {
+      "defect": "The scoring-reachability decision is filed as Product-only.",
+      "expected_check": "I5",
+      "file": "im003_clinical_decision_product_only.json",
+      "fixture_id": "im003_clinical_decision_product_only"
+    },
+    {
+      "defect": "A decision is marked approved in an analysis-only package.",
+      "expected_check": "I6",
+      "file": "im003_decision_approved.json",
+      "fixture_id": "im003_decision_approved"
+    },
+    {
+      "defect": "The package declares IM-003 enabled.",
+      "expected_check": "I6",
+      "file": "im003_enabled.json",
+      "fixture_id": "im003_enabled"
+    },
+    {
+      "defect": "A scenario claims IM-003 is enabled.",
+      "expected_check": "I8",
+      "file": "im003_scenario_enables_im003.json",
+      "fixture_id": "im003_scenario_enables_im003"
+    },
+    {
+      "defect": "A red-flag question is displaced by truncation.",
+      "expected_check": "I8",
+      "file": "im003_red_flag_displaced.json",
+      "fixture_id": "im003_red_flag_displaced"
+    },
+    {
+      "defect": "The path limit is raised from 5.",
+      "expected_check": "I8",
+      "file": "im003_path_limit_raised.json",
+      "fixture_id": "im003_path_limit_raised"
+    },
+    {
+      "defect": "Graph cycles are hidden from the report.",
+      "expected_check": "I7",
+      "file": "im003_cycle_count_hidden.json",
+      "fixture_id": "im003_cycle_count_hidden"
+    },
+    {
+      "defect": "Branch explosion is declared unbounded.",
+      "expected_check": "I7",
+      "file": "im003_unbounded_branching.json",
+      "fixture_id": "im003_unbounded_branching"
+    },
+    {
+      "defect": "A frozen candidate hash no longer matches the artifact on disk.",
+      "expected_check": "I9",
+      "file": "im003_frozen_artifact_hash_changed.json",
+      "fixture_id": "im003_frozen_artifact_hash_changed"
+    },
+    {
+      "defect": "Decisions are bound to an evidence hash that does not exist.",
+      "expected_check": "I10",
+      "file": "im003_evidence_binding_broken.json",
+      "fixture_id": "im003_evidence_binding_broken"
+    },
+    {
+      "defect": "The package claims the 239-case bank validates adaptive branching.",
+      "expected_check": "I11",
+      "file": "im003_case_bank_validation_claimed.json",
+      "fixture_id": "im003_case_bank_validation_claimed"
+    },
+    {
+      "defect": "Score/urgency deltas are published from the unvalidated scoring model.",
+      "expected_check": "I12",
+      "file": "im003_unvalidated_model_used.json",
+      "fixture_id": "im003_unvalidated_model_used"
+    }
+  ]
+}

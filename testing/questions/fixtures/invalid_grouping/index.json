@@ -1,0 +1,167 @@
+{
+  "_metadata": {
+    "fixture_set_id": "question_grouping_invalid",
+    "version": "1",
+    "generator": "tools/build_grouping_invalid_fixtures.py",
+    "base_artifact": "candidate/question_flow.ng.v1.1.json",
+    "base_sha256": "3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "description": "One fixture per way the grouping contract can be violated. Each names the check that must reject it; being rejected by a different check counts as a FAILURE, because that proves the artifact is broken rather than that the intended guard works.",
+    "count": 22
+  },
+  "fixtures": [
+    {
+      "fixture_id": "grouping_unknown_field",
+      "file": "grouping_unknown_field.json",
+      "expected_check": "G00",
+      "defect": "A grouping block carrying a field schema 1.1 does not define. A consumer would ignore it; the schema must not.",
+      "sha256": "973d9bd79de4cf983f23bf514bc4a31dbaa7168d39090afeaf4dfd038c68fb29"
+    },
+    {
+      "fixture_id": "grouping_semantics_absent",
+      "file": "grouping_semantics_absent.json",
+      "expected_check": "G01",
+      "defect": "The artifact groups questions but never declares that it does, so a consumer cannot know to apply a merge rule.",
+      "sha256": "92f32505059bded4e126b1448c1d35c485c23317aa024d5931cb6c4690871eda"
+    },
+    {
+      "fixture_id": "grouping_phase_after_truncation",
+      "file": "grouping_phase_after_truncation.json",
+      "expected_check": "G01",
+      "defect": "Merging after truncation lets un-merged questions consume the follow-up budget and drops questions the live engine asks.",
+      "sha256": "d11adbb65d18c64e108696aaf9a88b55632e27f84139961d5bdbe01f634865ef"
+    },
+    {
+      "fixture_id": "grouping_clarifier_role_declared_groupable",
+      "file": "grouping_clarifier_role_declared_groupable.json",
+      "expected_check": "G01",
+      "defect": "red_flag_clarifier removed from non_groupable_roles \u2014 the declaration that stops two danger-sign questions being merged into one.",
+      "sha256": "1d17f4dd305e3e9819466e33449ea493781211e83e7ee6e123c16113b8d2217b"
+    },
+    {
+      "fixture_id": "grouping_group_can_yield_two_questions",
+      "file": "grouping_group_can_yield_two_questions.json",
+      "expected_check": "G01",
+      "defect": "one_question_per_group_key false. A group that can present twice is not a group, and re-inflates the question count.",
+      "sha256": "5fc7ce0f95f481d7411060e0d7cb7a11575559b11df40fd655f47135821ca906"
+    },
+    {
+      "fixture_id": "grouping_duplicate_group_key",
+      "file": "grouping_duplicate_group_key.json",
+      "expected_check": "G02",
+      "defect": "Two questions claim one group_key, so a path can present two questions for a single group.",
+      "sha256": "3cedf83b39a314ea2bc7c5df5785e24f6fdbc0cce76cfa7eb12491601cee776e"
+    },
+    {
+      "fixture_id": "grouping_tie_break_key_reused_as_group_key",
+      "file": "grouping_tie_break_key_reused_as_group_key.json",
+      "expected_check": "G02",
+      "defect": "Two ungrouped questions share a tie_break_key. tie_break_key orders and never groups; this is an unresolved order tie, not an implied merge.",
+      "sha256": "04e527876f8a152d687f3ccb01411076319216d4e7519c97cf019366dd0e3f7d"
+    },
+    {
+      "fixture_id": "grouping_unknown_representative_selection",
+      "file": "grouping_unknown_representative_selection.json",
+      "expected_check": "G03",
+      "defect": "A selection rule naming user order. Accepting it would reintroduce exactly the nondeterminism this correction removes.",
+      "sha256": "b150664923dc33b53bb228fcb85369dfd55d40d11a7588ed7585cad95e4b73ba"
+    },
+    {
+      "fixture_id": "grouping_unknown_option_union_rule",
+      "file": "grouping_unknown_option_union_rule.json",
+      "expected_check": "G03",
+      "defect": "An option rule this validator cannot execute. Intersection would silently drop options a triggered source contributes.",
+      "sha256": "6e1a38d6234de4d2125660ae2277ed612f457f741fe58fc8c014176bdb380340"
+    },
+    {
+      "fixture_id": "grouping_option_conflict_not_preserving",
+      "file": "grouping_option_conflict_not_preserving.json",
+      "expected_check": "G03",
+      "defect": "A unioning group that does not promise to preserve every source's options.",
+      "sha256": "482e4e2e5077ee15e7c0ef53080172fcf740a019e2740831c1550d29b5595740"
+    },
+    {
+      "fixture_id": "grouping_value_type_conflict_accepted",
+      "file": "grouping_value_type_conflict_accepted.json",
+      "expected_check": "G03",
+      "defect": "Merging different answer shapes by picking one. That changes what an answer MEANS, which no grouping rule may do.",
+      "sha256": "9e9fcbafa0d18db391c138a47319dfdf42d6e88d47c80b6c96445a78c1a161ca"
+    },
+    {
+      "fixture_id": "grouping_empty_sources",
+      "file": "grouping_empty_sources.json",
+      "expected_check": "G04",
+      "defect": "A group with nothing to merge. The question can never be presented and its content is unreachable.",
+      "sha256": "ec9080ee662ed5b710e23e1f4dedbf13553afd4546f5815283ff6ca923cc49cb"
+    },
+    {
+      "fixture_id": "grouping_duplicate_source_id",
+      "file": "grouping_duplicate_source_id.json",
+      "expected_check": "G04",
+      "defect": "Two sources share an id, so provenance for the presented wording is ambiguous.",
+      "sha256": "7f427801b3f2a849b61ae3933f7ba9c7deeff23bb8ebbdf33b0ff68f8abf7ec6"
+    },
+    {
+      "fixture_id": "grouping_duplicate_source_order_index",
+      "file": "grouping_duplicate_source_order_index.json",
+      "expected_check": "G04",
+      "defect": "Two sources share an order index, so representative selection is a tie with no declared resolution.",
+      "sha256": "b9f1da663f7351ff9cfba059e02e992bdf6341801bb58e1feead93eb4a9fc03a"
+    },
+    {
+      "fixture_id": "grouping_source_option_not_declared",
+      "file": "grouping_source_option_not_declared.json",
+      "expected_check": "G05",
+      "defect": "A source would present an option the question never declares \u2014 an answer with no reviewed content and no ID-keyed home.",
+      "sha256": "d3373efc3c20b1aaabbe6cabeb0e4638e8c68aa5d959120955c44930a70bff92"
+    },
+    {
+      "fixture_id": "grouping_source_option_dropped",
+      "file": "grouping_source_option_dropped.json",
+      "expected_check": "G05",
+      "defect": "The question declares an option no source contributes. It can never be presented, so review would approve content no user sees.",
+      "sha256": "0cdd067b8092f66c192ba9157e6fd6e95c7d2b33255e0f34a660083eae6e8a21"
+    },
+    {
+      "fixture_id": "grouping_source_option_relabelled",
+      "file": "grouping_source_option_relabelled.json",
+      "expected_check": "G05",
+      "defect": "A source declares a different label for a shared option id, so the presented text depends on which source triggered.",
+      "sha256": "a2ff4d0b48905f93adeff97b79e5ff4f7dfa1964a7a976a2c69ef0ab50b09f44"
+    },
+    {
+      "fixture_id": "grouping_static_rule_with_source_options",
+      "file": "grouping_static_rule_with_source_options.json",
+      "expected_check": "G05",
+      "defect": "A static group whose source also carries options \u2014 two different option sets declared for one question.",
+      "sha256": "3cb5cda1425b441f0b4e2e19b559f4226f240485948f2e3125ccc2d8398af316"
+    },
+    {
+      "fixture_id": "grouping_clarifier_grouped",
+      "file": "grouping_clarifier_grouped.json",
+      "expected_check": "G06",
+      "defect": "A red-flag clarifier carrying a grouping block. Merging clarifiers deletes a danger-sign question; this must be impossible, not merely avoided.",
+      "sha256": "b308002f377cd13dafa23a0aa0c4bf1b964a5999f30778af0d31cdb6f7356e62"
+    },
+    {
+      "fixture_id": "grouping_source_triggers_outside_question",
+      "file": "grouping_source_triggers_outside_question.json",
+      "expected_check": "G07",
+      "defect": "A source that fires on a token its question's trigger does not cover, so the union needs a question that is never presented.",
+      "sha256": "46ebb496d83813e8947d50592d40483370dea9e64665d85a672e2234556e95b6"
+    },
+    {
+      "fixture_id": "grouping_ungrouped_question_in_groupable_role",
+      "file": "grouping_ungrouped_question_in_groupable_role.json",
+      "expected_check": "G08",
+      "defect": "The candidate 1.0 shape restored: a per-token follow-up with no grouping block, consuming its own slot against the limit of 5.",
+      "sha256": "7674f9643914dcc9d864c626b1e06ae4abe3229e1f92eb62565db30a56cadfb4"
+    },
+    {
+      "fixture_id": "grouping_source_order_index_not_integer",
+      "file": "grouping_source_order_index_not_integer.json",
+      "expected_check": "G09",
+      "defect": "A non-integer order index. Selection would fall back to JSON declaration order, which is not a declared rule.",
+      "sha256": "078f868d2921170cb27cc5832be524f7a907feebbc6543c41283daaaa3a9929f"
+    }
+  ]
+}

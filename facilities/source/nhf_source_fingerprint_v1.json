@@ -1,0 +1,547 @@
+{
+  "_metadata": {
+    "report_id": "nhf_source_fingerprint",
+    "version": "1",
+    "phase": "Nationwide Facilities / Step 4 (provenance investigation)",
+    "generator": "tools/report_source_fingerprint.py",
+    "note": "Reproducible identity of the supplied source CSV, for comparison against a candidate upstream export (authorization checklist item AUTH-09). Computed from committed bytes only; the CSV is never modified. Two files with the same sha256 are identical and need nothing below; two files that differ are located by header, row count, null pattern, state counts, identifier sets, timestamps and the per-state coordinate-orientation signature, in that order."
+  },
+  "file": {
+    "path": "facilities/source/nigeria_health_facilities.csv",
+    "sha256": "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3",
+    "byte_count": 20913558,
+    "title_line": "nigeria_health_facilities",
+    "row_count": 31390,
+    "column_count": 90
+  },
+  "columns": {
+    "order": [
+      "id",
+      "unique_id",
+      "state_unique_id",
+      "registration_no",
+      "start_date",
+      "close_date",
+      "facility_name",
+      "image_url",
+      "alt_facility_name",
+      "state_id",
+      "lga_id",
+      "ward_id",
+      "ownership_id",
+      "ownership_type_id",
+      "facility_level_id",
+      "facility_level_option_id",
+      "facility_level_options_category_id",
+      "physical_location",
+      "postal_address",
+      "longitude",
+      "latitude",
+      "phone_number",
+      "alternate_number",
+      "email_address",
+      "website",
+      "operational_days",
+      "operational_hours",
+      "operational_status_id",
+      "registration_status_id",
+      "license_status_id",
+      "outpatient",
+      "inpatient",
+      "doctors",
+      "pharmacists",
+      "dentist",
+      "pharmacy_technicians",
+      "nurses",
+      "lab_scientists",
+      "midwifes",
+      "lab_technicians",
+      "nurse_midwife",
+      "him_officers",
+      "community_health_officer",
+      "community_extension_workers",
+      "jun_community_extension_worker",
+      "dental_technicians",
+      "env_health_officers",
+      "attendants",
+      "beds",
+      "onsite_laboratory",
+      "onsite_imaging",
+      "onsite_pharmarcy",
+      "mortuary_services",
+      "ambulance_services",
+      "certificate_of_standard",
+      "status_id",
+      "created_by",
+      "created_at",
+      "updated_at",
+      "requested_by",
+      "requested_at",
+      "request_note",
+      "verified_by",
+      "verified_at",
+      "verify_note",
+      "validated_by",
+      "validated_at",
+      "validate_note",
+      "published_by",
+      "published_at",
+      "publish_note",
+      "facility_type_id",
+      "action",
+      "verified_id",
+      "verified_email",
+      "verified_mobile",
+      "validated_email",
+      "validated_mobile",
+      "published_email",
+      "published_mobile",
+      "state_name",
+      "lga_name",
+      "ward_name",
+      "facility_level_name",
+      "ownership_name",
+      "ownership_type",
+      "operational_status_name",
+      "registration_status_name",
+      "license_status_name",
+      "dhis2_synced"
+    ],
+    "header_sha256": "b2842a1d9bf5da62b303a32e279e59cd105c1c31e70097800018d24189c9320a"
+  },
+  "identifiers": {
+    "unique_id": {
+      "distinct": 31390,
+      "code_shape": "^\\d{2}/\\d{2}/\\d/\\d/\\d/\\d{4}$",
+      "matching_code_shape": 31383,
+      "segment_length_shape_counts": {
+        "2/2/1/0/0/4": 5,
+        "2/2/1/0/1/4": 2,
+        "2/2/1/1/1/4": 31383
+      },
+      "sorted_set_sha256": "afee64daa6ce96812fd1390542c15588050e61f23605c18c5be7100b534216c8"
+    },
+    "id": {
+      "distinct": 31390,
+      "numeric_min": 12348905,
+      "numeric_max": 87654281,
+      "sorted_set_sha256": "b55a75d6071ec1009d3b504c715cb745eeece7b69e57ced8b606053b1bf99cc0"
+    },
+    "state_unique_id_distinct": 31290
+  },
+  "grid3_cross_reference": {
+    "grid3_file": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+    "grid3_sha256": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180",
+    "grid3_nonblank_nhfr_facility_code": 32501,
+    "grid3_nonblank_nhfr_uid": 34541,
+    "unique_id_matching_grid3_nhfr_facility_code": 12619,
+    "id_matching_grid3_nhfr_uid": 17,
+    "note": "GRID3 v2.0 labels these columns NHFR_2024. The facility-code shape is identical between the two files; the exact-value overlap is bounded below by the two snapshots being roughly two years apart."
+  },
+  "timestamps": {
+    "created_at_min": "2026-05-18T16:06:51",
+    "created_at_max": "2026-07-13T10:11:03",
+    "updated_at_min": "2026-05-18T16:06:51",
+    "updated_at_max": "2026-07-21T13:15:26",
+    "zone_declared": false
+  },
+  "null_pattern": {
+    "empty_value_count_by_column": {
+      "id": 0,
+      "unique_id": 0,
+      "state_unique_id": 0,
+      "registration_no": 27946,
+      "start_date": 31390,
+      "close_date": 31390,
+      "facility_name": 0,
+      "image_url": 1432,
+      "alt_facility_name": 26431,
+      "state_id": 0,
+      "lga_id": 0,
+      "ward_id": 9,
+      "ownership_id": 5,
+      "ownership_type_id": 3872,
+      "facility_level_id": 7,
+      "facility_level_option_id": 9025,
+      "facility_level_options_category_id": 17120,
+      "physical_location": 477,
+      "postal_address": 28972,
+      "longitude": 524,
+      "latitude": 524,
+      "phone_number": 877,
+      "alternate_number": 25391,
+      "email_address": 24424,
+      "website": 30347,
+      "operational_days": 704,
+      "operational_hours": 697,
+      "operational_status_id": 861,
+      "registration_status_id": 0,
+      "license_status_id": 76,
+      "outpatient": 448,
+      "inpatient": 451,
+      "doctors": 723,
+      "pharmacists": 776,
+      "dentist": 730,
+      "pharmacy_technicians": 776,
+      "nurses": 725,
+      "lab_scientists": 776,
+      "midwifes": 725,
+      "lab_technicians": 776,
+      "nurse_midwife": 726,
+      "him_officers": 776,
+      "community_health_officer": 776,
+      "community_extension_workers": 776,
+      "jun_community_extension_worker": 776,
+      "dental_technicians": 776,
+      "env_health_officers": 776,
+      "attendants": 776,
+      "beds": 723,
+      "onsite_laboratory": 452,
+      "onsite_imaging": 452,
+      "onsite_pharmarcy": 452,
+      "mortuary_services": 454,
+      "ambulance_services": 454,
+      "certificate_of_standard": 0,
+      "status_id": 0,
+      "created_by": 0,
+      "created_at": 0,
+      "updated_at": 0,
+      "requested_by": 0,
+      "requested_at": 0,
+      "request_note": 31390,
+      "verified_by": 0,
+      "verified_at": 0,
+      "verify_note": 0,
+      "validated_by": 0,
+      "validated_at": 0,
+      "validate_note": 0,
+      "published_by": 0,
+      "published_at": 0,
+      "publish_note": 0,
+      "facility_type_id": 7,
+      "action": 1432,
+      "verified_id": 31390,
+      "verified_email": 31390,
+      "verified_mobile": 31390,
+      "validated_email": 31390,
+      "validated_mobile": 31390,
+      "published_email": 31390,
+      "published_mobile": 31390,
+      "state_name": 0,
+      "lga_name": 0,
+      "ward_name": 9,
+      "facility_level_name": 7,
+      "ownership_name": 5,
+      "ownership_type": 3872,
+      "operational_status_name": 861,
+      "registration_status_name": 0,
+      "license_status_name": 76,
+      "dhis2_synced": 0
+    }
+  },
+  "state_counts": {
+    "Abia": 756,
+    "Akwa-Ibom": 733,
+    "Anambra": 1352,
+    "Bauchi": 689,
+    "Bayelsa": 76,
+    "Benue": 1670,
+    "Borno": 353,
+    "Cross River": 1158,
+    "Delta": 861,
+    "Ebonyi": 415,
+    "Edo": 458,
+    "Ekiti": 582,
+    "Enugu": 935,
+    "FCT": 664,
+    "Gombe": 743,
+    "Imo": 1498,
+    "Jigawa": 1053,
+    "Kaduna": 1113,
+    "Kano": 1441,
+    "Katsina": 425,
+    "Kogi": 1138,
+    "Kwara": 939,
+    "Lagos": 1521,
+    "Nasarawa": 665,
+    "Niger": 826,
+    "Ogun": 1081,
+    "Ondo": 861,
+    "Osun": 1676,
+    "Oyo": 1593,
+    "Plateau": 1592,
+    "Rivers": 895,
+    "Taraba": 948,
+    "Yobe": 498,
+    "Zamfara": 182
+  },
+  "coordinate_signature": {
+    "rows_without_a_parseable_pair": 524,
+    "rows_at_null_island": 5,
+    "per_state_medians_as_given": {
+      "Abia": {
+        "rows_with_coordinates": 756,
+        "median_latitude_as_given": 5.15,
+        "median_longitude_as_given": 7.39
+      },
+      "Akwa-Ibom": {
+        "rows_with_coordinates": 733,
+        "median_latitude_as_given": 4.9,
+        "median_longitude_as_given": 7.84
+      },
+      "Anambra": {
+        "rows_with_coordinates": 1352,
+        "median_latitude_as_given": 6.12,
+        "median_longitude_as_given": 6.93
+      },
+      "Bauchi": {
+        "rows_with_coordinates": 689,
+        "median_latitude_as_given": 9.99,
+        "median_longitude_as_given": 11.06
+      },
+      "Bayelsa": {
+        "rows_with_coordinates": 76,
+        "median_latitude_as_given": 4.95,
+        "median_longitude_as_given": 6.32
+      },
+      "Benue": {
+        "rows_with_coordinates": 1670,
+        "median_latitude_as_given": 8.75,
+        "median_longitude_as_given": 7.28
+      },
+      "Borno": {
+        "rows_with_coordinates": 353,
+        "median_latitude_as_given": 12.91,
+        "median_longitude_as_given": 10.88
+      },
+      "Cross River": {
+        "rows_with_coordinates": 1158,
+        "median_latitude_as_given": 5.98,
+        "median_longitude_as_given": 8.53
+      },
+      "Delta": {
+        "rows_with_coordinates": 861,
+        "median_latitude_as_given": 5.64,
+        "median_longitude_as_given": 6.02
+      },
+      "Ebonyi": {
+        "rows_with_coordinates": 415,
+        "median_latitude_as_given": 6.2,
+        "median_longitude_as_given": 8.0
+      },
+      "Edo": {
+        "rows_with_coordinates": 458,
+        "median_latitude_as_given": 6.49,
+        "median_longitude_as_given": 5.72
+      },
+      "Ekiti": {
+        "rows_with_coordinates": 582,
+        "median_latitude_as_given": 7.66,
+        "median_longitude_as_given": 5.23
+      },
+      "Enugu": {
+        "rows_with_coordinates": 930,
+        "median_latitude_as_given": 6.47,
+        "median_longitude_as_given": 7.48
+      },
+      "FCT": {
+        "rows_with_coordinates": 664,
+        "median_latitude_as_given": 7.36,
+        "median_longitude_as_given": 9.01
+      },
+      "Gombe": {
+        "rows_with_coordinates": 742,
+        "median_latitude_as_given": 11.22,
+        "median_longitude_as_given": 10.2
+      },
+      "Imo": {
+        "rows_with_coordinates": 1498,
+        "median_latitude_as_given": 5.57,
+        "median_longitude_as_given": 7.06
+      },
+      "Jigawa": {
+        "rows_with_coordinates": 1053,
+        "median_latitude_as_given": 9.53,
+        "median_longitude_as_given": 12.36
+      },
+      "Kaduna": {
+        "rows_with_coordinates": 1113,
+        "median_latitude_as_given": 7.83,
+        "median_longitude_as_given": 10.48
+      },
+      "Kano": {
+        "rows_with_coordinates": 1409,
+        "median_latitude_as_given": 8.51,
+        "median_longitude_as_given": 11.96
+      },
+      "Katsina": {
+        "rows_with_coordinates": 425,
+        "median_latitude_as_given": 7.6,
+        "median_longitude_as_given": 12.75
+      },
+      "Kogi": {
+        "rows_with_coordinates": 1138,
+        "median_latitude_as_given": 6.74,
+        "median_longitude_as_given": 7.58
+      },
+      "Kwara": {
+        "rows_with_coordinates": 838,
+        "median_latitude_as_given": 4.68,
+        "median_longitude_as_given": 8.49
+      },
+      "Lagos": {
+        "rows_with_coordinates": 1521,
+        "median_latitude_as_given": 6.53,
+        "median_longitude_as_given": 3.34
+      },
+      "Nasarawa": {
+        "rows_with_coordinates": 665,
+        "median_latitude_as_given": 8.27,
+        "median_longitude_as_given": 8.63
+      },
+      "Niger": {
+        "rows_with_coordinates": 785,
+        "median_latitude_as_given": 6.05,
+        "median_longitude_as_given": 9.67
+      },
+      "Ogun": {
+        "rows_with_coordinates": 902,
+        "median_latitude_as_given": 6.83,
+        "median_longitude_as_given": 3.35
+      },
+      "Ondo": {
+        "rows_with_coordinates": 861,
+        "median_latitude_as_given": 7.12,
+        "median_longitude_as_given": 5.05
+      },
+      "Osun": {
+        "rows_with_coordinates": 1506,
+        "median_latitude_as_given": 7.67,
+        "median_longitude_as_given": 4.57
+      },
+      "Oyo": {
+        "rows_with_coordinates": 1593,
+        "median_latitude_as_given": 7.68,
+        "median_longitude_as_given": 3.91
+      },
+      "Plateau": {
+        "rows_with_coordinates": 1592,
+        "median_latitude_as_given": 9.15,
+        "median_longitude_as_given": 9.37
+      },
+      "Rivers": {
+        "rows_with_coordinates": 895,
+        "median_latitude_as_given": 4.83,
+        "median_longitude_as_given": 7.02
+      },
+      "Taraba": {
+        "rows_with_coordinates": 948,
+        "median_latitude_as_given": 11.07,
+        "median_longitude_as_given": 7.91
+      },
+      "Yobe": {
+        "rows_with_coordinates": 498,
+        "median_latitude_as_given": 11.11,
+        "median_longitude_as_given": 12.06
+      },
+      "Zamfara": {
+        "rows_with_coordinates": 182,
+        "median_latitude_as_given": 6.19,
+        "median_longitude_as_given": 12.15
+      }
+    },
+    "note": "Medians are of the columns AS LABELLED in the source. In a correctly oriented Nigerian dataset the median latitude lies in roughly 4-14 and the median longitude in roughly 3-15 with latitude < longitude in most southern states. States whose two medians appear exchanged relative to their known position reproduce the transposition finding of Steps 2-3 (reports/facilities_coordinate_audit_v1.json)."
+  },
+  "constant_workflow_values": {
+    "verify_note": "Auto-approved via bulk import",
+    "validate_note": "Auto-approved via bulk import",
+    "publish_note": "Auto-published via bulk import",
+    "certificate_of_standard": "No",
+    "dhis2_synced": "0"
+  },
+  "canonical_samples": {
+    "method": "rows sorted by unique_id; the first and last 10 rows are each canonicalized as name=value pairs joined by 0x1F, values stripped of surrounding whitespace, and hashed sha256.",
+    "samples": [
+      {
+        "unique_id": "01/01/1/1/1/0001",
+        "canonical_row_sha256": "96f912d931bdac627733e71727ddf64a0b385733482470a952edfc0796dd3c87"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0002",
+        "canonical_row_sha256": "dd13dd1b48fc7a216addb64e2d24903b9fd39d03639b0a8ab419fd4f57030cd3"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0003",
+        "canonical_row_sha256": "c36a17d0b890bf45a4d1d58a1ad85b4eca9460e353d4270383bc9deab7f52629"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0004",
+        "canonical_row_sha256": "1a5a80ebbc586092b13ef80249076103695b9512e338049f8d875bf5856cb35b"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0006",
+        "canonical_row_sha256": "7dc35f9da7631a6603db731fdb53633bcd988a042dbba49f694d3301c1cdbc27"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0007",
+        "canonical_row_sha256": "0b823e4104132706d635a354f4ae15cd6f58185ddd517762aa27d4aa01388598"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0008",
+        "canonical_row_sha256": "783d38af621f456c3ea46e62960c2284139c8d46caffc901aef362d112af87dc"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0009",
+        "canonical_row_sha256": "3d76567960bc369b82f8888f0d91b65283b5b0de846f8b3177dc0c20ae9c2f9a"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0010",
+        "canonical_row_sha256": "c88eb15bd0a8321e68164ad29212996296cf9b4592d003a8354a8283a7f90be0"
+      },
+      {
+        "unique_id": "01/01/1/1/1/0017",
+        "canonical_row_sha256": "66b89a7faa04a59b42ce14375c11287e1c044d0096c48541e2ca0e111a63fca2"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0339",
+        "canonical_row_sha256": "594ed7b91edfea79c84477cd050f97d4711000f1f750eaf6ffd6e6f8af6967e5"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0340",
+        "canonical_row_sha256": "f74b6d19ad2aba71fd6790d5994edb2b4f5c53cfd763bed860de4369c65b7fba"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0341",
+        "canonical_row_sha256": "e7543e10cabad80b760325d3a851d481ec6aaea6c68f0d309ecb8c9f10e8d584"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0346",
+        "canonical_row_sha256": "97c0a09838e72543a3f845257c44237918ef9e6f01fe2c79a1a3393b53f8a19a"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0347",
+        "canonical_row_sha256": "f2ee94c13686dcd5193a54976bc12450b55e2c933bdd5c5a252034927a0fec0d"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0350",
+        "canonical_row_sha256": "17900f35b20aaa1f34fb402d97352023f74db61fa2dafbc94d414147db9f04ae"
+      },
+      {
+        "unique_id": "37/06/1/2/2/0351",
+        "canonical_row_sha256": "88d946a37a563878feb00949549668374a2f7a1860b11a418e4401796f405875"
+      },
+      {
+        "unique_id": "37/06/1/3/1/0328",
+        "canonical_row_sha256": "2c87666c4aeff1d11a2c9396486fbac8921d8da03612ab6bd9a33ebd310bd443"
+      },
+      {
+        "unique_id": "37/06/1/3/2/0054",
+        "canonical_row_sha256": "e1144234754122149d0fe4f3500d2b5307df51dd22cdba2558aeb442192d3a6c"
+      },
+      {
+        "unique_id": "37/06/1/3/2/0343",
+        "canonical_row_sha256": "8dad400e18935ca8e563c172fd48ca6ec4571da6433958fb87aa6dafb0c55f29"
+      }
+    ]
+  }
+}

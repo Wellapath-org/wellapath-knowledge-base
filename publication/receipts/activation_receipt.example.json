@@ -1,0 +1,37 @@
+{
+  "receipt_type": "activation",
+  "receipt_id": "EXAMPLE-ACTIVATION-0001",
+  "receipt_schema_version": "1.0.0",
+  "operative": false,
+  "non_operative_declaration": "DRY-RUN EXAMPLE \u2014 NOT A RECORD OF ANY OPERATION. No upload, publication, activation or rollback has occurred. This document exists to define the shape a future authorized operation would record.",
+  "actor": {
+    "identity": null,
+    "title": null,
+    "role": "unassigned",
+    "authority_type": "none"
+  },
+  "occurred_at": null,
+  "environment": "staging",
+  "artifact": {
+    "artifact_id": "question_flow",
+    "artifact_version": "1.1",
+    "sha256": "sha256:3ea534b0797f382ec895e56accfd631d37fd61ae1bb2ecf173a666d5b888c02b",
+    "byte_count": 155532,
+    "object_key": "question_flow.ng.v1.1.json",
+    "country": "ng"
+  },
+  "decision_references": [
+    "no activation authorization exists for question_flow@1.1",
+    "im_001_resolved: true is a decision-set completion and authorizes no activation"
+  ],
+  "signing": {
+    "signed": false,
+    "mechanism": null,
+    "gap": "Contract 1.0.0 defines no receipt or manifest signing. This repository holds no signing key, no key custody procedure and no verification path, and invents none: an unsigned receipt is a statement by whoever wrote the file, and a home-made signature would look like assurance without being any. Establishing a trust mechanism is new infrastructure and needs its own decision."
+  },
+  "activation_performed": false,
+  "decision": "refused",
+  "deactivated": null,
+  "activation_authorization_ref": null,
+  "note": "Refused. Activation requires an explicit activation authorization bound to this artifact and version; none exists. `deactivated` is null because nothing was active to replace \u2014 a fact worth recording rather than an empty field."
+}

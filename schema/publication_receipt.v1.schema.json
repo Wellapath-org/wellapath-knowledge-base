@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wellapath.org/schema/publication_receipt.v1.schema.json",
+  "title": "WellaPath publication receipt contracts v1",
+  "description": "Schemas for the four receipts that future, separately authorized operations will emit: upload, publication decision, activation and rollback. NOTHING IN THIS REPOSITORY EMITS AN OPERATIVE RECEIPT. Only dry-run examples exist, and every one carries `operative: false` plus a `non_operative_declaration`, pinned by `const` — a forged successful receipt is therefore a schema failure and not merely a policy violation.\n\nEach receipt binds the same spine: who acted, when, in which environment, on which artifact version, with which hash and byte count, at which immutable key, under which decision references, and what it moved from. Rollback additionally binds the predecessor it returned to.\n\nSIGNING GAP: these receipts are unsigned. Contract 1.0.0 has no manifest or receipt signing, and this repository has no signing key, no key custody and no verification path. An unsigned receipt is a statement by whoever wrote the file. It is recorded here as a known gap; no substitute trust mechanism is invented, because a home-made one would look like assurance without being any.",
+  "type": "object",
+  "oneOf": [
+    { "$ref": "#/$defs/upload_receipt" },
+    { "$ref": "#/$defs/publication_decision_receipt" },
+    { "$ref": "#/$defs/activation_receipt" },
+    { "$ref": "#/$defs/rollback_receipt" }
+  ],
+  "$defs": {
+    "operative_flag": {
+      "const": false,
+      "description": "Always false in this repository. A receipt describing an operation that really happened would be produced by a future authorized operator tool, under a contract that does not yet exist. Pinning this false means no file here can be mistaken for one, or repurposed as one."
+    },
+    "non_operative_declaration": {
+      "const": "DRY-RUN EXAMPLE — NOT A RECORD OF ANY OPERATION. No upload, publication, activation or rollback has occurred. This document exists to define the shape a future authorized operation would record.",
+      "type": "string"
+    },
+    "signing": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["signed", "mechanism", "gap"],
+      "properties": {
+        "signed": { "const": false },
+        "mechanism": { "type": "null" },
+        "gap": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Must state the signing gap in words. Silence about it would read as absence of a problem."
+        }
+      }
+    },
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["identity", "title", "role", "authority_type"],
+      "properties": {
+        "identity": { "type": ["string", "null"], "minLength": 1 },
+        "title": { "type": ["string", "null"] },
+        "role": { "enum": ["operator", "engineering_lead", "founder", "product", "clinical", "unassigned"] },
+        "authority_type": { "enum": ["product", "clinical", "engineering_lead", "founder", "none"] }
+      }
+    },
+    "artifact_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["artifact_id", "artifact_version", "sha256", "byte_count", "object_key", "country"],
+      "properties": {
+        "artifact_id": { "type": "string", "pattern": "^[a-z][a-z0-9_]{1,63}$" },
+        "artifact_version": { "type": "string", "pattern": "^\\d+(\\.\\d+){0,3}$" },
+        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "byte_count": { "type": "integer", "minimum": 1 },
+        "object_key": { "type": "string", "pattern": "^[a-z0-9_]+\\.[a-z]{2}\\.v\\d+(\\.\\d+)*\\.json$" },
+        "country": { "type": "string", "pattern": "^[a-z]{2}$" }
+      }
+    },
+    "version_ref": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["artifact_version", "sha256"],
+      "properties": {
+        "artifact_version": { "type": "string", "pattern": "^\\d+(\\.\\d+){0,3}$" },
+        "sha256": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" }
+      }
+    },
+    "decision_references": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Decision IDs and record paths. Never a credential, a token or a signed URL."
+    },
+    "common": {
+      "type": "object",
+      "required": [
+        "receipt_id",
+        "receipt_schema_version",
+        "operative",
+        "non_operative_declaration",
+        "actor",
+        "occurred_at",
+        "environment",
+        "artifact",
+        "decision_references",
+        "signing"
+      ],
+      "properties": {
+        "receipt_id": { "type": "string", "minLength": 1 },
+        "receipt_schema_version": { "const": "1.0.0" },
+        "operative": { "$ref": "#/$defs/operative_flag" },
+        "non_operative_declaration": { "$ref": "#/$defs/non_operative_declaration" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "occurred_at": {
+          "type": ["string", "null"],
+          "description": "Null in every example here, because nothing occurred. A future operative receipt records a real UTC instant."
+        },
+        "environment": { "enum": ["development", "staging", "production"] },
+        "artifact": { "$ref": "#/$defs/artifact_identity" },
+        "decision_references": { "$ref": "#/$defs/decision_references" },
+        "signing": { "$ref": "#/$defs/signing" }
+      }
+    },
+    "upload_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/common" }],
+      "required": ["receipt_type", "upload_performed", "origin", "verified_after_upload"],
+      "properties": {
+        "receipt_type": { "const": "upload" },
+        "receipt_id": { "type": "string" },
+        "receipt_schema_version": { "const": "1.0.0" },
+        "operative": { "$ref": "#/$defs/operative_flag" },
+        "non_operative_declaration": { "$ref": "#/$defs/non_operative_declaration" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "occurred_at": { "type": ["string", "null"] },
+        "environment": { "enum": ["development", "staging", "production"] },
+        "artifact": { "$ref": "#/$defs/artifact_identity" },
+        "decision_references": { "$ref": "#/$defs/decision_references" },
+        "signing": { "$ref": "#/$defs/signing" },
+        "upload_performed": { "const": false },
+        "origin": {
+          "type": ["string", "null"],
+          "description": "The approved origin the object would live on. Never carries a query string, a fragment or credentials."
+        },
+        "verified_after_upload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["performed", "method"],
+          "properties": {
+            "performed": { "const": false },
+            "method": {
+              "type": "string",
+              "description": "How a real upload would be verified: re-read the object and re-derive sha256 and byte count from the bytes actually stored, never from an ETag or a Content-Length header."
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "publication_decision_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/common" }],
+      "required": ["receipt_type", "publication_performed", "decision", "approvals_at_decision", "blockers_at_decision"],
+      "properties": {
+        "receipt_type": { "const": "publication_decision" },
+        "receipt_id": { "type": "string" },
+        "receipt_schema_version": { "const": "1.0.0" },
+        "operative": { "$ref": "#/$defs/operative_flag" },
+        "non_operative_declaration": { "$ref": "#/$defs/non_operative_declaration" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "occurred_at": { "type": ["string", "null"] },
+        "environment": { "enum": ["development", "staging", "production"] },
+        "artifact": { "$ref": "#/$defs/artifact_identity" },
+        "decision_references": { "$ref": "#/$defs/decision_references" },
+        "signing": { "$ref": "#/$defs/signing" },
+        "publication_performed": { "const": false },
+        "decision": { "enum": ["refused", "granted"] },
+        "predecessor": { "$ref": "#/$defs/version_ref" },
+        "approvals_at_decision": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["product", "clinical"],
+          "properties": {
+            "product": { "enum": ["granted", "denied", "pending", "not_required"] },
+            "clinical": { "enum": ["granted", "denied", "pending", "not_required"] }
+          }
+        },
+        "blockers_at_decision": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "status"],
+            "properties": {
+              "id": { "type": "string" },
+              "status": { "enum": ["open", "resolved"] }
+            }
+          }
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "activation_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/common" }],
+      "required": ["receipt_type", "activation_performed", "decision", "deactivated", "activation_authorization_ref"],
+      "properties": {
+        "receipt_type": { "const": "activation" },
+        "receipt_id": { "type": "string" },
+        "receipt_schema_version": { "const": "1.0.0" },
+        "operative": { "$ref": "#/$defs/operative_flag" },
+        "non_operative_declaration": { "$ref": "#/$defs/non_operative_declaration" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "occurred_at": { "type": ["string", "null"] },
+        "environment": { "enum": ["development", "staging", "production"] },
+        "artifact": { "$ref": "#/$defs/artifact_identity" },
+        "decision_references": { "$ref": "#/$defs/decision_references" },
+        "signing": { "$ref": "#/$defs/signing" },
+        "activation_performed": { "const": false },
+        "decision": { "enum": ["refused", "granted"] },
+        "deactivated": {
+          "$ref": "#/$defs/version_ref",
+          "description": "The version this activation replaced. Activation is a transition, and a receipt that names only the arrival cannot be audited backwards."
+        },
+        "activation_authorization_ref": {
+          "type": ["string", "null"],
+          "description": "Null means no activation authorization existed, which means the activation must not have happened."
+        },
+        "note": { "type": "string" }
+      }
+    },
+    "rollback_receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [{ "$ref": "#/$defs/common" }],
+      "required": ["receipt_type", "rollback_performed", "decision", "rolled_back_from", "rolled_back_to", "hash_bound"],
+      "properties": {
+        "receipt_type": { "const": "rollback" },
+        "receipt_id": { "type": "string" },
+        "receipt_schema_version": { "const": "1.0.0" },
+        "operative": { "$ref": "#/$defs/operative_flag" },
+        "non_operative_declaration": { "$ref": "#/$defs/non_operative_declaration" },
+        "actor": { "$ref": "#/$defs/actor" },
+        "occurred_at": { "type": ["string", "null"] },
+        "environment": { "enum": ["development", "staging", "production"] },
+        "artifact": { "$ref": "#/$defs/artifact_identity" },
+        "decision_references": { "$ref": "#/$defs/decision_references" },
+        "signing": { "$ref": "#/$defs/signing" },
+        "rollback_performed": { "const": false },
+        "decision": { "enum": ["refused", "granted"] },
+        "rolled_back_from": { "$ref": "#/$defs/version_ref" },
+        "rolled_back_to": { "$ref": "#/$defs/version_ref" },
+        "hash_bound": {
+          "const": true,
+          "description": "A rollback receipt is meaningless unless both ends are bound by hash. There is no false value: a rollback that could not name the exact bytes it returned to did not have a target."
+        },
+        "note": { "type": "string" }
+      }
+    }
+  }
+}

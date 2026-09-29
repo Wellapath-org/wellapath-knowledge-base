@@ -1,0 +1,106 @@
+{
+  "_template_meta": {
+    "template_id": "vocabulary_expansion_request",
+    "template_version": "1.0",
+    "for_schema_version": "2.0",
+    "owner": "Product / Clinical",
+    "reviewed_by": "Knowledge Base / Data Engineering, then Clinical",
+    "instructions": [
+      "Copy this file to proposals/<yyyy-mm-dd>-<short-name>.json and fill in `entries`.",
+      "One object per proposed vocabulary entry. Delete this _template_meta block in the copy.",
+      "Every field marked required must be filled. `null` is not a value for a required field.",
+      "An entry with approval_status other than 'approved' MUST NOT enter a release artifact. tools/validate_vocabulary.py rejects unreviewed content in a candidate marked for publication.",
+      "Proposing an ALIAS is cheap and is the default. Proposing a NEW TOKEN is expensive: it is a clinical_token_identity change, blocks publication pending clinical review, and needs regression cases. Prefer an alias unless the concept is genuinely clinically distinct.",
+      "Do not propose an alias that is merely a spelling variant the normalizer already handles. Check first: python3 -c \"import sys; sys.path.insert(0,'tools'); from vocab.normalize import normalize; print(normalize('your phrase'))\""
+    ],
+    "field_reference": "schema/token_dictionary_schema_v2.0.json"
+  },
+
+  "request": {
+    "request_id": "<required — e.g. VEX-2026-001>",
+    "requested_by": "<required — name and role>",
+    "request_date": "<required — YYYY-MM-DD>",
+    "rationale": "<required — why this expansion is needed; what user problem it solves>",
+    "target_artifact_version": "<required — the vocabulary version this is intended to land in>"
+  },
+
+  "entries": [
+    {
+      "proposal_type": "<required — one of: alias | new_token | body_area_association | complaint_group | severity_applicability | duration_applicability | deprecation>",
+
+      "existing_token_id": "<required for everything except new_token — the token this attaches to>",
+
+      "proposed_canonical_label": "<required — caregiver-facing plain English, max 80 chars. Not clinical jargon. 'Skin pulling in between the ribs when breathing', not 'chest indrawing'.>",
+
+      "proposed_aliases": [
+        "<0..n search phrases users would actually type or say>"
+      ],
+
+      "intended_body_area": "<required or null — must be one of body_area_tokens; see the vocabulary artifact>",
+
+      "severity_applicability": {
+        "applicable": "<required — true | false>",
+        "descriptors": [
+          "<0..n values from severity_tokens — descriptive only, changes no weight or urgency tier>"
+        ]
+      },
+
+      "duration_applicability": {
+        "applicable": "<required — true | false>",
+        "descriptors": [
+          "<0..n values from duration_tokens — descriptive only>"
+        ]
+      },
+
+      "complaint_group": "<required or null — an existing complaint_group_id, or a proposed new one>",
+
+      "ambiguity_notes": "<required — what else could a user mean by this phrase? Name every existing token it could plausibly collide with. Write 'none identified' only after actually checking; leaving this thin is the single most common way an unsafe alias gets through.>",
+
+      "known_collisions": [
+        "<0..n existing token_ids whose canonical label or alias set this would collide with after normalization>"
+      ],
+
+      "collision_is_intended": "<required if known_collisions is non-empty — true means 'this SHOULD produce an ambiguity prompt'; false means the proposal needs rewording>",
+
+      "source_provenance": "<required — where this wording came from. A named clinical source, a user-research session with a date, a WHO/IMCI/NCDC document with a section reference. 'Seemed sensible' is not provenance.>",
+
+      "clinical_reviewer": "<required for approval — name of the clinician who reviewed this entry>",
+
+      "review_date": "<required for approval — YYYY-MM-DD>",
+
+      "approval_status": "<required — one of: draft | in_review | approved | rejected>",
+
+      "approval_evidence": "<required when approval_status is 'approved' — PR URL, issue URL, or signed document reference. A claim with no link is not an approval.>",
+
+      "affected_existing_tokens": [
+        "<0..n token_ids whose behaviour or reachability this changes>"
+      ],
+
+      "affected_questions_or_rules": [
+        "<0..n rule_ids or question identifiers this touches. Any non-empty value here escalates the change beyond search-only metadata.>"
+      ],
+
+      "regression_cases_required": [
+        {
+          "case_description": "<what must be verified>",
+          "input_tokens": ["<token_ids>"],
+          "expected_urgency": "<emergency | urgent | non_urgent | self_care | unchanged>",
+          "expected_top_condition": "<condition_id or null>",
+          "rationale": "<why this case proves the change is safe>"
+        }
+      ],
+
+      "expected_change_classification": "<required — the class you expect tools/classify_vocabulary_diff.py to assign: search_only_metadata | display_only_metadata | clinical_token_identity | red_flag_affecting | scoring_rule_affecting | question_flow_affecting | deprecation_removal>"
+    }
+  ],
+
+  "_submission_checklist": [
+    "Every required field is filled — no placeholder text remains.",
+    "ambiguity_notes reflects an actual check against the existing 295 tokens, not a guess.",
+    "No proposed alias merely restates a spelling variant normalization already handles.",
+    "No proposed alias shadows another token's canonical form unless collision_is_intended is true.",
+    "Every entry with approval_status 'approved' has a named clinical_reviewer, a review_date and a resolvable approval_evidence link.",
+    "Any entry whose expected_change_classification is a blocking class has regression_cases_required filled in.",
+    "The request has been run past Knowledge Base / Data Engineering for a feasibility read before clinical review time is spent on it."
+  ]
+}

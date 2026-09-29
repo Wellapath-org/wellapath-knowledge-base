@@ -1,0 +1,90 @@
+{
+  "_metadata": {
+    "record_id": "live_question_oracle_provenance",
+    "version": "1",
+    "generator": "tools/validate_oracle_provenance.py",
+    "description": "Immutable provenance record for the captured live-oracle fixture. A SIDECAR: this tool never writes to the fixture, because editing captured evidence to describe itself would defeat the point of capturing it."
+  },
+  "fixture": {
+    "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.json",
+    "sha256": "18c163067eb6ee8f0b436e2a46294570d2260ec673fc9e293b25efc89a14c0a1",
+    "bytes": 4231406,
+    "forward_cases": 2325,
+    "reversed_cases": 2300,
+    "total_cases": 4625
+  },
+  "capture": {
+    "evidence_class": "CAPTURED_DART",
+    "source_repository": "Wellapath-org/wellapath-mobile",
+    "source_commit": "657739cc1745104dd1194a57ef14cc9793c9b98e",
+    "source_symbol": "QuestionEngine.generateQuestions",
+    "harness": {
+      "path": "testing/questions/fixtures/oracle/live_question_oracle_v1.harness.dart.txt",
+      "sha256": "13a5c322e29b1388348be7b877d0d8a6c07d35fbac595a041b04715069de80d1",
+      "bytes": 8455,
+      "status": "reproduction_harness_recorded_in_knowledge_base",
+      "honest_limitation": "The capture used a TEMPORARY test placed in a wellapath-mobile checkout and deleted afterwards. That test is committed nowhere. The recorded harness performs the same capture and is NOT claimed to be byte-identical to it. The fixture's authenticity therefore rests on the two independent verifications below, not on this file."
+    },
+    "command": "git -C wellapath-mobile checkout 657739cc1745104dd1194a57ef14cc9793c9b98e && cp <harness> test/question_flow/tmp_oracle_export_test.dart && flutter test test/question_flow/tmp_oracle_export_test.dart && rm test/question_flow/tmp_oracle_export_test.dart",
+    "observed_output": "EXPORTED cases=2325 reversed=2300 tokens=24",
+    "mobile_repository_effect": "None. The capture imports the production QuestionEngine and calls it; it changes no source, asset or artifact, and the temporary test was removed. wellapath-mobile is unmodified by this step."
+  },
+  "structure": {
+    "driving_tokens": [
+      "abdominal_cramps",
+      "bleeding",
+      "body_pain",
+      "chest_indrawing_severe",
+      "chills",
+      "cough",
+      "dark_urine",
+      "difficulty_breathing",
+      "dizziness",
+      "fast_breathing_child",
+      "fatigue",
+      "fever",
+      "headache",
+      "nausea",
+      "nosebleed",
+      "pain",
+      "poor_appetite",
+      "poor_feeding",
+      "shortness_of_breath",
+      "sweating",
+      "swelling",
+      "vomiting",
+      "watery_stool",
+      "weakness"
+    ],
+    "driving_token_count": 24,
+    "max_tokens_per_combination": 3,
+    "forward_input_ordering": "Every subset of size 0..3 over the sorted driving tokens, in ascending index order: empty, singletons, pairs, triples. 1+24+276+2024 = 2325.",
+    "reversed_input_ordering": "The same subsets with selection order reversed, sizes 0 and 1 omitted because reversing them duplicates a forward case. 2325-25 = 2300.",
+    "captured_output_fields": [
+      "options",
+      "question_text",
+      "red_flag_token",
+      "role"
+    ],
+    "captured_case_fields": [
+      "input_tokens",
+      "questions"
+    ],
+    "roles_observed": [
+      "additional_symptoms",
+      "duration",
+      "red_flag_clarifier",
+      "severity"
+    ],
+    "demographics_captured": "none",
+    "demographics_rationale": "generateQuestions takes only the selected symptom token list. Sex, age, pregnancy, medical conditions and body area are not read by it, so none is recorded. The fixture therefore contains no PHI \u2014 only question definitions and token identifiers already published in token_dictionary 1.1."
+  },
+  "verification": {
+    "structural_checks_passed": true,
+    "structural_errors": [],
+    "structural_basis": "The enumeration, input ordering, reversed-case rule, field sets, role vocabulary and question limit are RE-DERIVED here and compared against the fixture; they are not read from the fixture's own metadata.",
+    "independent_corroboration": "reports/question_grouping_coverage_v1_1.json stage 1 reproduces all 4,625 cases from a separately written transcription of question_engine.dart with 0 mismatches."
+  },
+  "immutability": "This fixture is frozen. Any change to its bytes changes the sha256 recorded here and fails tools/run_w3_grouping_checks.py. It may be replaced only by a fresh capture at a NEW Mobile commit, recorded as a new fixture version.",
+  "evidence_class_warning": "Only these 4,625 cases are captured Dart output. The size 4-5 results in reports/question_grouping_coverage_v1_1.json are MODEL-DERIVED and must never be described as captured Mobile evidence."
+}

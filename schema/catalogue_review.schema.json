@@ -1,0 +1,259 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://wellapath.org/schema/catalogue_review.schema.json",
+  "title": "Vocabulary 2.0 catalogue proposal and reviewer decision",
+  "description": "Structure for a catalogue review batch: one proposal per reviewable item, each carrying its provenance, its single primary change class, its risk flags, and two independent reviewer decisions. Publication eligibility is COMPUTED from the decisions and is never asserted by hand.",
+
+  "definitions": {
+    "decision_state": {
+      "description": "A reviewer's decision. 'pending' is the only permitted initial value; nothing becomes publication-eligible while any required decision is pending, rejected or deferred.",
+      "type": "string",
+      "enum": ["pending", "approved", "approved_with_revision", "rejected", "deferred"]
+    },
+
+    "primary_change_class": {
+      "description": "Exactly one per proposal. The first six are non-blocking; the rest block publication and require clinical review. Aligned with docs/VOCABULARY_CHANGE_CLASSIFICATION.md.",
+      "type": "string",
+      "enum": [
+        "display_label_only",
+        "search_alias",
+        "ambiguous_search_term",
+        "complaint_group_metadata",
+        "body_area_metadata",
+        "severity_metadata",
+        "duration_metadata",
+        "canonical_token_addition",
+        "canonical_token_rename",
+        "canonical_token_merge",
+        "canonical_token_deprecation",
+        "clinical_token_identity",
+        "scoring_affecting_association",
+        "red_flag_affecting_association",
+        "insufficient_evidence_do_not_propose"
+      ]
+    },
+
+    "provenance": {
+      "type": "object",
+      "description": "Where the proposal came from. Every field is required; absence of an approval record means UNAPPROVED, and a merged PR is not a clinical approval unless the record says so.",
+      "required": [
+        "source_repository",
+        "source_path",
+        "source_commit",
+        "source_record",
+        "authoring_context",
+        "approval_record"
+      ],
+      "properties": {
+        "source_repository": { "type": "string" },
+        "source_path": { "type": "string" },
+        "source_commit": { "type": ["string", "null"] },
+        "source_record": {
+          "type": "string",
+          "description": "The exact key, line or record within the source."
+        },
+        "authoring_context": { "type": "string" },
+        "approval_record": {
+          "type": "string",
+          "enum": [
+            "proposed_unreviewed",
+            "engineering_reviewed",
+            "product_approved",
+            "clinically_approved",
+            "rejected",
+            "unresolved"
+          ]
+        },
+        "approval_evidence": {
+          "type": ["string", "null"],
+          "description": "Resolvable link. Required to be non-null for product_approved or clinically_approved."
+        }
+      }
+    },
+
+    "reviewer_decision": {
+      "type": "object",
+      "required": ["decision", "reviewer", "review_date", "rationale"],
+      "properties": {
+        "decision": { "$ref": "#/definitions/decision_state" },
+        "reviewer": {
+          "type": ["string", "null"],
+          "description": "Named individual. Null while pending; required for any non-pending decision."
+        },
+        "review_date": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "rationale": { "type": ["string", "null"] },
+        "evidence": { "type": ["string", "null"] }
+      }
+    },
+
+    "risk_flags": {
+      "type": "object",
+      "description": "Secondary flags. A proposal keeps exactly one primary class but may raise any number of these.",
+      "required": [
+        "affects_scoring",
+        "affects_red_flags",
+        "connects_two_existing_scoring_tokens",
+        "erases_laterality",
+        "erases_anatomical_location",
+        "erases_severity",
+        "erases_duration",
+        "erases_negation",
+        "merges_adult_and_paediatric",
+        "merges_pregnancy_specific_and_general",
+        "merges_symptom_and_diagnosis",
+        "changes_scoring_eligibility",
+        "alters_red_flag_reachability"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^.*$": {
+          "type": "string",
+          "enum": ["no", "yes", "unresolved"],
+          "description": "'unresolved' is a legitimate answer and blocks approval. It must not be downgraded to 'no' to clear a batch."
+        }
+      }
+    },
+
+    "proposal": {
+      "type": "object",
+      "required": [
+        "proposal_id",
+        "batch_id",
+        "phrase",
+        "normalized_form",
+        "locale",
+        "proposed_target",
+        "primary_change_class",
+        "risk_flags",
+        "provenance",
+        "evidence_level",
+        "ambiguity_notes",
+        "clinical_review",
+        "product_review",
+        "publication_eligible",
+        "publication_blocked_by"
+      ],
+      "properties": {
+        "proposal_id": { "type": "string", "pattern": "^VC1-[0-9]{4}$" },
+        "batch_id": { "type": "string" },
+        "phrase": {
+          "type": "string",
+          "description": "The user-facing or common-language phrase under review."
+        },
+        "normalized_form": {
+          "type": "string",
+          "description": "Computed by tools/vocab/normalize.py. Never hand-written."
+        },
+        "locale": { "type": "string" },
+        "complaint_section": {
+          "type": "string",
+          "enum": [
+            "pain",
+            "breathing",
+            "digestive",
+            "skin",
+            "neurological",
+            "maternal",
+            "paediatric",
+            "general_system",
+            "unassigned"
+          ]
+        },
+        "proposed_target": {
+          "type": "object",
+          "description": "Either a single canonical token, or an ambiguity set of two or more, or null where the proposal deliberately assigns nothing.",
+          "required": ["canonical_token_id", "ambiguity_set"],
+          "properties": {
+            "canonical_token_id": { "type": ["string", "null"] },
+            "ambiguity_set": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "proposed_complaint_group": { "type": ["string", "null"] },
+        "proposed_body_area": { "type": ["string", "null"] },
+        "proposed_severity_applicable": { "type": ["boolean", "null"] },
+        "proposed_duration_applicable": { "type": ["boolean", "null"] },
+        "display_safe_proposal": {
+          "type": "string",
+          "enum": ["not_proposed", "proposed_true", "proposed_false"],
+          "description": "Default not_proposed. display_safe stays false until a product AND clinical decision says otherwise; an existing label is never sufficient grounds."
+        },
+        "primary_change_class": { "$ref": "#/definitions/primary_change_class" },
+        "risk_flags": { "$ref": "#/definitions/risk_flags" },
+        "provenance": { "$ref": "#/definitions/provenance" },
+        "evidence_level": {
+          "type": "string",
+          "enum": [
+            "authoritative_clinical_source",
+            "product_user_research",
+            "engineering_inference",
+            "example_only",
+            "none"
+          ]
+        },
+        "ambiguity_notes": { "type": "string" },
+        "lost_context": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "What the phrase carries that the proposed target does not, e.g. laterality, age group, severity."
+        },
+        "clinical_review": { "$ref": "#/definitions/reviewer_decision" },
+        "product_review": { "$ref": "#/definitions/reviewer_decision" },
+        "publication_eligible": {
+          "type": "boolean",
+          "description": "COMPUTED. True only when every required reviewer has approved, no risk flag is unresolved, and provenance is complete. tools/validate_catalogue.py recomputes this and fails if the stored value disagrees."
+        },
+        "publication_blocked_by": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Every reason eligibility is false. Empty only when publication_eligible is true."
+        }
+      }
+    },
+
+    "batch": {
+      "type": "object",
+      "required": [
+        "batch_id",
+        "title",
+        "risk_tier",
+        "approval_authorizes",
+        "approval_does_not_authorize",
+        "required_reviewers",
+        "batch_status",
+        "proposals"
+      ],
+      "properties": {
+        "batch_id": { "type": "string" },
+        "title": { "type": "string" },
+        "risk_tier": {
+          "type": "string",
+          "enum": ["low", "medium", "blocking"]
+        },
+        "approval_authorizes": { "type": "array", "items": { "type": "string" } },
+        "approval_does_not_authorize": { "type": "array", "items": { "type": "string" } },
+        "required_reviewers": {
+          "type": "array",
+          "items": { "type": "string", "enum": ["clinical", "product"] }
+        },
+        "batch_status": { "$ref": "#/definitions/decision_state" },
+        "proposals": { "type": "array", "items": { "$ref": "#/definitions/proposal" } }
+      }
+    }
+  },
+
+  "type": "object",
+  "required": ["_metadata", "batches"],
+  "properties": {
+    "_metadata": {
+      "type": "object",
+      "required": ["artifact_id", "version", "generated_by", "frozen_baseline"],
+      "properties": {
+        "artifact_id": { "const": "vocabulary_catalogue_review" },
+        "version": { "type": "string" },
+        "generated_by": { "type": "string" },
+        "frozen_baseline": { "type": "object" }
+      }
+    },
+    "batches": { "type": "array", "items": { "$ref": "#/definitions/batch" } }
+  }
+}

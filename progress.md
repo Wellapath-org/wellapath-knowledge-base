@@ -1,6 +1,6 @@
 # Progress Log — wellapath-knowledge-base
 
-Last updated: 2026-07-26
+Last updated: 2026-09-14
 
 ## Merged
 
@@ -20,6 +20,8 @@ Last updated: 2026-07-26
 | PR | Branch | Summary | Status |
 |---|---|---|---|
 | #9 | `feat/e9-symptom-token-mapping` | Issue #25 (E9 beta blocker): data engineer deliverable — `mobile_handoff/symptom_display_body_area_map.csv`/`.json` (all 164 symptom tokens → display name → body area, 61 flagged ambiguous) and `condition_top5_symptom_tokens.json` (top-5-by-weight tokens for all 50 conditions). Awaiting mobile engineer's `symptom_display_map.dart` expansion on `feat/e9-symptom-picker-expansion`. | Open, awaiting review/merge |
+| #40 | `feat/facilities-nhf-candidate` | Nationwide Facilities Step 1 (commit `4afffe1`): `candidate/facilities.ng.v2.0.json` from the supplied `nigeria_health_facilities.csv`, schema 2.0, generator, provenance record, quality/quarantine/comparison/Mobile-compat reports. `facilities.ng.v1.1.json` untouched. | Open, unmerged; superseded in content by #41 |
+| #41 | `feat/facilities-2-0-candidate-pipeline` (stacked on #40) | Steps 2–3 (commits `4bb8e26`, `55a4af6`): pipeline policies, coordinate-orientation remediation study, candidate manifest, coordinate audit, source-authorization checklist, Mobile handoff. Candidate 29,028 records, `8fb80d3d…6da2`, `candidate_unapproved` / `may_publish: false`. Sections "Nationwide Facilities — Step 2/3" below. | Open, unmerged; awaiting source authorization (9 items) and FAC-D001…D006 |
 
 | Issue | Title | Status |
 |---|---|---|
@@ -30,9 +32,1184 @@ Last updated: 2026-07-26
 
 - **Decision (2026-07-26):** ship the 45 phone-matched Lagos facilities as `facilities.ng.v1.1.json` now; treat manual enrichment as the interim v1.x strategy, with a future NHFR API integration as the v2.0 rebuild path.
 - **NHFR in-portal API request (hfr.fmohconnect.gov.ng):** retry was **not submitted** — WellaPath's organization domain isn't verified yet and a personal email was not used as a substitute. Still outstanding; needs a proper org domain/email before resubmission.
+- **v2.0 rebuild status (2026-09-14):** a bulk registry export was supplied as a file instead of the API and built into an unapproved candidate on PRs #40/#41 (sections "Nationwide Facilities — Step 2/3/4" at the end of this log). Publication is blocked by the source-authorization checklist (`docs/FACILITIES_SOURCE_AUTHORIZATION_CHECKLIST.md`, nine items missing) and by the Product/Clinical decisions in `docs/FACILITIES_DECISIONS_REQUIRED.md`. **v1.1 remains the active artifact.** Step 4's provenance investigation identified the source system as the NHFR (evidence-backed inference) and prepared an unsent authorization request to the Federal Ministry of Health for founder review.
 
 ## Known Issues
 
 - **`kb.ng.v2.2.json` is missing from `develop`.** It was committed to `feat/e7-red-flag-mirror-fix` (commit `a4d9c5d`) after PR #6 had already been merged (merge commit `8bc622b`'s second parent is the earlier `2a8ffaf`, not `a4d9c5d`). The file exists on the remote branch but was never folded into mainline. `kb.ng.v2.3.json` (PR #7) was regenerated directly from the 50 `conditions/*.json` files, so it isn't affected by this gap, but the `v2.2` artifact itself needs to be recovered or intentionally abandoned.
 - **Symptom vocabulary has zero "Arms"-specific tokens** (flagged in PR #9) — the body-diagram picker has an Arms zone with nothing to route to it under the current 164-token set.
 - **61 of 164 symptom tokens are ambiguous** for lay users (no body location, near-duplicate tokens, or unexplained clinical jargon) — see `mobile_handoff/symptom_display_body_area_map.csv` for the full list and reasoning.
+
+## I2 / W2 — Symptom Vocabulary 2.0 foundation (Step 1)
+
+Branch `feat/i2-w2-vocabulary-schema-foundation`. Contract-defining step: schema,
+migration, validators, case-bank baseline and downstream contracts, so Backend and
+Mobile stop guessing. **Nothing published, nothing clinically approved.**
+Full write-up: `docs/I2_W2_VOCABULARY_FOUNDATION.md`.
+
+- **Baseline frozen from committed bytes** — no frozen artifact re-serialized or
+  rewritten. `token_dictionary` 1.1 · `kb` 2.4 · `rules` 2.2 · `facilities` 1.1 ·
+  `case_bank` 1.0, all five hashes matching the E9.1 freeze. 295 tokens, 240
+  referenced, 55 unused, 0 duplicate normalized labels, 0 ID-format violations.
+  `reports/baseline_freeze_v1.json`, `reports/token_reference_graph_v1.json`.
+
+- **Candidate artifact** `candidate/token_dictionary.ng.v2.0.json` — schema 2.0,
+  artifact 2.0, SHA256 `07f93596…`, `release_status: candidate_unapproved`.
+  295 → 295 tokens: zero added, removed, renamed, merged or deprecated. Generated
+  by `tools/build_vocabulary_v2.py`; the downgrade projection rebuilds
+  `token_dictionary.ng.v1.1.json` byte for byte from the new `tokens[]` alone,
+  asserted at build time and in tests.
+
+- **Backward compatible, measured not assumed.** The shipped mobile engine reads
+  exactly two keys of the token dictionary (`symptom_tokens`, `red_flag_tokens`,
+  in `red_flag_evaluator.dart`); both are byte identical, so the current build
+  loads the candidate with **no code change**. All six legacy arrays unchanged;
+  everything new sits under keys a schema 1.0 reader never touches.
+
+- **Aliases can never be scored** — structurally, not by convention. An alias is a
+  string inside `search.aliases` with no `token_id` and no `scoring_eligible`
+  flag. Ambiguous input returns candidates with `resolved_token_id: null` and
+  `scoring_eligible: false`. No fuzzy, prefix or substring matching anywhere, so
+  `no fever` cannot reach `fever`.
+
+- **Case bank: it was never missing.** The canonical 239-case bank is committed
+  here at `testing/case_bank_v1.json` (v1.0, `c7bdc434…`, provenance `ba7815e` →
+  `c974100`). What is missing is a copy at the *mobile* repo's default fixture
+  path `test/fixtures/case_bank_v1.json` — a cross-repo distribution gap, not
+  absent data. Mobile's harness skips rather than fails, by design. Copy command
+  in `mobile_handoff/vocabulary_v2/README.md` §9.
+  **Harness ready · data available · clinical approval NOT recorded · regression
+  result STALE** (last run 234 cases against kb 2.3; bank is now 239 and the
+  freeze is kb 2.4). Top-50 behaviour is proven unchanged *structurally* — every
+  clinical input is byte identical — **not** by an executed run. Not certified.
+  `reports/case_bank_status_v1.json`.
+
+- **Checks:** `python3 tools/run_w2_checks.py` — 11 groups green: 45 content
+  validators, 26 compatibility checks, 91 unit tests, plus staleness checks on
+  every generated file so a hand-edit turns CI red. Standard library only, no
+  network. CI: `.github/workflows/w2-vocabulary-validation.yml`.
+
+- **Diff classification:** `search_only_metadata` only, no blocking class. A clean
+  classification is *not* an approval — `reports/baseline_diff_v1.json` carries
+  `publication_decision.may_publish: false`.
+
+- **Live `/config` manifest unchanged.** No file in `wellapath-backend` or
+  `wellapath-mobile` was modified. Nothing uploaded to R2.
+
+### New in this repository
+
+`schema/token_dictionary.v2.schema.json` · `schema/token_dictionary_schema_v2.0.json` ·
+`tools/vocab/` + 10 generators/validators · `candidate/` · `reports/` ·
+`testing/vocabulary/` (91 tests, 45 search fixtures, 21 invalid fixtures) ·
+`docs/VOCABULARY_*.md` · `templates/vocabulary_expansion_request.template.json` ·
+`mobile_handoff/vocabulary_v2/` · `backend_handoff/vocabulary_v2/`
+
+### Blocked on clinical / product input
+
+1. **Approved alias & label catalogue.** None exists, so every optional metadata
+   field ships empty — no alias, body area, complaint group, severity/duration
+   descriptor or reviewer name was invented. Recommended first batch: promote the
+   already-merged `mobile_handoff/red_flag_display_map.json` labels and body areas
+   for the 12 global red-flag tokens, with clinical sign-off on each label.
+2. **Case bank v1.0 clinical sign-off**, or an explicit decision that
+   engineering-lead approval is the accepted bar. The case-bank schema has no
+   reviewer field at all.
+3. **Three IMCI severity tier keys** (`pneumonia`, `severe_pneumonia`,
+   `very_severe_disease`) used by `pneumonia_children.severity_levels` do not
+   resolve against `token_dictionary` 1.1, and `kb_schema_v1.0.json` contradicts
+   itself about whether they should. Pre-existing; assessed as behaviourally
+   inert (no engine path resolves a tier *key*); **not fixed here** — both
+   remedies touch frozen artifacts. Recorded in
+   `reports/baseline_freeze_v1.json` → `known_baseline_findings`.
+4. **`breathlessness` → `shortness_of_breath` alias proposal** (PR #24). Both are
+   live scoring tokens, so this is a `clinical_token_identity` change, not a
+   search tweak.
+5. **239-case regression re-run against kb 2.4** (mobile engineer). Does not block
+   W2 Step 1, which publishes nothing; does block any later vocabulary change
+   classified beyond search-only metadata.
+
+## I2 / W2 Step 3 — CB_211 / CB_232 adjudication
+
+Branch `feat/i2-w2-cb211-cb232-adjudication`. Evidence and disposition for the
+findings from the Mobile 239-case run (PR #71 @ `04dcf75`, base `678e300`,
+against token_dictionary 1.1 / kb 2.4 / rules 2.2 — 239 executed, 235 passed,
+1 failed, 3 human-review, **0 safety-critical under-triage**).
+**No clinical ruling made. Mobile PR #71 stays unmerged.**
+
+- **CB_211 — provenance proven, and the key document is not missing.** The
+  expectation was hardcoded in `testing/build_case_bank.py:174-177` at `ba7815e`
+  (PR #13) and never touched since, with the note *"matches E3.5 Case 12
+  behaviour"*. **E3.5 Case 12 is a live test**, not a lost spec:
+  `wellapath-mobile test/engine/pilot_case_validation_test.dart:422-439`
+  (commit `b34cfb8`, 2026-05-18). It asserts the engine must not crash and that
+  urgency is **any one of the four valid values — `urgent` explicitly included**.
+  It never mentions `empty_default`. So the engine *conforms* to the cited
+  source; the case bank narrowed a deliberately permissive assertion and invented
+  a source value.
+
+- **`empty_default` never existed.** Verified across all 5 historical revisions
+  of `urgency_determiner.dart` (`e20f45a`, `51afd89`, `7aeb13c`, `cfe1a25`,
+  `33a214e`) and every commit under `lib/`: the engine has only ever emitted
+  `global_red_flag`, `condition_specific_red_flag`, `demographic_escalation`,
+  `urgency_default`. Not a removed value — a value that was never implemented.
+
+- **Prior-run claim verified from committed evidence.** The identical mismatch
+  is in `testing/case_bank_results_v1.json` (234-case run, kb **2.3**) in three
+  places, byte-identical in every field. Recomputing CB_211 against kb 2.3 and
+  kb 2.4 gives the same result — **nothing regressed**. Tracked as
+  **wellapath-mobile issue #35** (OPEN), which carries its own open question to
+  the lead.
+
+- **Provisional engineering classification: `obsolete/stale case-bank
+  expectation`** — same conclusion Mobile reached, now grounded in the primary
+  artifact rather than a characterisation of it. Refinement worth keeping: this
+  is an **authoring-time over-constraint, not drift** — nothing was superseded,
+  so there is no earlier contract to restore. **Engineering classification only;
+  no clinical approval claimed or implied.**
+
+- **Reachability:** unreachable in product behind two tested guards —
+  `symptom_selection_screen.dart:83/250` (Continue disabled) and
+  `loading_screen.dart:71` (blocks before the engine). Reachable only by direct
+  engine invocation, which is what the case bank and
+  `engine_wiring_test.dart:218-229` do. Over-triage, not safety-critical, cannot
+  suppress a red flag (no tokens → no rule can match) and cannot change any
+  non-empty assessment.
+
+- **CB_232 — no tie, no tie-break, no regression.** malaria 26 vs
+  acute_diarrhoea 21, **margin 5**, one condition at top. Malaria leads on
+  symptom subtotal alone (`fever:9 + chills:7 = 16` vs `watery_stool:8 +
+  vomiting:5 = 13`) before its base weight of 10 is counted. Ranking and every
+  score are **identical between kb 2.3 and kb 2.4**. Not a safety concern
+  (urgency `urgent` is the conservative of the two candidates). The
+  mixed-presentation question it raises is the existing **Issue #38**
+  (malaria base_weight), not a new finding. CB_225 and CB_233 reproduced too.
+  Noted separately: the engine has **no documented tie-break**, and Dart's
+  `List.sort` is not stable — irrelevant to CB_232, but real for a future tie
+  between conditions with different urgency defaults (cf. CB_239's recorded tie).
+
+- **Proposed known-findings contract** (`testing/known_findings.json` +
+  `docs/KNOWN_FINDINGS_CONTRACT.md`) — **not wired into Mobile.** A registered
+  finding is a *pinned observation, never a suppressed failure*: the case still
+  executes, its exact observed output is asserted, and the run fails if anything
+  deviates — including an unexplained improvement. Follows the existing
+  `KNOWN_BASELINE_FINDINGS` precedent in `tools/report_baseline.py`.
+  `tools/validate_known_findings.py` (22 checks) enforces that the registry
+  quotes the case bank accurately, still matches reality, genuinely disagrees
+  with the expectation, claims no clinical authority, and carries an expiry.
+
+- **Checks:** `python3 tools/run_w2_checks.py` now runs **13** groups, all green.
+  Case bank, results file and generator are byte-identical; all four frozen
+  artifacts unchanged; candidate still `candidate_unapproved` / `may_publish:
+  false`; live manifest still on token_dictionary 1.1.
+
+### Engineering disposition (Step 3A) — Option D adopted
+
+The engineering lead adopted **Option D**: CB_211 is preserved byte-for-byte and
+registered as an explicit, unresolved, **fail-closed** known discrepancy. It must
+execute on every regression run, its exact observed result is asserted, it is
+**never counted as passed**, and any change in its observed behaviour — or any
+additional case mismatch — fails the run. Recorded in
+`testing/known_findings.json` as `engineering_disposition: option_d_adopted`,
+enforced by `tools/validate_known_findings.py` (28 checks).
+
+**Options B and C are deferred** for clinical/product adjudication **before
+external beta**. CB_232 requires no scoring, KB, case-bank or tie-break change.
+
+This is an **engineering** disposition only — not clinical approval, not
+external-beta approval, not production approval. **CB_211 remains unresolved.**
+
+### Still open
+
+1. **CB_211 final resolution** — B (correct the expectation in a **new versioned**
+   bank; v1 is immutable) vs C (engine-level empty-input result, issue #35's own
+   question). Needs clinical input on whether `urgent` + a fabricated malaria
+   differential is acceptable for empty input. **Due before external beta.**
+2. Case bank v1.0 clinical sign-off — still absent, still no schema field for it.
+3. Issue #38 — malaria base_weight in mixed presentations; CB_232/CB_225 are
+   worked examples for that monitoring item.
+4. No documented tie-break in the scoring engine (new, low priority).
+
+---
+
+# I2 / W2 Step 5 — Vocabulary 2.0 Clinical/Product Catalogue Review Package
+
+**Branch:** `feat/i2-w2-catalogue-review-package` (off `develop` `550e8f17`)
+**Date:** 2026-08-15
+
+## Status: review-ready — nothing approved, nothing publishable
+
+Builds the package clinical and product reviewers need to decide the Vocabulary
+2.0 catalogue item by item. **Every decision is `pending`, all 25 proposals are
+publication-blocked, and the candidate artifact is byte-identical** to the one
+merged at `dceecde2` (`07f93596…4e34cd2d`).
+
+## What was produced
+
+| Artifact | Contents |
+|---|---|
+| `review/catalogue_v1/catalogue_review_v1.json` | 25 proposals, 8 batches |
+| `review/catalogue_v1/display_label_review_v1.json` | review rows for **all 295** tokens |
+| `review/catalogue_v1/impact_report_v1.json` | counts by class, section, batch, state |
+| `review/catalogue_v1/risk_summary_v1.json` | blockers and carried-forward issues |
+| `schema/catalogue_review.schema.json` | proposal + decision contract |
+| `tools/build_catalogue_review.py` | deterministic generator, `--check` mode |
+| `tools/validate_catalogue.py` | fail-closed validators |
+| `testing/test_catalogue_review.py` | 57 checks incl. the pending dry run |
+| `docs/VOCABULARY_CATALOGUE_GOVERNANCE.md` | governance workflow |
+
+Inputs are committed and provenance-bearing; Mobile display labels are vendored
+(`proposals/catalogue_v1/mobile_display_labels.vendored.json`) so the generator
+never reads another repository at build time.
+
+## Proposals
+
+| Primary class | Count |
+|---|---|
+| `display_label_only` | 8 |
+| `red_flag_affecting_association` | 12 |
+| `clinical_token_identity` | 1 |
+| `insufficient_evidence_do_not_propose` | 4 |
+
+9 affect scoring · 12 affect red flags · 13 ambiguity sets · **0 normalization
+collisions** · **0 publication-eligible**.
+
+## The nine picker scoring-gap tokens (PR #24)
+
+All nine **already exist** as canonical symptom tokens in v1.1 and already carry
+kb weight; none is reachable from the Mobile picker. So eight are
+`display_label_only` — a reachability gap, not new vocabulary. No new token is
+needed for any of them.
+
+The ninth is not: `breathlessness` → `shortness_of_breath` is proposed as an
+alias, but both are existing canonical scoring tokens —
+`breathlessness` carries `lower_respiratory_infection` (7), `shortness_of_breath`
+carries `sari` (9), `asthma` (8), `cardio_symptoms` (7). Mapping one to the other
+changes reachability across four conditions, so it is classified
+**`clinical_token_identity`**, is publication-blocked, and **is not implemented**.
+Both tokens remain independent and active.
+
+## Roadmap examples
+
+The four example complaints carry **no repository provenance** — a search found
+no committed roadmap document containing them. Each is recorded as
+`insufficient_evidence_do_not_propose` with its lost context named; **no
+canonical token is assigned to any of them.**
+
+## Local-language gap: OPEN
+
+No authoritative Hausa/Yoruba/Igbo/Pidgin source exists in this repository. **No
+local term was generated, translated or inferred.** A sourced catalogue is
+required before any non-English content can be proposed.
+
+## Verification
+
+`python3 tools/run_w2_checks.py` — **all 16 checks pass** (13 pre-existing plus
+3 new). Generation is byte-reproducible; the validator recomputes publication
+eligibility and fails if a stored value disagrees. A control test proves the
+eligibility gate is a real gate: a fully approved, low-risk, fully-provenanced
+item *does* become eligible.
+
+Dry run with all decisions pending: zero eligible proposals, candidate hash
+unchanged, alias count 0, association count 0, `display_safe` false for all 295,
+`release_status` still `candidate_unapproved`.
+
+## Still open (unchanged, none repaired here)
+
+1. **CB_211** — Option B vs C, due before external beta.
+2. **Case bank v1.0 clinical sign-off** — still absent.
+3. **Issue #38** — malaria base_weight in mixed presentations.
+4. **No documented tie-break** — CB_232's margin was 5, so none was exercised.
+5. **Three IMCI tier keys** — `pneumonia`, `severe_pneumonia`, `very_severe_disease`.
+6. **`breathlessness` vs `shortness_of_breath`** — decision required.
+
+## I2 / W3 Step 1 — Adaptive Question Engine 2.0 contract
+
+Branch `feat/i2-w3-question-flow-contract`. Contract-defining step: freeze the
+existing question flow, define a versioned schema, project the current behaviour
+into a candidate, and hand Mobile an exact contract. **Nothing published, nothing
+approved, no Mobile or Backend file touched.**
+Full write-up: `docs/W3_QUESTION_FLOW_CONTRACT.md`.
+
+- **Headline finding: there is no question artifact.** The whole flow is Dart
+  source in wellapath-mobile — 18 token keys and 40 authored questions in
+  `followup_question_map.dart`, 3 red-flag clarifiers, one static engine class,
+  five screens and a controller. No version, no hash, no `/config` entry, and no
+  rollback independent of an app release. Six source files are vendored into
+  `baseline/questions_v1/` and hashed so the baseline is pinned to real bytes.
+
+- **Frozen baseline** (`reports/question_baseline_freeze_v1.json`): 44 question
+  definitions, 6 demographic questions, 154 answer options, 3 red-flag-affecting,
+  18 scoring-affecting, 121 picker-reachable tokens, 140 referenced tokens,
+  **0 unresolved references**, 0 dead options, enforced path limit 5.
+
+- **Eleven defects recorded, none repaired.** The important one is **QB-002**:
+  red-flag clarifier answers are **not evaluated when answered** —
+  `_commitAnswers()` runs only after the last follow-up question, so a "yes"
+  does not interrupt and the red flag is evaluated once, in the engine, after
+  every question has been shown. Also QB-005 (question wording depends on the
+  order symptoms were tapped), QB-006 (truncation is applied after clarifiers
+  are prepended; no clarifier is dropped today only because there are three),
+  QB-003 (no re-branching on newly derived tokens), QB-011 (123 picker labels
+  onto 121 tokens).
+
+- **Candidate** `candidate/question_flow.ng.v1.0.json` — schema 1.0, artifact
+  1.0, `candidate_unapproved`, `may_publish: false`. **50 questions, 300 answer
+  options.** Zero added, removed or reworded; zero answer meanings or token
+  effects changed; token output universe identical.
+
+- **Parity is claimed honestly.** Six impedance mismatches are recorded in the
+  artifact itself, and `parity_claim` says **"NOT identical"** — a test enforces
+  that it keeps saying so. IM-002 (immediate red-flag evaluation) is
+  clinically substantive and in the safe direction: **earlier, never later**.
+  IM-001 replaces the selection-order dependence with a declared tie-break.
+  Neither is implemented in Mobile here.
+
+- **Condition language:** 13 operators, 4 readable fields, closed and finite.
+  No expression parser, no scripting, no regex over clinical free text, no
+  network, no fuzzy or probabilistic branching. Fail-closed throughout: unknown
+  operator or field is an error, not `false`; unknown sex/pregnancy/age makes a
+  condition false, so a gated question is not asked rather than wrongly asked.
+
+- **Red-flag precedence** is structural: every red-flag-affecting question
+  declares immediate evaluation and blocks the next question, a validator fails
+  if any does not, and a second fails if the declared hook disagrees with the
+  computed effect. Truncation exemption is a schema **constant** — if red-flag
+  questions exceed the limit, the limit yields.
+
+- **Path controls:** limit 5 measured from the implementation, distribution
+  measured over 2,325 explored paths (max 5, min 1). **No final threshold
+  invented** — three bounded options proposed and `final_threshold_status` reads
+  PENDING product and clinical approval.
+
+- **Checks:** `python3 tools/run_w2_checks.py` now runs **22** groups, all green
+  — including 34 question-flow validators, 26 compatibility checks and 81
+  question-flow tests. 18 path scenarios + 3 edit scenarios; **23/23 invalid
+  fixtures** trip their named check. Exploration bound is declared, not glossed:
+  exhaustive over token subsets up to size 3, with the uncovered space stated.
+
+### Blocked on clinical / product input
+
+1. **IM-002 — immediate red-flag evaluation.** Safe direction, real behaviour
+   change. Engineering lead + clinical.
+2. **Question wording approval** — all 50 are `content_approved: false`.
+3. **Final path-length threshold** — three options proposed, none approved.
+4. **Whether any question may become skippable** — none is today.
+5. **QB-009** — the `0-12` age band maps to `children_under_5`, so a
+   6-to-12-year-old is tokenised as under-5; `children_under_15` is unused.
+   Pre-existing, not changed here.
+6. **Distribution model** — the flow is compiled into the app. Serving it as an
+   artifact needs a `/config` entry, a download path and last-known-good
+   fallback, none of which exists.
+
+### W3 Step 1A — dispositions recorded, full impedance disclosure
+
+Engineering-lead dispositions recorded in the candidate as
+`_metadata.engineering_dispositions`, enforced by 20 new fail-closed validators.
+
+- **Correction: there are SEVEN impedance mismatches, not six.** The artifact
+  always recorded IM-001 through IM-007; the PR description and contract doc
+  said "six". The artifact was right and the prose was wrong — now corrected,
+  and a validator asserts the enumerated list so a mismatch cannot be added
+  without being disclosed.
+
+- **Correction: IM-003 was under-classified.** It was recorded as "not
+  clinically substantive — can only ask more questions". Measured: newly
+  triggerable severity and duration questions produce tokens that carry **no**
+  kb weight and are **not** red-flag relevant, but newly triggerable
+  *additionalSymptoms* questions **do** affect scoring — they give the user
+  further chances to declare symptoms, which can change the token set and
+  therefore the top condition. Verified separately that **no** additionalSymptoms
+  option anywhere is a clarifier trigger token, so re-branching **cannot** raise
+  a red-flag clarifier that does not fire today. IM-003 is now classified
+  path-affecting, marked an activation blocker and **deferred**.
+
+- **Dispositions:** IM-001 adopted (ordering `(priority, tie_break_key,
+  question_id)`, regression evidence required before activation); IM-002 adopted
+  as a **required safety correction**; path limit **fixed at 5**; optional skips
+  **deferred** (candidate has zero); distribution **compiled-in / default-off /
+  internal only**, served distribution deferred to I3; wording preserved
+  byte-for-byte **without approval**. Every disposition states what it does
+  **not** authorize. Production, public-beta, external-beta, clinical and
+  product approval all **false**.
+
+- **QB-002 reproduced and measured** (`reports/qb002_evidence_v1.json`): a
+  clarifier answered "Yes" is followed by up to **4 further ordinary questions**
+  before the engine ever sees the red-flag token. `_commitAnswers()` runs only
+  on the last question. Scoring **cannot** override the eventual red flag —
+  `ScoringEngine.score` throws when `proceed_to_scoring` is false. So this is not
+  an under-triage defect; the harm is abandonment before the result. Earliest
+  safe interception point identified: `_onNext`, in the advance branch, before
+  `setState` and before the step-view event.
+
+- **Mobile IM-002 handoff** (`mobile_handoff/question_flow_v1/IM002_SAFETY_FIX.md`)
+  — the safety fix only, not the adaptive engine. 12 regression cases, telemetry
+  must not become a red-flag oracle, default-off flag for rollback.
+
+- No clinical-content change: question wording byte-identical (27 texts), token
+  output universe identical (139 tokens), 50 questions / 300 options unchanged.
+  Checks now **23 groups**, all green; 53 question-flow validators; 103 tests.
+
+## I2 / W3 Step 4 — Reconcile the question candidate with live de-duplication
+
+**Status: parity achieved, activation still blocked.** Candidate 1.1 and schema
+1.1 are unpublished, clinically unreviewed and consumed by no build. Candidate
+1.0 and schema 1.0 are retained unmodified.
+
+- **The blocker from Step 3 is cleared.** Candidate 1.0 planned a different
+  question SET on 1,930 of 2,325 paths because it modelled one question per
+  token per role while the live engine de-duplicates. Candidate 1.1 models the
+  grouping and is now **identical to real live output on 2,325 of 2,325 paths** —
+  0 question-set, 0 order, 0 wording, 0 option-set, 0 option-order, 0
+  token-effect, 0 red-flag, 0 truncation differences, 0 red-flag questions
+  dropped, path limit never exceeded.
+
+- **Measured against the real Dart engine, not a reimplementation.** The oracle
+  (`testing/questions/fixtures/oracle/`, 4,625 cases, 4.0 MB) is the actual
+  output of `QuestionEngine.generateQuestions` at Mobile `657739cc`, captured by
+  running it. A model compared against itself would have proved nothing.
+
+- **IM-001 is narrowed to what it always should have been.** It no longer changes
+  which questions are asked, only which of two existing wordings is shown where
+  the baseline has no stable answer. Under reversed selection order the live
+  engine **disagrees with itself on 1,680 of 2,300 paths**; the candidate is
+  unstable on **0**. 1.0's superseded IM-001 statement — which called it
+  `path_affecting: false` before measurement showed otherwise — is carried in the
+  record rather than overwritten.
+
+- **Two defects found by measurement, not by reading code.** GF-006: 1.0's
+  default-duration trigger fired on the empty selection and missed
+  `{chest_indrawing_severe, boils}` — two mapped tokens have no duration entry.
+  GF-008: every clarifier had priority 0, so ordering fell to the tie-break key,
+  i.e. alphabetical; `kRedFlagClarifiers` is not alphabetical, so the first and
+  third clarifier swapped on 168 paths. **Declaration order was already stable —
+  removing nondeterminism elsewhere is not a licence to reorder deterministic
+  output.**
+
+- **Two defects in my own tooling, corrected rather than worked around.** The
+  parity comparator derived option labels by splitting option ids and reported
+  1,249 false differences (`::yes` is not `Yes`). The containment check posed
+  `source AND NOT question` to `is_never_satisfiable`, which cannot discharge it,
+  and flagged all 40 sources; it now decides containment **exactly** by
+  enumerating the referenced token subsets, and refuses above 20 tokens rather
+  than approximating.
+
+- **Schema 1.1 is computed from 1.0, not hand-written.** `additionalProperties:
+  false` on a question made grouping inexpressible under 1.0. The generator loads
+  1.0, adds `$defs.grouping`, `$defs.groupSource`, `question.grouping`,
+  `metadata.grouping_semantics` and `pathControls.grouping_phase`, and re-proves
+  additivity on every run — refusing to write if any required field, enum value
+  or const was narrowed. One constraint widened: `schema_version` from
+  `const "1.0"` to `enum ["1.0","1.1"]`.
+
+- **Grouping is declared, not inferred:** `group_key` (distinct from
+  `tie_break_key`, which orders and never groups), `merge_strategy`,
+  `representative_selection` = `lowest_source_order_index`, `option_union_rule`,
+  `conflict_resolution`, and 40 explicit `sources`. Red-flag clarifiers are
+  **prohibited** from grouping. Grouping runs **before** truncation.
+
+- **Guards:** 10 grouping checks, all passing; **22 invalid fixtures, 22
+  rejected by the intended check** (rejection by a different check counts as a
+  failure). The existing 53-check validator passes on 1.1 **and** still passes
+  unchanged on 1.0. `tools/run_w3_grouping_checks.py` — 18 checks, 0 failed.
+
+- **Coverage beyond the oracle is labelled honestly.** The Python transcription
+  was first validated against all 4,625 real cases (0 mismatches) and only then
+  used to reach sizes 4 and 5: 53,130 further paths, 0 differences on every
+  dimension. That evidence is **model-derived and marked as such** — weaker than
+  live output, and not presented as it.
+
+- **Nothing clinical moved.** kb 2.4, rules 2.2, token dictionary 1.1 and 2.0,
+  candidate 1.0 and schema 1.0 all verified byte-unchanged. No question added,
+  removed or reworded; no answer meaning, produced token or red-flag rule
+  changed; IM-002 timing untouched; IM-003 not implemented; path limit still 5.
+
+- **Activation remains blocked** on product sign-off for representative wording,
+  unapproved content, absent clinical review, and publication — not on path
+  content, which is now measured at zero change.
+
+### Step 4A — final verification before merge
+
+Verification found **two defects in the Step 4 work itself**, both fixed before merge.
+
+- **Schema 1.1 was not additive.** `grouping_semantics` had been added to
+  `_metadata.required`, so candidate 1.0 no longer validated under 1.1 — exactly
+  what an additive extension may not do. The additivity guard had missed it
+  because it only checked that 1.0's constraints *survived*, never that new ones
+  were *added*. The guard now rejects a grown `required`, a changed `const` and
+  any new restricting keyword, and is **mutation-tested against all three**. The
+  requirement itself moved to where it belongs — the artifact version, enforced
+  by validator check G01, proven by the `grouping_semantics_absent` fixture.
+  Compatibility is now proven twice, structurally and behaviourally: candidate
+  1.0 validates under both schemas, candidate 1.1 is correctly refused by schema
+  1.0, and **23 schema-invalid 1.0 fixtures were re-checked under 1.1 with 0
+  newly accepted**.
+
+- **Oracle provenance was incomplete.** The capture used a temporary Mobile test
+  that was deleted and is committed nowhere. `tools/validate_oracle_provenance.py`
+  now re-derives the bounded enumeration, input ordering, reversed-case rule,
+  field sets, role vocabulary and question limit **from first principles** —
+  none of it read from the fixture's own metadata — and pins the fixture in a
+  **sidecar** record, so captured evidence is never edited to describe itself.
+  The reproduction harness is recorded in the KB and explicitly **not** claimed
+  to be byte-identical to the deleted test; the fixture's authenticity rests on
+  the structural re-derivation plus the independent 4,625-case transcription
+  match, not on that file.
+
+- **The PHI scan's first revision was wrong in both directions.** It reported 27
+  "phone numbers" that were fragments of the candidate 1.0 SHA256, and flagged
+  the token-dictionary schema's own sentence *"No PHI fields — no name, dob,
+  phone, email, address"* — the prose forbidding PHI. Patterns were narrowed
+  precisely rather than loosened generally, and the scan now carries **9 positive
+  and 4 negative controls** so a pattern narrowed into uselessness fails instead
+  of passing. 91 files, 0 hits.
+
+- **No clinical or runtime change, computed not asserted:** 33 question texts
+  identical · 169 answer labels, none changed in meaning · 139-token output
+  universe identical · red-flag effects identical · path limit 5 · zero skips ·
+  zero skip sentinels · IM-003 deferred and structurally absent · Vocabulary 2.0
+  unused with no alias operator in any condition.
+
+- **GF-006 and GF-008 re-measured against captured output.** GF-006: candidate
+  1.0 was wrong on 3 of 6 named cases; 1.1 matches live on all 6, and no duration
+  entry was invented for the two mapped tokens that lack one. GF-008: of **248**
+  captured paths presenting two or more clarifiers, 1.0's ordering differed from
+  live on **168**; 1.1 differs on **0**. The 168 figure is now computed, not
+  recalled.
+
+- **IM-001 is now actionable for Product.** `reports/im001_product_review_v1_1.json`
+  collapses the 1,680 order-dependent captured paths into **135 distinct wording
+  decisions**, each listing the selected wording, the rejected alternatives and
+  the paths riding on it. Every wording involved already exists in the live app.
+  All 135 are `PENDING`; until they are signed off, IM-001 remains an activation
+  blocker regardless of this merge.
+
+`tools/run_w3_grouping_checks.py` — **23 checks, 0 failed**.
+
+## I2 / W3 Step 5B — Mobile IM-001 option-ordering evidence incorporated
+
+Branch `feat/i2-w3-im001-option-ordering`. Mobile PR #75 produced a
+non-authoritative addendum decomposing the live option-list instability; this
+step verifies it, recomputes every count independently, and creates **one**
+global pending Product decision. **No decision approved. No candidate or clinical
+artifact changed.** Full write-up: `docs/IM001_OPTION_ORDERING.md`.
+
+- **Provenance verified against Mobile PR #75 head `dd9c6d0`:**
+  `docs/evidence/im001_option_instability_addendum_v1.json`, sha256
+  `371443cf1914b9870ecdd0a3ebe6838bd7322edd59f827058b1db3635f0e57a3`,
+  **1,252,307 bytes** — both matched exactly.
+
+- **Independently reproduced, not copied.** Every count recomputed from this
+  repository's captured-Dart oracle and the frozen artifacts;
+  `tools/report_im001_option_ordering.py` stores Mobile's figures only to
+  reconcile against and never reads them as an input. **All 21 dimensions agree,
+  zero unpaired reversed cases.** 2,300 comparisons = 413 identical + 1,665
+  wording-and-order + 207 order-only + 15 wording-only. Wording differs on 1,680;
+  option ID/label/token-mapping **sequence** differs on **1,872**.
+  *(Narrative count corrected from "22" to 21 in I2/W3 Step 6: the
+  `reconciliation.detail` table has 21 entries and always did. A prose count
+  error only — no evidence array, count, hash, conclusion, candidate or
+  decision changed, and every one of the 21 entries still agrees.)*
+
+- **Every clinical dimension is zero** — option ID set, label set,
+  option-to-token mapping set, reachable tokens, scoring reachability, red-flag
+  reachability, question identity, role sequence, truncation, required/skip. Not
+  one token is reachable in one order and not the other. The engine **unions**
+  additional-symptom options, and a union is a set operation, so reversing visit
+  order changes only the order options are appended in. **Display-order
+  instability only.**
+
+- **One decision, not 903.** `IM001-ORD-GLOBAL-001`, type
+  `deterministic_option_ordering_rule`, status **pending**, reviewer role
+  **Product**, reviewer/date/rationale **null**, activation blocker **true**.
+  Bound by SHA256 to a 903-group evidence table
+  (`reports/im001_option_order_evidence_v1.json`); a drifted hash fails
+  validation. All 903 groups retained with membership, token mappings, path
+  counts and per-group classification (`display_order_only` on all 903).
+
+- **Product-only is conditional and enforced.** The generator **refuses to emit
+  the decision at all** if any clinical dimension is non-zero, and
+  `tools/validate_im001_decisions.py` (51 checks) fails on
+  `product_only_classification_is_justified`.
+
+- **One definitional correction recorded.** A first pass defined question
+  identity as `(role, question_text)`, reporting 1,680 identity differences and
+  correctly tripping the safety gate. That was a defect in the definition, not a
+  clinical finding — which wording fills a slot is already the `wording`
+  dimension and the subject of the 135 wording decisions. Identity is now
+  `(role, red_flag_token)`, which yields 0 and matches Mobile.
+
+- **135 wording decisions untouched** — file byte-identical to develop, all still
+  `PENDING`, none merged into the ordering rule.
+
+- **IM-001 remains blocked on 136 Product decisions**: 135 wording selections +
+  1 ordering rule. `im_001_resolved: false`.
+
+- **Checks:** W3 grouping suite **25/25**, W2/W3 suite **23/23**, IM-001
+  validators **51/51**, content safety **93 files, 0 PHI hits, 0/13 controls
+  failed**. Candidate 1.1, candidate 1.0, schema, the wording review and the
+  oracle all byte-identical; all frozen clinical artifacts byte-identical; path
+  limit still 5; optional skips still 0; IM-003 still deferred.
+
+**Note on repository location:** the working copy moved from
+`~/wellapath-knowledge-base` to `~/dev/wellapath-knowledge-base` during this
+step. Nothing was lost — the move was verified against the remote and every
+frozen hash re-checked.
+
+## I2 / W3 Step 6 — IM-003 dynamic re-branching: impact analysis
+
+**Analysis only. IM-003 is not implemented, not enabled and not approved.** All
+9 decisions are `pending`; IM-003 remains
+`deferred_pending_product_and_clinical_review` and an activation blocker. No
+candidate, schema, question, answer, token effect, red-flag rule, scoring input,
+urgency rule or path limit was modified.
+
+**The 56 pairs reconcile exactly, and they are the trigger graph.** Recomputed
+from `kFollowupQuestionMap` rather than carried over: 18 nodes, **56 edges**,
+declared 56 = recomputed 56. Newly triggerable: 11 severity, 54 duration, 56
+additional-symptoms questions.
+
+**Cycles exist and do not mean non-termination — proved, not assumed.** 15
+two-cycles, 0 self-loops, max closure 14 tokens, max convergence depth 5. Under
+additive-only re-branching the token set is monotone non-decreasing and bounded,
+so a fixed point is reached regardless of cycles. Monotonicity is **checked over
+every ordered pair of seed tokens**, not asserted. It holds for additive mode
+only; removal re-branching is not monotone and is out of scope.
+
+**The safety question, answered across all four pathways.** The earlier IM-003
+note relied on clarifier-trigger membership alone, which is the weaker test — a
+token can be a danger sign through a global rule or a condition's own
+`red_flags` without ever being a clarifier trigger. All 15 newly reachable
+tokens were checked against global rules, condition-specific red flags,
+clarifier triggers and clarifier red-flag tokens: **0, 0, 0, 0**. Combination-only
+red flags cannot exist in the current artifacts — every rule and every condition
+red flag keys on a single token.
+
+**What IM-003 does change is scoring input.** All 15 newly reachable tokens carry
+KB weight, touching **31 of 50 conditions**. The exact per-condition weight delta
+is published.
+
+**What is deliberately not published.** Score, ranked conditions, top condition
+and urgency require Mobile's `ScoringEngine`. A Python model was written and
+validated against the 239-case bank: **234/239 top conditions, 217/239
+urgencies** — it disagrees with the shipped engine on 22 urgencies, so it was
+**not used**. Publishing IM-003 deltas from it would have been worse than
+publishing none. The exact scoring *input* delta is published instead and the
+Mobile harness is specified in the handoff.
+
+**The 239-case bank cannot exercise IM-003.** Every case carries `input_tokens`
+— a final token set — and **no answer sequence, no question order**. IM-003 is a
+property of the sequence. No sequence was invented and the suite is **not**
+claimed to validate adaptive branching.
+
+**Severity and duration tokens are inert today, not permanently.** Zero scoring
+weight, zero red-flag references across kb 2.4, rules 2.2, condition red flags,
+clarifier triggers and demographic modifiers — a property of the current
+artifacts, not of the tokens. Any approval of an inert subset must be
+re-validated on every clinical artifact change and enforced by a validator.
+
+**Recommendation: B with conditions, then C separately** — an engineering
+recommendation, not approval. The inert subset (severity, duration) and the
+scoring-active subset (additional symptoms) carry different risk and must not
+share one approval. The split must be **structurally enforceable** — a
+generator-computed `rebranch_class`, re-validated on every clinical artifact
+change — not a prose convention. No schema change is made here.
+
+**Guards:** 12 fail-closed checks, **18 invalid fixtures, 18 rejected by the
+intended check**. The decision package is bound to the impact report's exact
+hash, so regenerating the evidence invalidates the decisions.
+`tools/run_im003_checks.py` — **21 check groups, 0 failed**.
+
+**Documentation correction.** The IM-001 narrative said "All 22 dimensions
+agree"; the `reconciliation.detail` table has **21** entries and always did.
+Corrected to 21 — a prose count error with no measurement impact: no evidence
+array, count, hash, conclusion, candidate or decision changed.
+
+**One derived report changed as a consequence, disclosed rather than hidden.**
+`reports/question_no_clinical_change_v1_1.json` walks `reports/` and
+`testing/questions/fixtures/` wholesale, so adding this step's artifacts changed
+its scanned-file count (94 -> 113). Its scan now excludes the two IM-003 reports
+**by exact path**, because those are scanned by `run_im003_checks.py` with the
+same patterns and controls. An earlier `im003_` *prefix* rule also swallowed the
+19 invalid fixtures, which that runner does not scan — 19 files would have gone
+unscanned by anything. Mobile's vendored copy is pinned at `cffbe8a6` and is
+unaffected.
+
+### Step 6A correction — newly-reachable set undercounted by one token
+
+Pre-merge review of PR #31 found the impact analysis reported **14** newly
+reachable tokens and **30 of 50** conditions, while its own 56-pair array and
+18-node trigger graph produced **15**. `newly_reachable` accumulated only the
+second hop (the newly eligible question's own options) and never the produced
+token itself, so `pain` — reached from `swelling` and present in no other
+token's option list — disappeared. `pain` is canonical, picker-reachable and
+**scores on `minor_injury` at weight 6**, so the omission understated the
+scoring blast radius.
+
+The red-flag conclusion is unaffected: `pain` intersects zero of all six
+pathways, so "zero red-flag references" holds for all 15 tokens. Convergence is
+unaffected (15 two-cycles, closure 14, depth 5, 0 monotonicity violations — all
+independently reproduced).
+
+Check **I3** shared the same defect — it recomputed with the same
+second-hop-only rule, so it agreed with the wrong report and the disagreement
+was invisible. I3 is corrected and a new **I13** asserts the derived token list
+equals the two-hop closure of the pair array. A negative test confirms I13
+rejects the original 14/30 shape.
+
+Corrected: **15** newly reachable tokens, **31 of 50** conditions,
+`minor_injury` (weight 6) added to the scoring-input delta. No pair added or
+removed, no decision approved, IM-003 still disabled.
+
+Also corrected: `docs/IM001_OPTION_ORDERING.md` still read "All 22 reconciled
+dimensions agree" — the 21-dimension fix had been applied to `progress.md` only.
+Prose-only; no evidence value, hash, conclusion or decision changed.
+
+## I2 / W3 Step 8 — Mobile IM-003 measurement reconciled; IM003-SB-001 registered
+
+Branch `feat/i2-w3-im003-mobile-measurement`. Mobile PR #76 measured IM-003 with
+the **shipped** engine. This step verifies that evidence, reconciles every count
+independently, and registers a potential safety blocker. **No clinical
+adjudication, no approval, no implementation.** Full package:
+`docs/IM003_SB_001_ADJUDICATION.md`.
+
+- **Source verified at the exact PR head** `13be0d4937b1c49d6a49ddf096c5d5b6a47c2091`:
+  `docs/evidence/im003_mobile_scoring_measurement_v1.json`, sha256
+  `fb5aefab…`, **176,163 bytes**, CI `Flutter Lint & Build Check` **success** on
+  that same SHA. Vendored into `baseline/im003_mobile_v1/` at the identical hash.
+
+- **Methodology validated from the diff, not from CI passing.** The harness
+  imports the shipped `EngineController`, `RedFlagEvaluator` and `ScoringEngine`,
+  and throws `StateError` if a controller topCause id or score disagrees with the
+  shipped scorer, or if the scorer produces conditions while a red flag is
+  active. `lib/` is untouched — PR #76 changes only `PROGRESS.md`, `docs/` and
+  `test/`. Isolation tests assert nothing under `lib/` imports it, no build flag,
+  no pubspec asset, no clinical-artifact mutation.
+
+- **All counts reconciled independently:** 63 scenarios (12 authoritative + 51
+  graph-derived) · 0 red-flag changes · 25 urgency changes (24 escalations,
+  **1 de-escalation**) · 0 urgency-source changes · 31 top-condition changes
+  (overlapping) · 6 primary · 29 ranking-only · 0 score-only · 3 no-effect.
+  Graph facts re-reproduced: 18 nodes, 56 edges, 15 two-cycles, 0 self-loops,
+  **15** newly reachable tokens, **31** affected conditions, closure 14, depth 5,
+  0 monotonicity violations, `pain` present at `minor_injury` +6.
+
+- **Category definitions pinned.** The partition is by highest-order effect and
+  sums to 63 (25+6+29+0+3). **31 is an overlapping metric** — 25 of those also
+  changed urgency and are counted there; 6 are primary. 25+6=31. **All 31 changed
+  top conditions became malaria.**
+
+- **IM003-SB-001 registered**, status
+  `open_awaiting_clinical_and_product_adjudication`. S10_path_limit_pressure:
+  urgency **emergency → urgent**, red flag **false → false**, top condition
+  **lassa_fever (26) → malaria (25 → 52)**. Every value re-derived from KB 2.4:
+  lassa_fever 26 = 4+7+5+10; malaria 25 = 10+9+6; malaria 52 = 10+9+7+6+6+5+5+4.
+  No rule token present either side, so no rule was omitted; a single condition
+  holds the top score each side, so no tie explains it.
+
+- **Mechanism recorded, not repaired.** Additive answers → more scoring tokens →
+  changed scores → different top condition → different `urgency_default` →
+  de-escalation without any red-flag change. **Red-flag invariance does not prove
+  urgency invariance** — 0 red-flag changes and 25 urgency changes across the
+  same 63 scenarios. No weight, `urgency_default`, scoring, ranking, red-flag
+  rule, candidate question, path limit or Mobile behaviour changed.
+
+- **D004 updated and still pending** — evidence now carries the shipped-engine
+  measurement and names the blocker; requires clinical review; cannot be taken
+  while the blocker is open. The earlier *"B with conditions, then C separately"*
+  recommendation is **narrowed** (`NARROWED_PENDING_IM003_SB_001`) with its
+  original text retained verbatim rather than deleted.
+
+- **Checks:** IM-003 suite **24 groups, 0 failed** (stable over repeat runs) ·
+  blocker validators **59/59** · **10/10 mutation proofs** trip their intended
+  check · W3 grouping 25/25 · W2/W3 23/23 · content safety 117 files, 0 hits.
+  All 13 frozen artifacts byte-identical; both candidates still
+  `candidate_unapproved`, `branch_conditions: 0`, limit 5, IM-003 deferred;
+  R2 404; no `/config` entry. **Mobile PR #76 and this KB PR both remain
+  unmerged.**
+
+## I2 / W3 Step 9 — Product disposition and clinical rule requirements recorded
+
+**Source:** the human "I2/W3 IM-003 Safety Review — Decision Record" of
+2026-08-22, vendored verbatim at
+`baseline/im003_decision_record_v1/IM003_SAFETY_REVIEW_DECISION_RECORD_2026-08-22.vendored.md`.
+KB baseline at receipt `83cd5258`; Mobile PR #76 open/unmerged at `13be0d49`.
+
+- **Reviewer identity (corrected at Step 9A):** Product reviewer **Ayodele
+  John Oluwaseyi, Co-Founder & CEO, WellaPath**, review date 2026-08-22.
+  Clinical reviewer **null / not_assigned**; effective authority exactly
+  `product`. The record's combined wording ("Clinical Reviewer + Product
+  Lead") is retained only as a faithful record of the source text and is
+  superseded — it does not imply a Clinical reviewer participated. All six
+  Product decisions are attributed to the named Product reviewer; **nothing
+  is clinical approval** — enforced, with mutation proofs, not merely stated.
+
+- **Classification recorded:** IM003-SB-001 OPEN · D004 PENDING · IM-003
+  DISABLED · Mobile PR #76 merge authorization FALSE · Product disposition
+  RECORDED · clinical rule REQUIRED, NOT APPROVED · clinical approval FALSE ·
+  user-facing internal evaluation / external beta / production all BLOCKED.
+
+- **Six Product decisions** (IM003-PD-001…006): re-branching supported in
+  principle; re-ranking alone must never de-escalate urgency; IM-003
+  monotonicity required unless Clinical approves an explicit de-escalation
+  rule; user copy explains care urgency, never internal ranking (no
+  emergency→urgent copy approved); IM-003 excluded from user-facing internal
+  evaluation; constrained subsets investigable but not pre-approved.
+
+- **Seven open clinical requirements** (IM003-CR-001…007) — questions, not
+  decisions: the urgency-contribution rule, de-escalation conditions,
+  one/multiple/threshold urgency source, S10 plausibility, the
+  lassa_fever→malaria transition, Lassa at 26/rank 3, and required
+  population/competition regression cases. **No urgency algorithm selected**
+  — first-ranked-only, highest-among-ranked and threshold all remain
+  unapproved.
+
+- **Provisional invariant IM003-INV-001:** *for IM-003, adding evidence must
+  not lower the assessment's established urgency solely as a consequence of
+  condition re-ranking.* Scoped to IM-003 only; generalization requires
+  separate clinical approval; validation fails if it is omitted, weakened,
+  generalized or called clinically approved.
+
+- **Ten regression case classes** (IM003-RC-01…10) recorded, including
+  emergency rank-demotion with unchanged and increased scores, newly entering
+  and multiple emergency conditions, urgency-class competition, paired
+  red-flag/non-red-flag evidence, clinical-boundary cases, repeated
+  re-branching, population-specific cases, and any approved de-escalation
+  cases. **Displayed urgency must be asserted directly.**
+
+- **New tooling:** `tools/report_im003_disposition.py` (refuses to write against
+  a contradictory live governance state; `--check` staleness) and
+  `tools/validate_im003_disposition.py` — **72 checks, 28/28 mutation proofs**
+  after Step 9A, covering every fail-closed condition in the Step 9 and 9A
+  briefs: missing/blank reviewer name, title or date; non-`product` effective
+  authority; a Clinical reviewer inferred from the combined wording or
+  fabricated; `assigned` status without identity; the Product reviewer called
+  clinically qualified; the deferral note reinstated; a clinical requirement
+  Product-approved; plus invariant weakening, algorithm selection,
+  investigation-as-activation and binding drift. Wired into
+  `tools/run_im003_checks.py` (now 27 groups).
+
+- **Untouched:** all frozen clinical artifacts, weights and urgency defaults;
+  scoring/ranking/red-flag logic; question candidates; runtime behaviour;
+  publication state; the blocker registry and decision package (byte-identical,
+  still open/pending); Mobile and Backend. **Mobile PR #76 remains unmerged;
+  this KB PR is left unmerged for review.**
+
+## I2 / W3 Step 10 — IM-001 Product decision workbook prepared
+
+**Baseline verified at develop `7035e03c`:** 135 wording decisions pending ·
+IM001-ORD-GLOBAL-001 pending · 136 total · IM-001 unresolved and
+activation-blocking · evidence binding intact · all 21 reconciliation
+dimensions agree · every clinical-impact dimension zero.
+
+- **Workbook built** (`review/im001_workbook_v1/`): machine-readable workbook,
+  fill-in decision template, and a human review document. Each of the 135
+  wording decisions carries ID, role, trigger token/slot, candidate wording,
+  the alternative it beat, affected-path count, representative paths, an
+  explicit option-order field (no duration/severity question has an order
+  difference — all 903 order groups are additional-symptoms questions),
+  PENDING status, null reviewer fields and its evidence binding. No raw
+  oracle inspection required.
+
+- **Grouping hides nothing:** 135 decisions → **20 question-slot batches**
+  (15 duration, 5 severity; each slot = one candidate wording vs N
+  alternatives, so batches cannot contain conflicting alternatives — proven
+  by mutation). Batch approval expands to the explicit member-ID list;
+  every item is individually overridable. Original count (135) and grouped
+  presentation count (20 + 1 global) reported separately. A wording-pattern
+  index (9 families + irregulars) is display-only, never an approval unit.
+
+- **IM001-ORD-GLOBAL-001 presented separately** in plain Product language
+  (selection-order-dependent today; deterministic under candidate 1.1;
+  membership/labels/mappings/reachability unchanged; display order only)
+  with three mutually exclusive choices — approve candidate ordering /
+  retain current / request a different rule — **none pre-selected**.
+
+- **No decision made:** all 136 remain PENDING with null reviewer fields;
+  the intended reviewer (Ayodele John Oluwaseyi, Co-Founder & CEO) is named
+  in metadata only. Boundaries stated: Product-only, conditional on
+  clinical-impact dimensions staying zero (any nonzero reopens Clinical
+  review); approval does not publish/activate candidate 1.1, does not
+  authorize Mobile implementation; IM-003/IM003-SB-001 out of scope; Mobile
+  PR #76 unauthorized to merge.
+
+- **Tooling:** `tools/build_im001_workbook.py` (deterministic, fail-closed
+  against baseline drift, `--check`) and `tools/validate_im001_workbook.py`
+  — **30 checks, 14/14 mutation proofs** (count drift, omission,
+  duplication, lost alternative, path drift, approval without reviewer
+  evidence, conflicting batch, nonzero impact dimension in workbook and
+  source, claimed activation authority, resolved-while-pending, hash
+  drift).
+
+- **Untouched:** candidates, wording, ordering, KB/rules/tokens/facilities,
+  oracle and fixtures, IM-001 evidence and decision artifacts, IM-003
+  records, case bank, known findings, manifest and publication state,
+  Mobile and Backend. **IM-003 remains blocked; Mobile PR #76 remains
+  unmerged; this PR is left unmerged for review.**
+
+## I2 / W3 Step 11 — IM-001 Product verdicts recorded (136/136)
+
+**Source:** the Product reviewer's Final Product Decision Reconciliation of
+2026-08-24, confirmed for recording ("Yes — record the reconciled decisions
+now"), vendored verbatim at `baseline/im001_reconciliation_v1/`.
+
+- **All 136 Product decisions recorded**: 135 wording decisions →
+  `keep_candidate_wording`, IM001-ORD-GLOBAL-001 → **ORD-A**. Reviewer on
+  every verdict: Ayodele John Oluwaseyi, Co-Founder & CEO, WellaPath,
+  authority `product`, date 2026-08-24. **0 pending, 0 deferred, 0
+  overrides, 0 conflicts.** Each of the 20 batch approvals is expanded to
+  its explicit member IDs; each member carries its batch rationale
+  verbatim.
+
+- **New authoritative record** `reports/im001_product_verdicts_v1.json`
+  (`tools/report_im001_verdicts.py`, deterministic, fail-closed, `--check`),
+  bound to the vendored reconciliation by sha256 and to the three
+  reviewed-over evidence hashes. The wording artifact and the ordering
+  decision are regenerated through their existing generators, which now
+  apply the recorded verdicts as an overlay — decisions APPROVED with full
+  reviewer evidence; sign-off COMPLETE; ordering approved as ORD-A.
+
+- **Resolution without authorization:** `im_001_resolved: true` refers to
+  the decision set only. `activation_authorized`, `clinical_approval`,
+  publication and Mobile implementation are all **false** in the verdict
+  record, the wording sign-off, the ordering decision and the gate — each
+  enforced with mutation proofs.
+
+- **Clinical flag preserved:** IM001-CLIN-FLAG-001 on
+  `fast_breathing_child.severity` (IM001-D018/D027) — Product approved the
+  wording only; severity-rating validity, question validity, scale
+  appropriateness and clinical interpretation remain explicitly unapproved
+  and the flag must be reviewed by Clinical before any activation decision
+  involving that question. Visible in the verdict record, the wording
+  artifact, the gate and the workbook.
+
+- **Workbook now reflects recorded state** (regenerated): progress 136
+  reviewed / 0 pending, all items APPROVED with reviewer fields, ORD-A
+  marked selected; the two state-dependent mutations were rebased.
+
+- **Validators:** verdicts 28 checks + **15/15 mutations** ·
+  IM-001 decisions updated for the recorded state (58 checks) · workbook
+  30 checks + 14/14 mutations · W3 grouping suite grown to **30 checks**
+  (verdict staleness, verdict validity, verdict mutations, workbook
+  staleness, workbook validity). Evidence table byte-identical
+  (`fd4391a2…`); oracle untouched.
+
+- **Untouched:** question candidates, schemas, clinical artifacts, runtime
+  behaviour, publication state, R2/config, IM-003 records (blocker open,
+  D004 pending), Mobile and Backend. **Mobile PR #76 remains unauthorized
+  and unmerged; this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 2: candidate pipeline, schema, manifest, handoff
+
+Commit `4bb8e26` on `feat/facilities-2-0-candidate-pipeline` (PR #41, stacked
+on #40). **The record counts, coverage and coordinate treatment in this section
+are superseded by Step 3 below**; the section is kept because Step 3's
+remediation is only intelligible against what Step 2 found and refused.
+
+Builds on the Step 1 candidate (commit `4afffe1`). Same source
+(`nigeria_health_facilities.csv`, `e598cecc…becb3`, 31,390 rows); the file
+the brief re-supplied at the repository root is byte identical to the
+committed copy and was not committed twice.
+
+- **Blockers restated, not resolved:** source licence and publishing
+  organisation are NOT established, no data dictionary was supplied, and
+  the data is not nationwide (Adamawa, Kebbi, Sokoto absent). The candidate
+  is `candidate_unapproved` / `may_publish: false` under both
+  `release_status` and the brief's `publication_status`, pinned by schema
+  `const`.
+
+- **Headline source finding:** the source writes latitude and longitude
+  the wrong way round for whole states. The national bounding box (all
+  Step 1 checked) is blind to a northern transposition because both values
+  stay inside Nigeria. A per-state reference yardstick
+  (`mappings.STATE_REFERENCE_POINTS`, ±0.5°, cross-checked against
+  facilities 1.1's independent medians at 7/5/20 km) sees it: **9,911 rows
+  refused as transposed**, 81 as not in the claimed state, nothing
+  exchanged. **FCT, Kano, Katsina, Kwara, Niger, Taraba and Zamfara have
+  no surviving record; FCT and Kano are served by 1.1 today** — recorded
+  as a blocking Mobile finding. Instrument uncertain where lat ≈ lon
+  (Bauchi, Gombe, Yobe, Borno, Kogi); said so per state.
+
+- **Pipeline policies added, all counted:** rows without a usable
+  coordinate pair are quarantined (639: 524 absent, 106 box-transposed,
+  5 null island, 4 out of bounds), never emitted with nulls or a
+  substitute; exact duplicates (same name, state, LGA and coordinates)
+  collapse to the smallest registry `unique_id` with no value merging
+  (62 pairs, each listed with its survivor). 31,390 = 20,696 emitted +
+  10,694 quarantined.
+
+- **Provenance carried per record:** `source_record` gains `state_id`,
+  `lga_id`, `ward_id`, `source_updated_at`; `_metadata.source` gains the
+  snapshot instant (≤ 2026-07-21T13:15:26, zone undeclared).
+
+- **Further source findings:** `lga_id` is scoped to the LGA name — six
+  homonymous LGAs carry one id in two states each, so `(state, city_area)`
+  is the only LGA key; five Enugu-labelled rows carry Abia LGAs (all 0,0,
+  quarantined). Recorded in the provenance record.
+
+- **Still null by decision, guarded by tests:** `type` (vocabulary declared,
+  mapping table empty) and `emergency_capable`. Mobile compatibility
+  re-measured: NOT COMPATIBLE — two blocking findings (type null; FCT and
+  Kano lost).
+
+- **New deliverables:** `candidate/facilities.manifest.candidate.json`
+  (`IS_LIVE_MANIFEST: false`, every gate false, rollback bound to 1.1 by
+  hash), `docs/FACILITIES_2_0_CHANGELOG.md`,
+  `mobile_handoff/facilities_v2/` (README + Dart types). The validator
+  fails if either document stops citing the candidate's current digest.
+
+- **Candidate:** `candidate/facilities.ng.v2.0.json`, 20,696 records,
+  23,318,064 bytes, sha256 `e8bc4d72…d791`; schema 2.0 `f716f184…9837`.
+  `facilities.ng.v1.1.json` byte identical (`25684c71…2398`). Thirteen
+  unresolved decisions in `docs/FACILITIES_NHF_CANDIDATE.md` §10, of which
+  #13 (apply the transposition, or return the file to the source owner)
+  decides whether the candidate can ever reach 1.1's coverage.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **Nothing published, uploaded, activated or approved;
+  this PR is left unmerged for review.**
+
+## Nationwide Facilities — Step 3: coordinate-orientation remediation study
+
+Commit `55a4af6` on `feat/facilities-2-0-candidate-pipeline` (PR #41,
+https://github.com/Wellapath-org/wellapath-knowledge-base/pull/41, description
+updated in place — no new PR). Controlled remediation of the Step 2 finding.
+Nothing merged, published, uploaded, activated or handed to Backend/Mobile.
+Full study: `docs/FACILITIES_COORDINATE_REMEDIATION.md`.
+
+- **Boundary instrument:** the repository's own GRID3 facility points
+  (51,022, all 37 states, CC BY 4.0, hash-pinned) as an empirical
+  boundary via deterministic k-NN state membership
+  (`tools/facilities/geometry.py`). No polygons downloaded; the Step 2
+  centroid table decides nothing and survives only as a 300 km sanity
+  invariant.
+
+- **Rule `coordinate_orientation_v1`:** a pair is exchanged only when it
+  is outside its declared state as given and strictly inside it exchanged;
+  source values kept on the record; every correction listed in
+  `reports/facilities_coordinate_audit_v1.json`. Both plausible / either
+  uncertain / GRID3 names another state for the same NHFR facility →
+  ambiguous, held. Both outside → invalid. Outcomes: **18,210 unchanged ·
+  11,141 corrected · 1,442 ambiguous · 67 invalid**; 529 not orientable.
+  Record-level corroboration from the same facility's GRID3 point: within
+  20 km of the exchanged pair 3,005 times, of the pair as given 2 times.
+
+- **Coverage preserved:** 34 states; **FCT 632 (v1.1 614), Kano 1,293
+  (v1.1 2,040)**; no v1.1 state lost; the seven states Step 2 emptied are
+  all recovered by verified swaps. Candidate 29,028 records, 36,077,142
+  bytes, sha256 `8fb80d3d…6da2`; schema 2.0 `fc96d914…2e24`.
+
+- **Options:** A (corrected candidate) is the only candidate path; B (1.1
+  overlay) quantified and rejected — buys no coverage, adds 4,387 records
+  of another lineage, 1,985 of uncertain identity; **C (keep 1.1 active)
+  recommended for the active artifact** until source authorization and
+  FAC-D001 exist.
+
+- **Still null by decision:** `type` (null is not a vocabulary member; the
+  consumer contract — never filter it out, never an empty list — is in
+  the artifact metadata and the handoff) and `emergency_capable` (no
+  verified positive record; distance fallback pending FAC-D002). Exact
+  decisions: `docs/FACILITIES_DECISIONS_REQUIRED.md`.
+
+- **Source authorization checklist** (nine items, all missing) in
+  `facilities/source/nhf_authorization_checklist_v1.json`; the validator
+  refuses `may_publish` other than false while any is unsatisfied.
+
+- **Validation:** facilities 5/5 (91 validator checks, 104 tests),
+  publication 9/9 (frozen count 51), W2 23/23, W3 30/30, IM-003 27/27.
+  `facilities.ng.v1.0.json` and `v1.1.json` byte identical.
+
+- **Untouched:** every clinical artifact, `/config`, R2, Backend, Mobile,
+  telemetry (none). **PR #40 and PR #41 remain unmerged.**
+
+- **What unblocks the next step, in order:** (1) the nine authorization
+  items recorded with evidence in
+  `facilities/source/nhf_authorization_checklist_v1.json`; (2) FAC-D004
+  (engineering lead accepts or rejects `coordinate_orientation_v1`);
+  (3) FAC-D001 (`type`) and FAC-D002 (`emergency_capable`, with Clinical);
+  then re-measure Mobile compatibility. Until (1) exists the candidate
+  cannot leave `candidate_unapproved` whatever (2)–(3) decide.
+
+## Nationwide Facilities — Step 4: source-provenance investigation
+
+On `feat/facilities-2-0-candidate-pipeline` (PR #41). Provenance investigation
+only: **no checklist status changed, no candidate byte changed, nothing
+published, uploaded, activated or sent.** Verdict: **authorization incomplete**
+— the addressee is now identified and the request is drafted, but every AUTH
+item remains `missing`.
+
+- **Source system identified — as an evidence-backed inference, not owner
+  confirmation.** The CSV derives from the **Nigeria Health Facility Registry
+  (NHFR), Federal Ministry of Health, Nigeria** (hfr.fmohconnect.gov.ng).
+  Evidence, all reproducible in-repo: `unique_id` uses the six-segment
+  facility-code shape that GRID3's independently published `nhfr_facility_code`
+  column (labelled NHFR_2024) uses, with **12,619 of 31,390 exact value
+  matches**; record-level coordinate corroboration 3,005 vs 2 within 20 km
+  (Step 3 audit); registry-workflow schema shape. Recorded in
+  `nhf_provenance_v1.json` → `source_system_identification`, with the
+  inference labelled. **Registry-side export (inference):** internal workflow
+  columns (`created_by`, `verify_note`, `action`) are not what public pages or
+  the documented API serve, so the copy did not arrive through a documented
+  public channel — AUTH-09's gap exactly.
+
+- **Rights posture captured from the primary source (2026-09-14):** the
+  registry publishes **no licence, no terms of use, no data dictionary**; its
+  only rights statement is *"Copyright ©2026 Federal Ministry of Health. All
+  Rights Reserved"*. API access is key-gated behind an approval form
+  (`/developers`); no bulk export documented. Contact: **hfr@health.gov.ng**.
+  So the licence position is worse than unknown: the presumed owner's one
+  public statement reserves all rights; AUTH-02…05 need a **written grant**.
+  Legacy `hfr.health.gov.ng` has a broken TLS cert (not fetched); the NCDC
+  data-portal mirror was unreachable, and a mirror licence would not licence a
+  registry-side export anyway.
+
+- **Correction to the v1 provenance record:** the download-origin claim cited
+  `kMDItemWhereFroms`; the actual attribute is `com.apple.quarantine` naming
+  **Numbers**, and **no WhereFroms/URL attribute exists at all**. The
+  substance (passed through a spreadsheet, not pristine) stands. Root
+  duplicate CSV: byte-identical, no additional provenance, still untracked.
+
+- **Fingerprint for AUTH-09:** `facilities/source/nhf_source_fingerprint_v1.json`
+  (`tools/report_source_fingerprint.py`, deterministic, `--check`, wired into
+  `run_facilities_checks.py`): header + row/column counts, null pattern per
+  column, state counts, identifier-set hashes and shape census (31,383 of
+  31,390 canonical), GRID3 cross-reference, timestamp bounds
+  (2026-05-18T16:06:51 … 2026-07-21T13:15:26, zone undeclared), per-state
+  coordinate medians as-given (the transposition signature, e.g. Kano
+  8.51/11.96), canonical sample hashes. Lets the owner confirm or refute this
+  exact snapshot without any credential.
+
+- **Prepared, unsent authorization request:**
+  `facilities/source/nhf_authorization_request_draft_v1.md` — addressed to the
+  NHFR (hfr@health.gov.ng), asks for permission to transform and redistribute
+  via CDN and public mobile apps (incl. offline caching), the public-display
+  basis for phones/coordinates/hours, attribution text, snapshot version, data
+  dictionary, authority evidence and chain-of-custody confirmation, and
+  discloses the coordinate-orientation finding to the owner. **For founder
+  review; must be sent from a verified org address (the same prerequisite that
+  stalled the in-portal API request).**
+
+- **Checklist untouched in substance:** all nine items still `missing`,
+  `all_satisfied: false`; a status-free `investigation` block records
+  addressee, evidence trail and the draft. Six new fail-closed tests
+  (`ProvenanceInvestigationTests`) pin the evidence: fingerprint reproducible
+  and bound to the pinned digest, identification stays labelled INFERENCE with
+  `source_organization.established` still false, the verbatim All-Rights-
+  Reserved footer and contact, the draft's DRAFT-NOT-SENT marker and exact
+  digest, and zero checklist-status drift.
+
+- **One scanner change:** the PHI scan now has its first allowlist entry — the
+  exact string `hfr@health.gov.ng` (institutional mailbox, published by the
+  Ministry, deliberately recorded). Exact value only, never a pattern; 137
+  files, 0 hits, 0/16 controls failed.
+
+- **Checks:** facilities **6/6** (fingerprint check added) · publication 9/9
+  (freeze regenerated for the two deliberately revised provenance files) · W2
+  23/23 · W3 grouping 30/30 · IM-003 27/27. Candidate, both facilities
+  artifacts and the source CSV byte-identical; `candidate_unapproved` /
+  `may_publish: false` unchanged. **PRs #40 and #41 remain open and unmerged.**
+
+- **Still required from humans:** founder reviews and sends the request from a
+  verified WellaPath address; the Ministry's written grant lands AUTH-01…09
+  with evidence references; Legal reviews the grant's terms; then FAC-D001…D006
+  and the re-measured Mobile compatibility. Nothing in this step authorizes
+  publication.
