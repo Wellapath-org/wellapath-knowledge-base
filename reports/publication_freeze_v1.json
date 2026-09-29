@@ -8,7 +8,7 @@
     "note": "The exact bytes I3 Step 2 must not have touched. Regenerated and compared in --check mode, so a single changed byte in any listed file fails the run. The report cannot be fixed by editing it: an edited report no longer matches what the generator produces, which is the same failure."
   },
   "rule": "The publication tooling reads these files, hashes them and copies them into a disposable staging directory. It has no code path that opens any of them for writing, and every packaging operation re-hashes the source afterwards to prove it did not.",
-  "frozen_artifact_count": 44,
+  "frozen_artifact_count": 51,
   "groups": {
     "candidates": [
       {
@@ -35,6 +35,16 @@
         "path": "candidate/CANDIDATE_STATUS.md",
         "sha256": "b51205df607b0ac58732e5507dbe7947aa11fbf595df86e2364f6c6deb26c043",
         "byte_count": 3733
+      },
+      {
+        "path": "candidate/facilities.ng.v2.0.json",
+        "sha256": "8fb80d3d2bb491f25946c3741c201966fd52bb373aa3d71cc72162521dbb6da2",
+        "byte_count": 36077142
+      },
+      {
+        "path": "candidate/facilities.manifest.candidate.json",
+        "sha256": "17457490da329f9e886128ec7231f2aa206c87ac49406be57c1b637f72de5bcd",
+        "byte_count": 6669
       }
     ],
     "case_bank_and_findings": [
@@ -94,6 +104,28 @@
         "path": "facilities.ng.v1.1.json",
         "sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
         "byte_count": 1695844
+      }
+    ],
+    "facilities_source": [
+      {
+        "path": "facilities/source/nigeria_health_facilities.csv",
+        "sha256": "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3",
+        "byte_count": 20913558
+      },
+      {
+        "path": "facilities/source/nhf_provenance_v1.json",
+        "sha256": "4f17f920f59053b91c86e42073fef75db733e0f053c3f9d326523c5b4d59bf51",
+        "byte_count": 16345
+      },
+      {
+        "path": "facilities/source/nhf_authorization_checklist_v1.json",
+        "sha256": "fb22080a5d8e18eb105e075d45b7677b04347000f60738f01057e10557858d27",
+        "byte_count": 7184
+      },
+      {
+        "path": "facilities/source/GRID3_NGA_health_facilities_v2_0_3759985312699330018.csv",
+        "sha256": "154f3c9b2d4edb0744a6ce2b07ad921a467aea7699fa22aa4c258c788f52a180",
+        "byte_count": 13613859
       }
     ],
     "im001_records": [
@@ -232,6 +264,11 @@
         "path": "schema/token_dictionary_schema_v2.0.json",
         "sha256": "f2b1d73ac93ba23671ab1a95fa99d4f36596fed6a272476160554001cebfaf80",
         "byte_count": 35409
+      },
+      {
+        "path": "schema/facilities.v2.schema.json",
+        "sha256": "fc96d9142c9e669af6c02d6bb4e186fef025aa5a841fc65da4da2aff394c2e24",
+        "byte_count": 17610
       },
       {
         "path": "schema/kb_schema_v1.0.json",
