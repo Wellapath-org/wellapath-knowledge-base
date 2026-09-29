@@ -7,6 +7,12 @@ writing. **The rebuild reproduces the shipped `facility_id` set exactly**
 
 No conclusion here rests on the filename.
 
+**Applies unchanged to v1.2.** `facilities.ng.v1.2.json` has the same 5,344
+records with the same identifiers and coordinates — it differs from v1.1 only
+in that 45 NHFR-derived telephone values are removed and a licence block is
+added. The 896/5,344 OSM split and the Derivative Database determination carry
+over exactly. v1.2 is the version that declares the licence.
+
 ## Which records came from HOT/OSM
 
 **896 of 5,344 shipped records — 16.8%.**

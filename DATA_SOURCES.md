@@ -1,6 +1,6 @@
 # Data sources and attribution
 
-The facility dataset WellaPath ships, `facilities.ng.v1.1.json`, is built from
+The facility dataset WellaPath ships, `facilities.ng.v1.2.json`, is built from
 two public sources. Both require attribution. This file is that attribution,
 and it is a licence obligation, not documentation.
 
@@ -65,9 +65,9 @@ of Health **do not endorse WellaPath or this derived work.**
 ## Share-alike
 
 Because OpenStreetMap records are modified and merged into it,
-`facilities.ng.v1.1.json` is a **Derivative Database** under ODbL 1.0 §4.4,
+`facilities.ng.v1.2.json` is a **Derivative Database** under ODbL 1.0 §4.4,
 and is offered under the Open Database License 1.0. The complete
-machine-readable database is this repository's `facilities.ng.v1.1.json`,
+machine-readable database is this repository's `facilities.ng.v1.2.json`,
 available at no charge. See `docs/FACILITIES_ODBL_LINEAGE.md` for the
 determination and the record-level evidence behind it.
 
@@ -77,8 +77,14 @@ is not licensed by this notice.
 ## Not a source of this dataset
 
 The Nigeria Health Facility Registry (NHFR) export held privately is **not** a
-source of `facilities.ng.v1.1.json`, with one exception recorded here for
-completeness: 45 Lagos telephone numbers present in the shipped artifact were
-taken from it. NHFR publishes no licence and reserves all rights, so that
-material has no established redistribution basis and is pending a licensing
-decision. See `source/LAGOS_PHONE_ENRICHMENT_v1_WITHDRAWN.md`.
+source of `facilities.ng.v1.2.json`. It contributes no value to it: no record,
+no coordinate, no contact.
+
+The superseded `facilities.ng.v1.1.json` did carry 45 Lagos telephone numbers
+taken from that export. NHFR publishes no licence and reserves all rights, so
+those values had no established redistribution basis, and v1.2 exists to
+remove them. See `docs/FACILITIES_V1_2_ROLLBACK.md` and
+`source/LAGOS_PHONE_ENRICHMENT_v1_WITHDRAWN.md`.
+
+This is a licensing gap, not a privacy breach. No personal-data breach was
+established.
