@@ -1049,8 +1049,7 @@
     "provenance": {
       "facilities_1_1": [
         "GRID3 NGA Health Facilities v2.0",
-        "HDX Nigeria Health Facilities (OSM Export)",
-        "HFR manual enrichment \u2014 45 Lagos facilities with verified phone numbers"
+        "HDX Nigeria Health Facilities (OSM Export)"
       ],
       "candidate": [
         "single bulk registry export, organisation and licence not established"

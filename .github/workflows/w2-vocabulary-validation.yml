@@ -38,7 +38,7 @@ jobs:
           0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019  token_dictionary.ng.v1.1.json
           6c00d8257f8417e86bd5e237630bf8a4623ad72e2e46b1b071dd447c067cec2b  kb.ng.v2.4.json
           1d27e854cba95b179577a88f92445400f494a7fe8e6a53a60fcaa98b3870d1c4  rules.ng.v2.2.json
-          25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398  facilities.ng.v1.1.json
+          94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788  facilities.ng.v1.2.json
           c7bdc434a33d341e21e015f0defe567274d7f6271c332352b19ba21e7d998834  testing/case_bank_v1.json
           EOF
 

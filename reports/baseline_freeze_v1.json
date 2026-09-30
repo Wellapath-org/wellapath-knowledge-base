@@ -47,16 +47,16 @@
     },
     {
       "artifact_id": "facilities",
-      "file": "facilities.ng.v1.1.json",
+      "file": "facilities.ng.v1.2.json",
       "exists": true,
-      "declared_version": "1.1",
-      "internal_version": "1.1",
+      "declared_version": "1.2",
+      "internal_version": "1.2",
       "internal_version_matches_declared": true,
       "schema_version": "1.0",
-      "release_date": "2026-07-26",
+      "release_date": "2026-09-29",
       "country": "ng",
-      "sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
-      "bytes": 1695844
+      "sha256": "94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788",
+      "bytes": 1698125
     }
   ],
   "token_dictionary_baseline": {
@@ -539,12 +539,12 @@
       {
         "check": "artifact_present:facilities",
         "passed": true,
-        "detail": "facilities.ng.v1.1.json"
+        "detail": "facilities.ng.v1.2.json"
       },
       {
         "check": "internal_version_matches_filename:facilities",
         "passed": true,
-        "detail": "_metadata.version='1.1' declared='1.1'"
+        "detail": "_metadata.version='1.2' declared='1.2'"
       },
       {
         "check": "token_count_matches_declared_total",

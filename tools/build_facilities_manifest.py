@@ -47,7 +47,7 @@ def repo_path(*parts):
 
 
 CANDIDATE = repo_path("candidate", "facilities.ng.v2.0.json")
-CURRENT = repo_path("facilities.ng.v1.1.json")
+CURRENT = repo_path("facilities.ng.v1.2.json")
 QUALITY = repo_path("reports", "facilities_quality_v1.json")
 COMPAT = repo_path("reports", "facilities_mobile_compat_v1.json")
 MANIFEST = repo_path("candidate", "facilities.manifest.candidate.json")
@@ -83,7 +83,7 @@ def build():
             "changed_by_this_step": False,
             "current_facilities_entry": {
                 "version": current_meta["version"],
-                "url": "%s/facilities.ng.v1.1.json" % R2_BASE_URL,
+                "url": "%s/%s" % (R2_BASE_URL, os.path.basename(CURRENT)),
                 "url_is_the_convention_not_an_observation": True,
                 "hash": "sha256:%s" % sha256_file(CURRENT),
                 "release_date": current_meta["release_date"],
@@ -170,13 +170,13 @@ def build():
         },
         "rollback": {
             "target_version": current_meta["version"],
-            "target_file": "facilities.ng.v1.1.json",
+            "target_file": os.path.basename(CURRENT),
             "target_sha256": sha256_file(CURRENT),
             "target_byte_count": os.path.getsize(CURRENT),
-            "target_url": "%s/facilities.ng.v1.1.json" % R2_BASE_URL,
+            "target_url": "%s/%s" % (R2_BASE_URL, os.path.basename(CURRENT)),
             "target_untouched_by_this_work": True,
             "procedure": "mobile_handoff/facilities_v2/README.md (Rollback)",
-            "note": "facilities 1.1 remains the active artifact. The candidate has never been "
+            "note": "the shipped artifact remains active. The candidate has never been "
             "active, so there is nothing to roll back FROM; this records what the consumer "
             "returns to if the candidate is ever activated and then withdrawn.",
         },

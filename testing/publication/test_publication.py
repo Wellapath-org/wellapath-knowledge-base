@@ -283,7 +283,7 @@ class ObjectKeyTests(unittest.TestCase):
             "token_dictionary.ng.v1.1.json",
             "token_dictionary.ng.v2.0.json",
             "question_flow.ng.v1.1.json",
-            "facilities.ng.v1.1.json",
+            "facilities.ng.v1.2.json",
         ):
             self.assertEqual(origin.validate_object_key(key, "k"), [], key)
 
@@ -800,7 +800,7 @@ class ByteIdentityTests(unittest.TestCase):
             "0cc47ad9537c0bd4c6ef3aec8f1931eb9b4c62103a8809d16544f94a90b5c019",
         )
         self.assertEqual(
-            digests["facilities.ng.v1.1.json"],
+            digests["facilities.ng.v1.2.json"],
             "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
         )
         self.assertEqual(

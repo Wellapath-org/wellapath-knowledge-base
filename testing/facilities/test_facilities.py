@@ -59,7 +59,7 @@ MANIFEST = load_json(repo("candidate", "facilities.manifest.candidate.json"))
 CHECKLIST = load_json(repo("facilities", "source", "nhf_authorization_checklist_v1.json"))
 GEOMETRY = G.StateGeometry.load()
 SOURCE_SHA256 = "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3"
-CURRENT_SHA256 = "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398"
+CURRENT_SHA256 = "94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788"
 V1_0_SHA256 = "1c7b939199ab4465156f4cb336910eea120fcaa70f8b1c0743fc9f7a7c03009e"
 EMAIL = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 CORRECTED = [r for r in RECORDS if r["source_record"]["coordinate_transformation"] != "none"]
@@ -559,8 +559,8 @@ class IntegrityTests(unittest.TestCase):
         ids = [r["facility_id"] for r in RECORDS]
         self.assertEqual(len(set(ids)), len(ids))
 
-    def test_candidate_ids_cannot_collide_with_facilities_1_1(self):
-        old = {r["facility_id"] for r in load_json(repo("facilities.ng.v1.1.json"))["facilities"]}
+    def test_candidate_ids_cannot_collide_with_the_shipped_artifact(self):
+        old = {r["facility_id"] for r in load_json(repo("facilities.ng.v1.2.json"))["facilities"]}
         self.assertEqual(old & {r["facility_id"] for r in RECORDS}, set())
 
     def test_every_row_is_either_emitted_or_quarantined(self):
@@ -720,8 +720,8 @@ class ManifestTests(unittest.TestCase):
         self.assertEqual(MANIFEST["candidate_artifact"]["record_count"], len(RECORDS))
         self.assertEqual(MANIFEST["pipeline_accounting"]["coordinate_remediation"]["accepted_after_verified_swap"], 11141)
 
-    def test_the_manifest_binds_rollback_to_1_1_by_hash(self):
-        self.assertEqual(MANIFEST["rollback"]["target_file"], "facilities.ng.v1.1.json")
+    def test_the_manifest_binds_rollback_to_the_shipped_artifact_by_hash(self):
+        self.assertEqual(MANIFEST["rollback"]["target_file"], "facilities.ng.v1.2.json")
         self.assertEqual(MANIFEST["rollback"]["target_sha256"], CURRENT_SHA256)
 
     def test_the_manifest_is_reproducible(self):
@@ -812,8 +812,8 @@ class CandidateStatusTests(unittest.TestCase):
 
 
 class FrozenArtifactTests(unittest.TestCase):
-    def test_facilities_1_1_is_byte_identical(self):
-        self.assertEqual(sha256_file(repo("facilities.ng.v1.1.json")), CURRENT_SHA256)
+    def test_the_shipped_artifact_is_byte_identical(self):
+        self.assertEqual(sha256_file(repo("facilities.ng.v1.2.json")), CURRENT_SHA256)
 
     def test_facilities_1_0_is_byte_identical(self):
         self.assertEqual(sha256_file(repo("facilities.ng.v1.0.json")), V1_0_SHA256)
@@ -821,9 +821,9 @@ class FrozenArtifactTests(unittest.TestCase):
     def test_building_the_candidate_touches_no_frozen_artifact(self):
         import build_facilities_candidate as gen
 
-        before = (sha256_file(repo("facilities.ng.v1.1.json")), sha256_file(repo("facilities.ng.v1.0.json")))
+        before = (sha256_file(repo("facilities.ng.v1.2.json")), sha256_file(repo("facilities.ng.v1.0.json")))
         gen.build()
-        self.assertEqual((sha256_file(repo("facilities.ng.v1.1.json")),
+        self.assertEqual((sha256_file(repo("facilities.ng.v1.2.json")),
                           sha256_file(repo("facilities.ng.v1.0.json"))), before)
 
 

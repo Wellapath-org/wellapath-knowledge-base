@@ -61,7 +61,7 @@ class DataSourcesNoticeTests(unittest.TestCase):
 class ArtifactMetadataTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        with open(repo("facilities.ng.v1.1.json"), encoding="utf-8") as handle:
+        with open(repo("facilities.ng.v1.2.json"), encoding="utf-8") as handle:
             cls.meta = json.load(handle)["_metadata"]
 
     def test_the_two_licensed_sources_are_recorded_with_licence_and_url(self):
@@ -71,20 +71,25 @@ class ArtifactMetadataTests(unittest.TestCase):
         for source in by_licence.values():
             self.assertTrue(source["url"].startswith("https://"), source["url"])
 
-    def test_the_unlicensed_source_is_declared_rather_than_hidden(self):
-        """The artifact carries 45 NHFR-derived phone numbers.
+    def test_no_unlicensed_source_remains(self):
+        """v1.1 declared one source with a null licence: 45 NHFR-derived
+        telephone numbers, redistributed without established permission.
 
-        NHFR publishes no licence and reserves all rights, so this entry
-        honestly records url=None and license=None. The assertion pins that:
-        it fails if the gap is quietly papered over with a fabricated licence,
-        and it fails if a *second* unlicensed source appears.
+        v1.2 removed them, so every declared source now carries a licence.
+        This assertion is the guard against that regressing — it fails the
+        moment any source appears without one, which is how the original gap
+        would return.
         """
         unlicensed = [s for s in self.meta["sources"] if not s["license"]]
-        self.assertEqual(len(unlicensed), 1, "expected exactly one unlicensed source")
-        self.assertIn("HFR", unlicensed[0]["name"])
-        self.assertIsNone(unlicensed[0]["url"])
+        self.assertEqual(unlicensed, [], "every declared source must carry a licence")
+        self.assertEqual(len(self.meta["sources"]), 2)
 
-    def test_the_notice_discloses_the_unlicensed_material(self):
+    def test_the_notice_still_records_the_superseded_material(self):
+        """The history must stay legible after the file is gone.
+
+        v1.1 and its 45 NHFR-derived numbers are retired, but a reader has to
+        be able to find out that they existed and why they were withdrawn.
+        """
         with open(repo("DATA_SOURCES.md"), encoding="utf-8") as handle:
             text = handle.read()
         self.assertIn("NHFR", text)

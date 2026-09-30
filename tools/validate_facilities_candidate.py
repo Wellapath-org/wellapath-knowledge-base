@@ -53,12 +53,12 @@ COMPAT = repo_path("reports", "facilities_mobile_compat_v1.json")
 MANIFEST = repo_path("candidate", "facilities.manifest.candidate.json")
 CHECKLIST = repo_path("facilities", "source", "nhf_authorization_checklist_v1.json")
 PLAN = repo_path("publication", "plans", "facilities.ng.v2.0.dryrun.json")
-CURRENT = repo_path("facilities.ng.v1.1.json")
+CURRENT = repo_path("facilities.ng.v1.2.json")
 CHANGELOG = repo_path("docs", "FACILITIES_2_0_CHANGELOG.md")
 HANDOFF = repo_path("mobile_handoff", "facilities_v2", "README.md")
 
 SOURCE_SHA256 = "e598cecc24de7cea213118dfd88cb581754029f2dc9086618728989b6c3becb3"
-CURRENT_SHA256 = "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398"
+CURRENT_SHA256 = "94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788"
 V1_0_SHA256 = "1c7b939199ab4465156f4cb336910eea120fcaa70f8b1c0743fc9f7a7c03009e"
 
 #: Columns excluded on privacy or quality grounds. None may appear in the artifact, at any
@@ -459,9 +459,9 @@ def run():
           and manifest["candidate_artifact"]["sha256"] == digest
           and manifest["candidate_artifact"]["bytes"] == os.path.getsize(CANDIDATE)
           and manifest["candidate_artifact"]["record_count"] == len(records))
-    r.add("the candidate manifest binds rollback to facilities 1.1 by hash",
+    r.add("the candidate manifest binds rollback to the shipped artifact by hash",
           manifest is not None
-          and manifest["rollback"]["target_file"] == "facilities.ng.v1.1.json"
+          and manifest["rollback"]["target_file"] == os.path.basename(CURRENT)
           and manifest["rollback"]["target_sha256"] == CURRENT_SHA256)
     r.add("the candidate manifest grants nothing",
           manifest is not None

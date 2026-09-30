@@ -29,7 +29,13 @@ PHONE = re.compile(r"\"[+]?0?[789][01][0-9]{8}\"")
 EMAIL = re.compile(r"[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 
 V12 = load("facilities.ng.v1.2.json")
-V11 = load("facilities.ng.v1.1.json")
+# v1.1 has been retired from this repository — it carried 45 telephone
+# numbers with no established redistribution permission. Its facts are pinned
+# here instead of loaded, so the proof of what v1.2 changed survives the file's
+# removal. A checksum-verified private copy is held outside every working tree.
+V11_SHA256 = "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398"
+V11_PHONE_COUNT = 45
+V11_RECORD_COUNT = 5344
 V10 = load("facilities.ng.v1.0.json")
 
 
@@ -52,8 +58,14 @@ class NhfrRemovalTests(unittest.TestCase):
             self.assertIsNone(record["opening_hours"], record["facility_id"])
 
     def test_v1_1_carried_45_phones_and_v1_2_carries_none(self):
-        """Pins the delta this artifact exists to make."""
-        self.assertEqual(sum(1 for r in V11["facilities"] if r["phone"]), 45)
+        """Pins the delta this artifact exists to make.
+
+        v1.1 is retired, so its side of the comparison is a recorded fact
+        rather than a file read. The recorded counts come from the artifact
+        verified before removal (sha256 25684c71...2398).
+        """
+        self.assertEqual(V11_PHONE_COUNT, 45)
+        self.assertEqual(V11_RECORD_COUNT, len(V12["facilities"]))
         self.assertEqual(sum(1 for r in V12["facilities"] if r["phone"]), 0)
 
     def test_no_unlicensed_source_is_declared(self):
@@ -67,8 +79,10 @@ class NhfrRemovalTests(unittest.TestCase):
 
 
 class ContinuityTests(unittest.TestCase):
-    def test_identities_and_coordinates_are_unchanged_from_v1_1(self):
-        self.assertEqual(identity(V12["facilities"]), identity(V11["facilities"]))
+    def test_identities_and_coordinates_are_unchanged_from_the_lineage(self):
+        """v1.0 and v1.1 carried identical identities and coordinates, so
+        comparing against v1.0 proves the same thing now v1.1 is retired."""
+        self.assertEqual(identity(V12["facilities"]), identity(V10["facilities"]))
 
     def test_the_record_set_is_exactly_v1_0s(self):
         self.assertEqual(identity(V12["facilities"]), identity(V10["facilities"]))

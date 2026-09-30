@@ -9,11 +9,11 @@
     "location": "wellapath-backend src/routes/config.ts -> GET /config .artifacts",
     "changed_by_this_step": false,
     "current_facilities_entry": {
-      "version": "1.1",
-      "url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/facilities.ng.v1.1.json",
+      "version": "1.2",
+      "url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/facilities.ng.v1.2.json",
       "url_is_the_convention_not_an_observation": true,
-      "hash": "sha256:25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
-      "release_date": "2026-07-26",
+      "hash": "sha256:94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788",
+      "release_date": "2026-09-29",
       "country": "ng"
     }
   },
@@ -112,14 +112,14 @@
     }
   },
   "rollback": {
-    "target_version": "1.1",
-    "target_file": "facilities.ng.v1.1.json",
-    "target_sha256": "25684c714367abf2f3c305c8a5597b5f7eb0d11baaf658c5b9e2f8f5e2982398",
-    "target_byte_count": 1695844,
-    "target_url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/facilities.ng.v1.1.json",
+    "target_version": "1.2",
+    "target_file": "facilities.ng.v1.2.json",
+    "target_sha256": "94f162e492fa91f7d9d3cf2ca33fcf0598a031a2510aa900aa717a581bdb7788",
+    "target_byte_count": 1698125,
+    "target_url": "https://pub-8bc2ba0d7e7647799d89662d70f23c45.r2.dev/facilities.ng.v1.2.json",
     "target_untouched_by_this_work": true,
     "procedure": "mobile_handoff/facilities_v2/README.md (Rollback)",
-    "note": "facilities 1.1 remains the active artifact. The candidate has never been active, so there is nothing to roll back FROM; this records what the consumer returns to if the candidate is ever activated and then withdrawn."
+    "note": "the shipped artifact remains active. The candidate has never been active, so there is nothing to roll back FROM; this records what the consumer returns to if the candidate is ever activated and then withdrawn."
   },
   "mobile_compatibility": {
     "verdict": "NOT COMPATIBLE as it stands. The candidate satisfies every structural requirement \u2014 all ten fields present on every record, correct types, null handling consistent with the consumer \u2014 and still returns nothing for three of the four urgency paths, because the one field that drives non-emergency filtering cannot be populated from this source without a Product decision.",

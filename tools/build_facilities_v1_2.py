@@ -32,7 +32,6 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE = os.path.join(ROOT, "facilities.ng.v1.0.json")
-SUPERSEDED = os.path.join(ROOT, "facilities.ng.v1.1.json")
 OUT = os.path.join(ROOT, "facilities.ng.v1.2.json")
 
 VERSION = "1.2"

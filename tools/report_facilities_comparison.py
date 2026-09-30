@@ -52,7 +52,7 @@ def repo_path(*parts):
 
 
 
-CURRENT = repo_path("facilities.ng.v1.1.json")
+CURRENT = repo_path("facilities.ng.v1.2.json")
 CANDIDATE = repo_path("candidate", "facilities.ng.v2.0.json")
 COMPARISON = repo_path("reports", "facilities_comparison_v1.json")
 MOBILE = repo_path("reports", "facilities_mobile_compat_v1.json")

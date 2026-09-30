@@ -76,7 +76,7 @@
     {
       "finding": "the candidate is 21\u00d7 the size of facilities 1.1",
       "severity": "material",
-      "evidence": "36077142 bytes against 1695844. Mobile decodes the artifact into a List<Map<String, dynamic>> held in memory for the life of the locator.",
+      "evidence": "36077142 bytes against 1698125. Mobile decodes the artifact into a List<Map<String, dynamic>> held in memory for the life of the locator.",
       "resolution": "Options, none chosen here: compact serialisation, a distribution profile carrying only the ten fields Mobile reads, or per-state partitioning. All three are distribution decisions."
     },
     {
