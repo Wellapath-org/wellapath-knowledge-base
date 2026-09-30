@@ -83,7 +83,7 @@ def build():
             "changed_by_this_step": False,
             "current_facilities_entry": {
                 "version": current_meta["version"],
-                "url": "%s/facilities.ng.v1.1.json" % R2_BASE_URL,
+                "url": "%s/%s" % (R2_BASE_URL, os.path.basename(CURRENT)),
                 "url_is_the_convention_not_an_observation": True,
                 "hash": "sha256:%s" % sha256_file(CURRENT),
                 "release_date": current_meta["release_date"],

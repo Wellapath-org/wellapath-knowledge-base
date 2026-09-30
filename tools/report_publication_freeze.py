@@ -36,7 +36,7 @@ FROZEN = {
         "token_dictionary.ng.v1.0.json",
         "token_dictionary.ng.v1.1.json",
         "facilities.ng.v1.0.json",
-        "facilities.ng.v1.1.json",
+        "facilities.ng.v1.2.json",
     ],
     "candidates": [
         "candidate/token_dictionary.ng.v2.0.json",
